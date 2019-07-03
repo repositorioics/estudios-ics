@@ -53,6 +53,24 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item nav-dropdown hemodinamica">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="fa fa-sticky-note-o"  aria-hidden="true"></i>
+                    <spring:message code="Hemodinamica" /></a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item filedata">
+                        <a class="nav-link" href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                            <i class="fa fa-list"></i>
+                            <spring:message code="Listado" /></a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+
+
 	        <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/logout" htmlEscape="true" />"><i class="icon-lock"></i><spring:message code="logout" /></a>
             </li>

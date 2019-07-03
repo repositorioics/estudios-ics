@@ -25,7 +25,7 @@
                     <div class="card">
                         <div class="card-header">
                             <i class="fa fa-search"></i> <spring:message code="housesearch" />
-                            
+
                         </div>
                         <div class="card-block">
                         	<form action="#" id="select-house-form" autocomplete="off" class="form-horizontal ">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-            	
+
             </div>
             <!-- /.conainer-fluid -->
         </div>

@@ -1,6 +1,4 @@
 var SearchCasa = function () {
-
-    
     return {
         //main function to initiate the module
         init: function (parametros) {
@@ -36,10 +34,11 @@ var SearchCasa = function () {
                 },
                 submitHandler: function (form) {
                     table.clear().draw( false );
-                    searchCasas();
+                    searchCasas();//llama la funcion searchCasa
                 }
               });
-            
+
+            //Buscar una Casa
             function searchCasas()
         	{
             	$.getJSON(parametros.casasUrl, {

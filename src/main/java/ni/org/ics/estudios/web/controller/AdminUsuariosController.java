@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,9 +102,10 @@ public class AdminUsuariosController {
 		}
 	}
     
-    
+    /* Mapeo de Campo por campo value debe coincidir con mi name y id de mi control */
     @RequestMapping( value="saveUser", method=RequestMethod.POST)
-	public ResponseEntity<String> processUpdateUserForm( @RequestParam(value="username", required=true ) String userName
+	public ResponseEntity<String> processUpdateUserForm(
+              @RequestParam(value="username", required=true ) String userName
 	        , @RequestParam( value="completeName", required=true ) String completeName
 	        , @RequestParam( value="confirm_password", required=false ) String confirmPassword
 	        , @RequestParam( value="password", required=false, defaultValue="" ) String password

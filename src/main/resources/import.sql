@@ -878,3 +878,43 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('MOTIVO_OBSEQUIO', NULL, NULL, NULL, '1', 0, '0', 'Motivo de entrega de obsequio');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('MOTIVO_OBSEQUIO_01', '1', 'MOTIVO_OBSEQUIO', NULL, '0', 1, '0', 'Seguimiento Inicial');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('MOTIVO_OBSEQUIO_02', '2', 'MOTIVO_OBSEQUIO', NULL, '0', 2, '0', 'Seguimiento Final');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA', NULL, NULL, NULL, '1', 0, '0', 'Nivel de Conciencia hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA_1', '1', 'NIVELCONCIENCIA', NULL, '0', 1, '0', 'Claro y Lúcido');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA_2', '2', 'NIVELCONCIENCIA', NULL, '0', 2, '0', 'Alerta');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA_3', '3', 'NIVELCONCIENCIA', NULL, '0', 3, '0', 'Agitado');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA_4', '4', 'NIVELCONCIENCIA', NULL, '0', 4, '0', 'Irritable');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA_5', '5', 'NIVELCONCIENCIA', NULL, '0', 5, '0', 'Letargico');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('NIVELCONCIENCIA_6', '6', 'NIVELCONCIENCIA', NULL, '0', 6, '0', 'Activo');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('EXTREMIDADES', NULL, NULL, NULL, '1', 0, '0', 'Extremidades hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('EXTREMIDADES_Calidez', '1', 'EXTREMIDADES', NULL, '0', 1, '0', 'Calidez');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('EXTREMIDADES_Frías', '2', 'EXTREMIDADES', NULL, '0', 2, '0', 'Frías');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('EXTREMIDADES_Muy_Frías_Húmedas', '3', 'EXTREMIDADES', NULL, '0', 3, '0', 'Muy Frías y Húmedas');
+
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PULSOCALIDAD', NULL, NULL, NULL, '1', 0, '0', 'Pulso Calidad hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PULSOCALIDAD_FuerteVigoroso', '1', 'PULSOCALIDAD', NULL, '0', 1, '0', 'Fuerte, Vigoroso');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PULSOCALIDAD_DebilFiliforme', '2', 'PULSOCALIDAD', NULL, '0', 2, '0', 'Débil y Filiforme');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PULSOCALIDAD_MuyDebil', '3', 'PULSOCALIDAD', NULL, '0', 3, '0', 'Muy Débil');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PULSOCALIDAD_Ausente', '4', 'PULSOCALIDAD', NULL, '0', 4, '0', 'Ausente');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CLASIFICACIONDENGUE', NULL, NULL, NULL, '1', 0, '0', 'ClasificacionDengue hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CLASIFICACIONDENGUE_SinAlarma', '1', 'CLASIFICACIONDENGUE', NULL, '0', 1, '0', 'Sin signo de Alarma');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CLASIFICACIONDENGUE_ConAlarma', '2', 'CLASIFICACIONDENGUE', NULL, '0', 2, '0', 'Con signo de Alarma');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CLASIFICACIONDENGUE_Grave', '3', 'CLASIFICACIONDENGUE', NULL, '0', 3, '0', 'Grave');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('LLENADOCAPILAR', NULL, NULL, NULL, '1', 0, '0', 'LlenadoCapilar hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('LLENADOCAPILAR_>2', '1', 'LLENADOCAPILAR', NULL, '0', 1, '0', '>2"');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('LLENADOCAPILAR_3-5', '2', 'LLENADOCAPILAR', NULL, '0', 2, '0', '3-5');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('LLENADOCAPILAR_>=5', '3', 'LLENADOCAPILAR', NULL, '0', 3, '0', '>=5');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('LLENADOCAPILAR_<2', '4', 'LLENADOCAPILAR', NULL, '0', 4, '0', '<2"');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA', NULL, NULL, NULL, '1', 0, '0', 'PersonaValida hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA_16951', '16951', 'PERSONAVALIDA', NULL, '0', 1, '0', 'Sergio Ojeda Munguía');
+
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS', NULL, NULL, NULL, '1', 0, '0', 'diuresis hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_1-5', '1', 'DIURESIS', NULL, '0', 1, '0', '1-5 ml/Kg/Hr');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_0.5-0.9', '2', 'DIURESIS', NULL, '0', 2, '0', '0.5-0.9 ml/Kg/Hr');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_0.5', '3', 'DIURESIS', NULL, '0', 3, '0', '>0.5 ml/Kg/Hr');

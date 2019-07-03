@@ -24,12 +24,13 @@ public class CasaCohorteFamiliaCasoService {
     private SessionFactory sessionFactory;
 
     @SuppressWarnings("unchecked")
+
 	public List<CasaCohorteFamiliaCaso> getCasaCohorteFamiliaCasos(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from CasaCohorteFamiliaCaso c where c.pasive = '0' and c.inactiva = '0'");
         return query.list();
     }
-    
+    /* Servicios Devuelve una Casas por parametro */
     @SuppressWarnings("unchecked")
 	public List<CasaCohorteFamiliaCaso> getCasaCohorteFamiliaCasos(String parametro){
         Session session = sessionFactory.getCurrentSession();

@@ -47,7 +47,7 @@
 								<div class="input-group mb-1">
 	                                <span class="input-group-addon"><i class="icon-user"></i>
 	                                </span>
-	                                <input type="text" autocomplete="off" class="form-control" placeholder="<spring:message code="login.username" />" name="j_username">
+	                                <input type="text" autocomplete="off" autofocus="true" class="form-control" placeholder="<spring:message code="login.username" />" name="j_username">
 	                            </div>
 	                            <div class="input-group mb-2">
 	                                <span class="input-group-addon"><i class="icon-lock"></i>

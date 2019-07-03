@@ -65,7 +65,7 @@ public class MessageResourceService {
 		// Retrieve all
 		return  query.list();
 	}
-	
+	/* OBTIENE LA LISTA PARA LLENAR UN SELECT DE LA TABLA MENSAJE */
 	@SuppressWarnings("unchecked")
 	public List<MessageResource> getCatalogo(String catalogo) {
 		// Retrieve session from Hibernate
@@ -130,7 +130,7 @@ public class MessageResourceService {
         // Retrieve all
         return  query.list();
     }
-
+        /* ocupar este para Mostrar los catalogos */
     public MessageResource getMensajeByCatalogAndCatKey(String catKey, String catalogo) {
         // Retrieve session from Hibernate
         Session session = sessionFactory.getCurrentSession();
@@ -163,4 +163,8 @@ public class MessageResourceService {
         // Retrieve all
         return  query.list();
     }
+
+
+    /**/
+
 }

@@ -1,11 +1,11 @@
-var EditUser = function () {
-	
-	var handleMultiSelect = function () {
+var FormDetalle = function () {
+
+   /* var handleMultiSelect = function () {
         $('#authorities').multiSelect();
         $('#studies').multiSelect();
-    };
-    
-    var handlePasswordStrengthChecker = function () {
+    };*/
+
+  /*  var handlePasswordStrengthChecker = function () {
         var initialized = false;
         var input = $("#password");
 
@@ -25,16 +25,17 @@ var EditUser = function () {
                     return word.match(/[a-z].[0-9]/) && score;
                 }, 10, true);
 
-                // set as initialized 
+                // set as initialized
                 initialized = true;
             }
         });
-    };
+    };*/
 
     return {
         //main function to initiate the module
         init: function (parametros) {
-
+debugger;
+            console.log(parametros.saveDetHemoUrl);
             // wrapper function to  block element(indicate loading)
             function blockUI(el, centerY) {
                 var el = jQuery(el);
@@ -70,50 +71,44 @@ var EditUser = function () {
                 });
             }
 
-            handleMultiSelect();
-            handlePasswordStrengthChecker();
-            var form1 = $('#edit-user-form');
+           // handleMultiSelect();
+           // handlePasswordStrengthChecker();
+            var form1 = $('#formDetailHemo');
             form1.validate({
                 errorElement: 'span', //default input error message container
                 focusInvalid: false, // do not focus the last invalid input
                 rules: {
-                	username: {
-                        minlength: 5,
-                        maxlength: 50,
-                        noSpace:true,
+                    pa: {
                         required: true
                     },
-                    completeName: {
-                        minlength: 5,
-                        maxlength: 250,
-                        required: true
-                    },
-                    email: {
-                        minlength: 3,
-                        maxlength: 100,
-                        email: true
-                    },
-                    password: {
-                        minlength: 4,
-                        maxlength: 150,
-                        noSpace:true,
-                        required: true
-                        //pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[!@#$%^&*()?])).+$/
-                    },
-                    confirm_password: {
-                        minlength: 4,
-                        maxlength: 150,
+                    fr: {
                         required: true,
-                        noSpace:true,
-                        equalTo: "#password"
+                        number: true,
+                        min:12, max:80
                     },
-                    authorities: {
+                    fc:{
+                        required: true,
+                        number:true,
+                        min:50,
+                        max:180
+                    },
+
+                    sa: {
+                        required: true,
+                         number: true,
+                        min:70,
+                        max:100
+                    },
+                    diuresis: {
                         required: true
                     },
-                    /*studies: {
-                        required: true
-                    },*/
-                    firstname: {
+                    densidadUrinaria: {
+                        required: true,
+                        number: true,
+                        min:1005,
+                            max:1030
+                    },
+                    personaValida: {
                         required: true
                     }
                 },
@@ -139,54 +134,52 @@ var EditUser = function () {
                     processUser();
                 }
             });
-            
+
             function processUser()
-        	{
-            	blockUI();
-        	    $.post( parametros.saveUserUrl
-        	            , form1.serialize()
-        	            , function( data )
-        	            {
-        	    			usuario = JSON.parse(data);
-        	    			if (usuario.username === undefined) {
-        						toastr.error(data,"Error",{timeOut: 0});
-        					}
-        					else{
-        						$('#username').val(usuario.username);
-        						toastr.success(parametros.successmessage,usuario.username);
-        					}
-        	            	$('#completeName').focus();
-        	    			unblockUI();
-                            window.setTimeout(function(){
-                                window.location.href = parametros.usuarioUrl;
-                            }, 1500);
-        	            }
-        	            , 'text' )
-        		  		.fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        		    		alert( "error:" + errorThrown);
-        		    		unblockUI();
-        		  		});
-        	}
-            
-    	    
-    	    $(document).on('keypress','form input',function(event)
-    		{                
-    		    event.stopImmediatePropagation();
-    		    if( event.which == 13 )
-    		    {
-    		        event.preventDefault();
-    		        var $input = $('form input');
-    		        if( $(this).is( $input.last() ) )
-    		        {
-    		            //Time to submit the form!!!!
-    		            //alert( 'Hooray .....' );
-    		        }
-    		        else
-    		        {
-    		            $input.eq( $input.index( this ) + 1 ).focus();
-    		        }
-    		    }
-    		});
+            {
+                blockUI();
+                $.post( parametros.saveDetHemoUrl, form1.serialize(), function( data ){
+                        usuario = JSON.parse(data);
+                        if (usuario.username === undefined) {
+                            //toastr.error(data,"Error",{timeOut: 0});
+                            swal("Error!",data,"error");
+                        }
+                        else{
+                            $('#username').val(usuario.username);
+                            toastr.success(parametros.successmessage,usuario.username);
+                        }
+                        $('#completeName').focus();
+                        unblockUI();
+                        window.setTimeout(function(){
+                            window.location.href = parametros.usuarioUrl;
+                        }, 1500);
+                    }
+                    , 'text' )
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert( "error:" + errorThrown);
+                        unblockUI();
+                    });
+            }
+
+
+            $(document).on('keypress','form input',function(event)
+            {
+                event.stopImmediatePropagation();
+                if( event.which == 13 )
+                {
+                    event.preventDefault();
+                    var $input = $('form input');
+                    if( $(this).is( $input.last() ) )
+                    {
+                        //Time to submit the form!!!!
+                        //alert( 'Hooray .....' );
+                    }
+                    else
+                    {
+                        $input.eq( $input.index( this ) + 1 ).focus();
+                    }
+                }
+            });
         }
     };
 

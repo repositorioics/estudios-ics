@@ -22,13 +22,15 @@ public class ParticipanteService {
     @Resource(name="sessionFactory")
     private SessionFactory sessionFactory;
 
+
+    /* Obtiene un lista de todos los Participantes */
     @SuppressWarnings("unchecked")
 	public List<Participante> getParticipantes(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Participante");
         return query.list();
     }
-
+    /* Obtiene Un Participante por su codigo */
     public Participante getParticipanteByCodigo(Integer codigo){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Participante where codigo = :codigo");

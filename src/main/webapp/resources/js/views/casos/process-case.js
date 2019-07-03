@@ -81,10 +81,7 @@ var ProcessCase = function () {
 
             function search()
             {
-                $.getJSON( parametros.searchUrl
-                    , form1.serialize()
-                    , function( data )
-                    {
+                $.getJSON( parametros.searchUrl , form1.serialize() , function( data )   {
                         //registro = JSON.parse(data);
                         console.log(data);
                         if (data.mensaje != undefined) {

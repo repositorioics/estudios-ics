@@ -13,6 +13,7 @@
 		<intercept-url pattern="/chf/editarcaso/.*" access="ROLE_SUPER"/>
         <intercept-url pattern="/super/.*" access="ROLE_SUPER"/>
         <intercept-url pattern="/reportes/.*" access="ROLE_WEB,ROLE_SUPER"/>
+        <intercept-url pattern="/hemo/.*" access="ROLE_WEB,ROLE_SUPER" />
         <intercept-url pattern="/.*" access="ROLE_ADMIN"/>
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/loginfailed" />
