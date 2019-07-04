@@ -1315,7 +1315,7 @@
       <workItem from="1561986008616" duration="4156000" />
       <workItem from="1562173391427" duration="3252000" />
       <workItem from="1562176744360" duration="4442000" />
-      <workItem from="1562251432395" duration="5572000" />
+      <workItem from="1562251432395" duration="5651000" />
     </task>
     <task id="LOCAL-00001" summary="Add Hoja Hemodinámica">
       <created>1562176924698</created>
@@ -1329,11 +1329,15 @@
       <created>1562258392417</created>
       <updated>1562258392417</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Add Hoja Hemodinámica">
+      <created>1562259143731</created>
+      <updated>1562259143731</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="797554000" />
+    <option name="totallyTimeSpent" value="797633000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -1437,6 +1441,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
