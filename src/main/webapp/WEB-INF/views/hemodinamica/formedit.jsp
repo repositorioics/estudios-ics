@@ -31,7 +31,7 @@
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                <a href="<spring:url value="/hemo/create" htmlEscape="true "/>">
                     <spring:message code="/create" /></a>
             </li>
         </ol>
