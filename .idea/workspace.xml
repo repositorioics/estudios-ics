@@ -1315,7 +1315,7 @@
       <workItem from="1561986008616" duration="4156000" />
       <workItem from="1562173391427" duration="3252000" />
       <workItem from="1562176744360" duration="4442000" />
-      <workItem from="1562251432395" duration="5651000" />
+      <workItem from="1562251432395" duration="5662000" />
     </task>
     <task id="LOCAL-00001" summary="Add Hoja Hemodinámica">
       <created>1562176924698</created>
@@ -1333,11 +1333,15 @@
       <created>1562259143731</created>
       <updated>1562259143731</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add Hoja Hemodinámica">
+      <created>1562259221069</created>
+      <updated>1562259221069</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="797633000" />
+    <option name="totallyTimeSpent" value="797644000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
