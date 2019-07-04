@@ -28,7 +28,7 @@ import java.util.List;
 
 @Service("datoshemodinamicaService")
 @Transactional
-public class datoshemodinamicaService {
+public class DatoshemodinamicaService {
 
     @Resource(name="sessionFactory")
     private SessionFactory sessionFactory;
