@@ -9,6 +9,7 @@ import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
+import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
@@ -112,7 +113,7 @@ public class HemoController {
 
     /* Instancia de mi Servicio Hemodinamico */
     @Resource(name = "datoshemodinamicaService")
-    private ni.org.ics.estudios.service.hemodinanicaService.datoshemodinamicaService datoshemodinamicaService;
+    private DatoshemodinamicaService datoshemodinamicaService;
 
 
     /*MAPEAR LISTADO DE TODOS LOS PACIENTE CON HOJA HEMODINAMICA*/
