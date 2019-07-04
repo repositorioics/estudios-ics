@@ -35,8 +35,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/hemo")
-public class hemoController {
-    private static final Logger logger = LoggerFactory.getLogger(hemoController.class);
+public class HemoController {
+    private static final Logger logger = LoggerFactory.getLogger(HemoController.class);
 
     /*Agregar Detalle Hemodinamico del Participante */
     @RequestMapping(value="/listDetailsHemo/{idDatoHemo}", method = RequestMethod.GET)
