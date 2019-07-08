@@ -73,11 +73,11 @@ public class ReportesPdfService {
     public List<CartaConsentimiento> getCartasConsentimientoByFiltro(Integer estudio, Integer codigoParticipante, Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
         String sqlQuery = "select cc from CartaConsentimiento cc inner join cc.tamizaje t inner join cc.participante p " +
-                "where (cc.reconsentimiento is null or cc.reconsentimiento = '0')";
+                "where 1=1 ";//(cc.reconsentimiento is null or cc.reconsentimiento = '0')
 
         //sub consulta para obtener la carta mas antigua
         String sqlSubQuery = "select min(cc2.fechaFirma) from CartaConsentimiento cc2 inner join cc2.tamizaje t2 inner join cc2.participante p2 " +
-                "where (cc2.reconsentimiento is null or cc2.reconsentimiento = '0') and p2.codigo = p.codigo";
+                "where p2.codigo = p.codigo "; //(cc2.reconsentimiento is null or cc2.reconsentimiento = '0') and
 
         if (estudio>0) {
             sqlQuery += " and t.estudio.codigo = :estudio";
