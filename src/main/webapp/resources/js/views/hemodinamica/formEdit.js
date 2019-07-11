@@ -1,8 +1,4 @@
 $(document).ready(function(){
-/*    $.validator.addMethod('customphone', function (value, element) {
-        return this.optional(element) || /^\d{8}(?:[-\s]\d{4})?$/.test(value);
-    }, "Por favor entre un número de teléfono válido");*/
-
     $("#fie").datepicker({
         autoclose: true,
         format: "dd/mm/yyyy",
@@ -13,7 +9,7 @@ $(document).ready(function(){
         var f2= $("#fie").val();
         $("#diasenf").val(restaFechas(f1,f2));
     });
-    // Función para calcular los días transcurridos entre dos fechas
+    // Días transcurridos
     restaFechas = function(f1,f2){
         var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
         var aFecha1 = datestring.split("/");
@@ -116,5 +112,4 @@ $(document).ready(function(){
             $("#IMCdetallado").val("");
         }
     }
-    //toastr.info("Actualizar información!");
 })

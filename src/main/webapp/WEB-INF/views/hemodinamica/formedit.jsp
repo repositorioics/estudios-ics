@@ -443,7 +443,6 @@
                     }, 1500);
                 }).fail(function(XMLHttpRequest, textStatus, errorThrown){
                     swal("Error!","intente nuevamente!", "error");
-
                 });
             }
 

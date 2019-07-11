@@ -115,12 +115,12 @@
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="tc">T°C:</label>
-                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" required tabindex="10">
+                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" tabindex="10">
                                 </div>
 
                                 <div class="form-group col-sm-4">
                                     <label for="sa">SA02%:</label>
-                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%" required tabindex="11">
+                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%"  tabindex="11">
                                 </div>
 
                                 <div class="form-group col-sm-4">
@@ -320,13 +320,13 @@
                     max:180
                 },
                 sa: {
-                    required: true,
+
                     number: true,
                     min:70,
                     max:100
                 },
                 tc: {
-                    required: true,
+
                     number: true,
                     min:36,
                     max:41

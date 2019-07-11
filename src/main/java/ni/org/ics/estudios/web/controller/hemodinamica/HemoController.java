@@ -414,8 +414,8 @@ public class HemoController {
             ,@RequestParam( value="pam", required=true ) String pam
             ,@RequestParam( value="fc", required=true ) String fc
             ,@RequestParam( value="fr", required=true ) String fr
-            ,@RequestParam( value="tc", required=true ) String tc
-            ,@RequestParam( value="sa", required=true ) String sa
+            ,@RequestParam( value="tc" ) String tc
+            ,@RequestParam( value="sa" ) String sa
             ,@RequestParam( value="extremidades", required=true ) String extremidades
             ,@RequestParam( value="llenadoCapilar", required=true ) String llenadoCapilar
             ,@RequestParam( value="pulsoCalidad", required=true ) String pulsoCalidad
@@ -488,8 +488,8 @@ public class HemoController {
             ,@RequestParam( value="pam", required=true ) String pam
             ,@RequestParam( value="fc", required=true ) String fc
             ,@RequestParam( value="fr", required=true ) String fr
-            ,@RequestParam( value="tc", required=true ) String tc
-            ,@RequestParam( value="sa", required=true ) String sa
+            ,@RequestParam( value="tc" ) String tc
+            ,@RequestParam( value="sa" ) String sa
             ,@RequestParam( value="extremidades", required=true ) String extremidades
             ,@RequestParam( value="llenadoCapilar", required=true ) String llenadoCapilar
             ,@RequestParam( value="pulsoCalidad", required=true ) String pulsoCalidad

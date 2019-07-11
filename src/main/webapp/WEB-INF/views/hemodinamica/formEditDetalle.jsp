@@ -236,11 +236,11 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="tc">T°C:</label>
-                                        <input type="text" class="form-control focusNext" id="tc" name="tc" value="${objDet.tc}" placeholder="T°C" required tabindex="10">
+                                        <input type="text" class="form-control focusNext" id="tc" name="tc" value="${objDet.tc}" placeholder="T°C" tabindex="10">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="sa">SA02%:</label>
-                                        <input type="text" class="form-control focusNext" id="sa" value="${objDet.sa}" name="sa" placeholder="SA02%" required tabindex="11">
+                                        <input type="text" class="form-control focusNext" id="sa" value="${objDet.sa}" name="sa" placeholder="SA02%" tabindex="11">
                                     </div>
 
 
@@ -465,13 +465,13 @@
                     required:true
                 },
                 tc: {
-                    required: true,
+
                     number: true,
                     min:36,
                     max:41
                 },
                 sa:{
-                    required: true,
+
                     min:70,
                     max:100
                 },
