@@ -4,8 +4,10 @@ import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.ContactoParticipante;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.zen.ParticipanteZen;
 import ni.org.ics.estudios.service.ParticipanteService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
+import ni.org.ics.estudios.service.zen.ParticipanteZenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,10 @@ public class ParticipanteController {
 
     @Resource(name = "participanteService")
     private ParticipanteService participanteService;
+
+    @Resource(name = "participanteZenService")
+    private ParticipanteZenService participanteZenService;
+
     @Resource(name="participanteProcesosService")
     private ParticipanteProcesosService participanteProcesosService;
     /**
@@ -248,5 +254,25 @@ public class ParticipanteController {
             }
         }
         return "Datos recibidos!";
+    }
+
+    /**
+     * Retorna ParticipanteZen. Acepta una solicitud GET para JSON
+     * @return List<ParticipanteZen> JSON
+     */
+    @RequestMapping(value = "participantesZen", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<ParticipanteZen> getParticipantesZen() {
+        try {
+            logger.info("Descargando toda la informacion de ParticipanteZen");
+            List<ParticipanteZen> participanteZens = participanteZenService.getParticipantes();
+            if (participanteZens == null) {
+                logger.debug(new Date() + " - Nulo");
+            }
+            return participanteZens;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

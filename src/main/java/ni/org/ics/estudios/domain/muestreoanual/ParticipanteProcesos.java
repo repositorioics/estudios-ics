@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,6 +64,8 @@ public class ParticipanteProcesos implements Auditable {
     private String reConsChf18;//reconsentimiento a participantes de familia que cumplen 18 anios
     //22052019
     private String posDengue;
+    //17072019. Saber si el participante es seleccionado para el estudio ZEN(Zika en Ninos)
+    private String estudioZen;
 
     private MovilInfo movilInfo;
 
@@ -434,6 +437,16 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setPosDengue(String posDengue) {
         this.posDengue = posDengue;
+    }
+
+    @JsonIgnore
+    @Column(name = "estudio_zen", nullable = true, length = 2)
+    public String getEstudioZen() {
+        return estudioZen;
+    }
+
+    public void setEstudioZen(String estudioZen) {
+        this.estudioZen = estudioZen;
     }
 
     public MovilInfo getMovilInfo() {
