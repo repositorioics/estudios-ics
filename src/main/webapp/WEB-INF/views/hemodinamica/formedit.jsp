@@ -360,7 +360,7 @@
         $("#pamMin").mask("99.9");
         $("#pamMed").mask("99.9");
         $("#pamMax").mask("99.9");
-        $("#peso").mask("99.99");
+        $("#peso").mask("999.99");
             var parametros = {updateHemoUrl: "${updateHemoUrl}",
                                  Listado2Url:"${Listado2Url}"};
             var form2 = $('#update-hemo-form');

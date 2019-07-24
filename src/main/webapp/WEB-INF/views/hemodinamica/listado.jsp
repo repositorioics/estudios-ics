@@ -86,7 +86,7 @@
                                     <td>${lista.participante.nombre1} ${lista.participante.nombre2} ${lista.participante.apellido1} ${lista.participante.apellido2}</td>
                                     <td class="text-center">${lista.edad}</td>
                                     <td class="text-center">${lista.nExpediente}</td>
-                                    <td class="text-center"><fmt:formatDate value="${lista.recordDate}" pattern="dd/MM/yyyy"/></td>
+                                    <td class="text-center"><fmt:formatDate timeStyle = "medium" value="${lista.recordDate}" pattern="dd/MM/yyyy hh:mm"/></td>
                                     <td class="text-center">
                                         <a href="${fn:escapeXml(edithemoUrl)}" data-toggle="tooltip" data-placement="bottom" title="Editar"
                                            class="btn btn-outline-primary btn-sm">

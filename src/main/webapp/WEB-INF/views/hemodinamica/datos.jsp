@@ -45,6 +45,7 @@
     </style>
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
+
     <title>Hemodinámica</title>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -368,7 +369,7 @@
         $("#pamMin").mask("99.9");
         $("#pamMed").mask("99.9");
         $("#pamMax").mask("99.9");
-        $("#peso").mask("99.99");
+        $("#peso").mask("999.99");
         $("#sector").select2();
         $("#sector").on("change", function(){
            if(this.value == 18 ){
