@@ -57,8 +57,9 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
-                <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
-                    <spring:message code="/Hemodinámica" />
+                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/hemo/listado/" htmlEscape="true "/>">LISTADO</a>
+                <i class="fa fa-angle-right"></i><a href="<spring:url value="/hemo/create/" htmlEscape="true "/>">
+                    <spring:message code="Hemodinámica" />
                 </a>
             </li>
         </ol>
@@ -69,7 +70,7 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card">
+                    <div class="card text-black-50 bg-secondary">
                         <div class="card-header">
                             <strong> <i class="fa fa-search" aria-hidden="true"></i> - Búscar </strong>
                             <small>Participante</small>
@@ -295,7 +296,7 @@
         </div>
     </div>
 </div>
-<jsp:include page="../fragments/bodyFooter.jsp" />
+
 <jsp:include page="../fragments/corePlugins.jsp" />
 <c:choose>
     <c:when test="${cookie.eIcsLang.value == null}">
@@ -337,8 +338,8 @@
 
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
-<spring:url value="/resources/js/libs/mySelect2/select2_locale_es.min.js" var="select_esJs" />
-<script type="text/javascript" src="${select_esJs}"></script>
+<!-- <spring:url value="/resources/js/libs/mySelect2/select2_locale_es.min.js" var="select_esJs" />
+<script type="text/javascript" src="${select_esJs}"></script> -->
 <spring:url value="/resources/js/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{languagedt}.js" var="datePickerLoc">
     <spring:param name="languagedt" value="${lenguaje}" /></spring:url>
 <script src="${datePickerLoc}"></script>
@@ -705,6 +706,8 @@
                 swal("Error al guardar la información.","error");
             });
         }
+
+
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter
             if (evt.key !== 'Enter') {
@@ -732,6 +735,6 @@
 
     })
 </script>
-
+<jsp:include page="../fragments/bodyFooter.jsp" />
 </body>
 </html>

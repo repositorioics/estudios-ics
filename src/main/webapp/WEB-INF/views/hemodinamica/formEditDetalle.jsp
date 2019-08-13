@@ -118,6 +118,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/hemo" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/hemo/listDetailsHemo/{idDatoHemo}">
+                         <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
+                         </spring:url>">Listado
+                </a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(listDetailsHemoUrl)}">Actualizar Detalle <strong> ${objDet.datoshemodinamica.participante.nombre1} ${objDet.datoshemodinamica.participante.nombre2} ${objDet.datoshemodinamica.participante.apellido1} ${objDet.datoshemodinamica.participante.apellido2}</strong></a>
             </li>
         </ol>
         <spring:url value="/hemo/UpdateDetalleHemo" var="upateDetHemoUrl"/>
@@ -336,9 +343,14 @@
                                     <div hidden="hidden">
                                         <input type="text" readonly name="idDatoHemo" id="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" class="form-control"/>
                                         <input type="text" readonly name="idHemoDetalle" id="idHemoDetalle" class="form-control" value="${objDet.idHemoDetalle}"/>
-
+                                        <spring:url value="/hemo/listDetailsHemo/{idHemoDetalle}" var="volverUrl">
+                                            <spring:param name="idHemoDetalle" value="${objDet.idHemoDetalle}" />
+                                        </spring:url>
                                     </div>
                                     <spring:url value="/hemo/listDetailsHemo/{idDatoHemo}" var="listDetailsHemoUrl">
+                                        <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
+                                    </spring:url>
+                                    <spring:url value="/hemo/edithemo/{idDatoHemo}" var="edithemoUrl">
                                         <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
                                     </spring:url>
                                     <div hidden="hidden">

@@ -32,9 +32,11 @@
 <div>
     <jsp:include page="../fragments/sideBar.jsp" />
     <div class="main">
+        <br/>
+        <br/>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<spring:url value="/hemo/create" htmlEscape="true "/>"><spring:message code="Hemodinámica" /></a>
+                <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
                 <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
                     <spring:message code="Listado" /></a>

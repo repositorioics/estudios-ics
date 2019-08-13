@@ -167,6 +167,7 @@ public class HemoController {
         if (participante != null){
             ParticipanteProcesos procesos = participanteProcesosService.getParticipante(parametro);
             map.put("estado",procesos.getEstPart().toString());
+
         }
         map.put("codigo", participante.getCodigo().toString());
         map.put("nombre", participante.getNombreCompleto());

@@ -31,6 +31,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(listDetailsHemoUrl)}">AGREGAR DETALLE</a>
             </li>
         </ol>
         <spring:url value="/hemo/addHemoDetalle" var="addDetalleHemoUrl"/>
@@ -181,6 +183,10 @@
                                     </select>
                                 </div>
                                     <div hidden="hidden">
+
+                                        <spring:url value="/hemo/editdetails/{idHemoDetalle}" var="editDetailsUrl">
+                                            <spring:param name="idHemoDetalle" value="${idDatoHemo}" />
+                                        </spring:url>
                                     <div class="form-group col-sm-12">
                                         <input type="text" name="idDatoHemo" id="idDatoHemo" value="${idDatoHemo}" class="form-control"/>
                                     </div>

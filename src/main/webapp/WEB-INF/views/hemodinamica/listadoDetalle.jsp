@@ -45,10 +45,18 @@
     <jsp:include page="../fragments/sideBar.jsp" />
     <!-- Main content -->
     <div class="main">
+    <br/>
+    <br/>
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/hemo/listado/" htmlEscape="true "/>">LISTADO</a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(editDetailsUrl)}">LISTA DE DETALLES </a>
+                <i class="fa fa-angle-right"></i>
+                ${nombre}
             </li>
         </ol>
         <div class="container-fluid">
