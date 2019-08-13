@@ -93,6 +93,7 @@ public class ReportesPdfService {
         sqlQuery += " and cc.fechaFirma = ("+sqlSubQuery+") order by cc.fechaFirma asc, t.estudio.codigo asc, p.codigo";
 
         Query query = session.createQuery(sqlQuery);
+
         if(codigoParticipante != null)
             query.setParameter("codigoParticipante", codigoParticipante);
         if (estudio>0)

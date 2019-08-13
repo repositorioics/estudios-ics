@@ -61,6 +61,10 @@ public class ParticipanteProcesosService {
 		return participante;
 	}
 
+
+
+
+
 	@SuppressWarnings("unchecked")
 	public List<ParticipanteProcesos> getParticipantesMensajes(Integer barrio,
 			String tubo, String estudio, String edad) {
