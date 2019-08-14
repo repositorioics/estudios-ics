@@ -83,7 +83,7 @@ var SearchCoordenadas = function () {
                                     text = "Si";
                                     break;
                                 default:
-                                    text = "No value found";
+                                    text = "-";
                             }
                             var oBarrio;
                             if (data[i].otroBarrio == "" || data[i].otroBarrio == null){

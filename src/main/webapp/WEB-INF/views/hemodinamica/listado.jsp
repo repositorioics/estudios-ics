@@ -29,11 +29,9 @@
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
-<div>
+<div class="">
     <jsp:include page="../fragments/sideBar.jsp" />
     <div class="main">
-        <br/>
-        <br/>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
@@ -47,7 +45,7 @@
             <div class="animated fadeIn">
             <div class="container">
             <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-users"></i> <spring:message code="Participante" />

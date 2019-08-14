@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
-
 <div class="sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/" htmlEscape="true "/>"><i class="icon-speedometer"></i><spring:message code="dashboard" /></a>
             </li>
+            <sec:authorize access="hasRole('ROLE_ROOT')">
             <li class="nav-item nav-dropdown administracion">
 	            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wrench"></i><spring:message code="admin" /></a>
 	            <ul class="nav-dropdown-items">
@@ -19,7 +19,7 @@
                     </li> -->
 	            </ul>
 	        </li>
-
+            </sec:authorize>
 	        <li class="nav-item nav-dropdown chfcasos">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="chfcasos" /></a>
                 <ul class="nav-dropdown-items">

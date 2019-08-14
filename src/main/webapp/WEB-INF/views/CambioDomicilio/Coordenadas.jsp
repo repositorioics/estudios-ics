@@ -13,7 +13,6 @@
     <jsp:include page="../fragments/headTag.jsp" />
 
     <%-- Comentario en JSP --%>
-
     <%-- Comentario en JSP
     <spring:url value="/resources/css/dtresponsive/twitter-bootstrap.css" var="boot1" />
      <link href="${boot1}" rel="stylesheet" type="text/css"/>--%>
@@ -36,7 +35,7 @@
   }
   input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
   .swal-modal {
-      background-color: rgba(63,127,191,0.69);
+      background-color: rgba(63,127,191,90);
       border: 3px solid white;
   }
   .swal-title{
@@ -46,9 +45,7 @@
    color: #ffffff;
   }
   .hide{
-
       visibility: hidden
-
   }
 </style>
 </head>
