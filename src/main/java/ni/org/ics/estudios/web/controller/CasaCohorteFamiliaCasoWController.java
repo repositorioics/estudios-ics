@@ -1,16 +1,20 @@
 package ni.org.ics.estudios.web.controller;
 
 import com.google.gson.Gson;
+import ni.org.ics.estudios.domain.CartaConsentimiento;
 import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
+import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.language.MessageResource;
+import ni.org.ics.estudios.service.CartaConsentimientoService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.UsuarioService;
 import ni.org.ics.estudios.service.cohortefamilia.CasaCohorteFamiliaService;
 import ni.org.ics.estudios.service.cohortefamilia.ParticipanteCohorteFamiliaService;
 import ni.org.ics.estudios.service.cohortefamilia.casos.CasaCohorteFamiliaCasoService;
 import ni.org.ics.estudios.service.cohortefamilia.casos.ParticipanteCohorteFamiliaCasoService;
+import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
@@ -56,8 +60,11 @@ public class CasaCohorteFamiliaCasoWController {
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
 
-    @Resource(name="usuarioService")
-    private UsuarioService usuarioService;
+    @Resource(name="cartaConsentimientoService")
+    private CartaConsentimientoService cartaConsentimientoService;
+
+    @Resource(name="participanteProcesosService")
+    private ParticipanteProcesosService participanteProcesosService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String obtenerCasos(Model model) throws ParseException {
@@ -224,6 +231,30 @@ public class CasaCohorteFamiliaCasoWController {
 
 
             this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCaso);
+            //verificar si no tiene consentimiento muestra de manos
+            boolean pedirConsentimiento = true;
+            boolean pedirAsentimientoCasa = true;
+            List<CartaConsentimiento> cartaConPart = this.cartaConsentimientoService.getCartaConsentimientoByCodParticipanteEstudio(codigoParticipante, 1); //1 es estudio familia
+            List<CartaConsentimiento> cartaConCasa = this.cartaConsentimientoService.getCartaConsentimientoByCodCasaEstudio(casaCaso.getCasa().getCodigoCHF(), 1); //1 es estudio familia
+            for(CartaConsentimiento cc : cartaConPart){
+                //es carta para cohorte familia y tiene registro en parteD que se refiere a muestra de manos
+                if ((cc.getAceptaParteD()!=null && !cc.getAceptaParteD().isEmpty())){
+                    pedirConsentimiento = false;
+                    break;
+                }
+            }
+            if (cartaConCasa.size()>0) pedirAsentimientoCasa = false;
+
+            if (pedirConsentimiento || pedirAsentimientoCasa){
+                ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigoParticipante);
+                procesos.setMxSuperficie((pedirConsentimiento && pedirAsentimientoCasa)?"3":(pedirConsentimiento?"2":"1"));
+                this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+            }else{
+                ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigoParticipante);
+                procesos.setMxSuperficie("0");//ninguno
+                this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+            }
+
 
             //Agregar resto de participantes de la casa
             List<ParticipanteCohorteFamilia> participantesCasa = participanteCohorteFamiliaService.getParticipantesCHFByCodigoCasa(codigoCasa);
@@ -245,6 +276,10 @@ public class CasaCohorteFamiliaCasoWController {
                     participanteCaso.setEstado('1');
 
                     this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCaso);
+                        ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getParticipante().getCodigo());
+                        procesos.setMxSuperficie(pedirAsentimientoCasa?"1":"0");
+                        this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+
                 }
             }
 

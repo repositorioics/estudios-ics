@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Created by ICS_Inspiron3 on 23/07/2019.
  */
 @Entity
-@Table(name = "Personal", catalog = "estudios_ics")
+@Table(name = "personal", catalog = "estudios_ics")
 public class Personal extends BaseMetaData implements Auditable {
     private static final long serialVersionUID = 1L;
 

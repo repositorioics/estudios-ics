@@ -921,3 +921,18 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_1-5', '1', 'DIURESIS', NULL, '0', 1, '0', '1-5 ml/Kg/Hr');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_0.5-0.9', '2', 'DIURESIS', NULL, '0', 2, '0', '0.5-0.9 ml/Kg/Hr');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_0.5', '3', 'DIURESIS', NULL, '0', 3, '0', '>0.5 ml/Kg/Hr');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP', NULL, NULL, NULL, '1', 0, '0', 'Catalogo tipos de muestras superficie');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_01', '01', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 1, '0', 'Manecilla de la puerta de la casa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_02', '02', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 2, '0', 'Manija del baño');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_03', '03', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 3, '0', 'Manija del refrigerador');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_04', '04', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 4, '0', 'Interruptor de la luz sala o habitación');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_05', '05', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 5, '0', 'Juguete de niño');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_06', '06', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 6, '0', 'Teléfono celular');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_07', '07', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 7, '0', 'Mesa del comedor');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_08', '08', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 8, '0', 'Grifo de agua');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_09', '09', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 9, '0', 'Encima del refrigerador');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_10', '10', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 10, '0', 'Mueble cerca de la cama');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_11', '11', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 11, '0', 'Pared detrás de la cama');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_12', '12', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 12, '0', 'Pared en el baño');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_13', '13', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 13, '0', 'Muestra de ambas manos');

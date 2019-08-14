@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "Cargo", catalog = "estudios_ics")
+@Table(name = "cargo", catalog = "estudios_ics")
 public class Cargo extends BaseMetaData {
 
     private static final long serialVersionUID = 1L;
