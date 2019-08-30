@@ -34,6 +34,7 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'logout', 'Salir','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'reports', 'Reportes','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'report.file.data', 'Datos Generales','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'uo1.positives', 'Positivos UO1','0','0',0);
 
 
 /*Catalogos*/
@@ -936,3 +937,13 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_11', '11', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 11, '0', 'Pared detrás de la cama');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_12', '12', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 12, '0', 'Pared en el baño');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_TIPO_MX_SUP_13', '13', 'CHF_CAT_TIPO_MX_SUP', NULL, '0', 13, '0', 'Muestra de ambas manos');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_VISITA', NULL, NULL, NULL, '1', 0, '0', 'Tipos de visita UO1');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_VISITA_I', 'I', 'UO1_CAT_VISITA', NULL, '0', 1, '0', 'Inicial');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_VISITA_F', 'F', 'UO1_CAT_VISITA', NULL, '0', 2, '0', 'Final');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_POSITIVO_POR', NULL, NULL, NULL, '1', 0, '0', 'Caso UO1 positivo por');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_POSITIVO_01', '01', 'UO1_CAT_POSITIVO_POR', NULL, '0', 1, '0', 'PCR');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_POSITIVO_02', '02', 'UO1_CAT_POSITIVO_POR', NULL, '0', 2, '0', 'PRI');
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.positive.by', 'Positivo por','0','0',0);

@@ -16,6 +16,8 @@ import ni.org.ics.estudios.service.cohortefamilia.casos.CasaCohorteFamiliaCasoSe
 import ni.org.ics.estudios.service.cohortefamilia.casos.ParticipanteCohorteFamiliaCasoService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
+import ni.org.ics.estudios.web.utils.JsonUtil;
+import ni.org.ics.estudios.web.utils.StringUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,7 +163,7 @@ public class CasaCohorteFamiliaCasoWController {
                 casaCasoExistente.setInactiva("1");
                 this.casaCohorteFamiliaCasoService.saveOrUpdateCasaCohorteFamiliaCaso(casaCasoExistente);
             }
-            return createJsonResponse(casaCasoExistente);
+            return JsonUtil.createJsonResponse(casaCasoExistente);
         }
         catch(Exception e){
             Gson gson = new Gson();
@@ -182,10 +184,10 @@ public class CasaCohorteFamiliaCasoWController {
             Date dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
             Date dFIF = DateUtil.StringToDate(fif, "dd/MM/yyyy");
             if (dFechaInicio.after(new Date())){
-                return createJsonResponse("Fecha de inicio es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
+                return JsonUtil.createJsonResponse("Fecha de inicio es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
             }
             if (dFIF.after(new Date())){
-                return createJsonResponse("FIF es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
+                return JsonUtil.createJsonResponse("FIF es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
             }
             CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasoByCodigoCasa(codigoCasa);
             //CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasosByCodigoCasaFecha(codigoCasa,dFechaInicio);
@@ -196,7 +198,7 @@ public class CasaCohorteFamiliaCasoWController {
             if (casaCasoExistente==null) {
                 if (casaCaso == null) {
                     casaCaso = new CasaCohorteFamiliaCaso();
-                    casaCaso.setCodigoCaso(getCadenaAlfanumAleatoria(36, true));
+                    casaCaso.setCodigoCaso(StringUtil.getCadenaAlfanumAleatoria(36, true));
 
                 }
                 casaCaso.setCasa(casaCohorteFamiliaService.getCasasCHFByCodigo(codigoCasa));
@@ -210,7 +212,7 @@ public class CasaCohorteFamiliaCasoWController {
                 this.casaCohorteFamiliaCasoService.saveOrUpdateCasaCohorteFamiliaCaso(casaCaso);
             }else {
                 if (casaCasoExistente.getFechaInicio().compareTo(dFechaInicio)!=0){
-                    return createJsonResponse("Ya existe un caso activo para esta casa con fecha de inicio: "+DateUtil.DateToString(casaCasoExistente.getFechaInicio(),"dd/MM/yyyy"));
+                    return JsonUtil.createJsonResponse("Ya existe un caso activo para esta casa con fecha de inicio: "+DateUtil.DateToString(casaCasoExistente.getFechaInicio(),"dd/MM/yyyy"));
                 }else
                     casaCaso = casaCasoExistente;
             }
@@ -218,7 +220,7 @@ public class CasaCohorteFamiliaCasoWController {
             ParticipanteCohorteFamiliaCaso participanteCaso = this.participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByParticipante(codigoParticipante, casaCaso.getCodigoCaso());
             if(participanteCaso==null){
                 participanteCaso = new ParticipanteCohorteFamiliaCaso();
-                participanteCaso.setCodigoCasoParticipante(getCadenaAlfanumAleatoria(36, true));
+                participanteCaso.setCodigoCasoParticipante(StringUtil.getCadenaAlfanumAleatoria(36, true));
                 participanteCaso.setRecordDate(new Date());
                 participanteCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 participanteCaso.setPasive('0');
@@ -264,7 +266,7 @@ public class CasaCohorteFamiliaCasoWController {
                     participanteCaso = this.participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByParticipante(participante.getParticipante().getCodigo(), casaCaso.getCodigoCaso());
                     if (participanteCaso == null) {
                         participanteCaso = new ParticipanteCohorteFamiliaCaso();
-                        participanteCaso.setCodigoCasoParticipante(getCadenaAlfanumAleatoria(36, true));
+                        participanteCaso.setCodigoCasoParticipante(StringUtil.getCadenaAlfanumAleatoria(36, true));
                         participanteCaso.setEnfermo("N");
                         participanteCaso.setFechaEnfermedad(null);
                         participanteCaso.setRecordDate(new Date());
@@ -283,57 +285,12 @@ public class CasaCohorteFamiliaCasoWController {
                 }
             }
 
-            return createJsonResponse(casaCaso);
+            return JsonUtil.createJsonResponse(casaCaso);
         }
         catch(Exception e){
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.CREATED);
         }
-    }
-
-    private ResponseEntity<String> createJsonResponse( String mensaje )
-    {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("mensaje", mensaje);
-        Gson gson = new Gson();
-        String json = gson.toJson(map);
-        UnicodeEscaper escaper = UnicodeEscaper.above(127);
-        json = escaper.translate(json);
-        return new ResponseEntity<String>( json, HttpStatus.CREATED);
-    }
-
-    private ResponseEntity<String> createJsonResponse( Object o )
-    {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        Gson gson = new Gson();
-        String json = gson.toJson(o);
-        UnicodeEscaper escaper = UnicodeEscaper.above(127);
-        json = escaper.translate(json);
-        return new ResponseEntity<String>( json, headers, HttpStatus.CREATED );
-    }
-
-    private String getCadenaAlfanumAleatoria (int longitud, boolean usarSeparador){
-        StringBuilder  cadenaAleatoria = new StringBuilder();
-        long milis = new java.util.GregorianCalendar().getTimeInMillis();
-        Random r = new Random(milis);
-        int i = 0;
-        int longitudSeparador = 0;
-        while ( i < longitud){
-            if (usarSeparador && longitudSeparador==4){
-                cadenaAleatoria.append("-");
-                i++;
-                longitudSeparador=0;
-            }else {
-                char c = (char) r.nextInt(255);
-                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-                    cadenaAleatoria.append(c);
-                    i++;
-                    longitudSeparador++;
-                }
-            }
-        }
-        return cadenaAleatoria.toString();
     }
 }

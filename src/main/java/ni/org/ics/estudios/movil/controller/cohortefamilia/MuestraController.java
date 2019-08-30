@@ -125,4 +125,18 @@ public class MuestraController {
         return "Datos recibidos!";
     }
 
+    /**
+     * Acepta una solicitud GET para JSON
+     * @return JSON
+     */
+    @RequestMapping(value = "muestrasCasosUO1", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<Muestra> getMuestrasUO1() throws Exception{
+        logger.info("Descargando toda la informacion de formularios muestras UO1 para el usuario ");
+        List<Muestra> respuestaList = muestraService.getMuestrasUO1();
+        if (respuestaList == null){
+            logger.debug("Nulo");
+        }
+        return respuestaList;
+    }
 }
