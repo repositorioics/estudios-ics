@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Created by ICS_Inspiron3 on 23/07/2019.
  */
 @Entity
-@Table(name = "areaTrabajo", catalog = "estudios_ics")
+@Table(name = "areatrabajo", catalog = "estudios_ics")
 public class AreaTrabajo extends BaseMetaData {
     private static final long serialVersionUID = 1L;
 

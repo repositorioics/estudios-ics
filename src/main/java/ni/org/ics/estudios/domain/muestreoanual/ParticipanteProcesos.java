@@ -66,6 +66,7 @@ public class ParticipanteProcesos implements Auditable {
     private String posDengue;
     //17072019. Saber si el participante es seleccionado para el estudio ZEN(Zika en Ninos)
     private String estudioZen;
+    private String mxSuperficie; //1:asent mx superficie, 2:consent manos, 3:Ambos, 0 o null:No aplica
 
     private MovilInfo movilInfo;
 
@@ -447,6 +448,15 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setEstudioZen(String estudioZen) {
         this.estudioZen = estudioZen;
+    }
+
+    @Column(name = "mx_superficie", nullable = true, length = 2)
+    public String getMxSuperficie() {
+        return mxSuperficie;
+    }
+
+    public void setMxSuperficie(String mxSuperficie) {
+        this.mxSuperficie = mxSuperficie;
     }
 
     public MovilInfo getMovilInfo() {

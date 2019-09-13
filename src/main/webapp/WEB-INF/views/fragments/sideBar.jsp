@@ -20,25 +20,30 @@
 	            </ul>
 	        </li>
             </sec:authorize>
-	        <li class="nav-item nav-dropdown chfcasos">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="chfcasos" /></a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item chfcasossearch">
-                        <a class="nav-link" href="<spring:url value="/chf/editarcaso/" htmlEscape="true "/>"><i class="icon-home"></i><spring:message code="chfcasossearch" /></a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item nav-dropdown supervision">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-eye"></i><spring:message code="superv" /></a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item intensiveMonitoring">
-                        <a class="nav-link" href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><i class="icon-location-pin"></i><spring:message code="intensiveMonitoring" /></a>
-                    </li>
-                    <li class="nav-item visitsIM">
-                        <a class="nav-link" href="<spring:url value="/reportes/super/visitas/" htmlEscape="true "/>"><i class="icon-list"></i><spring:message code="visits" /></a>
-                    </li>
-                </ul>
-            </li>
+            <sec:authorize access="hasAnyRole('ROLE_SUPER')">
+                <li class="nav-item nav-dropdown chfcasos">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="chfcasos" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item chfcasossearch">
+                            <a class="nav-link" href="<spring:url value="/chf/editarcaso/" htmlEscape="true "/>"><i class="icon-home"></i><spring:message code="chfcasossearch" /></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-dropdown supervision">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-eye"></i><spring:message code="superv" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item intensiveMonitoring">
+                            <a class="nav-link" href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><i class="icon-location-pin"></i><spring:message code="intensiveMonitoring" /></a>
+                        </li>
+                        <li class="nav-item visitsIM">
+                            <a class="nav-link" href="<spring:url value="/reportes/super/visitas/" htmlEscape="true "/>"><i class="icon-list"></i><spring:message code="visits" /></a>
+                        </li>
+                        <li class="nav-item posUO1">
+                            <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
             <li class="nav-item nav-dropdown laboratory">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-chemistry"></i><spring:message code="laboratory" /></a>
                 <ul class="nav-dropdown-items">

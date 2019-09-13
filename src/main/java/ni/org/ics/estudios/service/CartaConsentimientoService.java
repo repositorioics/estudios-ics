@@ -62,4 +62,17 @@ public class CartaConsentimientoService {
         if (estudio>0)  query.setParameter("estudio", estudio);
         return query.list();
     }
+
+    public List<CartaConsentimiento> getCartaConsentimientoByCodCasaEstudio(String casaChf, Integer estudio)
+    {
+        Session session = sessionFactory.getCurrentSession();
+        String sqlQuery = "from CartaConsentimiento where casaChf = :casaChf ";
+        if (estudio>0)  sqlQuery += " and tamizaje.estudio.codigo = :estudio";
+        sqlQuery += " order by fechaFirma asc";
+        Query query = session.createQuery(sqlQuery);
+
+        query.setParameter("casaChf", casaChf);
+        if (estudio>0)  query.setParameter("estudio", estudio);
+        return query.list();
+    }
 }

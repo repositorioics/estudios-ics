@@ -54,6 +54,12 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     private String verifTutor;
     private String reconsentimiento; //indica si es carta por reconsentimiento del estudio
     private Date fechaRecibido;
+    //consentimiento muestras superficie casas
+    private String nombre1MxSuperficie;
+    private String nombre2MxSuperficie;
+    private String apellido1MxSuperficie;
+    private String apellido2MxSuperficie;
+    private String casaChf;
 
     @Id
     @Column(name = "CODIGO", nullable = false, insertable = true, updatable = false, length = 36)
@@ -240,7 +246,7 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name="CODIGO_PARTICIPANTE", nullable = false)
+    @JoinColumn(name="CODIGO_PARTICIPANTE", nullable = true)
     @ForeignKey(name = "FK_PARTICIPANTE_CARTACON")
     public Participante getParticipante() {
         return participante;
@@ -348,6 +354,51 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
 
     public void setFechaRecibido(Date fechaEnvio) {
         this.fechaRecibido = fechaEnvio;
+    }
+
+    @Column(name = "NOMBRE1_MXSUPERFICIE", length = 100, nullable = true)
+    public String getNombre1MxSuperficie() {
+        return nombre1MxSuperficie;
+    }
+
+    public void setNombre1MxSuperficie(String nombre1MxSuperficie) {
+        this.nombre1MxSuperficie = nombre1MxSuperficie;
+    }
+
+    @Column(name = "NOMBRE2_MXSUPERFICIE", length = 100, nullable = true)
+    public String getNombre2MxSuperficie() {
+        return nombre2MxSuperficie;
+    }
+
+    public void setNombre2MxSuperficie(String nombre2MxSuperficie) {
+        this.nombre2MxSuperficie = nombre2MxSuperficie;
+    }
+
+    @Column(name = "APELLIDO1_MXSUPERFICIE", length = 100, nullable = true)
+    public String getApellido1MxSuperficie() {
+        return apellido1MxSuperficie;
+    }
+
+    public void setApellido1MxSuperficie(String apellido1MxSuperficie) {
+        this.apellido1MxSuperficie = apellido1MxSuperficie;
+    }
+
+    @Column(name = "APELLIDO2_MXSUPERFICIE", length = 100, nullable = true)
+    public String getApellido2MxSuperficie() {
+        return apellido2MxSuperficie;
+    }
+
+    public void setApellido2MxSuperficie(String apellido2MxSuperficie) {
+        this.apellido2MxSuperficie = apellido2MxSuperficie;
+    }
+
+    @Column(name = "CODIGO_CASA_CHF", length = 4, nullable = true)
+    public String getCasaChf() {
+        return casaChf;
+    }
+
+    public void setCasaChf(String casaChf) {
+        this.casaChf = casaChf;
     }
 
     @Override

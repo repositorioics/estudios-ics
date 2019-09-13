@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.movil.controller.cohortefamilia;
 
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.cohortefamilia.MuestraSuperficie;
 import ni.org.ics.estudios.service.cohortefamilia.MuestraService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,4 +90,53 @@ public class MuestraController {
         return "Datos recibidos!";
     }
 
+    /**
+     * Acepta una solicitud GET para JSON
+     * @return JSON
+     */
+    @RequestMapping(value = "muestrasSuperficie", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<MuestraSuperficie> getMuestrasSuperficie() throws Exception{
+        logger.info("Descargando toda la informacion de formularios muestras de superficie para el usuario ");
+        List<MuestraSuperficie> respuestaList = muestraService.getMuestrasSuperficie();
+        if (respuestaList == null){
+            logger.debug("Nulo");
+        }
+        return respuestaList;
+    }
+
+    /**
+     * Acepta una solicitud POST con un par�metro JSON
+     * @param muestras Objeto serializado de Muestras superficie
+     * @return String con el resultado
+     */
+    @RequestMapping(value = "muestrasSuperficie", method = RequestMethod.POST, consumes = "application/json")
+    public @ResponseBody String saveMuestras(@RequestBody MuestraSuperficie[] muestras){
+        logger.debug("Insertando/Actualizando muestras superficie");
+        if (muestras == null){
+            logger.debug("Nulo");
+            return "No recibi nada!";
+        }else{
+            List<MuestraSuperficie> muestraList = Arrays.asList(muestras);
+            for (MuestraSuperficie muestra : muestraList){
+                muestraService.saveOrUpdateMxSup(muestra);
+            }
+        }
+        return "Datos recibidos!";
+    }
+
+    /**
+     * Acepta una solicitud GET para JSON
+     * @return JSON
+     */
+    @RequestMapping(value = "muestrasCasosUO1", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<Muestra> getMuestrasUO1() throws Exception{
+        logger.info("Descargando toda la informacion de formularios muestras UO1 para el usuario ");
+        List<Muestra> respuestaList = muestraService.getMuestrasUO1();
+        if (respuestaList == null){
+            logger.debug("Nulo");
+        }
+        return respuestaList;
+    }
 }

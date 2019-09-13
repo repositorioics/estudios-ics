@@ -30,6 +30,7 @@ public class VisitaTerrenoParticipante extends BaseMetaData {
     private String relacionFamPersonaCasa;
     private String otraRelacionPersonaCasa;
     private String telefonoPersonaCasa;
+    private String estudio;
 
     @Id
     @Column(name = "CODIGO", nullable = false, length = 50)
@@ -149,6 +150,15 @@ public class VisitaTerrenoParticipante extends BaseMetaData {
 
     public void setTelefonoPersonaCasa(String telefonoPersonaCasa) {
         this.telefonoPersonaCasa = telefonoPersonaCasa;
+    }
+
+    @Column(name = "ESTUDIO", nullable = true, length = 50)
+    public String getEstudio() {
+        return estudio;
+    }
+
+    public void setEstudio(String estudio) {
+        this.estudio = estudio;
     }
 
     @Override

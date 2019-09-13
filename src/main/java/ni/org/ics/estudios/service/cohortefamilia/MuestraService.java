@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.service.cohortefamilia;
 
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.cohortefamilia.MuestraSuperficie;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -80,4 +81,24 @@ public class MuestraService {
         session.saveOrUpdate(muestra);
     }
 
+    public List<MuestraSuperficie> getMuestrasSuperficie() throws Exception
+    {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select m from MuestraSuperficie m, CasaCohorteFamiliaCaso c where m.caso = c.codigoCaso and c.pasive = '0' and c.inactiva = '0' and m.pasive = '0'");
+        return  query.list();
+    }
+
+    public void saveOrUpdateMxSup(MuestraSuperficie muestra){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(muestra);
+    }
+
+    public List<Muestra> getMuestrasUO1() throws Exception{
+        Calendar hoy = Calendar.getInstance();
+        int anioActual = hoy.get(Calendar.YEAR);
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('4','5') and recordDate >= :primerDia");
+        query.setParameter("primerDia", DateUtil.StringToDate("01/01/"+String.valueOf(anioActual), "dd/MM/yyyy"));
+        return  query.list();
+    }
 }
