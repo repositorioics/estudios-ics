@@ -49,7 +49,7 @@
   }
 </style>
 </head>
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden footer-fixed">
 <jsp:include page="../fragments/bodyHeader.jsp" />
 <div class="">
 <jsp:include page="../fragments/sideBar.jsp" />

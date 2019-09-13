@@ -24,28 +24,12 @@
     <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
     <style>
          input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
-
-         .has-search .form-control {
-             padding-left: 2.375rem;
-         }
-
-         .has-search .form-control-feedback {
-             position: absolute;
-             z-index: 2;
-             display: block;
-             width: 2.375rem;
-             height: 2.375rem;
-             line-height: 2.375rem;
-             text-align: center;
-             pointer-events: none;
-             color: #aaa;
-         }
-
-
+         input[type="text"]{color: #000000; font-family: Roboto}
+         input[type="select"]{color: #000000; font-family: Roboto}
     </style>
+    <jsp:include page="../fragments/headTag.jsp" />
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
-
     <title>Hemodinámica</title>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -65,15 +49,16 @@
         </ol>
         <spring:url value="/hemo/addHemodinamica" var="saveHemoUrl"/>
         <spring:url value="/hemo/listado" var="ListadoUrl"/>
+        <spring:url value="/hemo/GetRange" var="GetRangeUrl"/>
         <c:set var="successmessage"><spring:message code="process.success" /></c:set>
         <c:set var="errormessage"><spring:message code="process.errors" /></c:set>
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card text-black-50 bg-secondary">
+                    <div class="card text-black-50 bg-light border-primary">
                         <div class="card-header">
-                            <strong> <i class="fa fa-search" aria-hidden="true"></i> - Búscar </strong>
-                            <small>Participante</small>
+                            <h5 class="text-gray-dark" style="font-family: Roboto">
+                                <i class="fa fa-search" aria-hidden="true"></i>   <spring:message code="Búscar Participante" /></h5>
                         </div>
                         <div class="card-block">
                             <spring:url value="/hemo/searchParticipant" var="searchPartUrl"/>
@@ -84,34 +69,35 @@
                                         <input type="text" class="form-control" placeholder="Ingrese el código" id="parametro" name="parametro">
                                         <div id="gendererror" class="text-danger"></div>
                                     </div>
-
                                 </div>
                             </form>
                                 <div class="row">
                                     <form action="#" class="form-horizontal" id="save-hemo-form" method="post" autocomplete="off" name="save-hemo-form" role="form">
-                                        <div id="errorIMC" class="error text-danger"></div>
+                                        <div id="errorIMC" hidden="hidden" class="error text-danger"></div>
                                         <div class="row">
+                                        <div hidden="hidden">
                                             <div class="form-group col-sm-4">
                                                 <label for="silais">Silais:</label>
-                                                <input type="text" class="form-control font-weight-bold" name="silais" id="silais" value="Managua" readonly >
+                                                <input type="text" class="form-control" name="silais" id="silais" value="Managua" readonly >
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="silais">Unidad de Salud:</label>
-                                                <input type="text" name="uSalud" id="uSalud" readonly value="Sócrates Flores Vivas" class="form-control font-weight-bold" />
+                                                <input type="text" name="uSalud" id="uSalud" readonly value="Sócrates Flores Vivas" class="form-control" />
                                             </div>
 
                                             <div class="form-group col-sm-4">
                                                 <label for="municipio">Municipio:</label>
-                                                <input type="text" class="form-control font-weight-bold" id="municipio" name="municipio" value="Managua" readonly >
+                                                <input type="text" class="form-control" id="municipio" name="municipio" value="Managua" readonly >
                                             </div>
+                                        </div>
                                             <div hidden="hidden">
                                                 <div class="form-group col-sm-3">
                                                     <label for="idParticipante">Participante:</label>
-                                                    <input type="text" name="idParticipante" id="idParticipante" placeholder="Código del Participante" readonly class="form-control font-weight-bold"/>
+                                                    <input type="text" name="idParticipante" id="idParticipante" placeholder="Código del Participante" readonly class="form-control"/>
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label for="sector">Sector:</label>
                                                 <span class="required text-danger"> * </span>
                                                 <select name="sector" id="sector" name="sector" class="form-control" required="required">
@@ -121,17 +107,17 @@
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                            <div id="bar" class="form-group col-sm-6" style="display: none">
+                                            <div class="form-group col-sm-8">
+                                                <label for="direccion">Dirección de Participante :</label>
+                                                <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ingrese la dirección"/>
+                                            </div>
+                                            <div id="bar" class="form-group col-sm-12" style="display: none">
                                                 <label for="barrioF">Barrio :</label>
                                                 <input type="text" class="form-control" id="barrioF" name="barrioF" style="text-transform:uppercase" />
                                             </div>
-                                            <div class="form-group col-sm-12">
-                                                <label for="direccion">Dirección de Participante :</label>
-                                                <textarea name="direccion" class="form-control font-weight-bold" id="direccion" cols="30" rows="2" placeholder="Ingrese la dirección" ></textarea>
-                                            </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="fecha">Fecha de Nacimiento:</label>
-                                                <input type="text" id="fecha" name="fecha" readonly class="form-control font-weight-bold" />
+                                                <input type="text" id="fecha" name="fecha" readonly class="form-control" />
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="expediente">Expediente:</label>
@@ -145,11 +131,25 @@
 
                                             <div class="form-group col-sm-6">
                                                 <label for="nombre">Nombre:</label>
-                                                <input type="text" class="form-control font-weight-bold" placeholder="Nombre del Participante" id="nombre" required readonly>
+                                                <input type="text" class="form-control" placeholder="Nombre del Participante" id="nombre" required readonly>
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label for="edad">Edad:</label>
-                                                <input type="text" class="form-control font-weight-bold" id="edad" placeholder="Edad" name="edad" readonly>
+                                                <input type="text" class="form-control" id="edad" placeholder="Edad" name="edad" readonly>
+                                            </div>
+                                            <div hidden="hidden">
+                                                <div class="form-group col-sm-3">
+                                                    <input type="text" name="anios" id="anios" />
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <input type="text" name="mes" id="mes"/>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <input type="text" id="dias" name="dias"/>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <input type="text" id="sexo" name="sexo"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <hr/>
@@ -170,28 +170,43 @@
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="asc">A.S.C(m2):</label>
-                                                <input type="text" class="form-control font-weight-bold" id="asc" name="asc" readonly>
+                                                <input type="text" class="form-control" id="asc" name="asc" readonly>
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="imc">IMC:</label>
-                                                <input type="text" class="form-control font-weight-bold" id="imc" name="imc" readonly>
+                                                <input type="text" class="form-control" id="imc" name="imc" readonly>
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="IMCdetallado">Detalle Imc:</label>
-                                                <input type="text" class="form-control font-weight-bold" id="IMCdetallado" name="IMCdetallado" readonly>
+                                                <input type="text" class="form-control" id="IMCdetallado" name="IMCdetallado" readonly>
                                             </div>
 
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label for="fie">Fecha Inicio de Enfermedad:</label>
                                                 <span class="required text-danger"> * </span>
                                                 <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="4"/>
                                             </div>
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label for="diasenf">Días de Enfermedad:</label>
-                                                <input type="text" class="form-control font-weight-bold" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
+                                                <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
+                                            </div>
+
+                                            <div class="form-group col-sm-4" style="text-align: center">
+                                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                 <p class="text-center">
+                                                     <br/>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="chkRange2" name="chkRange2">
+                                                        <label class="custom-control-label" for="chkRange2">Frecuencias Respiratorias.</label>
+                                                    </div>
+                                                 </p>
+                                                </div>
+
+
                                             </div>
                                             </div>
-                                        <hr/>
+                                        <br/>
+                                        <div hidden="hidden">
                                         <div class="row">
                                             <div class="form-group col-sm-4">
                                                 <button class="btn btn-dark btn-block btn-lg" type="button" tabindex="5" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -199,74 +214,74 @@
                                                 </button>
                                             </div>
                                             <div class="form-group col-sm-4">
-
                                             </div>
                                             <div class="form-group col-sm-4">
-
+                                                <button id="btnObtenerRango" class="btn btn-primary btn-block btn-lg" type="button"> Obtener</button>
                                             </div>
                                         </div>
+
                                             <div class="row">
                                              <div class="col-md-12">
                                                      <div class="collapse" id="collapseExample">
-            <div class="row">
-                <div class="col-sm-12">
-                    <label style="font-family: Roboto">Rango de Presión PS/PD:</label>
-                </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label style="font-family: Roboto">Rango de Presión PS/PD:</label>
+                                                </div>
 
-                    <div class="form-group col-sm-4">
-                        <input type="text" class="form-control focusNext" id="sdMin" name="sdMin" placeholder="Mínima" tabindex="6">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <input type="text" class="form-control focusNext" id="sdMed" name="sdMed" placeholder="Media" tabindex="7">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <input type="text" class="form-control focusNext" id="sdMax" name="sdMax" placeholder="Máxima" tabindex="8">
-                    </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <label class="text-capitalize"  style="font-family: Roboto">Presión Arterial Media (PAM): </label>
-                </div>
-                <div class="form-group col-sm-4">
-                    <input type="text" class="form-control focusNext" id="pamMin" name="pamMin" placeholder="Minima" tabindex="9">
-                </div>
-                <div class="form-group col-sm-4">
-                    <input type="text" class="form-control focusNext" id="pamMed" name="pamMed" placeholder="Media" tabindex="10">
-                </div>
-                <div class="form-group col-sm-4">
-                    <input type="text" class="form-control focusNext" id="pamMax" name="pamMax" placeholder="Máxima" tabindex="11">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <label style="font-family: Roboto">Rango de Frecuencias Cárdiacas: </label>
-                </div>
-                <div class="form-group col-sm-4">
-                    <input type="text" class="form-control focusNext" id="fcMin" name="fcMin" placeholder="Minima" tabindex="12">
-                </div>
+                                                    <div class="form-group col-sm-4">
+                                                        <input type="text" class="form-control font-weight-bold focusNext" id="sdMin" name="sdMin" placeholder="Mínima" readonly tabindex="6">
+                                                    </div>
+                                                    <div class="form-group col-sm-4">
+                                                        <input type="text" class="form-control font-weight-bold focusNext" id="sdMed" name="sdMed" placeholder="Media" readonly tabindex="7">
+                                                    </div>
+                                                    <div class="form-group col-sm-4">
+                                                        <input type="text" class="form-control font-weight-bold focusNext" id="sdMax" name="sdMax" placeholder="Máxima" readonly tabindex="8">
+                                                    </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label class="text-capitalize"  style="font-family: Roboto">Presión Arterial Media (PAM): </label>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <input type="text" class="form-control font-weight-bold focusNext" id="pamMin" name="pamMin" placeholder="Minima" readonly tabindex="9">
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <input type="text" class="form-control font-weight-bold focusNext" id="pamMed" name="pamMed" placeholder="Media" readonly tabindex="10">
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <input type="text" class="form-control font-weight-bold focusNext" id="pamMax" name="pamMax" placeholder="Máxima" readonly tabindex="11">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label style="font-family: Roboto">Rango de Frecuencias Cárdiacas: </label>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <input type="text" class="form-control font-weight-bold focusNext" id="fcMin" name="fcMin" placeholder="Minima" readonly tabindex="12">
+                                                </div>
 
-                <div class="form-group col-sm-4">
-                    <input type="text" class="form-control focusNext" id="fcMed" name="fcMed" placeholder="Máxima" tabindex="13">
-                </div>
-                <div class="form-group col-sm-4">
-                    <input type="text" class="form-control focusNext" id="fcProm" name="fcProm" placeholder="Promedio" tabindex="14">
-                </div>
-            </div>
-            <div class="row">
-            <div class="col-sm-12">
-                <label class="text-capitalize"  style="font-family: Roboto">Rango Frecuencias Respiratorias </label>
-            </div>
-            <div class="form-group col-sm-6">
-                <input type="text" class="form-control focusNext" id="frMin" name="frMin" placeholder="Minima" tabindex="15">
-            </div>
-            <div class="form-group col-sm-6">
-                <input type="text" class="form-control focusNext" id="frMax" name="frMax" placeholder="Máxima" tabindex="16">
-            </div>
-        </div>
+                                                <div class="form-group col-sm-4">
+                                                    <input type="text" class="form-control font-weight-bold focusNext" id="fcMed" name="fcMed" placeholder="Máxima" readonly tabindex="13">
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <input type="text" class="form-control font-weight-bold focusNext" id="fcProm" name="fcProm" placeholder="Promedio" readonly tabindex="14">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-sm-12">
+                                                <label class="text-capitalize"  style="font-family: Roboto">Rango Frecuencias Respiratorias </label>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <input type="text" class="form-control font-weight-bold focusNext" id="frMin" name="frMin" placeholder="Minima" readonly tabindex="15">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <input type="text" class="form-control font-weight-bold focusNext" id="frMax" name="frMax" placeholder="Máxima" readonly tabindex="16">
+                                            </div>
+                                        </div>
         </div>
     </div>
 </div>
-
+                                        </div>
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 <div class="form-group">
@@ -364,12 +379,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#parametro").focus();
-        $("#sdMin").mask("999.9/999.9");
-        $("#sdMed").mask("999.9/999.9");
-        $("#sdMax").mask("999.9/999.9");
-        $("#pamMin").mask("99.9");
-        $("#pamMed").mask("99.9");
-        $("#pamMax").mask("99.9");
         $("#peso").mask("999.99");
         $("#sector").select2();
         $("#sector").on("change", function(){
@@ -381,6 +390,48 @@
                $("#barrioF").val("").attr("required", "false");
             }
         });
+        function ClearRangos(){
+                $("#sdMin").val("");
+                $("#sdMed").val("");
+                $("#sdMax").val("");
+                $("#pamMin").val("");
+                $("#pamMed").val("");
+                $("#pamMax").val("");
+                $("#fcMin").val("");
+                $("#fcMed").val("");
+                $("#fcProm").val("");
+                $("#frMin").val("");
+                $("#frMax").val("");
+        }
+
+        $("#btnObtenerRango").on("click", function(){
+            GetRange();
+        });
+        function GetRange(){
+            $.getJSON(parameters.GetRangeUrl,{ sexo : $('#sexo').val(), fecha : $('#fecha').val(), ajax : 'true'  }, function(data){
+                console.log(data);
+                if (data.result == null){
+                $("#sdMin").val(data.objPsdmin);
+                $("#sdMed").val(data.objPsdmed);
+                $("#sdMax").val(data.objPsdmax);
+                $("#pamMin").val(data.objPammin);
+                $("#pamMed").val(data.objPammed);
+                $("#pamMax").val(data.objPammax);
+                $("#fcMin").val(data.objfcMin);
+                $("#fcMed").val(data.objfcMax);
+                $("#fcProm").val(data.objfcProm);
+                $("#frMin").val(data.objfrMin);
+                $("#frMax").val(data.objfrMax);
+
+                    $("input[name=chkRange2]").attr("checked", true);
+                }else{
+                    ClearRangos();
+
+                    $("input[name=chkRange2]").attr("checked", false);
+                }
+            })
+        }
+
         $("#select-participante-form").validate({
             rules:{
                 parametro: {required: true}
@@ -410,6 +461,7 @@
             },
             submitHandler: function (form) {
                 searchParticipante();
+                ClearRangos();
             }
         })
         var parametros = {searchPartUrl: "${searchPartUrl}"};
@@ -417,30 +469,12 @@
             $.getJSON(parametros.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
                 var len = data.length;
                 if(len==0){
-                    toastr.options = {
-                        "closeButton": true,
-                        "onclick": null,
-                        "showDuration": "300",
-                        "hideDuration": "1000",
-                        "timeOut": 3000,
-                        "extendedTimeOut": 0,
-                        "tapToDismiss": false
-                    };
-                   // toastr["warning"](parametros.notFound);
                     swal("Error!","Código no encontrado","error");
+                    $("input[name=chkRange2]").attr("checked", false);
                     $("#parametro").focus();
                 }
                 else{
                     if(data.estado == "0"){
-                        toastr.options = {
-                            "closeButton": true,
-                            "onclick": null,
-                            "showDuration": "300",
-                            "hideDuration": "1000",
-                            "timeOut": 3000,
-                            "extendedTimeOut": 0,
-                            "tapToDismiss": false
-                        };
                         swal("Advertencia!", "Participante está retirado!", "warning");
                         $("#nombre").val("");
                         $("#fecha").val("");
@@ -448,12 +482,20 @@
                         $("#edad").val("");
                         $("#direccion").val("");
                         $("#sector").val("").change();
+                        $("#anios").val("");
+                        $("#mes").val("");
+                        $("#dias").val("");
+                        $("#sexo").val("");
+                        $("input[name=chkRange2]").attr("checked", false);
                         $("#parametro").focus();
                     }else{
                         var elemento = data.edad;
                         var fecha = elemento.split('/');
                         var datestring = ( fecha[0] + " Años " + fecha[1] + " Meses " + fecha[2] + " Dias");
-
+                        $("#anios").val(fecha[0]);
+                        $("#mes").val(fecha[1]);
+                        $("#dias").val(fecha[2]);
+                        $("#sexo").val(data.sexo);
                         var myExpediente = data.fecha;
                         $("#nombre").val(data.nombre);
                         $("#fecha").val(data.fecha);
@@ -464,21 +506,13 @@
                         var exp = myExpediente.split('/');
                         var verExpdiente = (exp[0]+""+exp[1]+""+exp[2].substr(2,2))
                         $("#expediente").val(verExpdiente);
+                        GetRange();
                         $("#peso").focus();
                     }
                 }
             }).fail(function() {
-                toastr.options = {
-                    "closeButton": true,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": 0,
-                    "extendedTimeOut": 0,
-                    "tapToDismiss": false
-                };
-                //toastr["error"]("error", "Error!!");
                 swal("Error!","Código no existe!", "error");
+                $("input[name=chkRange2]").attr("checked", false);
                 $("#parametro").focus();
             });
         }
@@ -601,7 +635,8 @@
         }
 
         var parameters = { saveHemoUrl: "${saveHemoUrl}",
-                           ListadoUrl:"${ListadoUrl}"};
+                           ListadoUrl:"${ListadoUrl}",
+            GetRangeUrl:"${GetRangeUrl}"};
         var form1 = $('#save-hemo-form');
 
         jQuery.validator.addMethod("myComa", function (value, element) {
@@ -651,28 +686,7 @@
                 talla:{required:true,
                     number: true},
                 diasenf:{required:true},
-                uSalud:{required:true},
-                fcMin:{number:true,min:60, max:110},
-                fcMed:{number:true,min:100, max:180 },
-                fcProm:{number:true, min:80, max:145},
-                frMin:{number:true,min:12, max:40 },
-                frMax:{number:true,min:18, max:60},
-                pamMin:{
-                    number: true
-                    ,min:48.9
-                    ,max:76.6
-                },
-                pamMed:{
-                    number: true,
-                    min:57.6,
-                    max:87.5
-                },
-                pamMax:{
-                    number: true
-                ,min:66.3
-                ,max:98.4
-                }
-
+                uSalud:{required:true}
             },
             errorElement: 'em',
             errorPlacement: function ( error, element ) {
@@ -697,7 +711,6 @@
         });
         function SaveHemo(dir){
             $.post(dir.saveHemoUrl, form1.serialize(), function(data){
-                console.log(form1.serialize());
                 swal("Éxito!", "Información guardada!", "success")
                 window.setTimeout(function(){
                     window.location.href = parameters.ListadoUrl;

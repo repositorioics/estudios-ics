@@ -15,6 +15,8 @@
     <style>
 
         input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
+        input[type="text"]{color: #000000; font-family: Roboto}
+        input[type="select"]{color: #000000; font-family: Roboto}
         body {
             height: 100vh;
             padding: 0;
@@ -137,7 +139,7 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card">
+                    <div class="card text-black-50 bg-secondary">
                         <div class="card-header">
                             <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinamica" />
                         </div>

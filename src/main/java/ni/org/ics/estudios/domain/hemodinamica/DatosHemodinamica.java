@@ -5,6 +5,7 @@ package ni.org.ics.estudios.domain.hemodinamica;
         import javax.persistence.*;
 
         import ni.org.ics.estudios.domain.Participante;
+        import org.codehaus.jackson.annotate.JsonIgnore;
         import org.hibernate.annotations.ForeignKey;
         import org.hibernate.annotations.GenericGenerator;
 
@@ -61,7 +62,6 @@ public class DatosHemodinamica extends BaseMetaData {
     private Integer frMax;
 
     private String barrioF;
-
 
     /*  Getter y Setter*/
     @Id
@@ -336,4 +336,5 @@ public class DatosHemodinamica extends BaseMetaData {
     public void setBarrioF(String barrioF) {
         this.barrioF = barrioF;
     }
+
 }

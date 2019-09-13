@@ -4,13 +4,19 @@ import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
+import ni.org.ics.estudios.dto.RangosFrecuenciasCardiacas;
+import ni.org.ics.estudios.dto.RangosPresion;
+import ni.org.ics.estudios.service.UsuarioService;
+import ni.org.ics.estudios.users.model.UserSistema;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +32,18 @@ public class DatoshemodinamicaService {
     @Resource(name="sessionFactory")
     private SessionFactory sessionFactory;
 
+    @Resource(name="usuarioService")
+    private UsuarioService usuarioService;
+
     @SuppressWarnings("unchecked")
     public List<DatosHemodinamica> getListadoHemo() throws Exception {
         try {
             Session session = sessionFactory.getCurrentSession();
-            Query query = session.createQuery("from DatosHemodinamica");
+            UserSistema usuarioActual = this.usuarioService.getUser(SecurityContextHolder.getContext().getAuthentication().getName());
+            //String getUserName = usuarioActual.getUsername();
+            //Query query = session.createQuery("from DatosHemodinamica where recordUser =:getUserName");
+            //query.setParameter("getUserName", getUserName);
+            Query query = session.createQuery("from DatosHemodinamica order by fecha asc");
             return query.list();
         }catch (Exception e){
             throw e;
@@ -88,7 +101,7 @@ public class DatoshemodinamicaService {
         try {
         // Retrieve session from Hibernate
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("FROM DatosHemodinamica d where " +  "d.idDatoHemo =:idDatoHemo");
+        Query query = session.createQuery("FROM DatosHemodinamica d where " +  "d.idDatoHemo =:idDatoHemo order by fecha asc ");
         query.setParameter("idDatoHemo",idDatoHemo);
         DatosHemodinamica objHemo = (DatosHemodinamica) query.uniqueResult();
         return objHemo;
@@ -129,9 +142,43 @@ public class DatoshemodinamicaService {
         return query.list();
     }
 
+    /* Seleccionar registros Rangos de presión   */
+    @SuppressWarnings("unchecked")
+    public RangosPresion ObtenerRangosPresion(String sexo, Integer edad, String medida){
+        Session session = sessionFactory.getCurrentSession();
+        String consulta = "FROM RangosPresion WHERE :edad BETWEEN edadmin AND edadmax AND sexo =:sexo AND umedida =:medida";
+        Query query = session.createQuery(consulta);
+        query.setParameter("edad", edad);
+        query.setParameter("sexo", sexo);
+        query.setParameter("medida", medida);
+        RangosPresion obj = (RangosPresion) query.uniqueResult();
+        return obj;
+    }
 
-    /**/
+    @SuppressWarnings("unchecked")
+    public RangosFrecuenciasCardiacas ObtenerFCardiaca(String medida, Integer edad){
+        Session session = sessionFactory.getCurrentSession();
+        String consulta ="from RangosFrecuenciasCardiacas where :edad between edadmin and edadmax and umedida =:medida";
+        Query query = session.createQuery(consulta);
+        query.setParameter("medida", medida);
+        query.setParameter("edad", edad);
+        RangosFrecuenciasCardiacas obj = (RangosFrecuenciasCardiacas) query.uniqueResult();
+        return obj;
+    }
 
+    public boolean VerifyId(String idDatoHemo){
+        Session session = sessionFactory.getCurrentSession();
+        String consulta = " FROM HemoDetalle WHERE idDatoHemo = :idDatoHemo";
+        Query query = session.createQuery(consulta);
+        query.setParameter("idDatoHemo",idDatoHemo);
+        HemoDetalle obj = (HemoDetalle)query.uniqueResult();
+        if (obj !=null){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
 
 
 }

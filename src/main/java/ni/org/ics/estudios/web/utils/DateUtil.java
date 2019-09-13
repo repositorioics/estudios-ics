@@ -2,7 +2,9 @@ package ni.org.ics.estudios.web.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Miguel Salinas on 7/3/2017.
@@ -39,4 +41,75 @@ public final class DateUtil {
         else
             return null;
     }
+
+    /* - inicio de la function fecha */
+    public static String obtenerEdad(Date fechan) {
+        Calendar today = Calendar.getInstance();
+        GregorianCalendar fechaNacimiento = new GregorianCalendar();
+        fechaNacimiento.setTime(fechan);
+        int age = today.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
+        int month = (age)*12 + today.get(Calendar.MONTH) - fechaNacimiento.get(Calendar.MONTH);
+
+        if(today.get(Calendar.DAY_OF_MONTH) < fechaNacimiento.get(Calendar.DAY_OF_MONTH)){
+            month = month - 1;
+        }
+
+        if(month == 0) {
+            Long tDias = (today.getTimeInMillis() - fechaNacimiento.getTimeInMillis())  / (1000 * 60 * 60 * 24);
+            return new StringBuffer().append(tDias).append(" dias").toString();
+        }
+        else if(age == 0) {
+            age = today.get(Calendar.MONTH) - fechaNacimiento.get(Calendar.MONTH);
+            if(age == 0) {
+                age = today.get(Calendar.DAY_OF_MONTH) - fechaNacimiento.get(Calendar.DAY_OF_MONTH);
+                return new StringBuffer().append(age).append(" dias").toString();
+            }else {
+                int diaFechaActual = today.get(Calendar.DAY_OF_MONTH);
+                int diaFechaNac = fechaNacimiento.get(Calendar.DAY_OF_MONTH);
+                if (diaFechaActual < diaFechaNac) {
+                    age = age - 1;
+                    return new StringBuffer().append(age).append(" meses").toString();
+                } else {
+                    return new StringBuffer().append(age).append(" meses").toString();
+                }
+
+            }
+        } else if (month > 0 && month < 12) {
+            return new StringBuffer().append(month).append(" meses").toString();
+
+        }else {
+            if (today.get(Calendar.MONTH) < fechaNacimiento.get(Calendar.MONTH)) {
+                age--;
+            } else if (today.get(Calendar.MONTH) == fechaNacimiento.get(Calendar.MONTH)
+                    && today.get(Calendar.DAY_OF_MONTH) < fechaNacimiento.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+            return new StringBuffer().append(age).append(" años").toString();
+        }
+       /* Calendar today = Calendar.getInstance();
+        int age = today.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
+
+        if (age == 0) {
+            age = (today.get(Calendar.MONTH) - fechaNacimiento.get(Calendar.MONTH));
+
+            if (age == 0) {
+                age = (today.get(Calendar.DAY_OF_MONTH) - fechaNacimiento.get(Calendar.DAY_OF_MONTH));
+                return new StringBuffer().append(age).append(" dias").toString();
+            } else {
+                return new StringBuffer().append(age).append(" meses").toString();
+            }
+        } else {
+            if (today.get(Calendar.MONTH) < fechaNacimiento.get(Calendar.MONTH)) {
+                age--;
+            } else if (today.get(Calendar.MONTH) == fechaNacimiento.get(Calendar.MONTH)
+                    && today.get(Calendar.DAY_OF_MONTH) < fechaNacimiento.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+            return new StringBuffer().append(age).append(" años").toString();
+        }*/
+    }
+
+    /* ** fin de la funcion fecha*/
+
+
 }

@@ -17,6 +17,8 @@
             color: #000000; background-color: #ffffff;
             font-family: Roboto
         }
+        input[type="text"]{color: #000000; font-family: Roboto}
+        input[type="select"]{color: #000000; font-family: Roboto}
     </style>
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
@@ -45,9 +47,11 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card">
+                    <div class="card text-black-50 bg-secondary">
                         <div class="card-header">
-                            <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinamica" />
+                           <h5 style="font-family: Roboto">
+                               <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinámica" />
+                           </h5>
                         </div>
                         <div class="card-block">
                             <form name="formSaveDetailHemo" autocomplete="off" role="form" action="#" id="formSaveDetailHemo" method="post" class="form-horizontal">

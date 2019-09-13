@@ -1,11 +1,14 @@
 package ni.org.ics.estudios.web.controller.hemodinamica;
 
+import com.google.common.base.Verify;
 import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.RangosFrecuenciasCardiacas;
+import ni.org.ics.estudios.dto.RangosPresion;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
@@ -26,10 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ICS_Inspiron3 on 22/05/2019.
@@ -132,9 +132,9 @@ public class HemoController {
     /* FIN DEL METODO LISTADO*/
 
     /*Buscar lo faltante para modals*/
-    @RequestMapping(value = "ViewResutl/{idHemoDetalle}", method = RequestMethod.GET, produces="application/json" )
+    @RequestMapping(value = "/ViewResutl", method = RequestMethod.GET, produces="application/json" )
     public @ResponseBody
-    String BuscarResultado(@PathVariable(value = "idHemoDetalle") String idHemoDetalle)  throws ParseException {
+    String BuscarResultado(@RequestParam(value = "idHemoDetalle") String idHemoDetalle)  throws ParseException {
         Map<String, String> map = new HashMap<String, String>();
         HemoDetalle obj = datoshemodinamicaService.getByHemoDetalleId(idHemoDetalle);
         map.put("pa", obj.getPa());
@@ -145,7 +145,7 @@ public class HemoController {
         map.put("tc", obj.getTc());
         map.put("sa", obj.getSa());
         map.put("diuresis", obj.getDiuresis());
-        map.put("densidadU", obj.getDensidadUrinaria());
+        map.put("densidadU", (obj.getDensidadUrinaria() != null ? obj.getDensidadUrinaria():"-"));
         map.put("personaValida", obj.getPersonaValida());
         String jsonResponse;
         jsonResponse = new Gson().toJson(map);
@@ -167,7 +167,6 @@ public class HemoController {
         if (participante != null){
             ParticipanteProcesos procesos = participanteProcesosService.getParticipante(parametro);
             map.put("estado",procesos.getEstPart().toString());
-
         }
         map.put("codigo", participante.getCodigo().toString());
         map.put("nombre", participante.getNombreCompleto());
@@ -175,6 +174,7 @@ public class HemoController {
         map.put("edad", participante.getEdad());
         map.put("direccion", participante.getCasa().getDireccion());
         map.put("barrio", participante.getCasa().getBarrio().getCodigo().toString());
+        map.put("sexo", participante.getSexo().toString());
         String jsonResponse;
         jsonResponse = new Gson().toJson(map);
         //escapar caracteres especiales, escape de los caracteres con valor num�rico mayor a 127
@@ -184,8 +184,46 @@ public class HemoController {
         throw e;
     }
     }
-
-
+    /* */
+    @RequestMapping(value = "/GetRange", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    String GetRange(@RequestParam(value ="sexo", required = true) String sexo,
+                    @RequestParam(value ="fecha", required = true)String fecha) throws Exception{
+        try{
+            Map<String, String> map = new HashMap<String, String>();
+            Date myfecha = DateUtil.StringToDate(fecha,"dd/MM/yyyy");
+            String result = DateUtil.obtenerEdad(myfecha);
+            String[] part = result.split(" ");
+            String part1 = part[0];
+            String part2 =part[1];
+            Integer num = Integer.valueOf(part1);
+            if (num <= 18) {
+                RangosPresion objPresion = datoshemodinamicaService.ObtenerRangosPresion(sexo, num, part2);
+                RangosFrecuenciasCardiacas objFrec = datoshemodinamicaService.ObtenerFCardiaca(part2, num);
+                if (objPresion != null && objFrec != null) {
+                    map.put("objPsdmin", objPresion.getPsdmin());
+                    map.put("objPsdmed", objPresion.getPsdmed());
+                    map.put("objPsdmax", objPresion.getPsdmax());
+                    map.put("objPammin", objPresion.getPammin());
+                    map.put("objPammed", objPresion.getPammed());
+                    map.put("objPammax", objPresion.getPammax());
+                    map.put("objfcMin", objFrec.getFcMinima());
+                    map.put("objfcMax", objFrec.getFcMedia());
+                    map.put("objfcProm", objFrec.getFcPromedio());
+                    map.put("objfrMin",objFrec.getFrMinima());
+                    map.put("objfrMax", objFrec.getFrMaxima());
+                }
+            }else{
+                map.put("result","mayor de 18 años");
+            }
+            String jsonResponse;
+            jsonResponse = new Gson().toJson(map);
+            UnicodeEscaper escaper = UnicodeEscaper.above(127);
+            return escaper.translate(jsonResponse);
+        }catch (Exception e){
+            throw e;
+        }
+    }
 
         /* Guardar datos Hemodinamica 29/05/2019 - first save */
         @RequestMapping(value="addHemodinamica", method=RequestMethod.POST)

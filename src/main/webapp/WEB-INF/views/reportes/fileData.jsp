@@ -32,9 +32,9 @@
         <div class="container-fluid col-8">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="page-title">
+                    <h5 class="page-title">
                         <small><spring:message code="search" /> <spring:message code="participant" /></small>
-                    </h3>
+                    </h5>
                 </div>
                 <div class="card-block">
                     <div class="row">
