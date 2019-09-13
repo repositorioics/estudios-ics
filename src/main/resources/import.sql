@@ -947,3 +947,7 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_POSITIVO_02', '02', 'UO1_CAT_POSITIVO_POR', NULL, '0', 2, '0', 'PRI');
 
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.positive.by', 'Positivo por','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_LUGAR_REGISTRO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo lugar de registro evento');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_LUGAR_REGISTRO_01', '1', 'CAT_LUGAR_REGISTRO', NULL, '0', 1, '0', 'Centro de Salud');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_LUGAR_REGISTRO_02', '2', 'CAT_LUGAR_REGISTRO', NULL, '0', 2, '0', 'Terreno');
