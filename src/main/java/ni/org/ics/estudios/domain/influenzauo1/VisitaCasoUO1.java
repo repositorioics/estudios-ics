@@ -21,6 +21,7 @@ public class VisitaCasoUO1 extends BaseMetaData implements Auditable {
     private Date fif;
     private String vacunaFlu3Semanas;
     private Date fechaVacuna;
+    private String lugar;
 
     @Id
     @Column(name = "CODIGO_VISITA_CASO", length = 50, nullable = false)
@@ -122,6 +123,15 @@ public class VisitaCasoUO1 extends BaseMetaData implements Auditable {
 
     public void setFechaVacuna(Date fechaVacuna) {
         this.fechaVacuna = fechaVacuna;
+    }
+
+    @Column(name = "LUGAR", length = 2)
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
     }
 
     @Override
