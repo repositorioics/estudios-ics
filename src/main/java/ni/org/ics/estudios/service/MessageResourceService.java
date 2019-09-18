@@ -130,6 +130,8 @@ public class MessageResourceService {
         // Retrieve all
         return  query.list();
     }
+
+
         /* ocupar este para Mostrar los catalogos */
     public MessageResource getMensajeByCatalogAndCatKey(String catKey, String catalogo) {
         // Retrieve session from Hibernate

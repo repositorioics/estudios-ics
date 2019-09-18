@@ -55,7 +55,7 @@
 		<beans:property name="userDetailsDao" ref="userDetailsDao" />
 		<beans:property name="passwordEncoder" ref="encoder" />
 	</beans:bean>
-	
+    <beans:bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 	<authentication-manager>
 		<authentication-provider ref="authenticationProvider" />
 	</authentication-manager>

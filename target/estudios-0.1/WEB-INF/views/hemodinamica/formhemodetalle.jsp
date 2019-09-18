@@ -17,6 +17,8 @@
             color: #000000; background-color: #ffffff;
             font-family: Roboto
         }
+        input[type="text"]{color: #000000; font-family: Roboto}
+        input[type="select"]{color: #000000; font-family: Roboto}
     </style>
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
@@ -31,6 +33,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(listDetailsHemoUrl)}">AGREGAR DETALLE</a>
             </li>
         </ol>
         <spring:url value="/hemo/addHemoDetalle" var="addDetalleHemoUrl"/>
@@ -43,9 +47,11 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card">
+                    <div class="card text-black-50 bg-secondary">
                         <div class="card-header">
-                            <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinamica" />
+                           <h5 style="font-family: Roboto">
+                               <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinámica" />
+                           </h5>
                         </div>
                         <div class="card-block">
                             <form name="formSaveDetailHemo" autocomplete="off" role="form" action="#" id="formSaveDetailHemo" method="post" class="form-horizontal">
@@ -115,12 +121,12 @@
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="tc">T°C:</label>
-                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" required tabindex="10">
+                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" tabindex="10">
                                 </div>
 
                                 <div class="form-group col-sm-4">
                                     <label for="sa">SA02%:</label>
-                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%" required tabindex="11">
+                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%"  tabindex="11">
                                 </div>
 
                                 <div class="form-group col-sm-4">
@@ -181,6 +187,10 @@
                                     </select>
                                 </div>
                                     <div hidden="hidden">
+
+                                        <spring:url value="/hemo/editdetails/{idHemoDetalle}" var="editDetailsUrl">
+                                            <spring:param name="idHemoDetalle" value="${idDatoHemo}" />
+                                        </spring:url>
                                     <div class="form-group col-sm-12">
                                         <input type="text" name="idDatoHemo" id="idDatoHemo" value="${idDatoHemo}" class="form-control"/>
                                     </div>
@@ -320,13 +330,13 @@
                     max:180
                 },
                 sa: {
-                    required: true,
+
                     number: true,
                     min:70,
                     max:100
                 },
                 tc: {
-                    required: true,
+
                     number: true,
                     min:36,
                     max:41

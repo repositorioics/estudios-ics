@@ -45,21 +45,30 @@
     <jsp:include page="../fragments/sideBar.jsp" />
     <!-- Main content -->
     <div class="main">
+    <br/>
+    <br/>
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/hemo/listado/" htmlEscape="true "/>">LISTADO</a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(editDetailsUrl)}">LISTA DE DETALLES </a>
+                <i class="fa fa-angle-right"></i>
+                ${nombre}
             </li>
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
                 <div class="row">
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-10">
+
+                    <div class="col-sm-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong> <i class="fa fa-info" aria-hidden="true"></i> - Información </strong>
-                                <small>Participante</small>
+                                <h5 style="font-family: Roboto">
+                                    <i class="fa fa-info" aria-hidden="true"></i> Información Participante
+                                </h5>
                             </div>
                             <spring:url value="/hemo/adddetails/{idDatoHemo}" var="addDetailsUrl">
                                 <spring:param name="idDatoHemo" value="${idDatoHemo}" />
@@ -130,24 +139,24 @@
                                             <spring:message code="Cancelar" /></a>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong> <i class="fa fa-align-justify"></i> - Detalles </strong>
-                                <small>Hemodinámicos</small>
+                                <h5 style="font-family: Roboto">
+                                    Detalles Hemodinámicos
+                                </h5>
+                                <strong> <i class="fa fa-align-justify"></i> -  </strong>
+                                <small></small>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <table class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" id="tblHistorial">
                                     <thead>
                                     <tr>
+                                        <th class="text-center hide">Id</th>
                                         <th class="text-center">F. Registro</th>
                                         <th class="text-center">Hora</th>
                                         <th class="text-center">Clasificación</th>
@@ -156,7 +165,7 @@
                                         <th class="text-center">Pulso</th>
                                         <th class="text-center">llenado Capilar</th>
                                         <th class="text-center">Editar</th>
-                                        <th class="text-center" hidden="hidden">Ver</th>
+                                        <th class="text-center">Ver</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -167,10 +176,10 @@
                                         <spring:url value="/hemo/editdetails/{idHemoDetalle}" var="editDetailsUrl">
                                             <spring:param name="idHemoDetalle" value="${h.idHemoDetalle}" />
                                         </spring:url>
-                                        <spring:url value="/hemo/ViewResutl/{idHemoDetalle}" var="searchResultUrl">
-                                            <spring:param name="idHemoDetalle" value="${h.idHemoDetalle}" />
+                                        <spring:url value="/hemo/ViewResutl/" var="searchResultUrl">
                                         </spring:url>
                                         <tr>
+                                            <td class="hide">${h.idHemoDetalle}</td>
                                             <td><fmt:formatDate value="${h.fecha}" pattern="dd/MM/yyyy"/></td>
                                             <td>${h.hora}</td>
                                             <td class="text-center">${h.signo}</td>
@@ -204,10 +213,10 @@
                                                      </span>
                                                 </a>
                                             </td>
-                                            <td class="text-center" hidden="hidden">
-                                                <button class="btn btn-outline-dark btn-sm viewResponse" data-id="${h.idHemoDetalle}">
+                                            <td class="text-center">
+                                                <a class="btn btn-outline-dark btn-sm btnView" data-id="${h.idHemoDetalle}">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
-                                            </button>
+                                            </a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -217,7 +226,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-1"></div>
+
                 </div>
             </div>
         </div>
@@ -305,9 +314,52 @@
 
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
+
 <script>
-    $(function(){
-        $("#tblHistorial").dataTable({
+    var table;
+
+    $(document).ready(function(){
+        table = $("#tblHistorial").dataTable({
+            responsive: true,
+            "language": {
+                "sProcessing":     "Procesando...",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sZeroRecords":    "No se encontraron resultados",
+                "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sSearch":         "Buscar:",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },"columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ]
+        });
+        $('#tblHistorial tbody').on('click', '.btnView', function () {
+            var id = $(this).data('id');
+            ver(id);
+        });
+    });
+
+    /*$(function(){
+        table = $("#tblHistorial").dataTable({
             responsive: true,
             "language": {
                 "sProcessing":     "Procesando...",
@@ -354,7 +406,24 @@
                 $("#densidadU").text(data.densidadU);
             })
         });
-    })
+
+
+    });*/
+
+    function ver(id){
+        $.getJSON("${searchResultUrl}", { idHemoDetalle : id,   ajax : 'true'  }, function(data){
+            $("#exampleModal").modal("show");
+            $("#pa").text(data.pa);
+            $("#pp").text(data.pp);
+            $("#pam").text(data.pam);
+            $("#fcardi").text(data.fcardi);
+            $("#fr").text(data.fr);
+            $("#tc").text(data.tc);
+            $("#sa").text(data.sa);
+            $("#diuresis").text(data.diuresis);
+            $("#densidadU").text(data.densidadU);
+        })
+    }
 </script>
 </body>
 </html>

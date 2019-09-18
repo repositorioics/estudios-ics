@@ -13,14 +13,11 @@
     <!-- END DATE PICKER -->
     <style>
         input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff }
-        textarea{
-            color: #000000; background-color: #ffffff;
-            font-weight: bold;
-        }
+        input[type="text"]{color: #000000; font-family: Roboto}
+        input[type="select"]{color: #000000; font-family: Roboto}
     </style>
-    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
+   <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
-
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -31,15 +28,20 @@
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
-                    <spring:message code="/create" /></a>
+                <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">LISTADO</a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(edithemoUrl)}">ACTUALIZAR </a>
+                <i class="fa fa-angle-right"></i>
+                <strong>${obj.participante.nombre1} ${obj.participante.nombre2} ${obj.participante.apellido1} ${obj.participante.apellido2}</strong>
             </li>
         </ol>
         <spring:url value="/hemo/UpdateHemodinamica" var="updateHemoUrl"/>
         <spring:url value="/hemo/listado" var="Listado2Url"/>
         <div class="container-fluid">
             <div class="animated fadeIn">
-               <div class="card">
+               <div class="card text-black-50 bg-secondary border-primary">
                     <div class="card-header">
                         <h5 class="text-gray-dark" style="font-family: Roboto">
                             <i class="fa fa-refresh" aria-hidden="true"></i>  <spring:message code="Actualizar Información" /></h5>
@@ -51,28 +53,29 @@
                                     <input type="text" readonly id="idDatoHemo" name="idDatoHemo" value="${obj.idDatoHemo}"/>
                                 </div>
                                 <div class="row">
+                                    <div hidden="hidden">
                                     <div class="form-group col-sm-4">
                                         <label for="silais">Silais:</label>
-                                        <input type="text" class="form-control font-weight-bold" name="silais" id="silais" value="${obj.silais}" readonly />
+                                        <input type="text" class="form-control" name="silais" id="silais" value="${obj.silais}" readonly />
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="uSalud">Unidad de Salud:</label>
-                                        <input type="text" name="uSalud" id="uSalud" readonly value="${obj.uSalud}" class="form-control font-weight-bold" />
+                                        <input type="text" name="uSalud" id="uSalud" readonly value="${obj.uSalud}" class="form-control" />
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="municipio">Municipio:</label>
-                                        <input type="text" class="form-control font-weight-bold" id="municipio"
+                                        <input type="text" class="form-control" id="municipio"
                                                path="municipio" name="municipio" value="${obj.municipio}" readonly />
                                     </div>
-
+                                </div>
                                     <div hidden="hidden">
                                         <div class="form-group col-sm-3">
                                             <label for="idParticipante">Participante:</label>
-                                            <input type="text" class="form-control font-weight-bold" name="idParticipante"  id="idParticipante" readonly value="${obj.participante.codigo}"  />
+                                            <input type="text" class="form-control" name="idParticipante"  id="idParticipante" readonly value="${obj.participante.codigo}"  />
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-4">
                                         <label for="sector">Sector:</label>
                                         <span class="required text-danger"> * </span>
                                         <select name="sector" id="sector" class="form-control">
@@ -89,19 +92,18 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div id="bar" class="form-group col-sm-6" style="display: none">
+                                    <div class="form-group col-sm-8">
+                                        <label for="direccion">Dirección de Participante :</label>
+                                        <input type="text" name="direccion" class="form-control" value="${obj.direccion}"
+                                               placeholder="Ingrese la dirección"  id="direccion" name="direccion"/>
+                                    </div>
+                                    <div id="bar" class="form-group col-sm-12" style="display: none">
                                         <label for="barrioF">Barrio :</label>
                                         <input type="text" class="form-control" id="barrioF" name="barrioF" value="${obj.barrioF}" style="text-transform:uppercase" />
                                     </div>
-                                    <div class="form-group col-sm-12">
-                                        <label for="direccion">Dirección de Participante :</label>
-                                        <textarea name="direccion" class="form-control"
-                                                  id="direccion" name="direccion" cols="30" rows="2" value="${obj.direccion}"
-                                                  placeholder="Ingrese la dirección">${obj.direccion}</textarea>
-                                    </div>
                                     <div class="form-group col-sm-4">
                                         <label for="fecha">Fecha de Nacimiento:</label>
-                                        <input type="text" class="form-control font-weight-bold" id="fecha" name="fecha"
+                                        <input type="text" class="form-control" id="fecha" name="fecha"
                                                value="<fmt:formatDate value="${obj.fecha}" pattern="dd/MM/yyyy"/>" readonly />
                                     </div>
                                     <div class="form-group col-sm-4">
@@ -114,13 +116,13 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="nombre" class="control-label">Nombre:</label>
-                                        <input type="text" class="form-control font-weight-bold" id="nombre" name="nombre"
+                                        <input type="text" class="form-control" id="nombre" name="nombre"
                                                value=" ${obj.participante.nombre1} ${obj.participante.nombre2} ${obj.participante.apellido1} ${obj.participante.apellido2}"
                                                readonly />
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="edad">Edad:</label>
-                                        <input type="text" class="form-control font-weight-bold"  name="edad" id="edad" value="${obj.edad}" readonly />
+                                        <input type="text" class="form-control"  name="edad" id="edad" value="${obj.edad}" readonly />
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="peso">Peso(kg):</label>
@@ -134,29 +136,39 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="asc">A.S.C(m2):</label>
-                                        <input type="text" class="form-control font-weight-bold" id="asc" name="asc" readonly value="${obj.asc}"/>
+                                        <input type="text" class="form-control" id="asc" name="asc" readonly value="${obj.asc}"/>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="imc">IMC:</label>
-                                        <input type="text" class="form-control font-weight-bold" id="imc" name="imc" readonly value="${obj.imc}"/>
+                                        <input type="text" class="form-control" id="imc" name="imc" readonly value="${obj.imc}"/>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="IMCdetallado">Detalle Imc:</label>
-                                        <input type="text" class="form-control font-weight-bold" id="IMCdetallado" name="IMCdetallado" readonly value="${obj.IMCdetallado}"/>
+                                        <input type="text" class="form-control" id="IMCdetallado" name="IMCdetallado" readonly value="${obj.IMCdetallado}"/>
                                     </div>
-                                    <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-4">
                                         <label for="fie">Fecha Inicio de Enfermedad:</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control focusNext" tabindex="3" id="fie" name="fie"  value="<fmt:formatDate value="${obj.fie}" pattern="dd/MM/yyyy"/>" />
                                     </div>
-                                    <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-4">
                                         <label for="diasenf">Días de Enfermedad:</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control font-weight-bold" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
+                                        <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
+                                    </div>
+                                    <div class="form-group col-sm-4" style="text-align: center">
+                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                            <p class="text-center">
+                                                <br/>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="chkRange2" name="chkRange2">
+                                                <label class="custom-control-label" for="chkRange2"> <strong> Frecuencias Respiratorias. </strong> </label>
+                                            </div> </p>
+                                        </div>
                                     </div>
                                 </div>
                                     <br/>
-                                    <hr/>
+                                <div hidden="hidden">
                                     <div class="row">
                                         <div class="form-group col-sm-4">
                                             <button class="btn btn-dark btn-lg btn-block" type="button" data-toggle="collapse" tabindex="6" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -232,7 +244,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                </div>
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -298,8 +310,6 @@
 
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
-<spring:url value="/resources/js/libs/mySelect2/select2_locale_es.min.js" var="select_esJs" />
-<script type="text/javascript" src="${select_esJs}"></script>
 
 
 <!-- bootstrap datepicker -->
@@ -335,6 +345,7 @@
 <script>
     $(document).ready(function(){
         $("#sector").select2();
+        $("#peso").mask("999.99");
         loadSelect();
         $("#sector").on("change", function(){
             if(this.value == 18 ){
@@ -345,6 +356,11 @@
                 $("#barrioF").val("").attr("required", "false");
             }
         });
+        if ($("#sdMin").val() == null || $("#sdMin").val() == ""){
+            $("input[name=chkRange2]").attr("checked", false);
+        }else{
+            $("input[name=chkRange2]").attr("checked", true);
+        }
         function loadSelect(){
             if($("#sector").val() ==18){
                 $("#bar").show();
@@ -354,13 +370,6 @@
                 $("#barrioF").val("").attr("required", "false");
             }
         }
-        $("#sdMin").mask("999.9/999.9");
-        $("#sdMed").mask("999.9/999.9");
-        $("#sdMax").mask("999.9/999.9");
-        $("#pamMin").mask("99.9");
-        $("#pamMed").mask("99.9");
-        $("#pamMax").mask("99.9");
-        $("#peso").mask("99.99");
             var parametros = {updateHemoUrl: "${updateHemoUrl}",
                                  Listado2Url:"${Listado2Url}"};
             var form2 = $('#update-hemo-form');
@@ -388,32 +397,8 @@
                         number: true},
                     diasenf:{required:true},
                     pam:{required:true},
-                    IMCdetallado:{required:true},
-
-                    frMin:{number:true,min:12, max:40 },
-                    frMax:{number:true,min:18, max:60},
-
-                    fcMin:{number:true,min:60, max:110},
-                    fcMed:{number:true,min:100, max:180 },
-                    fcProm:{number:true, min:80, max:145}
-
-                    /*pamMin:{
-                        number: true
-                        ,min:48.9
-                        ,max:76.6
+                    IMCdetallado:{required:true}
                     },
-                    pamMed:{
-                        number: true,
-                        min:57.6,
-                        max:87.5
-                    },
-                    pamMax:{
-                        number: true
-                        ,min:66.3
-                        ,max:98.4
-                    }*/
-
-                },
                 errorElement: 'em',
                 errorPlacement: function ( error, element ) {
                     error.addClass( 'form-control-feedback' );
@@ -443,7 +428,6 @@
                     }, 1500);
                 }).fail(function(XMLHttpRequest, textStatus, errorThrown){
                     swal("Error!","intente nuevamente!", "error");
-
                 });
             }
 

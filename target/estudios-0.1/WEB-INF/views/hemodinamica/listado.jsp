@@ -27,28 +27,30 @@
     <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
 
 </head>
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden footer-fixed">
 <jsp:include page="../fragments/bodyHeader.jsp" />
-<div>
+<div class="app-body">
     <jsp:include page="../fragments/sideBar.jsp" />
     <div class="main">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<spring:url value="/hemo/create" htmlEscape="true "/>"><spring:message code="Hemodinámica" /></a>
+                <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
                 <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
                     <spring:message code="Listado" /></a>
             </li>
         </ol>
         <spring:url value="/hemo/listado" var="listHemoUrl"/>
+        <spring:url value="/reportes/ReporteHemodinamica/" var="pdfUrl"/>
         <div class="container-fluid">
             <div class="animated fadeIn">
             <div class="container">
-            <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-users"></i> <spring:message code="Participante" />
+                   <h5 style="font-family: Roboto">
+                       <i class="fa fa-users"></i> <spring:message code="Participante" />
+                   </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -59,7 +61,9 @@
                             </a>
                         </div>
                     </div>
+                    <br/>
                     <hr/>
+                    <br/>
                     <div class="table-responsive">
                         <table id="tableHemo" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                             <thead>
@@ -71,6 +75,7 @@
                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Fecha Registro" /></th>
                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Editar" /></th>
                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Detalle" /></th>
+                                <th data-hide="phone,tablet" class="text-center"><spring:message code="Reporte" /></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -86,7 +91,7 @@
                                     <td>${lista.participante.nombre1} ${lista.participante.nombre2} ${lista.participante.apellido1} ${lista.participante.apellido2}</td>
                                     <td class="text-center">${lista.edad}</td>
                                     <td class="text-center">${lista.nExpediente}</td>
-                                    <td class="text-center"><fmt:formatDate value="${lista.recordDate}" pattern="dd/MM/yyyy"/></td>
+                                    <td class="text-center"><fmt:formatDate timeStyle = "medium" value="${lista.recordDate}" pattern="dd/MM/yyyy hh:mm"/></td>
                                     <td class="text-center">
                                         <a href="${fn:escapeXml(edithemoUrl)}" data-toggle="tooltip" data-placement="bottom" title="Editar"
                                            class="btn btn-outline-primary btn-sm">
@@ -99,19 +104,23 @@
                                             <i class="fa fa-history" aria-hidden="true"></i>
                                         </a>
                                     </td>
+                                    <td class="text-center">
+
+                                        <button type="button" data-toggle="tooltip" id="btnReporte" data-placement="top" title="Reporte"
+                                           class="btn btn-outline-info btn-sm btnReporte" data-id="${lista.idDatoHemo}">
+                                            <i class="fa fa-book" aria-hidden="true"></i>
+                                        </button>
+
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="card-footer text-muted">
-
-                </div>
+                <div class="card-footer text-muted"></div>
             </div>
-
             <hr>
-
             </div>
             </div>
             </div>
@@ -120,6 +129,7 @@
         </div>
   </div>
 </div>
+<jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
@@ -137,20 +147,18 @@
 
 <spring:url value="/resources/js/libs/dataTableResponsive/responsive.bootstrap4.min.js" var="TResponsiveb4" />
 <script type="text/javascript" src="${TResponsiveb4}"></script>
-
-
-
-
-
-
-
-
 <script>
     $(document).ready(function(){
-      $('#example').DataTable( {
-            responsive: true
-        } );
+        $("#tableHemo tbody").on("click", ".btnReporte",function(){
+            var id = $(this).data('id');
+            SendId(id);
+        });
+        function SendId(id){
+            // http://localhost:8081/estudios_ics/reportes/ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f
+            debugger;
+            window.open("${pdfUrl}?idDatoHemo="+id, '_blank');
 
+        }
       $('#tableHemo').DataTable({
           responsive: true,
           "language": {
@@ -177,8 +185,8 @@
                   "sSortDescending": ": Activar para ordenar la columna de manera descendente"
               }
           }
-      });
-        //$('[data-toggle="tooltip"]').tooltip();
+       });
+
     });
 </script>
 </body>

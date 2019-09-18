@@ -1,13 +1,29 @@
 package ni.org.ics.estudios.web.utils.pdf;
 
 import com.lowagie.text.*;
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 import com.lowagie.text.pdf.draw.LineSeparator;
+import com.sun.javafx.font.*;
+import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
+import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.language.MessageResource;
+import ni.org.ics.estudios.web.utils.DateUtil;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
+import sun.font.FontFamily;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
+import javax.swing.text.*;
+import java.awt.*;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
@@ -18,6 +34,11 @@ import java.util.List;
 public class PdfView extends AbstractPdfView {
 
     java.util.List<MessageResource> messageReports = new ArrayList<MessageResource>();
+    java.util.List<MessageResource> messageExtremidades = new ArrayList<MessageResource>();
+    java.util.List<MessageResource> messagenivel = new ArrayList<MessageResource>();
+    List<MessageResource> messagellenado = new ArrayList<MessageResource>();
+    List<MessageResource> messagepulso = new ArrayList<MessageResource>();
+    List<MessageResource> messagediuresis = new ArrayList<MessageResource>();
 
     @Override
     protected void buildPdfDocument(
@@ -27,6 +48,63 @@ public class PdfView extends AbstractPdfView {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         messageReports = (java.util.List<MessageResource>) model.get("labels");
+        if (model.get("TipoReporte").equals(Constants.TPR_DATOSGENERALES)){
+            datosGenerales(model, document, writer);
+        }
+        if (model.get("TipoReporte").equals(Constants.TPR_HEMOREPORTE)){
+            hemoReporte(model, document, writer);
+        }
+    }
+
+    private PdfPCell createCell(String text, Font f, int border){
+        PdfPCell cell = new PdfPCell(new Phrase(text, f));
+        cell.setPaddingBottom(5);
+        cell.setBorder(border);
+        return cell;
+    }
+
+    private PdfPCell createCell(String text, Font f, int border, int colspan){
+        PdfPCell cell = new PdfPCell(new Phrase(text, f));
+        cell.setColspan(colspan);
+        cell.setPaddingBottom(5);
+        cell.setBorder(border);
+        return cell;
+    }
+
+    private PdfPCell createCellUnderline(String text, Font f, int border) {
+        Chunk chunk2 = new Chunk(text, f);
+        chunk2.setUnderline(1f, -2f);
+        PdfPCell cell = new PdfPCell(new Phrase(chunk2));
+        cell.setPaddingBottom(5);
+        cell.setBorder(border);
+        return cell;
+    }
+    private PdfPCell createCellUnderline(String text, Font f, int border, int colspan) {
+        Chunk chunk2 = new Chunk(text, f);
+        chunk2.setUnderline(1f, -2f);
+        PdfPCell cell = new PdfPCell(new Phrase(chunk2));
+        cell.setColspan(colspan);
+        cell.setPaddingBottom(5);
+        cell.setBorder(border);
+        return cell;
+    }
+
+
+    private String getMessage(String messageKey, String languaje){
+        for(MessageResource message : messageReports){
+            if (message.getMessageKey().equalsIgnoreCase(messageKey)){
+                if (languaje!=null && languaje.equalsIgnoreCase("en"))
+                    return message.getEnglish();
+                else return message.getSpanish();
+            }
+        }
+        return "";
+    }
+
+    private void datosGenerales(Map<String, Object> model,
+                                 Document document,
+                                 PdfWriter writer) throws Exception{
+
         List<DatosGeneralesParticipante> datosParticipantes = (List<DatosGeneralesParticipante>) model.get("datos");
         if (datosParticipantes.size()<=0){
             Paragraph h1 = new Paragraph(this.getMessage("noResults", null), new Font(Font.TIMES_ROMAN, 13, Font.BOLD));
@@ -185,7 +263,6 @@ public class PdfView extends AbstractPdfView {
             table.addCell(createCell(datosParticipante.getHospitalizadoDengue(), timesRomanNormal12, Rectangle.NO_BORDER));
             table.addCell(createCell(this.getMessage("lbl.when", null), timesRomanBold12, Rectangle.NO_BORDER));
             table.addCell(createCell(datosParticipante.getFechaHospitalizadoDengue(), timesRomanNormal12, Rectangle.NO_BORDER));
-
             document.add(table);
 
             LineSeparator ls2 = new LineSeparator();
@@ -200,49 +277,675 @@ public class PdfView extends AbstractPdfView {
         }
     }
 
-    private PdfPCell createCell(String text, Font f, int border){
-        PdfPCell cell = new PdfPCell(new Phrase(text, f));
-        cell.setPaddingBottom(5);
-        cell.setBorder(border);
-        return cell;
+
+    // create TableNull
+    private static PdfPTable createTableNull(String text){
+        Font etiquetas = FontFactory.getFont(FontFactory.HELVETICA,9);
+        PdfPTable table = new PdfPTable(9);
+        table.setWidthPercentage(100f);
+        PdfPCell cel = new PdfPCell();
+        cel.addElement(new Phrase(text,etiquetas));
+        table.addCell(cel);
+        table.completeRow();
+        return table;
     }
 
-    private PdfPCell createCell(String text, Font f, int border, int colspan){
-        PdfPCell cell = new PdfPCell(new Phrase(text, f));
-        cell.setColspan(colspan);
-        cell.setPaddingBottom(5);
-        cell.setBorder(border);
-        return cell;
-    }
+    private void hemoReporte( Map<String, Object> model,
+                              Document document, PdfWriter writer )throws Exception{
+        DatosHemodinamica obj = (DatosHemodinamica) model.get("obj");
+        List<HemoDetalle> ListDetail = (List<HemoDetalle>) model.get("detalle");
+        messageReports = (java.util.List<MessageResource>) model.get("labels");
+        messageExtremidades = (java.util.List<MessageResource>) model.get("extremidades");
+        messagenivel=(java.util.List<MessageResource>) model.get("nivel");
+        messagellenado = (List<MessageResource>)model.get("llenado");
+        messagepulso = (List<MessageResource>)model.get("pulso");
+        messagediuresis = (List<MessageResource>)model.get("diuresis");
+        document.setPageSize(PageSize.A4.rotate());
+        document.open();
 
-    private PdfPCell createCellUnderline(String text, Font f, int border) {
-        Chunk chunk2 = new Chunk(text, f);
-        chunk2.setUnderline(1f, -2f);
-        PdfPCell cell = new PdfPCell(new Phrase(chunk2));
-        cell.setPaddingBottom(5);
-        cell.setBorder(border);
-        return cell;
-    }
-    private PdfPCell createCellUnderline(String text, Font f, int border, int colspan) {
-        Chunk chunk2 = new Chunk(text, f);
-        chunk2.setUnderline(1f, -2f);
-        PdfPCell cell = new PdfPCell(new Phrase(chunk2));
-        cell.setColspan(colspan);
-        cell.setPaddingBottom(5);
-        cell.setBorder(border);
-        return cell;
-    }
+        Font bf12 = new Font(Font.TIMES_ROMAN, 10);
+        Font font = FontFactory.getFont(FontFactory.HELVETICA, 8);
+        Font etiquetas = FontFactory.getFont(FontFactory.HELVETICA,9);
+        Font timesRomanNormal12 = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font timesRomanBold12 = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
 
-    private String getMessage(String messageKey, String languaje){
-        for(MessageResource message : messageReports){
-            if (message.getMessageKey().equalsIgnoreCase(messageKey)){
-                if (languaje!=null && languaje.equalsIgnoreCase("en"))
-                    return message.getEnglish();
-                else return message.getSpanish();
+
+
+        //Declaracion de Variable
+        PdfPTable table = new PdfPTable(new float[]{18,30,10,40});
+        table.setWidthPercentage(100f);
+        PdfPCell cell;
+
+        table = new PdfPTable(new float[]{10, 10, 10, 10, 10,10,10});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("MINISTERIO DE SALUD."));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setColspan(3);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Código"));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        document.add(table);
+
+        /******************************************/
+        table = new PdfPTable(new float[]{10, 10, 10, 10, 10,10,10});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("HOJA DE EVALUACIÓN HEMODINÁMICA."));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        cell.setColspan(3);
+        table.addCell(cell);
+
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getnExpediente()));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        document.add(table);
+        /******************************************/
+
+        /******************************************/
+        table = new PdfPTable(new float[]{10, 10, 10, 10, 10,10,10});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("PACIENTES HOSPITALIZADOS CON DENGUE."));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        cell.setColspan(3);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        document.add(table);
+
+        Paragraph p = new Paragraph();
+        p.setLeading(0, 1.2f);
+        p.setAlignment(Element.ALIGN_JUSTIFIED);
+        p.setSpacingBefore(10);
+        document.add(p);
+
+        /****************************** 1er Fila *********************************/
+
+        table = new PdfPTable(new float[]{3, 6, 8, 12, 10,10,10,11});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Silais:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getSilais(), bf12));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Unidad de Salud:", etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getuSalud(), bf12));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Municipio:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getMunicipio(), bf12));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Sector:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getParticipante().getCasa().getBarrio().getNombre(),bf12));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        document.add(table);
+        /*******************************Fin 1ra Fila****************************/
+        /****************************** 2da Fila *********************************/
+        table = new PdfPTable(new float[]{5, 15, 10, 10, 9,10,11});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Dirección:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getDireccion(), bf12));
+        cell.setColspan(4);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Fecha:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(DateUtil.DateToString(obj.getFecha(),"dd/MM/yyyy"),bf12));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        document.add(table);
+/****************************** Fin 2da Fila *********************************/
+/****************************** 3ra Fila *********************************/
+        table = new PdfPTable(new float[]{13,37,13,37});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Número de expediente:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getnExpediente(), font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("No. Teléfonico:", etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+        String tel;
+        if (obj.getTelefono() !=null){
+            tel = obj.getTelefono();
+        }else{tel ="--";}
+        cell = new PdfPCell(new Phrase(tel , font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+        document.add(table);
+        /****************************** Fin 3ra Fila *********************************/
+        /****************************** Fin 4ta Fila *********************************/
+        table = new PdfPTable(new float[]{10, 18, 4, 13, 5,5,5,5,5,10,5,5});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Nombre y Apellidos:", etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getParticipante().getNombreCompleto(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Edad:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getEdad(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Peso:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+        Double pes = Double.valueOf(obj.getPeso().toString());
+        cell = new PdfPCell(new Phrase(pes +" Kg",font));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Talla:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getTalla().toString()+" cm",font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("ASC:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        double x = (double)Math.round(obj.getAsc() * 100d) / 100d;
+        cell = new PdfPCell(new Phrase(Double.valueOf(x).toString(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("IMC:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getImc().toString(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        document.add(table);
+        /****************************** Fin 4ta Fila *********************************/
+        Paragraph t3 = new Paragraph("Valoración del Estado nutricional en los niños/niñas", bf12);
+        t3.setSpacingAfter(5f);
+        document.add(t3);
+        /********************************* 5ta Fila **************************************************/
+        table = new PdfPTable(new float[]{10, 15, 5, 10, 8,10,5,8});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Rango de Presión PS/SD.",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+        String psdmin,psdmed,psdmax;
+        if (obj.getSdMin() != null || obj.getSdMin() == ""){
+            psdmin = obj.getSdMin();
+            psdmed = obj.getSdMed();
+            psdmax = obj.getSdMax();
+        }else{
+            psdmin = "--";
+            psdmed = "--";
+            psdmax = "--";
+        }
+        cell = new PdfPCell(new Phrase(psdmin + " /, " + psdmed + " /, " + psdmax, font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("PAM",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getPamMin() +" / "+ obj.getPamMed() +" / "+ obj.getPamMax(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Rangos de FC:",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+        String min, med, max, frmin, frmax;
+        if(obj.getFcMin() != null){
+            min = obj.getFcMin().toString();
+            med = obj.getFcMed().toString();
+            max = obj.getFcProm().toString();
+            frmin = obj.getFrMin().toString();
+            frmax = obj.getFrMax().toString();
+        } else {
+            min ="--";
+            med ="--";
+            max ="--";
+            frmin ="--";
+            frmax ="--";
+        }
+        cell = new PdfPCell(new Phrase(min +" / "+ med +" / "+ max,font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Rango FR: ",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(frmin+" / "+frmax, font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        document.add(table);
+        /************************************* Fin 5ta Fila **********************************************/
+        /************************************* Fin 6ta Fila **********************************************/
+        table = new PdfPTable(new float[]{10, 15, 5, 10, 8,10,5,8});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("mínima media máxima",font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("mínima media máxima",font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("mínima/máximo promedio", font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(""));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("mínimo/máximo", font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        document.add(table);
+        /************************************* Fin 6ta Fila **********************************************/
+
+        /************************************* Fin 6ta Fila **********************************************/
+        table = new PdfPTable(new float[]{10, 10, 7, 13, 10,10});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Fecha inicio de enfermedad:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(DateUtil.DateToString(obj.getFie(),"dd/MM/yyyy"),font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Días de enfermedad:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getDiasenf().toString(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Días de hospitalización:",etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("--",etiquetas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.BOTTOM);
+        table.addCell(cell);
+        document.add(table);
+
+        /************************************* Fin 6ta Fila **********************************************/
+        if (ListDetail.size() <= 0){
+            table = new PdfPTable(new float[]{18, 42, 40});
+            table.setWidthPercentage(100f);
+            cell = new PdfPCell(new Phrase("Clasificacion clínica del Dengue:", etiquetas));
+            cell.setBorder(0);
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("", font));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(Rectangle.BOTTOM);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Tamaño: " + ListDetail.size()));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
+        }else {
+            for (HemoDetalle list : ListDetail){
+                table = new PdfPTable(new float[]{18, 42, 40});
+                table.setWidthPercentage(100f);
+                cell = new PdfPCell(new Phrase("Clasificacion clínica del Dengue:", etiquetas));
+                cell.setBorder(0);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(list.getSigno(), font));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(Rectangle.BOTTOM);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Tamaño: " + ListDetail.size()));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+                break;
             }
         }
-        return "";
+
+        /******************** INICIO DEL DETALLE *******************************/
+        if(ListDetail.size() <= 0){
+           document.add(createTableNull("Fecha"));
+           document.add(createTableNull("Hora"));
+           document.add(createTableNull("Nivel de Consciencia"));
+           document.add(createTableNull("P/A mmHg"));
+           document.add(createTableNull("PP mmHg"));
+           document.add(createTableNull("PAM mmHg"));
+           document.add(createTableNull("FC por Mínuto"));
+           document.add(createTableNull("FR por Mínuto"));
+           document.add(createTableNull("T°C"));
+           document.add(createTableNull("SAO2 %"));
+           document.add(createTableNull("Extremidades"));
+           document.add(createTableNull("Llenado Capilar (seg)"));
+           document.add(createTableNull("Pulso (Calidad)"));
+           document.add(createTableNull("Diuresis/ ml/Kg/Hr"));
+           document.add(createTableNull("Densidad Urinaria"));
+           document.add(createTableNull("Persona encargada de la Valoración"));
+        }
+        table.setSpacingAfter(10);
+        table = new PdfPTable(10);
+        table.setWidthPercentage(100f);
+        Integer cont = 1;
+        table.addCell(new Phrase("Fecha ", etiquetas));
+
+        for (HemoDetalle l : ListDetail) {
+            cont++;
+            table.addCell(new Phrase(DateUtil.DateToString(l.getFecha(), "dd/MM/yyyy"), font));
+            if (cont == 10){
+                table.completeRow();
+            }
+        }
+        table.addCell(new Phrase("Hora ", etiquetas));
+        for (HemoDetalle l : ListDetail) {
+            cont++;
+            table.addCell(new Phrase(l.getHora(),font));
+            if (cont == 10){
+                table.completeRow();
+            }
+        }
+
+        document.add(table);
+        document.newPage();
+       /* Integer cont = 0;
+        //Integer tam = ListDetail.size();
+        table = new PdfPTable(ListDetail.size() == 1 ? 8 : ListDetail.size()+1);
+        table.setWidthPercentage(100f);
+        for (int i = 0; i <= 16; i++) {
+            if (i == 0){
+                table.addCell(new Phrase("Fecha "+cont, etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(DateUtil.DateToString(l.getFecha(),"dd/MM/yyyy"),font));
+                }
+                cont++;
+            }
+            if (i == 1){
+                table.addCell(new Phrase("Hora "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getHora(),font));
+                }
+                cont++;
+            }
+            if (i == 2){
+                table.addCell(new Phrase("Nivel de Consciencia "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(this.getDescripcionCatalogo(l.getNivelConciencia(),"NIVELCONCIENCIA"),font));
+                }
+                cont++;
+            }
+            if (i == 3){
+                table.addCell(new Phrase("P/A mmHg "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getPa().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 4){
+                table.addCell(new Phrase("PP mmHg "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getPp().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 5){
+                table.addCell(new Phrase("PAM mmHg "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getPam().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 6){
+                table.addCell(new Phrase("FC por Minuto "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getFc().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 7){
+                table.addCell(new Phrase("Fr por Minuto "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getFr().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 8){
+                table.addCell(new Phrase("T°C "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getTc().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 9){
+                table.addCell(new Phrase("SA02% "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getSa().toString(),font));
+                }
+                cont++;
+            }
+            if (i == 10){
+                table.addCell(new Phrase("Extremidades "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(this.getDescripcionCatalogo(l.getExtremidades(),"EXTREMIDADES"),font));
+                }
+                cont++;
+            }
+            if (i == 11){
+                table.addCell(new Phrase("Llenado Capilar (seg) "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(this.getDescripcionCatalogo(l.getLlenadoCapilar(),"LLENADOCAPILAR"),font));
+                }
+                cont++;
+            }
+            if (i == 13){
+                table.addCell(new Phrase("Pulso (Calidad) "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(this.getDescripcionCatalogo(l.getPulsoCalidad(),"PULSOCALIDAD"),font));
+                }
+                cont++;
+            }
+            if (i == 14){
+                table.addCell(new Phrase("Diuresis/ml/Kg/Hr "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(this.getDescripcionCatalogo(l.getDiuresis(),"DIURESIS"),font));
+                }
+                cont++;
+            }
+            if (i == 15){
+                table.addCell(new Phrase("Densidad Urinaria "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getDensidadUrinaria(),font));
+                }
+                cont++;
+            }
+            if (i == 16){
+                table.addCell(new Phrase("Validado por "+cont,etiquetas));
+                for (HemoDetalle l : ListDetail) {
+                    table.addCell(new Phrase(l.getPersonaValida(),font));
+                }
+                cont++;
+            }
+
+        }*///fin for i
+
+        //document.add(table);
+        LineSeparator ls2 = new LineSeparator();
+        ls2.setLineWidth(0.5f);
+        document.add(new Chunk(ls2));
+
+        table = new PdfPTable(new float[]{20,40});
+        table.setWidthPercentage(96);
+        table.addCell(createCell("Creado por: ", timesRomanBold12, Rectangle.NO_BORDER));
+        table.addCell(createCell(obj.getRecordUser(), timesRomanNormal12, Rectangle.NO_BORDER));
+
+        document.add(table);
+
     }
+
+    private String getDescripcionCatalogo(String codigo,String catroot){
+        for(MessageResource rnv : messageExtremidades){
+            if (rnv.getCatKey().equals(codigo)) {
+                if (catroot != "" && rnv.getCatRoot().equals(catroot))
+                    return rnv.getSpanish();
+            }
+        }
+        return "-";
+    }
+
+
+
 }
 
 class MyFooter extends PdfPageEventHelper {
@@ -263,12 +966,28 @@ class MyFooter extends PdfPageEventHelper {
             posicion+=10;
         }
     }
-
     public List<String> getMensajes() {
         return mensajes;
     }
 
     public void setMensajes(List<String> mensajes) {
         this.mensajes = mensajes;
+    }
+
+    private void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
+
+        //create a new cell with the specified Text and Font
+        PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
+        //set the cell alignment
+        cell.setHorizontalAlignment(align);
+        //set the cell column span in case you want to merge two or more cells
+        cell.setColspan(colspan);
+        //in case there is no text and you wan to create an empty row
+        if(text.trim().equalsIgnoreCase("")){
+            cell.setMinimumHeight(10f);
+        }
+        //add the call to the table
+        table.addCell(cell);
+
     }
 }

@@ -15,6 +15,8 @@
     <style>
 
         input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
+        input[type="text"]{color: #000000; font-family: Roboto}
+        input[type="select"]{color: #000000; font-family: Roboto}
         body {
             height: 100vh;
             padding: 0;
@@ -118,6 +120,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/hemo" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/hemo/listDetailsHemo/{idDatoHemo}">
+                         <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
+                         </spring:url>">Listado
+                </a>
+                <i class="fa fa-angle-right"></i>
+                <a href="${fn:escapeXml(listDetailsHemoUrl)}">Actualizar Detalle <strong> ${objDet.datoshemodinamica.participante.nombre1} ${objDet.datoshemodinamica.participante.nombre2} ${objDet.datoshemodinamica.participante.apellido1} ${objDet.datoshemodinamica.participante.apellido2}</strong></a>
             </li>
         </ol>
         <spring:url value="/hemo/UpdateDetalleHemo" var="upateDetHemoUrl"/>
@@ -130,7 +139,7 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card">
+                    <div class="card text-black-50 bg-secondary">
                         <div class="card-header">
                             <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinamica" />
                         </div>
@@ -236,11 +245,11 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="tc">T°C:</label>
-                                        <input type="text" class="form-control focusNext" id="tc" name="tc" value="${objDet.tc}" placeholder="T°C" required tabindex="10">
+                                        <input type="text" class="form-control focusNext" id="tc" name="tc" value="${objDet.tc}" placeholder="T°C" tabindex="10">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="sa">SA02%:</label>
-                                        <input type="text" class="form-control focusNext" id="sa" value="${objDet.sa}" name="sa" placeholder="SA02%" required tabindex="11">
+                                        <input type="text" class="form-control focusNext" id="sa" value="${objDet.sa}" name="sa" placeholder="SA02%" tabindex="11">
                                     </div>
 
 
@@ -336,9 +345,14 @@
                                     <div hidden="hidden">
                                         <input type="text" readonly name="idDatoHemo" id="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" class="form-control"/>
                                         <input type="text" readonly name="idHemoDetalle" id="idHemoDetalle" class="form-control" value="${objDet.idHemoDetalle}"/>
-
+                                        <spring:url value="/hemo/listDetailsHemo/{idHemoDetalle}" var="volverUrl">
+                                            <spring:param name="idHemoDetalle" value="${objDet.idHemoDetalle}" />
+                                        </spring:url>
                                     </div>
                                     <spring:url value="/hemo/listDetailsHemo/{idDatoHemo}" var="listDetailsHemoUrl">
+                                        <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
+                                    </spring:url>
+                                    <spring:url value="/hemo/edithemo/{idDatoHemo}" var="edithemoUrl">
                                         <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
                                     </spring:url>
                                     <div hidden="hidden">
@@ -465,13 +479,13 @@
                     required:true
                 },
                 tc: {
-                    required: true,
+
                     number: true,
                     min:36,
                     max:41
                 },
                 sa:{
-                    required: true,
+
                     min:70,
                     max:100
                 },

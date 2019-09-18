@@ -3,10 +3,12 @@ package ni.org.ics.estudios.service.reportes;
 import com.google.common.base.Predicate;
 import ni.org.ics.estudios.domain.*;
 import ni.org.ics.estudios.domain.cohortefamilia.encuestas.EncuestaParticipante;
+import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.muestreoanual.EncuestaParticipanteMA;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.*;
+import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.EncuestaParticipanteService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.users.model.UserSistema;
@@ -29,6 +31,7 @@ import java.util.List;
  * Created by Miguel Salinas on 19/10/2018.
  * V1.0
  */
+
 @Service("reportesPdfService")
 @Transactional
 public class ReportesPdfService {
@@ -50,6 +53,9 @@ public class ReportesPdfService {
     private SessionFactory sessionFactory;
     @Resource(name = "encuestaParticipanteService")
     private ni.org.ics.estudios.service.cohortefamilia.EncuestaParticipanteService encuestaParticipanteService;
+    /* Instancia de mi Servicio Hemodinamico */
+    @Resource(name = "datoshemodinamicaService")
+    private DatoshemodinamicaService datoshemodinamicaService;
 
     private final static String SI="SI";
     private final static String NO="NO";
@@ -441,5 +447,4 @@ public class ReportesPdfService {
         return resultado;
 
     }
-
 }

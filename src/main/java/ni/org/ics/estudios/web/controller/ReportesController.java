@@ -1,12 +1,16 @@
 package ni.org.ics.estudios.web.controller;
 
 import ni.org.ics.estudios.domain.catalogs.Estudio;
+import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
+import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
+import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
 import ni.org.ics.estudios.web.utils.DateUtil;
+import ni.org.ics.estudios.web.utils.pdf.Constants;
 import ni.org.ics.estudios.web.utils.pdf.DatosGeneralesParticipante;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Miguel Salinas on 9/8/2017.
@@ -37,6 +43,10 @@ public class ReportesController {
     private ReportesPdfService reportesPdfService;
     @Resource(name = "estudioService")
     private EstudioService estudioService;
+
+    /* Instancia de mi Servicio Hemodinamico */
+    @Resource(name = "datoshemodinamicaService")
+    private DatoshemodinamicaService datoshemodinamicaService;
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -90,7 +100,30 @@ public class ReportesController {
         List<MessageResource> messageReports = messageResourceService.loadAllMessagesNoCatalogs();
         excelView.addObject("labels", messageReports);
         excelView.addObject("datos", datosParticipante);
+        excelView.addObject("TipoReporte", Constants.TPR_DATOSGENERALES);
         return excelView;
     }
+
+    /*Este controlador devuelve archivo Hemodinámica  /ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f    */
+    @RequestMapping(value = "/ReporteHemodinamica", method = RequestMethod.GET)
+    public ModelAndView ReporteHemodinamica(@RequestParam(value = "idDatoHemo", required = true) String idDatoHemo)
+        throws Exception{
+        ModelAndView pdfHemodinamic = new ModelAndView("pdfView");
+        DatosHemodinamica obj = datoshemodinamicaService.getbyId(idDatoHemo);
+        List<HemoDetalle> detalle = datoshemodinamicaService.getListHemoDetalle(idDatoHemo);
+        List<MessageResource> messageReports = messageResourceService.loadAllMessagesNoCatalogs();
+        List<MessageResource> extremidades = messageResourceService.getCatalogo("EXTREMIDADES");
+        extremidades.addAll(messageResourceService.getCatalogo("NIVELCONCIENCIA"));
+        extremidades.addAll(messageResourceService.getCatalogo("LLENADOCAPILAR"));
+        extremidades.addAll(messageResourceService.getCatalogo("PULSOCALIDAD"));
+        extremidades.addAll(messageResourceService.getCatalogo("DIURESIS"));
+        pdfHemodinamic.addObject("extremidades", extremidades);
+        pdfHemodinamic.addObject("labels", messageReports);
+        pdfHemodinamic.addObject("obj", obj);
+        pdfHemodinamic.addObject("detalle", detalle);
+        pdfHemodinamic.addObject("TipoReporte", Constants.TPR_HEMOREPORTE);
+        return pdfHemodinamic;
+    }
+
 
 }

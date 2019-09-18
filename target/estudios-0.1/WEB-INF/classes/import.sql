@@ -912,9 +912,13 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA', NULL, NULL, NULL, '1', 0, '0', 'PersonaValida hemodinamica');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA_16951', '16951', 'PERSONAVALIDA', NULL, '0', 1, '0', 'Sergio Ojeda Munguía');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA_28613', '28613', 'PERSONAVALIDA', NULL, '0', 2, '0', 'Miguel Plazaola');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA_26861', '26861', 'PERSONAVALIDA', NULL, '0', 3, '0', 'Nerys Sánchez');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('PERSONAVALIDA_377', '377', 'PERSONAVALIDA', NULL, '0', 17, '0', ' Dr. PAUL ARANCIBIA TORRES');
 
 
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS', NULL, NULL, NULL, '1', 0, '0', 'diuresis hemodinamica');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_1-5', '1', 'DIURESIS', NULL, '0', 1, '0', '1-5 ml/Kg/Hr');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_0.5-0.9', '2', 'DIURESIS', NULL, '0', 2, '0', '0.5-0.9 ml/Kg/Hr');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('DIURESIS_0.5', '3', 'DIURESIS', NULL, '0', 3, '0', '>0.5 ml/Kg/Hr');
+

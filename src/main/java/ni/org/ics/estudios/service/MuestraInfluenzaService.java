@@ -97,4 +97,9 @@ public class MuestraInfluenzaService {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(muestraInfluenza);
     }
+
+
+
+
+
 }

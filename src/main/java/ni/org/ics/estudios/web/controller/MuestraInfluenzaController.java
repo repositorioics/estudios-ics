@@ -165,6 +165,25 @@ public class MuestraInfluenzaController {
             return createJsonResponse("No se encontraron resultados");
     }
 
+    /* Mi Busqueda*/
+    @RequestMapping(value = "searchLabel", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<String> searchLabel(@RequestParam(value="codigoParticipante", required=false ) Integer codigoParticipante,
+                                          @RequestParam(value="codigoCasa", required=false ) String codigoCasa,
+                                          @RequestParam(value="codigoMx", required=false ) String codigoMx,
+                                          @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                          @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                          @RequestParam(value="registrado", required=false ) String registrado,
+                                          @RequestParam(value="tipoEtiquetas", required=false ) String tipoEtiquetas) throws Exception {
+
+
+
+        return  createJsonResponse("Test Realizado correctamente!");
+
+    }
+    //Fin de Mi Busqueda
+
+
     private  Map<String, Object> parseSampleMap(Integer codigoParticipante, String codigoLab, Date fechaToma, Date fif, ParticipanteCohorteFamilia participanteCohorteFamilia) throws Exception{
         Map<String, Object> mapMuestra = new HashMap<String, Object>();
         mapMuestra.put("idMx", codigoParticipante);

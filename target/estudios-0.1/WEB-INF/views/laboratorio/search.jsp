@@ -32,6 +32,7 @@
         <c:set var="ingresarParametro"><spring:message code="enter.parameter" /></c:set>
         <c:set var="seleccioneMuestra"><spring:message code="select.sample" /></c:set>
         <spring:url value="/lab/muestras/searchSamples" var="searchUrl"/>
+        <spring:url value="/lab/muestras/searchLabel" var="searchLabelUrl"/>
         <spring:url value="/super/particaso/getParticipantsCasos" var="getCodesUrl"/>
         <div class="container-fluid">
             <div class="card">
@@ -126,6 +127,9 @@
                                         </button>
                                         <br>
                                         <br>
+                                        <button id="btnGenerateLabel" type="submit" name="btnGenerateLabel" class="btn btn-primary btn-ladda">
+                                            <spring:message code="Generar Labels" /> <i class="fa fa-search"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -415,7 +419,19 @@
                 toastr.warning("${seleccioneMuestra}");
             }
         }
+            $("#btnGenerateLabel").on("click", function(){
+                buscarLabel();
+            });
+        function buscarLabel(){
+            if(parametroIngresado()){
+                $.getJSON("${searchLabelUrl}", form1.serialize(), function (data) {
+                            toastr.success("God");
+                        });
+            }else{
+                toastr.warning("${ingresarParametro}");
+            }
 
+        }
         function search()
         {
             if (parametroIngresado()) {

@@ -3,9 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <html>
 <head>
 <jsp:include page="fragments/headTag.jsp" />
+    <style>
+    </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 	<jsp:include page="fragments/bodyHeader.jsp" />
@@ -18,8 +21,11 @@
                 <li class="breadcrumb-item"><a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a></li>
             </ol>
             <div class="container-fluid">
+                <!--  <strong>  <sec:authentication property="principal.authorities" /></strong> -->
+                <!--  <div class="jumbotron">
+                    <h1>Hola, <strong> <c:out value="${pageContext.request.remoteUser}"/></strong></h1>
+                </div>-->
             </div>
-            <!-- /.conainer-fluid -->
         </div>
     </div>
     <jsp:include page="fragments/bodyFooter.jsp" />

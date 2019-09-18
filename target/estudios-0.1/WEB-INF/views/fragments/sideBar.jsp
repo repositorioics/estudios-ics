@@ -7,17 +7,19 @@
             <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/" htmlEscape="true "/>"><i class="icon-speedometer"></i><spring:message code="dashboard" /></a>
             </li>
+            <sec:authorize access="hasRole('ROLE_ROOT')">
             <li class="nav-item nav-dropdown administracion">
 	            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wrench"></i><spring:message code="admin" /></a>
 	            <ul class="nav-dropdown-items">
 	                <li class="nav-item users">
 	                    <a class="nav-link" href="<spring:url value="/admin/users/" htmlEscape="true "/>"><i class="icon-people"></i><spring:message code="users" /></a>
 	                </li>
-                    <li class="nav-item versionLetters">
+                    <!--<li class="nav-item versionLetters">
                         <a class="nav-link" href="<spring:url value="/admin/vcartas/" htmlEscape="true "/>"><i class="icon-docs"></i><spring:message code="versionLetters" /></a>
-                    </li>
+                    </li> -->
 	            </ul>
 	        </li>
+            </sec:authorize>
 	        <li class="nav-item nav-dropdown chfcasos">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="chfcasos" /></a>
                 <ul class="nav-dropdown-items">
@@ -45,6 +47,7 @@
                     </li>
                 </ul>
             </li>
+
             <li class="nav-item nav-dropdown reports">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-docs"></i><spring:message code="reports" /></a>
                 <ul class="nav-dropdown-items">
@@ -54,23 +57,35 @@
                 </ul>
             </li>
 
-            <li class="nav-item nav-dropdown hemodinamica">
+            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+                <li class="nav-item nav-dropdown hemodinamica">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-sticky-note-o"  aria-hidden="true"></i>
+                        <spring:message code="Hemodinamica" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item filedata">
+                            <a class="nav-link" href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                                <i class="fa fa-list"></i>
+                                <spring:message code="Listado" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
+
+            <sec:authorize access="hasRole('ROLE_DOM')">
+            <li class="nav-item nav-dropdown Domicilio">
                 <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="fa fa-sticky-note-o"  aria-hidden="true"></i>
-                    <spring:message code="Hemodinamica" /></a>
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <spring:message code="Cambios Domicilio" /></a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item filedata">
-                        <a class="nav-link" href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
-                            <i class="fa fa-list"></i>
-                            <spring:message code="Listado" /></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<spring:url value="/Domicilio/Listado" htmlEscape="true "/>">
+                            <i class="fa fa-bank" aria-hidden="true"></i>
+                            <spring:message code="Domicilios" /></a>
                     </li>
                 </ul>
             </li>
-
-
-
-
-
+            </sec:authorize>
 	        <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/logout" htmlEscape="true" />"><i class="icon-lock"></i><spring:message code="logout" /></a>
             </li>

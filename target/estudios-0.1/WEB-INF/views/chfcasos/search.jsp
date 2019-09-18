@@ -95,17 +95,14 @@
 	<!-- Custom scripts required by this view -->
 	<spring:url value="/resources/scripts/casas/search-casa.js" var="casaScript" />
 	<script src="${casaScript}" type="text/javascript"></script>
-	
-	
 	<script>
 		jQuery(document).ready(function() {			
 			var parametros = {casasUrl: "${casasUrl}",
-					partsUrl: "${partsUrl}",
+				partsUrl: "${partsUrl}",
 				notFound: "${notFound}",
 				dataTablesLang: "${dataTablesLang}"};
 			SearchCasa.init(parametros);
 		});
 	</script>
-	
 </body>
 </html>
