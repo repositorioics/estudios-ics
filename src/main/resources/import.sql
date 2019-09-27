@@ -951,3 +951,8 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_LUGAR_REGISTRO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo lugar de registro evento');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_LUGAR_REGISTRO_01', '1', 'CAT_LUGAR_REGISTRO', NULL, '0', 1, '0', 'Centro de Salud');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_LUGAR_REGISTRO_02', '2', 'CAT_LUGAR_REGISTRO', NULL, '0', 2, '0', 'Terreno');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN', NULL, NULL, NULL, '1', 0, '0', 'Catalogo intensidad sintomas transmision influenza');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN_01', '1', 'CAT_INTENSIDAD_SIN', NULL, '0', 1, '0', 'Leve');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN_02', '2', 'CAT_INTENSIDAD_SIN', NULL, '0', 2, '0', 'Moderad@');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN_03', '3', 'CAT_INTENSIDAD_SIN', NULL, '0', 3, '0', 'Sever@');

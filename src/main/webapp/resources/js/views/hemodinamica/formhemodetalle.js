@@ -105,7 +105,7 @@ debugger;
                     densidadUrinaria: {
                         required: true,
                         number: true,
-                        min:1005,
+                        min:1000,
                             max:1030
                     },
                     personaValida: {
