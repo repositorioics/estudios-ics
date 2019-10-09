@@ -956,3 +956,9 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN_01', '1', 'CAT_INTENSIDAD_SIN', NULL, '0', 1, '0', 'Leve');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN_02', '2', 'CAT_INTENSIDAD_SIN', NULL, '0', 2, '0', 'Moderad@');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTENSIDAD_SIN_03', '3', 'CAT_INTENSIDAD_SIN', NULL, '0', 3, '0', 'Sever@');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo Si/No/Desconocido/No Aplica UO1');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_01', '1', 'UO1_CAT_SNDNA', NULL, '0', 1, '0', 'S');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_02', '0', 'UO1_CAT_SNDNA', NULL, '0', 2, '0', 'N');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_03', '2', 'UO1_CAT_SNDNA', NULL, '0', 4, '0', 'NA');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_999', '999', 'UO1_CAT_SNDNA', NULL, '0', 3, '0', 'D');

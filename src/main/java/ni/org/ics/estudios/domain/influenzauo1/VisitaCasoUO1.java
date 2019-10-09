@@ -135,6 +135,11 @@ public class VisitaCasoUO1 extends BaseMetaData implements Auditable {
     }
 
     @Override
+    public String toString() {
+        return codigoCasoVisita;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof VisitaCasoUO1)) return false;
