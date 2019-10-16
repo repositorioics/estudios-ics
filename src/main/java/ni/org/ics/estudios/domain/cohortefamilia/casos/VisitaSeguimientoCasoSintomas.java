@@ -48,6 +48,14 @@ public class VisitaSeguimientoCasoSintomas extends BaseMetaData implements Audit
 	private String cualAntibiotico;
 	private String prescritoMedico;
     private String respiracionRapida;
+    //se agrega intensidad sintomas
+	private String fiebreIntensidad;
+	private String dolorCabezaIntensidad;
+	private String dolorArticularIntensidad;
+	private String dolorMuscularIntensidad;
+	private String secrecionNasalIntensidad;
+	private String tosIntensidad;
+	private String dolorGargantaIntensidad;
     
 	@Id
     @Column(name = "CODIGO_SINTOMA_CASO", length = 50, nullable = false)
@@ -304,7 +312,70 @@ public class VisitaSeguimientoCasoSintomas extends BaseMetaData implements Audit
         this.respiracionRapida = respiracionRapida;
     }
 
-    @Override
+	@Column(name = "FIEBRE_INTENSIDAD", length = 2, nullable = true)
+	public String getFiebreIntensidad() {
+		return fiebreIntensidad;
+	}
+
+	public void setFiebreIntensidad(String fiebreIntensidad) {
+		this.fiebreIntensidad = fiebreIntensidad;
+	}
+
+	@Column(name = "DOLOR_CABEZA_INTENSIDAD", length = 2, nullable = true)
+	public String getDolorCabezaIntensidad() {
+		return dolorCabezaIntensidad;
+	}
+
+	public void setDolorCabezaIntensidad(String dolorCabezaIntensidad) {
+		this.dolorCabezaIntensidad = dolorCabezaIntensidad;
+	}
+
+	@Column(name = "DOLOR_ARTICULAR_INTENSIDAD", length = 2, nullable = true)
+	public String getDolorArticularIntensidad() {
+		return dolorArticularIntensidad;
+	}
+
+	public void setDolorArticularIntensidad(String dolorArticularIntensidad) {
+		this.dolorArticularIntensidad = dolorArticularIntensidad;
+	}
+
+	@Column(name = "DOLOR_MUSCULAR_INTENSIDAD", length = 2, nullable = true)
+	public String getDolorMuscularIntensidad() {
+		return dolorMuscularIntensidad;
+	}
+
+	public void setDolorMuscularIntensidad(String dolorMuscularIntensidad) {
+		this.dolorMuscularIntensidad = dolorMuscularIntensidad;
+	}
+
+	@Column(name = "SECRECION_NASAL_INTENSIDAD", length = 2, nullable = true)
+	public String getSecrecionNasalIntensidad() {
+		return secrecionNasalIntensidad;
+	}
+
+	public void setSecrecionNasalIntensidad(String secrecionNasalIntensidad) {
+		this.secrecionNasalIntensidad = secrecionNasalIntensidad;
+	}
+
+	@Column(name = "TOS_INTENSIDAD", length = 2, nullable = true)
+	public String getTosIntensidad() {
+		return tosIntensidad;
+	}
+
+	public void setTosIntensidad(String tosIntensidad) {
+		this.tosIntensidad = tosIntensidad;
+	}
+
+	@Column(name = "DOLOR_GARGANTA_INTENSIDAD", length = 2, nullable = true)
+	public String getDolorGargantaIntensidad() {
+		return dolorGargantaIntensidad;
+	}
+
+	public void setDolorGargantaIntensidad(String dolorGargantaIntensidad) {
+		this.dolorGargantaIntensidad = dolorGargantaIntensidad;
+	}
+
+	@Override
 	public String toString(){
 		return codigoVisitaCaso.getCodigoParticipanteCaso().getCodigoCaso().getCasa().getCodigoCHF() + "-" + codigoVisitaCaso.getCodigoParticipanteCaso().getParticipante().getParticipante().getCodigo() + "-" + codigoVisitaCaso.getCodigoParticipanteCaso().getCodigoCaso().getFechaInicio();
 	}
