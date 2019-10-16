@@ -730,7 +730,6 @@ public class PdfView extends AbstractPdfView {
             cell.setBorder(Rectangle.BOTTOM);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase("Tamaño: " + ListDetail.size()));
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.setBorder(0);
             table.addCell(cell);
@@ -748,16 +747,33 @@ public class PdfView extends AbstractPdfView {
                 cell.setBorder(Rectangle.BOTTOM);
                 table.addCell(cell);
 
-                cell = new PdfPCell(new Phrase("Tamaño: " + ListDetail.size()));
+                /*cell = new PdfPCell(new Phrase("Tamaño: " + ListDetail.size()));
                 cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cell.setBorder(0);
-                table.addCell(cell);
+                table.addCell(cell);*/
                 document.add(table);
                 break;
             }
         }
 
+        LineSeparator ls01 = new LineSeparator();
+        ls01.setLineWidth(0.5f);
+        document.add(new Chunk(ls01));
+
+        table = new PdfPTable(new float[]{40,40,40});
+        table.setWidthPercentage(100f);
+        cell = new PdfPCell(new Phrase("Tabla en Construcción..! ", etiquetas));
+        cell.setBorder(0);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(0);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
         /******************** INICIO DEL DETALLE *******************************/
+        /*
         if(ListDetail.size() <= 0){
            document.add(createTableNull("Fecha"));
            document.add(createTableNull("Hora"));
@@ -775,13 +791,20 @@ public class PdfView extends AbstractPdfView {
            document.add(createTableNull("Diuresis/ ml/Kg/Hr"));
            document.add(createTableNull("Densidad Urinaria"));
            document.add(createTableNull("Persona encargada de la Valoración"));
+        }else{
+            table = new PdfPTable(new float[]{50});
+            table.setWidthPercentage(100f);
+            cell = new PdfPCell(new Phrase("No se encontró Información..! ", timesRomanNormal12));
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
         }
         table.setSpacingAfter(10);
         table = new PdfPTable(10);
         table.setWidthPercentage(100f);
-        Integer cont = 1;
-        table.addCell(new Phrase("Fecha ", etiquetas));
+        /*
 
+        Integer cont = 1;
         for (HemoDetalle l : ListDetail) {
             cont++;
             table.addCell(new Phrase(DateUtil.DateToString(l.getFecha(), "dd/MM/yyyy"), font));
@@ -796,10 +819,10 @@ public class PdfView extends AbstractPdfView {
             if (cont == 10){
                 table.completeRow();
             }
-        }
+        }*/
 
-        document.add(table);
-        document.newPage();
+
+
        /* Integer cont = 0;
         //Integer tam = ListDetail.size();
         table = new PdfPTable(ListDetail.size() == 1 ? 8 : ListDetail.size()+1);

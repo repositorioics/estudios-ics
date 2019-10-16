@@ -30,16 +30,25 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-dropdown supervision">
-                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-eye"></i><spring:message code="superv" /></a>
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-eye"></i><spring:message code="superv" /></a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item intensiveMonitoring">
+                        <a class="nav-link" href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><i class="icon-location-pin"></i><spring:message code="intensiveMonitoring" /></a>
+                    </li>
+                    <li class="nav-item visitsIM">
+                        <a class="nav-link" href="<spring:url value="/reportes/super/visitas/" htmlEscape="true "/>"><i class="icon-list"></i><spring:message code="visits" /></a>
+                    </li>
+                    <li class="nav-item posUO1">
+                        <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
+                    </li>
+                </ul>
+            </li>
+
+                <li class="nav-item nav-dropdown supervision">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-home"></i><spring:message code="Casas" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item intensiveMonitoring">
-                            <a class="nav-link" href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><i class="icon-location-pin"></i><spring:message code="intensiveMonitoring" /></a>
-                        </li>
-                        <li class="nav-item visitsIM">
-                            <a class="nav-link" href="<spring:url value="/reportes/super/visitas/" htmlEscape="true "/>"><i class="icon-list"></i><spring:message code="visits" /></a>
-                        </li>
-                        <li class="nav-item posUO1">
-                            <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
+                            <a class="nav-link" href="<spring:url value="/CrearCasa/CrearCasa" htmlEscape="true "/>"><i class="fa fa-plus-circle"></i><spring:message code="Crear Casa" /></a>
                         </li>
                     </ul>
                 </li>

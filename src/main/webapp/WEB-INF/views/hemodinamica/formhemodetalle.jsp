@@ -314,7 +314,7 @@
                 extremidades:{required:true},
                 densidadUrinaria:{
                     number: true,
-                    min:1005, max:1030
+                    min:1000, max:1030
                 },
                 pulsoCalidad:{required: true},
                 llenadoCapilar:{required:true},

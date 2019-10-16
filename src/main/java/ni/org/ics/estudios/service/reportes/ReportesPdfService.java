@@ -3,7 +3,6 @@ package ni.org.ics.estudios.service.reportes;
 import com.google.common.base.Predicate;
 import ni.org.ics.estudios.domain.*;
 import ni.org.ics.estudios.domain.cohortefamilia.encuestas.EncuestaParticipante;
-import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.muestreoanual.EncuestaParticipanteMA;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.language.MessageResource;

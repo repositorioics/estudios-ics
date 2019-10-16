@@ -454,7 +454,7 @@
         $("#pulsoCalidad").select2();
         $("#personaValida").select2();
         $("#diuresis").select2();
-        $("#pa").mask("999/999");
+        //$("#pa").mask("999/999");
         $("#fecha").datepicker({
             autoclose: true,
             format: "dd/mm/yyyy",
@@ -471,8 +471,8 @@
         var form1 = $("#formDetailHemo");
         form1.validate({
             rules:{
-                pa:{required:true,
-                    customphone:true
+                pa:{required:true
+                    //customphone:true
                 },
                 signo:{required:true},
                 nivelConciencia:{
@@ -503,7 +503,7 @@
                 extremidades:{required:true},
                 densidadUrinaria:{
                     number: true,
-                    min:1005
+                    min:1000
                     ,max:1030
                 }
             },

@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.service.Domicilios;
 
+import ni.org.ics.estudios.domain.Casa;
+import ni.org.ics.estudios.domain.CasaTmp;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 
 import ni.org.ics.estudios.domain.catalogs.Barrio;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -121,4 +124,50 @@ public class DomicilioService {
             throw e;
         }
     }
+
+
+    /***** SERVICIOS PARA LAS NUEVAS CASAS *******/
+
+     /* --  Verificar si Existe una hoja con identica  -- */
+    @SuppressWarnings("unchecked")
+    public boolean SiExisteHouse(Integer cod) throws Exception {
+        try {
+            boolean bandera = false;
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery("from Casa c where " + "c.codigo =:cod");
+            query.setParameter("cod", cod);
+            if (query.list().size() > 0) {
+                bandera = true;
+            }
+            return bandera;
+        }catch (Exception e){
+            throw e;
+        }
+    }
+    @SuppressWarnings("unchecked")
+public void SaveCasaTmp(CasaTmp obj) throws Exception {
+            try {
+                Session session = sessionFactory.getCurrentSession();
+                session.saveOrUpdate(obj);
+            }catch (Exception e){
+                throw e;
+            }
+        }
+
+
+    @SuppressWarnings("unchecked")
+        public List<CasaTmp> ListCasasTmp(String username)throws Exception{
+            try
+            {
+                Session session = sessionFactory.getCurrentSession();
+                String consulta = "from CasaTmp where usuario =:username";
+                Query query = session.createQuery(consulta);
+                query.setParameter("username", username);
+                return query.list();
+            }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+    /************/
 }
