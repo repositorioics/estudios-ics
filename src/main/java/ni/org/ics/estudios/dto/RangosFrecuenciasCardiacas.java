@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by ICS_Inspiron3 on 19/08/2019.
  */
 @Entity
-@Table(name = "RANGOSFRECUENCIASCARDIACAS", catalog = "estudios_ics")
+@Table(name = "rangosfrecuenciascardiacas", catalog = "estudios_ics")
 public class RangosFrecuenciasCardiacas implements Serializable {
     private Integer codigo;
     private Integer edadmin;
