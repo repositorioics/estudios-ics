@@ -1,25 +1,47 @@
 $(document).ready(function(){
+    $("#fconsulta").datepicker({
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        endDate: '-0d',
+        todayBtn:true
+    }).on("change", function(e){
+        var f1 = $("#fconsulta").val();
+        var f2= $("#fie").val();
+        $("#diasenf").val(restaFechas(f1,f2));
+    });
+
     $("#fie").datepicker({
         autoclose: true,
         format: "dd/mm/yyyy",
         todayBtn:true,
         endDate: '-0d'
-    }).on("changeDate", function(e){
-        var f1 = new Date();
+    }).on("change", function(e){
+        var f1 = $("#fconsulta").val();
         var f2= $("#fie").val();
         $("#diasenf").val(restaFechas(f1,f2));
     });
-    // Días transcurridos
     restaFechas = function(f1,f2){
-        var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
-        var aFecha1 = datestring.split("/");
+        var fechaConsulta = new Date(f1);
+        var fechaInicioEnf = new Date(f2);
+        if(fechaConsulta < fechaInicioEnf){
+            swal("Error", "Fecha Inicio Enfermedad no debe ser Mayor que Fecha Consulta","error");
+            $("#diasenf").val("");
+            $("#fie").val("");
+            return;
+        }
+        // var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
+        //var aFecha1 = datestring.split("/");
+        var aFecha1 = f1.split("/");
         var aFecha2 = f2.split("/");
         var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
         var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
         var dif =  fFecha1 - fFecha2;
         var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
-        return dias;
-    };
+        if(dias == NaN){
+            dias = 0;
+        }
+        return dias +1;
+    }
     //--------------------------------------------------------------------
     $('#sistolica').keyup(function(){
         calculoPresion();

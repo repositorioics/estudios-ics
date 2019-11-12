@@ -146,30 +146,47 @@
                                         <label for="IMCdetallado">Detalle Imc:</label>
                                         <input type="text" class="form-control" id="IMCdetallado" name="IMCdetallado" readonly value="${obj.IMCdetallado}"/>
                                     </div>
+
+                                    <div class="form-group col-sm-4">
+                                        <label for="fconsulta">Fecha Consulta:</label>
+                                        <span class="required text-danger"> * </span>
+                                        <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fecha}" pattern="dd/MM/yyyy"/>"/>
+                                    </div>
+
                                     <div class="form-group col-sm-4">
                                         <label for="fie">Fecha Inicio de Enfermedad:</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" tabindex="3" id="fie" name="fie"  value="<fmt:formatDate value="${obj.fie}" pattern="dd/MM/yyyy"/>" />
+                                        <input type="text" class="form-control focusNext" tabindex="3" id="fie" name="fie"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fie}" pattern="dd/MM/yyyy"/>" />
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="diasenf">Días de Enfermedad:</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
                                     </div>
-                                    <div class="form-group col-sm-4" style="text-align: center">
+
+
+                                    <div class="form-group col-sm-6">
                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                             <p class="text-center">
                                                 <br/>
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox" class="custom-control-input" id="chkRange2" name="chkRange2">
-                                                <label class="custom-control-label" for="chkRange2"> <strong> Frecuencias Respiratorias. </strong> </label>
-                                            </div> </p>
+                                                <label class="custom-control-label" for="chkRange2">Frecuencias Respiratorias.</label>
+                                            </div>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                     <br/>
                                 <div hidden="hidden">
                                     <div class="row">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <p class="text-center">
+                                                <br/>
+                                                <input type="radio" id="customRadio2" name="positivo" class="custom-control-input" value="0">
+                                                <label class="custom-control-label" for="customRadio2"> Negativo</label>
+                                            </p>
+                                        </div>
                                         <div class="form-group col-sm-4">
                                             <button class="btn btn-dark btn-lg btn-block" type="button" data-toggle="collapse" tabindex="6" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                                 <i class="fa fa-stethoscope" aria-hidden="true"></i>  Rangos
@@ -381,7 +398,7 @@
                     uSalud:{required:true},
                     silais:{required: true},
                     municipio:{required:true},
-                    fecha:{required: true},
+                    fconsulta:{required: true},
                     sector: {required: true},
                     expediente:{required: true},
                     telefono:{

@@ -395,9 +395,15 @@
             var result = pa.split("/");
             var part1 = result[0];
             var part2 = result[1];
-            var diferencia = parseInt(part1)-parseInt(part2);
-            var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
+            var diferencia = 0;
+            if(part1 > part2){
+                diferencia = parseInt(part1)-parseInt(part2);
+            }
+            else{
+                diferencia = parseInt(part2)-parseInt(part1);
+            }
             $("#pp").val(diferencia);
+            var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
             $("#pam").val(Math.round(pam));
         })
 
