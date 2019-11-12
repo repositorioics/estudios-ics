@@ -62,6 +62,7 @@ public class DatosHemodinamica extends BaseMetaData {
     private Integer frMax;
 
     private String barrioF;
+    private char positivo = '0';
 
     /*  Getter y Setter*/
     @Id
@@ -318,7 +319,6 @@ public class DatosHemodinamica extends BaseMetaData {
     }
 
 
-
     @Column(name = "frMax", nullable = true)
     public Integer getFrMax() {
         return frMax;
@@ -337,4 +337,12 @@ public class DatosHemodinamica extends BaseMetaData {
         this.barrioF = barrioF;
     }
 
+    @Column(name = "positivo", nullable = true)
+    public char getPositivo() {
+        return positivo;
+    }
+
+    public void setPositivo(char positivo) {
+        this.positivo = positivo;
+    }
 }

@@ -49,6 +49,21 @@ public class DatoshemodinamicaService {
             throw e;
         }
     }
+
+     /* Metodo busca Participante en  HemoDinamica por ID  */
+     @SuppressWarnings("unchecked")
+     public List<DatosHemodinamica> getListadoHemoByID(Integer idParticipante) throws Exception {
+         try {
+             Session session = sessionFactory.getCurrentSession();
+              Query query = session.createQuery("from DatosHemodinamica where idParticipante =:idParticipante order by fecha asc");
+              query.setParameter("idParticipante", idParticipante);
+             return query.list();
+         }catch (Exception e){
+             throw e;
+         }
+     }
+    /* Fin del Metodo*/
+
 /*Metodo para Guardar hoja Hemodinamica*/
     @SuppressWarnings("unchecked")
     public void SaveDatosHemo(DatosHemodinamica obj) throws Exception {

@@ -182,16 +182,22 @@
                                             </div>
 
                                             <div class="form-group col-sm-4">
+                                                <label for="fconsulta">Fecha Consulta:</label>
+                                                <span class="required text-danger"> * </span>
+                                                <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta" data-date-end-date="+0d" required tabindex="4"/>
+                                            </div>
+
+                                            <div class="form-group col-sm-4">
                                                 <label for="fie">Fecha Inicio de Enfermedad:</label>
                                                 <span class="required text-danger"> * </span>
-                                                <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="4"/>
+                                                <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="5" data-date-end-date="+0d"/>
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="diasenf">Días de Enfermedad:</label>
-                                                <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
+                                                <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}"  readonly/>
                                             </div>
 
-                                            <div class="form-group col-sm-4" style="text-align: center">
+                                            <div class="form-group col-sm-6">
                                                 <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                                  <p class="text-center">
                                                      <br/>
@@ -201,13 +207,19 @@
                                                     </div>
                                                  </p>
                                                 </div>
-
-
                                             </div>
                                             </div>
                                         <br/>
                                         <div hidden="hidden">
                                         <div class="row">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <p class="text-center">
+                                                    <br/>
+                                                    <input type="radio" id="customRadio2" name="positivo" class="custom-control-input" value="0">
+                                                    <label class="custom-control-label" for="customRadio2"> Negativo</label>
+                                                </p>
+
+                                            </div>
                                             <div class="form-group col-sm-4">
                                                 <button class="btn btn-dark btn-block btn-lg" type="button" tabindex="5" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                                     <i class="fa fa-stethoscope" aria-hidden="true"></i>  Rangos
@@ -477,7 +489,7 @@
                     if(data.estado == "0"){
                         swal("Advertencia!", "Participante está retirado!", "warning");
                         $("#nombre").val("");
-                        $("#fecha").val("");
+                        $("#fconsulta").val("");
                         $("#idParticipante").val("");
                         $("#edad").val("");
                         $("#direccion").val("");
@@ -516,26 +528,50 @@
                 $("#parametro").focus();
             });
         }
+        $("#fie").prop("disabled", true);
+        $("#fconsulta").datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            endDate: '-0d',
+            todayBtn:true
+    }).on("change", function(e){
+            $("#fie").prop("disabled", false);
+            var f1 = $("#fconsulta").val();
+            var f2= $("#fie").val();
+            $("#diasenf").val((restaFechas(f1,f2)) == "NaN" ? 0 : restaFechas(f1,f2));
+        });
 
         $("#fie").datepicker({
             autoclose: true,
             format: "dd/mm/yyyy",
             todayBtn:true,
-            endDate: '-0d'
-        }).on("changeDate", function(e){
-            var f1 = new Date();
+            endDate:$("#fecha1").val()
+        }).on("change", function(e){
+            var f1 = $("#fconsulta").val();
             var f2= $("#fie").val();
             $("#diasenf").val(restaFechas(f1,f2));
         });
         restaFechas = function(f1,f2){
-            var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
-            var aFecha1 = datestring.split("/");
+            var fechaConsulta = new Date(f1);
+            var fechaInicioEnf = new Date(f2);
+            if(fechaConsulta < fechaInicioEnf){
+                swal("Error", "Fecha Inicio Enfermedad no debe ser Mayor que Fecha Consulta","error");
+                $("#fie").val("");
+                $("#diasenf").val("");
+                return;
+            }
+           // var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
+            //var aFecha1 = datestring.split("/");
+            var aFecha1 = f1.split("/");
             var aFecha2 = f2.split("/");
             var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
             var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
             var dif =  fFecha1 - fFecha2;
             var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
-            return dias;
+            if(dias == NaN){
+                dias = 0;
+            }
+            return dias +1;
         }
 
         $('#sistolica').keyup(function(){
@@ -663,6 +699,7 @@
                 silais:{required: true},
                 municipio:{required:true},
                 fecha:{required: true},
+                fconsulta:{required: true},
                 sector: {required: true,
                     validaSelect:"Seleccione una opción",
                  highlight: function(input) {
@@ -710,6 +747,7 @@
             }
         });
         function SaveHemo(dir){
+            console.log(form1.serialize());
             $.post(dir.saveHemoUrl, form1.serialize(), function(data){
                 swal("Éxito!", "Información guardada!", "success")
                 window.setTimeout(function(){

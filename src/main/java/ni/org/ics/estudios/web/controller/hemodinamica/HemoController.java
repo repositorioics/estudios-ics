@@ -131,6 +131,35 @@ public class HemoController {
     }
     /* FIN DEL METODO LISTADO*/
 
+    /* Mapeo  de la Vista Inicio Listado 2*/
+    @RequestMapping(value = "/listado2", method = RequestMethod.GET)
+    public ModelAndView listado2()throws Exception{
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/hemodinamica/listado2");
+        return modelAndView;
+    }
+    /* Listado 2 */
+
+    //Obtener la lista de hojas por codigo participante
+    @RequestMapping(value = "/ListaHoja", method = RequestMethod.GET, produces ="application/json")
+    public @ResponseBody
+    List<DatosHemodinamica> ListaHoja(@RequestParam(value = "parametro", required=true ) Integer parametro)
+            throws Exception{
+        List<DatosHemodinamica> lista = null;
+        try {
+            lista = datoshemodinamicaService.getListadoHemoByID(parametro);
+            return lista;
+        } catch (Exception e) {
+            return  lista = null;
+        }
+
+    }
+
+
+
+
+
+
     /*Buscar lo faltante para modals*/
     @RequestMapping(value = "/ViewResutl", method = RequestMethod.GET, produces="application/json" )
     public @ResponseBody
@@ -230,7 +259,8 @@ public class HemoController {
         public ResponseEntity<String>addHemodinamica(@RequestParam( value="asc", required=true ) double asc
                 , @RequestParam( value="direccion", required=true ) String direccion
                 , @RequestParam( value="edad", required=true ) String edad
-                , @RequestParam( value="fecha", required=true ) Date fecha
+                , @RequestParam( value="fecha", required=true ) String fecha
+                , @RequestParam( value="fconsulta", required=true ) String fconsulta
                 , @RequestParam( value="imc", required=true ) double imc
                 , @RequestParam( value="municipio", required=true ) String municipio
                 , @RequestParam( value="expediente", required=true ) String nExpediente
@@ -256,13 +286,14 @@ public class HemoController {
                 , @RequestParam( value="fcProm", required=false ) Integer fcProm
                 , @RequestParam( value="frMin", required=false ) Integer frMin
                 , @RequestParam( value="frMax", required=false ) Integer frMax
+
         ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
             obj.setAsc(Double.valueOf(asc));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
-            obj.setFecha(fecha);
+            obj.setFecha(DateUtil.StringToDate(fconsulta,"dd/MM/yyyy"));
             obj.setImc(imc);
             obj.setMunicipio(municipio);
             obj.setnExpediente(nExpediente);
@@ -315,6 +346,7 @@ public class HemoController {
             , @RequestParam( value="direccion", required=true ) String direccion
             , @RequestParam( value="edad", required=true ) String edad
             , @RequestParam( value="fecha", required=true ) String fecha
+            , @RequestParam( value="fconsulta", required=true ) String fconsulta
             , @RequestParam( value="imc", required=true ) double imc
             , @RequestParam( value="municipio", required=true ) String municipio
             , @RequestParam( value="expediente", required=true ) String nExpediente
@@ -340,6 +372,7 @@ public class HemoController {
             , @RequestParam( value="fcProm", required=false ) Integer fcProm
             , @RequestParam( value="frMin", required=false ) Integer frMin
             , @RequestParam( value="frMax", required=false ) Integer frMax
+
     ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
@@ -347,7 +380,7 @@ public class HemoController {
             obj.setAsc(Double.valueOf(asc));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
-            obj.setFecha(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
+            obj.setFecha(DateUtil.StringToDate(fconsulta, "dd/MM/yyyy"));
             obj.setImc(imc);
             obj.setMunicipio(municipio);
             obj.setnExpediente(nExpediente);
