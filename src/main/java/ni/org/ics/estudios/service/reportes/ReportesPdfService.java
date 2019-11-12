@@ -251,7 +251,7 @@ public class ReportesPdfService {
                         if (contacto.getDireccion()!=null && contacto.getDireccion().toUpperCase().contains("MISMA")) {
                             dgp.setDireccionContacto(participante.getCasa().getDireccion());
                         } else {
-                            dgp.setDireccionContacto(contactoParticipantes.get(0).getDireccion());
+                            dgp.setDireccionContacto(contacto.getDireccion());
                         }
                         break;
                     }
