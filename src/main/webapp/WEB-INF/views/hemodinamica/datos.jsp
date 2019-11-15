@@ -41,14 +41,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
-                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/hemo/listado/" htmlEscape="true "/>">LISTADO</a>
+                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/hemo/listado2/" htmlEscape="true "/>">LISTADO</a>
                 <i class="fa fa-angle-right"></i><a href="<spring:url value="/hemo/create/" htmlEscape="true "/>">
                     <spring:message code="Hemodinámica" />
                 </a>
             </li>
         </ol>
         <spring:url value="/hemo/addHemodinamica" var="saveHemoUrl"/>
-        <spring:url value="/hemo/listado" var="ListadoUrl"/>
+        <spring:url value="/hemo/listado2" var="ListadoUrl"/>
         <spring:url value="/hemo/GetRange" var="GetRangeUrl"/>
         <c:set var="successmessage"><spring:message code="process.success" /></c:set>
         <c:set var="errormessage"><spring:message code="process.errors" /></c:set>
@@ -197,7 +197,7 @@
                                                 <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}"  readonly/>
                                             </div>
 
-                                            <div class="form-group col-sm-6">
+                                            <div hidden="hidden" class="form-group col-sm-6">
                                                 <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                                  <p class="text-center">
                                                      <br/>
@@ -208,6 +208,23 @@
                                                  </p>
                                                 </div>
                                             </div>
+                                            <div class="form-group col-sm-12">
+                                                <div id="positivoerror" class="text-danger"></div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <p class="text-center">
+                                                        <br/>
+                                                        <input type="radio" id="chkpositivo0" value="0" name="chkpositivo" class="custom-control-input">
+                                                    <label class="custom-control-label" for="chkpositivo0">Negativo.</label>
+                                                    </p>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <p class="text-center">
+                                                        <br/>
+                                                    <input type="radio" id="chkpositivo1" value="1" name="chkpositivo" class="custom-control-input">
+                                                    <label class="custom-control-label" for="chkpositivo1">Positivo.</label>
+                                                    </p>
+                                                </div>
+                                                </div>
                                             </div>
                                         <br/>
                                         <div hidden="hidden">
@@ -308,7 +325,7 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
-                                                    <a class="btn btn-warning btn-block btn-lg" tabindex="18" href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                                                    <a class="btn btn-warning btn-block btn-lg" tabindex="18" href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
                                                         <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
                                                         <spring:message code="Cancelar" /></a>
                                                 </div>
@@ -529,6 +546,7 @@
             });
         }
         $("#fie").prop("disabled", true);
+
         $("#fconsulta").datepicker({
             autoclose: true,
             format: "dd/mm/yyyy",
@@ -538,7 +556,15 @@
             $("#fie").prop("disabled", false);
             var f1 = $("#fconsulta").val();
             var f2= $("#fie").val();
-            $("#diasenf").val((restaFechas(f1,f2)) == "NaN" ? 0 : restaFechas(f1,f2));
+            $("#diasenf").val(0);
+            var validaFeecha = 0;
+            if (f2 ==="" || f2 ===null ){
+                $("#diasenf").val(0);
+            }else{
+                validaFeecha = restaFechas(f1,f2);
+                $("#diasenf").val(validaFeecha);
+            }
+
         });
 
         $("#fie").datepicker({
@@ -547,30 +573,37 @@
             todayBtn:true,
             endDate:$("#fecha1").val()
         }).on("change", function(e){
+            debugger;
             var f1 = $("#fconsulta").val();
             var f2= $("#fie").val();
-            $("#diasenf").val(restaFechas(f1,f2));
+            var validaFeecha = 0;
+            if(f1<f2){
+                $("#diasenf").val(validaFeecha);
+                swal("Error", "Inicio Enfermedad no debe ser Mayor que Consulta","error");
+                var f2= $("#fie").val(null);
+                $("#diasenf").val(0);
+                return;
+            }  else if(f2===null||f2===""){
+                $("#diasenf").val(0);
+            }else{
+                $("#diasenf").val(restaFechas(f1,f2));
+            }
         });
         restaFechas = function(f1,f2){
             var fechaConsulta = new Date(f1);
             var fechaInicioEnf = new Date(f2);
-            if(fechaConsulta < fechaInicioEnf){
-                swal("Error", "Fecha Inicio Enfermedad no debe ser Mayor que Fecha Consulta","error");
+            if(Date.parse(fechaConsulta) < Date.parse(fechaInicioEnf)){
+                swal("Error", "Inicio Enfermedad no debe ser Mayor que Consulta","error");
                 $("#fie").val("");
                 $("#diasenf").val("");
                 return;
             }
-           // var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
-            //var aFecha1 = datestring.split("/");
             var aFecha1 = f1.split("/");
             var aFecha2 = f2.split("/");
             var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
             var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
             var dif =  fFecha1 - fFecha2;
             var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
-            if(dias == NaN){
-                dias = 0;
-            }
             return dias +1;
         }
 
@@ -613,6 +646,9 @@
                 var alturaCuadrado = alturaMetro * alturaMetro;
                 var imc = peso / alturaCuadrado;
                 document.getElementById("imc").value = Math.round(imc * 100) / 100;
+                if(altura == "" || altura == null){
+                    alturaCuadrado =0;
+                }
                 /*CALCULO DESCRIPCION IMC*/
 
                 if (imc < 16) {
@@ -694,6 +730,7 @@
                     required: true,
                     number: true
                 },
+                chkpositivo:{required:true},
                 IMCdetallado:{required: true},
                 nombre:{required: true},
                 silais:{required: true},
@@ -778,11 +815,6 @@
                 event.preventDefault();
             }
         });
-
-
-
-
-
 
     })
 </script>

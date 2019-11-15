@@ -30,7 +30,7 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>">LISTADO</a>
+                <a href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">LISTADO</a>
                 <i class="fa fa-angle-right"></i>
                 <a href="${fn:escapeXml(edithemoUrl)}">ACTUALIZAR </a>
                 <i class="fa fa-angle-right"></i>
@@ -38,7 +38,7 @@
             </li>
         </ol>
         <spring:url value="/hemo/UpdateHemodinamica" var="updateHemoUrl"/>
-        <spring:url value="/hemo/listado" var="Listado2Url"/>
+        <spring:url value="/hemo/listado2" var="Listado2Url"/>
         <div class="container-fluid">
             <div class="animated fadeIn">
                <div class="card text-black-50 bg-secondary border-primary">
@@ -163,9 +163,7 @@
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control" id="diasenf" name="diasenf" value="${obj.diasenf}" readonly/>
                                     </div>
-
-
-                                    <div class="form-group col-sm-6">
+                                    <div hidden="hidden" class="form-group col-sm-6">
                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                             <p class="text-center">
                                                 <br/>
@@ -176,6 +174,36 @@
                                             </p>
                                         </div>
                                     </div>
+
+                                    <div class="form-group col-sm-12">
+                                        <div id="positivoerror" class="text-danger"></div>
+                                        <br/>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                        <c:choose>
+                                            <c:when test="${obj.positivo eq '0'.charAt(0)}">
+                                                <input type="radio" id="chkpositivo0" value="${obj.positivo}" name="chkpositivo" checked="checked" class="custom-control-input"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="radio" id="chkpositivo0" value="0" name="chkpositivo" class="custom-control-input"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <label class="custom-control-label" for="chkpositivo0">Negativo.</label>
+                                    </div>
+
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <c:choose>
+                                            <c:when test="${obj.positivo eq  '1'.charAt(0)}">
+                                                <input type="radio" id="chkpositivo1" value="${obj.positivo}" name="chkpositivo" checked="checked" class="custom-control-input"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="radio" id="chkpositivo1" value="1" name="chkpositivo" class="custom-control-input"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <label class="custom-control-label" for="chkpositivo1">Positivo.</label>
+                                    </div>
+
+                                    </div>
+
                                 </div>
                                     <br/>
                                 <div hidden="hidden">
@@ -274,7 +302,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <a class="btn btn-warning btn-block btn-lg" href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                                            <a class="btn btn-warning btn-block btn-lg" href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
                                                 <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
                                                 <spring:message code="Cancelar" /></a>
                                         </div>
@@ -396,6 +424,7 @@
                     nombre:{required:true},
                     parametro :{required: true},
                     uSalud:{required:true},
+                    chkpositivo:{required: true},
                     silais:{required: true},
                     municipio:{required:true},
                     fconsulta:{required: true},
