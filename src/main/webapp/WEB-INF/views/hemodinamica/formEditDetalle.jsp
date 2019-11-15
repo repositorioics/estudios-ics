@@ -130,7 +130,7 @@
             </li>
         </ol>
         <spring:url value="/hemo/UpdateDetalleHemo" var="upateDetHemoUrl"/>
-        <spring:url value="/hemo/listado" var="ListadoHemoUrl"/>
+        <spring:url value="/hemo/listado2" var="ListadoHemoUrl"/>
         <spring:url value="/hemo/listDetailsHemo/{idDatoHemo}" var="listDetailsHemoUrl">
             <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
         </spring:url>

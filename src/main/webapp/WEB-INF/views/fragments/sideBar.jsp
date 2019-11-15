@@ -78,7 +78,7 @@
                         <spring:message code="Hemodinamica" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item filedata">
-                            <a class="nav-link" href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                            <a class="nav-link" href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
                                 <i class="fa fa-list"></i>
                                 <spring:message code="Listado" /></a>
                         </li>

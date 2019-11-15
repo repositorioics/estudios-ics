@@ -5,9 +5,17 @@ $(document).ready(function(){
         endDate: '-0d',
         todayBtn:true
     }).on("change", function(e){
+        $("#fie").prop("disabled", false);
         var f1 = $("#fconsulta").val();
         var f2= $("#fie").val();
-        $("#diasenf").val(restaFechas(f1,f2));
+        $("#diasenf").val(0);
+        var validaFeecha = 0;
+        if (f2 ==="" || f2 ===null ){
+            $("#diasenf").val(0);
+        }else{
+            validaFeecha = restaFechas(f1,f2);
+            $("#diasenf").val(validaFeecha);
+        }
     });
 
     $("#fie").datepicker({
@@ -16,9 +24,21 @@ $(document).ready(function(){
         todayBtn:true,
         endDate: '-0d'
     }).on("change", function(e){
+        debugger;
         var f1 = $("#fconsulta").val();
         var f2= $("#fie").val();
-        $("#diasenf").val(restaFechas(f1,f2));
+        var validaFeecha = 0;
+        if(f1<f2){
+            $("#diasenf").val(validaFeecha);
+            swal("Error", "Inicio Enfermedad no debe ser Mayor que Consulta","error");
+            var f2= $("#fie").val(null);
+            $("#diasenf").val(0);
+            return;
+        }  else if(f2===null||f2===""){
+            $("#diasenf").val(0);
+        }else{
+            $("#diasenf").val(restaFechas(f1,f2));
+        }
     });
     restaFechas = function(f1,f2){
         var fechaConsulta = new Date(f1);
@@ -29,15 +49,13 @@ $(document).ready(function(){
             $("#fie").val("");
             return;
         }
-        // var datestring = ("0" + f1.getDate()).slice(-2) + "/" + ("0"+(f1.getMonth()+1)).slice(-2) + "/" + f1.getFullYear();
-        //var aFecha1 = datestring.split("/");
         var aFecha1 = f1.split("/");
         var aFecha2 = f2.split("/");
         var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
         var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
         var dif =  fFecha1 - fFecha2;
         var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
-        if(dias == NaN){
+        if(dias === NaN){
             dias = 0;
         }
         return dias +1;
@@ -52,6 +70,7 @@ $(document).ready(function(){
     function calculoPresion() {
         var sistolica = document.getElementById("sistolica").value;
         var diastolica = document.getElementById("diastolica").value;
+
         var pam = ((parseFloat(diastolica) * 2) + parseFloat(sistolica)) / 3;
         document.getElementById('pam').value = Math.round(pam);
         var pp = parseFloat(sistolica) - parseFloat(diastolica);

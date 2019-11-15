@@ -5,7 +5,10 @@ var SearchHemoParticipant = function () {
         init: function (parametros) {
             var table  = $('#tablePartHemo').DataTable({
                 searching: false,
-                paging: false
+                paging: true,
+                "oLanguage": {
+                    "sUrl": parametros.dataTablesLang
+                }
             });
             $("#select-Participante-form").validate( {
                 rules: {
@@ -41,28 +44,26 @@ var SearchHemoParticipant = function () {
                     if(len==0){
                         swal("Advertencia!", "Datos no encontrados!", "warning");
                     }else{
-
                         for ( var i = 0; i < len; i++) {
-                            console.log(data[i].fecha);
                             var valor ="";
-                            //var datestring =  ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
+                            var partsUrl = parametros.edithemoUrl + '/'+data[i].idDatoHemo+ '/';
+                            var editUrl = parametros.listDetailsHemoUrl + '/'+data[i].idDatoHemo+ '/';
+                            var pdf = parametros.pdfUrl+ '/'+data[i].idDatoHemo+ '/';
+                            var d =new Date(data[i].fecha);
+                            var datestring =  ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
                             var getCode = data[i].participante.codigo;
                             var NameComplete =  data[i].participante.nombre1+' '+ data[i].participante.nombre2+' '+ data[i].participante.apellido1+' '+data[i].participante.apellido1;
                             var edad = data[i].edad;
-                            var expe = data[i].nExpediente;
-                            var f =data[i].fecha;
                             table.row.add([
                                 getCode,
                                 NameComplete,
                                 edad,
-                                expe,
-                                data[i].fecha,
-                                valor = '<a class="btn btn-info" href='+ parametros.UpdateActualUrl + '><i class="fa fa-refresh"></i></a>',
-                                valor = '<a class="btn btn-info" href='+ parametros.UpdateActualUrl + '><i class="fa fa-refresh"></i></a>',
-                                valor = '<a class="btn btn-info" href='+ parametros.UpdateActualUrl + '><i class="fa fa-refresh"></i></a>'
+                                datestring,
+                                valor = '<a class="btn btn-outline-primary btn-sm" target="_blank" href='+ partsUrl + '><i class="fa fa-edit"></i></a>',
+                                valor = '<a class="btn btn-outline-success btn-sm" target="_blank" href='+ editUrl + '><i class="fa fa-history"></i></a>',
+                                valor = '<a class="btn btn-outline-info btn-sm btnReporte" data-id="' + data[i].idDatoHemo + '"><i class="fa fa-book"></i></a>'
                             ]).draw( false );
                         }
-
                     }
 
                 }).fail(function() {

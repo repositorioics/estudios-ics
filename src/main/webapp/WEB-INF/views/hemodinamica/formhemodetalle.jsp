@@ -32,13 +32,13 @@
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<spring:url value="/hemo/listado" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <a href="<spring:url value="/hemo/listado2" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
                 <a href="${fn:escapeXml(listDetailsHemoUrl)}">AGREGAR DETALLE</a>
             </li>
         </ol>
         <spring:url value="/hemo/addHemoDetalle" var="addDetalleHemoUrl"/>
-        <spring:url value="/hemo/listado" var="ListadoHemoUrl"/>
+        <spring:url value="/hemo/listado2" var="ListadoHemoUrl"/>
         <c:set var="successmessage"><spring:message code="process.success" /></c:set>
         <c:set var="errormessage"><spring:message code="process.errors" /></c:set>
         <spring:url value="/hemo/listDetailsHemo/{idDatoHemo}" var="listDetailsHemoUrl">
@@ -393,8 +393,8 @@
         $("#pa").keyup(function(){
             var pa = $("#pa").val();
             var result = pa.split("/");
-            var part1 = result[0];
-            var part2 = result[1];
+            var part1 = parseInt(result[0]);
+            var part2 = parseInt(result[1]);
             var diferencia = 0;
             if(part1 > part2){
                 diferencia = parseInt(part1)-parseInt(part2);
@@ -406,7 +406,6 @@
             var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
             $("#pam").val(Math.round(pam));
         })
-
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter
             if (evt.key !== 'Enter') {

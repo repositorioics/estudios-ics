@@ -55,7 +55,7 @@ public class DatoshemodinamicaService {
      public List<DatosHemodinamica> getListadoHemoByID(Integer idParticipante) throws Exception {
          try {
              Session session = sessionFactory.getCurrentSession();
-              Query query = session.createQuery("from DatosHemodinamica where idParticipante =:idParticipante order by fecha asc");
+              Query query = session.createQuery("from DatosHemodinamica where idParticipante =:idParticipante order by fecha desc");
               query.setParameter("idParticipante", idParticipante);
              return query.list();
          }catch (Exception e){

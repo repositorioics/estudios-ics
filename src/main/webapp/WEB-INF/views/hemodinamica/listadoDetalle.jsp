@@ -52,7 +52,7 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/hemo/listado/" htmlEscape="true "/>">LISTADO</a>
+                <a href="<spring:url value="/hemo/listado2/" htmlEscape="true "/>">LISTADO</a>
                 <i class="fa fa-angle-right"></i>
                 <a href="${fn:escapeXml(editDetailsUrl)}">LISTA DE DETALLES </a>
                 <i class="fa fa-angle-right"></i>
@@ -134,7 +134,7 @@
                                     <div class="col-sm-4"></div>
                                     <div class="col-sm-4">
                                         <a class="btn btn-warning btn-md btn-lg btn-block" data-toggle="tooltip" data-placement="bottom" title="Ir al Listado"
-                                           href="<spring:url value="/hemo/listado" htmlEscape="true "/>">
+                                           href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
                                             <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
                                             <spring:message code="Cancelar" /></a>
                                     </div>

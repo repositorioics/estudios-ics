@@ -2,6 +2,7 @@ package ni.org.ics.estudios.web.controller.hemodinamica;
 
 import com.google.common.base.Verify;
 import com.google.gson.Gson;
+import javafx.beans.property.DoubleProperty;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 
@@ -286,11 +290,11 @@ public class HemoController {
                 , @RequestParam( value="fcProm", required=false ) Integer fcProm
                 , @RequestParam( value="frMin", required=false ) Integer frMin
                 , @RequestParam( value="frMax", required=false ) Integer frMax
-
+                , @RequestParam( value="chkpositivo", required=false ) char chkpositivo
         ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
-            obj.setAsc(Double.valueOf(asc));
+            obj.setAsc(Double.valueOf(round(asc,2)));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
             obj.setFecha(DateUtil.StringToDate(fconsulta,"dd/MM/yyyy"));
@@ -321,11 +325,13 @@ public class HemoController {
             obj.setFcMin(fcMin);
             obj.setFcMed(fcMed);
             obj.setFcProm(fcProm);
-            obj.setFrMax(frMin);
-            obj.setFrMin(frMax);
+            obj.setFrMax(frMax);
+            obj.setFrMin(frMin);
+            obj.setPositivo(chkpositivo);
             obj.setEstado('1');
             obj.setPasive('0');
             obj.setDeviceid("server");
+
             datoshemodinamicaService.SaveDatosHemo(obj);
             return createJsonResponse(obj) ;
         }
@@ -372,12 +378,12 @@ public class HemoController {
             , @RequestParam( value="fcProm", required=false ) Integer fcProm
             , @RequestParam( value="frMin", required=false ) Integer frMin
             , @RequestParam( value="frMax", required=false ) Integer frMax
-
+            , @RequestParam( value="chkpositivo", required=false ) char chkpositivo
     ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
             obj.setIdDatoHemo(idDatoHemo);
-            obj.setAsc(Double.valueOf(asc));
+            obj.setAsc(Double.valueOf(round(asc,2)));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
             obj.setFecha(DateUtil.StringToDate(fconsulta, "dd/MM/yyyy"));
@@ -408,8 +414,9 @@ public class HemoController {
             obj.setFcMin(fcMin);
             obj.setFcMed(fcMed);
             obj.setFcProm(fcProm);
-            obj.setFrMax(frMin);
-            obj.setFrMin(frMax);
+            obj.setFrMax(frMax);
+            obj.setFrMin(frMin);
+            obj.setPositivo(chkpositivo);
             obj.setEstado('1');
             obj.setPasive('0');
             obj.setDeviceid("server");
@@ -421,7 +428,13 @@ public class HemoController {
             return  new ResponseEntity<String>( json, HttpStatus.OK);
         }
     }
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
 
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
     /*Obtiene por Id de una lista/tabla de registro*/
     @RequestMapping(value = "/edithemo/{idDatoHemo}",method = RequestMethod.GET)
     public ModelAndView edithemo(@PathVariable(value="idDatoHemo" ) String idDatoHemo){
