@@ -64,6 +64,8 @@ public class DatosHemodinamica extends BaseMetaData {
     private String barrioF;
     private char positivo = '0';
 
+    private boolean esPositivo;
+
     /*  Getter y Setter*/
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -345,4 +347,10 @@ public class DatosHemodinamica extends BaseMetaData {
     public void setPositivo(char positivo) {
         this.positivo = positivo;
     }
+
+    @Transient
+    public boolean isEsPositivo() {
+        return this.positivo == '1';
+    }
+
 }

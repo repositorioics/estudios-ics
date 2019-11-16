@@ -180,7 +180,7 @@
                                         <br/>
                                         <div class="custom-control custom-radio custom-control-inline">
                                         <c:choose>
-                                            <c:when test="${obj.positivo eq '0'.charAt(0)}">
+                                            <c:when test="${obj.esPositivo eq false}">
                                                 <input type="radio" id="chkpositivo0" value="${obj.positivo}" name="chkpositivo" checked="checked" class="custom-control-input"/>
                                             </c:when>
                                             <c:otherwise>
@@ -192,7 +192,7 @@
 
                                     <div class="custom-control custom-radio custom-control-inline">
                                         <c:choose>
-                                            <c:when test="${obj.positivo eq  '1'.charAt(0)}">
+                                            <c:when test="${obj.esPositivo eq true}">
                                                 <input type="radio" id="chkpositivo1" value="${obj.positivo}" name="chkpositivo" checked="checked" class="custom-control-input"/>
                                             </c:when>
                                             <c:otherwise>
