@@ -49,6 +49,8 @@ public class DatoshemodinamicaService {
             throw e;
         }
     }
+    //Contar el número de Detalle
+
 
      /* Metodo busca Participante en  HemoDinamica por ID  */
      @SuppressWarnings("unchecked")
@@ -131,13 +133,12 @@ public class DatoshemodinamicaService {
         query.setParameter("idDatoHemo",idDatoHemo);
         return  query.list();
     }
-
-    public int NumeroHemoDet(String idDatoHemo) {
+    @SuppressWarnings("unchecked")
+    public List<HemoDetalle> NumeroHemoDet(String idDatoHemo) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select count(*) FROM HemoDetalle hd where " + "hd.datoshemodinamica.idDatoHemo =:idDatoHemo");
+        Query query = session.createQuery("FROM HemoDetalle hd where " + "hd.datoshemodinamica.idDatoHemo =:idDatoHemo");
         query.setParameter("idDatoHemo", idDatoHemo);
-        int counter = query.hashCode();
-        return counter ;
+        return query.list();
     }
 
     /* Servicio para obtener hemo detalle por id*/

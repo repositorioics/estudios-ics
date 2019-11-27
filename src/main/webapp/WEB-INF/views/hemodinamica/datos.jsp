@@ -157,16 +157,21 @@
                                             <div class="col-sm-12">
                                                 <h4 class="text-capitalize" style="font-family: Roboto">Cálculos</h4>
                                             </div>
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label for="peso">Peso(kg):</label>
                                                 <span class="required text-danger"> * </span>
                                                 <input type="text" class="form-control focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
                                             </div>
 
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label for="talla">Talla(cm):</label>
                                                 <span class="required text-danger"> * </span>
                                                 <input type="text" class="form-control focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label for="numParametro">Parametros:</label>
+                                                <span class="required text-danger"> * </span>
+                                                <input type="text" class="form-control focusNext" name="numParametro"  id="numParametro" placeholder="Cantidad de Parámetros" tabindex="4">
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="asc">A.S.C(m2):</label>
@@ -184,13 +189,13 @@
                                             <div class="form-group col-sm-4">
                                                 <label for="fconsulta">Fecha Consulta:</label>
                                                 <span class="required text-danger"> * </span>
-                                                <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta" data-date-end-date="+0d" required tabindex="4"/>
+                                                <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta" data-date-end-date="+0d" required tabindex="5"/>
                                             </div>
 
                                             <div class="form-group col-sm-4">
                                                 <label for="fie">Fecha Inicio de Enfermedad:</label>
                                                 <span class="required text-danger"> * </span>
-                                                <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="5" data-date-end-date="+0d"/>
+                                                <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="6" data-date-end-date="+0d"/>
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="diasenf">Días de Enfermedad:</label>
@@ -408,7 +413,20 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#parametro").focus();
-        $("#peso").mask("999.99");
+        $('#peso').on('change', function() {
+            if(isNaN(this.value)){
+                this.value = "";
+            }else{
+                this.value = parseFloat(this.value).toFixed(2);
+            }
+        });
+        $('#talla').on('change', function() {
+            if(isNaN(this.value)){
+                this.value = "";
+            }else{
+                this.value = parseFloat(this.value).toFixed(2);
+            }
+        });
         $("#sector").select2();
         $("#sector").on("change", function(){
            if(this.value == 18 ){
@@ -438,7 +456,6 @@
         });
         function GetRange(){
             $.getJSON(parameters.GetRangeUrl,{ sexo : $('#sexo').val(), fecha : $('#fecha').val(), ajax : 'true'  }, function(data){
-                console.log(data);
                 if (data.result == null){
                 $("#sdMin").val(data.objPsdmin);
                 $("#sdMed").val(data.objPsdmed);
@@ -607,7 +624,7 @@
             return dias +1;
         }
 
-        $('#sistolica').keyup(function(){
+        /*$('#sistolica').keyup(function(){
             calculoPresion();
         });
         $('#diastolica').keyup(function(){
@@ -625,7 +642,7 @@
             document.getElementById('pam').value = Math.round(pam);
             var pp = parseFloat(sistolica) - parseFloat(diastolica);
             document.getElementById('pp').value = Math.round(pp);
-        }
+        }*/
         $("#peso").keyup(function(){
             calculoimc();
             AsuperCorporal();
@@ -696,9 +713,13 @@
         function AsuperCorporal(){
             var talla = document.getElementById("talla").value;
             var peso = document.getElementById("peso").value;
+
             if(peso != null & talla != null & peso != "" & talla != ""){
                 var areasc =Math.sqrt((peso * talla) / 3600);
-                document.getElementById("asc").value = parseFloat(areasc);
+                if(isNaN(areasc))
+                    $("#asc").val("");
+                else
+                document.getElementById("asc").value = parseFloat(areasc).toFixed(2);
             }else{
                 $("#asc").val("");
                 $("#imc").val("");
@@ -737,6 +758,10 @@
                 municipio:{required:true},
                 fecha:{required: true},
                 fconsulta:{required: true},
+                numParametro:{
+                    required:true,
+                    number: true
+                },
                 sector: {required: true,
                     validaSelect:"Seleccione una opción",
                  highlight: function(input) {
@@ -750,17 +775,17 @@
                 }
                 },
                 expediente:{required: true},
-                telefono:{
+                    telefono:{
                     maxlength: 8,
                     minlength: 8,
                     digits: true},
-                edad:{required: true},
-                peso:{required:true,
+                    edad:{required: true},
+                    peso:{required:true,
                     number: true},
-                talla:{required:true,
+                    talla:{required:true,
                     number: true},
-                diasenf:{required:true},
-                uSalud:{required:true}
+                    diasenf:{required:true},
+                    uSalud:{required:true}
             },
             errorElement: 'em',
             errorPlacement: function ( error, element ) {

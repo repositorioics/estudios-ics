@@ -64,6 +64,9 @@ public class DatosHemodinamica extends BaseMetaData {
     private String barrioF;
     private char positivo = '0';
 
+    private boolean esPositivo;
+    private Integer numParametros;
+
     /*  Getter y Setter*/
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -262,9 +265,6 @@ public class DatosHemodinamica extends BaseMetaData {
         this.pamMed = pamMed;
     }
 
-
-
-
     @Column(name = "pamMin", nullable = true)
     public String getPamMin() {
         return pamMin;
@@ -345,4 +345,20 @@ public class DatosHemodinamica extends BaseMetaData {
     public void setPositivo(char positivo) {
         this.positivo = positivo;
     }
+
+    @Column(name = "numparametros", nullable = true)
+    public Integer getNumParametros() {
+        return numParametros;
+    }
+
+    public void setNumParametros(Integer numParametros) {
+        this.numParametros = numParametros;
+    }
+
+    //Trasient es para no ser mapeado
+    @Transient
+    public boolean isEsPositivo(){
+        return this.positivo == '1';
+    }
+
 }

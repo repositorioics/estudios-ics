@@ -34,6 +34,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * Created by ICS_Inspiron3 on 22/05/2019.
@@ -43,7 +44,7 @@ import java.util.*;
 public class HemoController {
     private static final Logger logger = LoggerFactory.getLogger(HemoController.class);
 
-    /*Agregar Detalle Hemodinamico del Participante */
+    /* Lista de Detalle Hemodinamico del Participante */
     @RequestMapping(value="/listDetailsHemo/{idDatoHemo}", method = RequestMethod.GET)
     public ModelAndView addDetalleHemo(@PathVariable(value="idDatoHemo" ) String idDatoHemo)throws ParseException {
         ModelAndView mv = new ModelAndView();
@@ -74,9 +75,7 @@ public class HemoController {
             return mv;
         }
     }
-
-
-
+    //Formulario para ingresar datos Hemodinamica
     @RequestMapping(value="/create", method = RequestMethod.GET)
     public String login(ModelMap model) {
         List<Barrio> barrios = datoshemodinamicaService.getBarrios();
@@ -91,9 +90,11 @@ public class HemoController {
     @Resource(name = "participanteProcesosService")
     private ParticipanteProcesosService participanteProcesosService;
 
+    // Formulario para Capturar el detalle Hemodinamico
     @RequestMapping(value="adddetails/{idDatoHemo}", method = RequestMethod.GET)
     public String adddetails(@PathVariable(value="idDatoHemo" ) String idDatoHemo, ModelMap model) {
-        /*Select poblar el select de nivel de conciencia*/
+        try {
+            /*Select poblar el select de nivel de conciencia*/
             List<MessageResource> nivelConciencia = messageResourceService.getCatalogo("NIVELCONCIENCIA");
             model.addAttribute("nivelConciencia", nivelConciencia);
             List<MessageResource> pulsoCalidad = messageResourceService.getCatalogo("PULSOCALIDAD");
@@ -105,14 +106,19 @@ public class HemoController {
             List<MessageResource> llenadoCapilar = messageResourceService.getCatalogo("LLENADOCAPILAR");
             model.addAttribute("llenadoCapilar", llenadoCapilar);
             model.addAttribute("idDatoHemo", idDatoHemo);
-            /* Persona que Valida */
             List<MessageResource> personaValida = messageResourceService.getCatalogo("PERSONAVALIDA");
-
             List<MessageResource> diuresis = messageResourceService.getCatalogo("DIURESIS");
             model.addAttribute("diuresis", diuresis);
-
             model.addAttribute("personaValida", personaValida);
-            return "/hemodinamica/formhemodetalle";
+            DatosHemodinamica h = datoshemodinamicaService.getbyId(idDatoHemo);
+            List<HemoDetalle> contParams = datoshemodinamicaService.NumeroHemoDet(idDatoHemo);
+            model.addAttribute("h",h);
+            model.addAttribute("numParameter", (h.getNumParametros()== null) ? "0" : h.getNumParametros() );
+            model.addAttribute("contParams",contParams.size());
+        } catch (Exception e) {
+           System.err.print(e.getMessage());
+        }
+        return "/hemodinamica/formhemodetalle";
     }
 
     /* Instancia de mi Servicio Hemodinamico */
@@ -120,7 +126,7 @@ public class HemoController {
     private DatoshemodinamicaService datoshemodinamicaService;
 
 
-    /*MAPEAR LISTADO DE TODOS LOS PACIENTE CON HOJA HEMODINAMICA*/
+    /*LISTAR DE TODOS LOS PACIENTE CON HOJA HEMODINAMICA -- No está en uso*/
     @RequestMapping(value = "/listado", method = RequestMethod.GET)
     public ModelAndView ListadoHemo() throws Exception {
         try {
@@ -135,14 +141,13 @@ public class HemoController {
     }
     /* FIN DEL METODO LISTADO*/
 
-    /* Mapeo  de la Vista Inicio Listado 2*/
+    /* Buscar Listado por Codigo Participante */
     @RequestMapping(value = "/listado2", method = RequestMethod.GET)
     public ModelAndView listado2()throws Exception{
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/hemodinamica/listado2");
         return modelAndView;
     }
-    /* Listado 2 */
 
     //Obtener la lista de hojas por codigo participante
     @RequestMapping(value = "/ListaHoja", method = RequestMethod.GET, produces ="application/json")
@@ -158,11 +163,6 @@ public class HemoController {
         }
 
     }
-
-
-
-
-
 
     /*Buscar lo faltante para modals*/
     @RequestMapping(value = "/ViewResutl", method = RequestMethod.GET, produces="application/json" )
@@ -210,14 +210,13 @@ public class HemoController {
         map.put("sexo", participante.getSexo().toString());
         String jsonResponse;
         jsonResponse = new Gson().toJson(map);
-        //escapar caracteres especiales, escape de los caracteres con valor num�rico mayor a 127
         UnicodeEscaper escaper = UnicodeEscaper.above(127);
         return escaper.translate(jsonResponse);
     }catch (Exception e){
         throw e;
     }
     }
-    /* */
+    /* Obtener los Rangos de Presión y Frecuencias Cardiacas */
     @RequestMapping(value = "/GetRange", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     String GetRange(@RequestParam(value ="sexo", required = true) String sexo,
@@ -291,6 +290,7 @@ public class HemoController {
                 , @RequestParam( value="frMin", required=false ) Integer frMin
                 , @RequestParam( value="frMax", required=false ) Integer frMax
                 , @RequestParam( value="chkpositivo", required=false ) char chkpositivo
+                ,@RequestParam(value = "numParametro", required = true) Integer numParametro
         ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
@@ -328,10 +328,10 @@ public class HemoController {
             obj.setFrMax(frMax);
             obj.setFrMin(frMin);
             obj.setPositivo(chkpositivo);
+            obj.setNumParametros(numParametro);
             obj.setEstado('1');
             obj.setPasive('0');
             obj.setDeviceid("server");
-
             datoshemodinamicaService.SaveDatosHemo(obj);
             return createJsonResponse(obj) ;
         }
@@ -379,9 +379,11 @@ public class HemoController {
             , @RequestParam( value="frMin", required=false ) Integer frMin
             , @RequestParam( value="frMax", required=false ) Integer frMax
             , @RequestParam( value="chkpositivo", required=false ) char chkpositivo
+            ,@RequestParam(value = "numParametro", required = true) Integer numParametro
     ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
+
             obj.setIdDatoHemo(idDatoHemo);
             obj.setAsc(Double.valueOf(round(asc,2)));
             obj.setDireccion(direccion);
@@ -417,6 +419,7 @@ public class HemoController {
             obj.setFrMax(frMax);
             obj.setFrMin(frMin);
             obj.setPositivo(chkpositivo);
+            obj.setNumParametros(numParametro);
             obj.setEstado('1');
             obj.setPasive('0');
             obj.setDeviceid("server");
@@ -430,7 +433,6 @@ public class HemoController {
     }
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
-
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
@@ -513,7 +515,6 @@ public class HemoController {
 
     ){
         try{
-
             if (!datoshemodinamicaService.SiExisteHemo(idDatoHemo, DateUtil.StringToDate(fecha, "dd/MM/yyyy"), hora)) {
                 HemoDetalle obj = new HemoDetalle();
                 obj.setSigno(signo);
@@ -606,7 +607,6 @@ public class HemoController {
             objDetalle.setDiuresis(diuresis);
             objDetalle.setDensidadUrinaria(densidadUrinaria);
             objDetalle.setPersonaValida(personaValida);
-            /*if (impreso){imp='1';}else {imp = '0';}*/
             Character imp='0';
             objDetalle.setImpreso(imp);
             DatosHemodinamica o = datoshemodinamicaService.getbyId(idDatoHemo);

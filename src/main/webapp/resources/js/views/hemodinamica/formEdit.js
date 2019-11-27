@@ -144,9 +144,13 @@ $(document).ready(function(){
     function AsuperCorporal(){
         var talla = document.getElementById("talla").value;
         var peso = document.getElementById("peso").value;
-        if(peso != null & talla != null & peso != "" & talla != "") {
-            var areasc = Math.sqrt((peso * talla) / 3600);
-            document.getElementById("asc").value = Math.round(areasc);
+
+        if(peso != null & talla != null & peso != "" & talla != ""){
+            var areasc =Math.sqrt((peso * talla) / 3600);
+            if(isNaN(areasc))
+                $("#asc").val("");
+            else
+                document.getElementById("asc").value = parseFloat(areasc).toFixed(2);
         }else{
             $("#asc").val("");
             $("#imc").val("");

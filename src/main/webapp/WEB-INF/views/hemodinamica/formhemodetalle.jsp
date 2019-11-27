@@ -35,6 +35,8 @@
                 <a href="<spring:url value="/hemo/listado2" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
                 <a href="${fn:escapeXml(listDetailsHemoUrl)}">AGREGAR DETALLE</a>
+                <i class="fa fa-angle-right"></i>
+                <strong>${h.participante.nombre1} ${h.participante.nombre2} ${h.participante.apellido1} ${h.participante.apellido2}</strong>
             </li>
         </ol>
         <spring:url value="/hemo/addHemoDetalle" var="addDetalleHemoUrl"/>
@@ -105,34 +107,34 @@
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="pp">PP mmHg:</label>
-                                    <input type="text" class="form-control focusNext" id="pp" name="pp" placeholder="PP mmHg" readonly required tabindex="6">
+                                    <input type="text" class="form-control focusNext" id="pp" name="pp" placeholder="PP mmHg" readonly required >
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="pam">PAM mmHg:</label>
-                                    <input type="text" class="form-control focusNext" id="pam" name="pam" placeholder="PAM mmHg" readonly  required tabindex="7">
+                                    <input type="text" class="form-control focusNext" id="pam" name="pam" placeholder="PAM mmHg" readonly  required >
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="fc">F.C por Minuto:</label>
-                                    <input type="text" class="form-control focusNext" id="fc" name="fc" placeholder="F.C por Minuto" required tabindex="8">
+                                    <input type="text" class="form-control focusNext" id="fc" name="fc" placeholder="F.C por Minuto" required tabindex="6">
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="fr">F.R por Minuto:</label>
-                                    <input type="text" class="form-control focusNext" id="fr" name="fr" placeholder="F.R por Minuto" required tabindex="9">
+                                    <input type="text" class="form-control focusNext" id="fr" name="fr" placeholder="F.R por Minuto" required tabindex="7">
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="tc">T°C:</label>
-                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" tabindex="10">
+                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" tabindex="8">
                                 </div>
 
                                 <div class="form-group col-sm-4">
                                     <label for="sa">SA02%:</label>
-                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%"  tabindex="11">
+                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%"  tabindex="9">
                                 </div>
 
                                 <div class="form-group col-sm-4">
                                     <label for="extremidades">Extremidades:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="extremidades" id="extremidades" class="form-control focusNext" required tabindex="12">
+                                    <select name="extremidades" id="extremidades" class="form-control focusNext" required tabindex="10">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${extremidades}" var="extrem">
                                             <option value="${extrem.catKey}">${extrem.spanish}</option>
@@ -142,7 +144,7 @@
                                 <div class="form-group col-sm-4">
                                     <label for="llenadoCapilar">Llenado Capilar (seg):</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="llenadoCapilar" id="llenadoCapilar" class="form-control focusNext" required tabindex="13"/>
+                                    <select name="llenadoCapilar" id="llenadoCapilar" class="form-control focusNext" required tabindex="11"/>
                                     <option selected value=""><spring:message code="select" />...</option>
                                     <c:forEach items="${llenadoCapilar}" var="llenado">
                                         <option value="${llenado.catKey}">${llenado.spanish}</option>
@@ -152,7 +154,7 @@
                                 <div class="form-group col-sm-4">
                                     <label for="pulsoCalidad">Pulso (Calidad):</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="pulsoCalidad" id="pulsoCalidad" class="form-control focusNext" required tabindex="14">
+                                    <select name="pulsoCalidad" id="pulsoCalidad" class="form-control focusNext" required tabindex="12">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${pulsoCalidad}" var="pulso">
                                             <option value="${pulso.catKey}">${pulso.spanish}</option>
@@ -162,7 +164,7 @@
 
                                 <div class="form-group col-sm-4">
                                     <label for="diuresis">Diuresis/ml/Kg/Hr:</label>
-                                    <select name="diuresis" id="diuresis" class="form-control focusNext" tabindex="15">
+                                    <select name="diuresis" id="diuresis" class="form-control focusNext" tabindex="13">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${diuresis}" var="d">
                                             <option value="${d.catKey}">${d.spanish}</option>
@@ -172,21 +174,32 @@
 
                                 <div class="form-group col-sm-4">
                                     <label for="densidadUrinaria">Densidad Urinaria:</label>
-                                    <input type="text" class="form-control focusNext" id="densidadUrinaria" tabindex="16"
+                                    <input type="text" class="form-control focusNext" id="densidadUrinaria" tabindex="14"
                                            name="densidadUrinaria" placeholder="Densidad Urinaria">
                                 </div>
 
                                 <div class="form-group col-sm-12">
                                     <label for="personaValida">Valorado Por:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="17">
+                                    <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="15">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${personaValida}" var="person">
                                             <option value="${person.catKey}">${person.spanish}</option>
                                         </c:forEach>
                                     </select>
                                 </div>
+
                                     <div hidden="hidden">
+                                        <div class="form-group col-sm-6">
+                                            <input type="text" name="idDatoHemo2" id="idDatoHemo2" value="${idDatoHemo}" class="form-control"/>
+                                        </div>
+
+                                        <div class="form-group col-sm-3">
+                                            <input type="text" name="numParams" id="numParams" value="${numParameter}" class="form-control"/>
+                                        </div>
+                                        <div class="form-group col-sm-3">
+                                            <input type="text" name="contParams" id="contParams" value="${contParams}" class="form-control"/>
+                                        </div>
 
                                         <spring:url value="/hemo/editdetails/{idHemoDetalle}" var="editDetailsUrl">
                                             <spring:param name="idHemoDetalle" value="${idDatoHemo}" />
@@ -220,14 +233,13 @@
                                     <div class="col-sm-4"></div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <a href="${fn:escapeXml(listDetailsHemoUrl)}" data-toggle="tooltip" title="Volver" data-placement="top"
-                                               class="btn btn-warning btn-block btn-lg">
+                                            <a href="${fn:escapeXml(listDetailsHemoUrl)}" id="volver"  data-toggle="tooltip" title="Volver" data-placement="top"
+                                               class="btn btn-warning btn-block btn-lg desabilitado">
                                                 <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
                                                 Cancelar
                                             </a>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
@@ -283,6 +295,23 @@
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
 <script>
+    $( window ).bind("load",function() {
+        if($("#numParams").val() === $("#contParams").val()){
+            window.setTimeout(function () {
+                var p = $("#contParams").val();
+                swal("Finalizado!","Total de Parámetros: " +p,"success");
+                $("#btnGuardar").prop( "disabled", true );
+            }, 1500);
+        }else{
+            $("#btnGuardar").prop( "disabled", false );
+        }
+        if($("#numParams").val() != $("#contParams").val()){
+            debugger;
+            $('#volver').bind("click", function (e) {
+                e.preventDefault();
+            });
+        }
+    });
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
         $("#dx").focus();
@@ -376,19 +405,24 @@
             var url = {addDetalleHemoUrl:"${addDetalleHemoUrl}",
                        listDetailsHemoUrl:"${listDetailsHemoUrl}"
             };
-            $.post(url.addDetalleHemoUrl, form1.serialize(), function(data){
-                if(data.msj != null){
-                    //toastr.warning(data.msj);
-                    swal("Error!",data.msj,"error");
-                }else{
-                    swal("Éxito",'Información guardada',"success");
-                    window.setTimeout(function(){
-                        window.location.href = url.listDetailsHemoUrl;
-                    }, 1500);
-                }
-            }).fail(function(){
-                swal("Error!", "intente de nuevo!", "error");
-            })
+            if( isNaN($('#pp').val()) || isNaN($('#pam').val()) || $('#pp').val()=== '0' || $('#pam').val() === '0' ){
+                $('#pa').css('border-color','#FF0000');
+                swal("Error!","Valores en cero","error");
+                return false;
+            }else {
+                $.post(url.addDetalleHemoUrl, form1.serialize(), function (data) {
+                    if (data.msj != null) {
+                        swal("Error!", data.msj, "error");
+                    } else {
+                        swal("Éxito", 'Información guardada.', "success");
+                        window.setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    }
+                }).fail(function () {
+                    swal("Error!", "intente de nuevo!", "error");
+                })
+            }
         }
         $("#pa").keyup(function(){
             var pa = $("#pa").val();
@@ -396,15 +430,23 @@
             var part1 = parseInt(result[0]);
             var part2 = parseInt(result[1]);
             var diferencia = 0;
-            if(part1 > part2){
+            if(part1 > part2)
                 diferencia = parseInt(part1)-parseInt(part2);
+            else
+                diferencia = parseInt(part2)-parseInt(part1);
+            if(isNaN(diferencia)){
+                $("#pp").val(0);
+                $("#pam").val(0);
             }
             else{
-                diferencia = parseInt(part2)-parseInt(part1);
+                $("#pp").val(diferencia);
             }
-            $("#pp").val(diferencia);
-            var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
-            $("#pam").val(Math.round(pam));
+             if(isNaN(part1) || isNaN(part2)){
+                $("#pam").val(0);
+            }else{
+                var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
+                $("#pam").val(Math.round(pam));
+            }
         })
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter

@@ -77,6 +77,7 @@
                                             <th class="text-center"><spring:message code="Código" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Nombre del Participante"/></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Edad" /></th>
+                                            <th data-hide="phone,tablet" class="text-center"><spring:message code="Registro" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Fecha Consulta" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Editar" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Detalle" /></th>
@@ -138,7 +139,10 @@
 <script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
-
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script src="${jQValidationLoc}"></script>
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
@@ -156,10 +160,7 @@
             SendId(id);
         });
         function SendId(id){
-            // http://localhost:8081/estudios_ics/reportes/ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f
-            debugger;
             window.open("${pdfUrl}?idDatoHemo="+id, '_blank');
-
         }
         $("#parametro").focus();
         var parametros={

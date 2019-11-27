@@ -479,7 +479,6 @@
                     required:true
                 },
                 tc: {
-
                     number: true,
                     min:36,
                     max:41
@@ -503,8 +502,8 @@
                 extremidades:{required:true},
                 densidadUrinaria:{
                     number: true,
-                    min:1000
-                    ,max:1030
+                    min:1000,
+                    max:1030
                 }
             },
             errorElement: 'em',
@@ -536,29 +535,45 @@
         function UpdateDetHemo(){
             var url = parameters.upateDetHemoUrl;
             var dir2 = parameters.listDetailsHemoUrl;
-            $.post(url, form1.serialize(), function(data){
-                swal("Éxito!", "Información Actualizada.!", "success");
-                window.setTimeout(function(){
-                    window.location.href = dir2;
-                }, 1500);
-            }).fail(function(){
-                swal("Error!","intente de nuevo!", "error")
-            })
+            debugger;
+            if( isNaN($('#pp').val()) || isNaN($('#pam').val()) || $('#pp').val()=== '0' || $('#pam').val() === '0' ){
+                $('#pa').css('border-color','#FF0000');
+                swal("Error!","Valores en cero","error");
+                return false;
+            }else{
+                $.post(url, form1.serialize(), function(data){
+                    swal("Éxito!", "Información Actualizada.!", "success");
+                    window.setTimeout(function(){
+                        window.location.href = dir2;
+                    }, 1500);
+                }).fail(function(){
+                    swal("Error!","intente de nuevo!", "error")
+                });
+            }
         }
         $("#pa").keyup(function(){
             var pa = $("#pa").val();
             var result = pa.split("/");
-            var part1 = result[0];
-            var part2 = result[1];
+            var part1 = parseInt(result[0]);
+            var part2 = parseInt(result[1]);
             var diferencia = 0;
-            if(part1 > part2){
+            if(part1 > part2)
                 diferencia = parseInt(part1)-parseInt(part2);
-            }else{
+            else
                 diferencia = parseInt(part2)-parseInt(part1);
+            if(isNaN(diferencia)){
+                $("#pp").val(0);
+                $("#pam").val(0);
             }
-            $("#pp").val(diferencia);
-            var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
-            $("#pam").val(Math.round(pam));
+            else{
+                $("#pp").val(diferencia);
+            }
+            if(isNaN(part1) || isNaN(part2)){
+                $("#pam").val(0);
+            }else{
+                var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
+                $("#pam").val(Math.round(pam));
+            }
         })
 
         document.addEventListener('keypress', function(evt) {
