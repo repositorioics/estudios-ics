@@ -129,7 +129,7 @@ public class DatoshemodinamicaService {
     /*obtener el listado de los detalles hemodinamica */
     public List<HemoDetalle> getListHemoDetalle(String idDatoHemo){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("FROM HemoDetalle det where " + "det.datoshemodinamica.idDatoHemo =:idDatoHemo");
+        Query query = session.createQuery("FROM HemoDetalle det where " + "det.datoshemodinamica.idDatoHemo =:idDatoHemo order by  fecha asc, hora asc");
         query.setParameter("idDatoHemo",idDatoHemo);
         return  query.list();
     }

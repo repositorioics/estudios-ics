@@ -286,10 +286,26 @@ public class ParticipanteController {
     public @ResponseBody
     List<DatosParticipante> descargarDatosParticipante(@PathVariable Integer codigo) {
         logger.info("Descargando los datos del participante "+codigo);
-        /*List<DatosParticipante> mapResponse =  participanteService.getDatosParticipante(codigo);
-        String jsonResponse = new Gson().toJson(mapResponse);
-        UnicodeEscaper escaper = UnicodeEscaper.above(127);
-        return escaper.translate(jsonResponse);*/
         return participanteService.getDatosParticipante(codigo);
+    }
+
+    /**
+     * Retorna ParticipanteZen. Acepta una solicitud GET para JSON
+     * @return List<ParticipanteZen> JSON
+     */
+    @RequestMapping(value = "datosParticipantes", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<DatosParticipante> getDatosParticipantes() {
+        try {
+            logger.info("Descargando toda la informacion de Participantes");
+            List<DatosParticipante> participantes = participanteService.getDatosParticipantes();
+            if (participantes == null) {
+                logger.debug(new Date() + " - Nulo");
+            }
+            return participantes;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

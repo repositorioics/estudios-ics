@@ -65,6 +65,7 @@ public class DatosHemodinamica extends BaseMetaData {
     private char positivo = '0';
 
     private boolean esPositivo;
+    private Integer numParametros;
 
     /*  Getter y Setter*/
     @Id
@@ -346,6 +347,15 @@ public class DatosHemodinamica extends BaseMetaData {
 
     public void setPositivo(char positivo) {
         this.positivo = positivo;
+    }
+
+    @Column(name = "numparametros", nullable = true)
+    public Integer getNumParametros() {
+        return numParametros;
+    }
+
+    public void setNumParametros(Integer numParametros) {
+        this.numParametros = numParametros;
     }
 
     @Transient

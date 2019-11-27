@@ -149,4 +149,15 @@ public class ParticipanteService {
         query.setResultTransformer(Transformers.aliasToBean(DatosParticipante.class));
         return query.list();
     }
+
+    public List<DatosParticipante> getDatosParticipantes(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select p.codigo as codigo, p.nombre1 as nombre1, p.nombre2 as nombre2,  p.apellido1 as apellido1, p.apellido2 as apellido2, p.sexo as sexo, p.fechaNac as fechaNac, " +
+                "p.nombre1Padre as nombre1Padre, p.nombre2Padre as nombre2Padre, p.apellido1Padre as apellido1Padre, p.apellido2Padre as apellido2Padre, p.nombre1Madre as nombre1Madre, p.nombre2Madre as nombre2Madre, " +
+                "p.apellido1Madre as apellido1Madre, p.apellido2Madre as apellido2Madre, c.codigo as codigoCasa, b.codigo as codigoBarrio, b.nombre as nombreBarrio, c.direccion as direccion, c.manzana as manzana, pp.estudio as estudios, pp.estPart as estPart, " +
+                "pp.tutor as tutor, coalesce((select spanish from MessageResource where catKey = cast(pp.relacionFam as string) and catRoot = 'CP_CAT_RFTUTOR'), 'Sin Relac Familiar') as relacionFamTutor " +
+                "from Participante p inner join p.casa c inner join c.barrio b, ParticipanteProcesos pp where p.codigo = pp.codigo ");
+        query.setResultTransformer(Transformers.aliasToBean(DatosParticipante.class));
+        return query.list();
+    }
 }
