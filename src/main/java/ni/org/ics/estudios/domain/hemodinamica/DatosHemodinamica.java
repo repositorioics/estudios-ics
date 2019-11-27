@@ -65,7 +65,6 @@ public class DatosHemodinamica extends BaseMetaData {
     private char positivo = '0';
 
     private boolean esPositivo;
-    private Integer numParametros;
 
     /*  Getter y Setter*/
     @Id
@@ -265,6 +264,9 @@ public class DatosHemodinamica extends BaseMetaData {
         this.pamMed = pamMed;
     }
 
+
+
+
     @Column(name = "pamMin", nullable = true)
     public String getPamMin() {
         return pamMin;
@@ -346,18 +348,8 @@ public class DatosHemodinamica extends BaseMetaData {
         this.positivo = positivo;
     }
 
-    @Column(name = "numparametros", nullable = true)
-    public Integer getNumParametros() {
-        return numParametros;
-    }
-
-    public void setNumParametros(Integer numParametros) {
-        this.numParametros = numParametros;
-    }
-
-    //Trasient es para no ser mapeado
     @Transient
-    public boolean isEsPositivo(){
+    public boolean isEsPositivo() {
         return this.positivo == '1';
     }
 

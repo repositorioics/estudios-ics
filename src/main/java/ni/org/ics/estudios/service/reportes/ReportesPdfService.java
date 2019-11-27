@@ -246,7 +246,7 @@ public class ReportesPdfService {
                 for (ContactoParticipante contacto : contactoParticipantes) {
                     if (contacto.getEsPropio() != null && contacto.getEsPropio().equalsIgnoreCase("0")) {
                         dgp.setNombreContacto(contacto.getNombre());
-                        dgp.setBarrioContacto(contacto.getBarrio().getNombre());
+                        dgp.setBarrioContacto(contacto.getBarrio()!=null?contacto.getBarrio().getNombre():"");
                         dgp.setTelefonosContacto((contacto.getNumero1() != null ? contacto.getNumero1() : "") + "   " + (contacto.getNumero2() != null ? contacto.getNumero2() : ""));
                         if (contacto.getDireccion()!=null && contacto.getDireccion().toUpperCase().contains("MISMA")) {
                             dgp.setDireccionContacto(participante.getCasa().getDireccion());

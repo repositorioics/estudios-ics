@@ -124,20 +124,15 @@
                                         <label for="edad">Edad:</label>
                                         <input type="text" class="form-control"  name="edad" id="edad" value="${obj.edad}" readonly />
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-6">
                                         <label for="peso">Peso(kg):</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control focusNext" tabindex="2" name="peso" id="peso" placeholder="Peso" value="${obj.peso}"/>
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-6">
                                         <label for="talla">Talla(cm):</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control focusNext" tabindex="3" name="talla" id="talla" placeholder="Talla" value="${obj.talla}"/>
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="numParametro">Parametros:</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" name="numParametro"  id="numParametro" value="${obj.numParametros}" tabindex="4">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="asc">A.S.C(m2):</label>
@@ -197,7 +192,7 @@
 
                                     <div class="custom-control custom-radio custom-control-inline">
                                         <c:choose>
-                                            <c:when test="${obj.esPositivo eq  true}">
+                                            <c:when test="${obj.esPositivo eq true}">
                                                 <input type="radio" id="chkpositivo1" value="${obj.positivo}" name="chkpositivo" checked="checked" class="custom-control-input"/>
                                             </c:when>
                                             <c:otherwise>
@@ -395,20 +390,7 @@
 <script>
     $(document).ready(function(){
         $("#sector").select2();
-        $('#peso').on('change', function() {
-            if(isNaN(this.value)){
-                this.value = "";
-            }else{
-                this.value = parseFloat(this.value).toFixed(2);
-            }
-        });
-        $('#talla').on('change', function() {
-            if(isNaN(this.value)){
-                this.value = "";
-            }else{
-                this.value = parseFloat(this.value).toFixed(2);
-            }
-        });
+        $("#peso").mask("999.99");
         loadSelect();
         $("#sector").on("change", function(){
             if(this.value == 18 ){
@@ -446,10 +428,6 @@
                     silais:{required: true},
                     municipio:{required:true},
                     fconsulta:{required: true},
-                    numParametro:{
-                        required:true,
-                        digits: true
-                    },
                     sector: {required: true},
                     expediente:{required: true},
                     telefono:{

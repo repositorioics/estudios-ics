@@ -29,5 +29,8 @@
       <module name="estudios" target="1.6" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="LEIN_JVM_OPTS=-Dhttps.protocols=TLSv1.2" />
+  </component>
 </project>
 

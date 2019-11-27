@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by ICS_Inspiron3 on 15/08/2019.
  */
 @Entity
-@Table(name = "RANGOSPRESION", catalog = "estudios_ics")
+@Table(name = "rangospresion", catalog = "estudios_ics")
 public class RangosPresion implements Serializable {
 
     private Integer codigo;

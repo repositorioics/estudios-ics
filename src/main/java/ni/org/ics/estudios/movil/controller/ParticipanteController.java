@@ -1,9 +1,11 @@
 package ni.org.ics.estudios.movil.controller;
 
+import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.ContactoParticipante;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.DatosParticipante;
 import ni.org.ics.estudios.dto.zen.ParticipanteZen;
 import ni.org.ics.estudios.service.ParticipanteService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
@@ -274,5 +276,20 @@ public class ParticipanteController {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Retorna participante_procesos. Acepta una solicitud GET para JSON
+     * @return participante JSON
+     */
+    @RequestMapping(value = "datosParticipante/{codigo}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<DatosParticipante> descargarDatosParticipante(@PathVariable Integer codigo) {
+        logger.info("Descargando los datos del participante "+codigo);
+        /*List<DatosParticipante> mapResponse =  participanteService.getDatosParticipante(codigo);
+        String jsonResponse = new Gson().toJson(mapResponse);
+        UnicodeEscaper escaper = UnicodeEscaper.above(127);
+        return escaper.translate(jsonResponse);*/
+        return participanteService.getDatosParticipante(codigo);
     }
 }

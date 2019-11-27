@@ -3,9 +3,11 @@ package ni.org.ics.estudios.service;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.ContactoParticipante;
 import ni.org.ics.estudios.domain.Participante;
+import ni.org.ics.estudios.dto.DatosParticipante;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,6 +134,19 @@ public class ParticipanteService {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from ContactoParticipante where participante.codigo = :codigo and pasive = '0' order by recordDate desc");
         query.setParameter("codigo", codigoParticipante);
+        return query.list();
+    }
+
+    public List<DatosParticipante> getDatosParticipante(Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select p.codigo as codigo, p.nombre1 as nombre1, p.nombre2 as nombre2,  p.apellido1 as apellido1, p.apellido2 as apellido2, p.sexo as sexo, p.fechaNac as fechaNac, " +
+                "p.nombre1Padre as nombre1Padre, p.nombre2Padre as nombre2Padre, p.apellido1Padre as apellido1Padre, p.apellido2Padre as apellido2Padre, p.nombre1Madre as nombre1Madre, p.nombre2Madre as nombre2Madre, " +
+                "p.apellido1Madre as apellido1Madre, p.apellido2Madre as apellido2Madre, c.codigo as codigoCasa, b.codigo as codigoBarrio, b.nombre as nombreBarrio, c.direccion as direccion, c.manzana as manzana, pp.estudio as estudios, pp.estPart as estPart, " +
+                "pp.tutor as tutor, coalesce((select spanish from MessageResource where catKey = cast(pp.relacionFam as string) and catRoot = 'CP_CAT_RFTUTOR'), 'Sin Relac Familiar') as relacionFamTutor " +
+                "from Participante p inner join p.casa c inner join c.barrio b, ParticipanteProcesos pp where p.codigo = pp.codigo " +
+                " and p.codigo = :codigo ");
+        query.setParameter("codigo", codigo);
+        query.setResultTransformer(Transformers.aliasToBean(DatosParticipante.class));
         return query.list();
     }
 }
