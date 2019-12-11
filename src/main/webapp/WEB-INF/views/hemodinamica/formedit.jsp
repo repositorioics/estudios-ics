@@ -124,15 +124,20 @@
                                         <label for="edad">Edad:</label>
                                         <input type="text" class="form-control"  name="edad" id="edad" value="${obj.edad}" readonly />
                                     </div>
-                                    <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-4">
                                         <label for="peso">Peso(kg):</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control focusNext" tabindex="2" name="peso" id="peso" placeholder="Peso" value="${obj.peso}"/>
                                     </div>
-                                    <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-4">
                                         <label for="talla">Talla(cm):</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control focusNext" tabindex="3" name="talla" id="talla" placeholder="Talla" value="${obj.talla}"/>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="numParametro">Parametros:</label>
+                                        <span class="required text-danger"> * </span>
+                                        <input type="text" class="form-control focusNext" name="numParametro"  id="numParametro" value="${obj.numParametros}" tabindex="4">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="asc">A.S.C(m2):</label>
@@ -150,13 +155,13 @@
                                     <div class="form-group col-sm-4">
                                         <label for="fconsulta">Fecha Consulta:</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fecha}" pattern="dd/MM/yyyy"/>"/>
+                                        <input type="text" class="form-control focusNext" tabindex="5" id="fconsulta" name="fconsulta"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fecha}" pattern="dd/MM/yyyy"/>"/>
                                     </div>
 
                                     <div class="form-group col-sm-4">
                                         <label for="fie">Fecha Inicio de Enfermedad:</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" tabindex="3" id="fie" name="fie"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fie}" pattern="dd/MM/yyyy"/>" />
+                                        <input type="text" class="form-control focusNext" tabindex="6" id="fie" name="fie"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fie}" pattern="dd/MM/yyyy"/>" />
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="diasenf">Días de Enfermedad:</label>
@@ -430,6 +435,10 @@
                     fconsulta:{required: true},
                     sector: {required: true},
                     expediente:{required: true},
+                    numParametro:{
+                        required: true,
+                        digits: true
+                    },
                     telefono:{
                         digits: true,
                         maxlength: 8,

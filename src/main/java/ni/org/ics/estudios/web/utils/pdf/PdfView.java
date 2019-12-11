@@ -13,6 +13,7 @@ import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.web.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 import sun.font.FontFamily;
 
@@ -24,6 +25,7 @@ import java.awt.*;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -304,12 +306,12 @@ public class PdfView extends AbstractPdfView {
         document.open();
         Font bf12 = new Font(Font.TIMES_ROMAN, 10);
         Font font = FontFactory.getFont(FontFactory.HELVETICA, 8);
+        Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 7, Font.BOLD);
         Font etiquetas = FontFactory.getFont(FontFactory.HELVETICA, 9);
         Font timesRomanNormal12 = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
         Font timesRomanBold12 = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
 
-
-        //Declaracion de Variable
+        //region
         PdfPTable table = new PdfPTable(new float[]{18, 30, 10, 40});
         table.setWidthPercentage(100f);
         PdfPCell cell;
@@ -317,10 +319,6 @@ public class PdfView extends AbstractPdfView {
         Double tablas = Math.ceil((double)ListDetail.size()/maximoCol);
         int conDetalle = 0;
         for (int t = 1; t <= tablas.intValue() ; t++) {
-            /*MyFooter footer = new MyFooter();
-            footer.setNumberPage(t);
-            writer.setPageEvent(footer);*/
-
             if (conDetalle > 0 && conDetalle % 16 == 0) {
                 document.newPage();
             }
@@ -379,7 +377,7 @@ public class PdfView extends AbstractPdfView {
             cell.setBorder(0);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(obj.getnExpediente()));
+            cell = new PdfPCell(new Phrase(  obj.getnExpediente().substring(0,2)+" / "+ obj.getnExpediente().substring(2,4)+" / "+ obj.getnExpediente().substring(4,6) ));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(0);
             table.addCell(cell);
@@ -695,6 +693,7 @@ public class PdfView extends AbstractPdfView {
             table.addCell(cell);
 
             document.add(table);
+            //endregion
             /************************************* Fin 6ta Fila **********************************************/
 
             /************************************* Fin 6ta Fila **********************************************/
@@ -739,41 +738,42 @@ public class PdfView extends AbstractPdfView {
             table.addCell(cell);
 
             document.add(table);
+            //endregion
             /************************************* Fin 6ta Fila **********************************************/
 
             table = new PdfPTable(17);
             table.setWidthPercentage(100f);
-            table.addCell(new Phrase("Fecha ", font));
+            table.addCell(new Phrase("Fecha ", font2));
             table.completeRow();
-            table.addCell(new Phrase("Hora ", font));
+            table.addCell(new Phrase("Hora ", font2));
             table.completeRow();
-            table.addCell(new Phrase("Nivel de Consciencia ", font));
+            table.addCell(new Phrase("Nivel de Consciencia ", font2));
             table.completeRow();
-            table.addCell(new Phrase("P/A mmHg", font));
+            table.addCell(new Phrase("P/A mmHg", font2));
             table.completeRow();
-            table.addCell(new Phrase("PP mmHg", font));
+            table.addCell(new Phrase("PP mmHg", font2));
             table.completeRow();
-            table.addCell(new Phrase("PAM mmHg", font));
+            table.addCell(new Phrase("PAM mmHg", font2));
             table.completeRow();
-            table.addCell(new Phrase("FC por Minuto", font));
+            table.addCell(new Phrase("FC por Minuto", font2));
             table.completeRow();
-            table.addCell(new Phrase("Fr por Minuto", font));
+            table.addCell(new Phrase("Fr por Minuto", font2));
             table.completeRow();
-            table.addCell(new Phrase("T°C", font));
+            table.addCell(new Phrase("T°C", font2));
             table.completeRow();
-            table.addCell(new Phrase("SA02%", font));
+            table.addCell(new Phrase("SA02%", font2));
             table.completeRow();
-            table.addCell(new Phrase("Extremidades", font));
+            table.addCell(new Phrase("Extremidades", font2));
             table.completeRow();
-            table.addCell(new Phrase("Llenado Capilar (seg)", font));
+            table.addCell(new Phrase("Llenado Capilar (seg)", font2));
             table.completeRow();
-            table.addCell(new Phrase("Pulso (Calidad)", font));
+            table.addCell(new Phrase("Pulso (Calidad)", font2));
             table.completeRow();
-            table.addCell(new Phrase("Diuresis/ml/Kg/Hr", font));
+            table.addCell(new Phrase("Diuresis/ml/Kg/Hr", font2));
             table.completeRow();
-            table.addCell(new Phrase("Densidad Urinaria", font));
+            table.addCell(new Phrase("Densidad Urinaria", font2));
             table.completeRow();
-            table.addCell(new Phrase("Validado por", font));
+            table.addCell(new Phrase("Validado por", font2));
             table.completeRow();
 
 
@@ -786,6 +786,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(DateUtil.DateToString(l.getFecha(), "dd/MM/yyyy"), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -798,6 +799,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getHora(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -810,6 +812,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(this.getDescripcionCatalogo(l.getNivelConciencia(), "NIVELCONCIENCIA"), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -818,10 +821,18 @@ public class PdfView extends AbstractPdfView {
                     PdfPRow row = table.getRow(i);
                     PdfPCell[] cell1 = row.getCells();
                     int celda = 1;
+                    String part1="", part2="";
                     for (int conDet = conDetalle; conDet < maximoCol * t; conDet++) {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
-                            cell1[celda].setPhrase(new Phrase(l.getPa(), font));
+                            for (int indice = 0; indice < l.getPa().length(); indice++){
+                                String string = l.getPa();
+                                String[] parts = string.split("/");
+                                part1 = parts[0];
+                                part2 = parts[1];
+                            }
+                            cell1[celda].setPhrase(new Phrase(Integer.parseInt(part1)+"/"+Integer.parseInt(part2), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -835,6 +846,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getPp(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -844,10 +856,10 @@ public class PdfView extends AbstractPdfView {
                     PdfPCell[] cell1 = row.getCells();
                     int celda = 1;
                     for (int conDet = conDetalle; conDet < maximoCol * t; conDet++) {
-
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getPam(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -859,8 +871,8 @@ public class PdfView extends AbstractPdfView {
                     for (int conDet = conDetalle; conDet < maximoCol * t; conDet++) {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
-
                             cell1[celda].setPhrase(new Phrase(l.getFc(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -874,6 +886,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getFr(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -887,6 +900,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getTc(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -900,6 +914,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getSa(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -913,6 +928,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(this.getDescripcionCatalogo(l.getExtremidades(), "EXTREMIDADES"), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -926,6 +942,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(this.getDescripcionCatalogo(l.getLlenadoCapilar(), "LLENADOCAPILAR"), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -939,6 +956,7 @@ public class PdfView extends AbstractPdfView {
 
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(this.getDescripcionCatalogo(l.getPulsoCalidad(), "PULSOCALIDAD"), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -952,6 +970,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(this.getDescripcionCatalogo(l.getDiuresis(), "DIURESIS"), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -965,6 +984,7 @@ public class PdfView extends AbstractPdfView {
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getDensidadUrinaria(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
@@ -974,32 +994,30 @@ public class PdfView extends AbstractPdfView {
                     PdfPCell[] cell1 = row.getCells();
                     int celda = 1;
                     for (int conDet = conDetalle; conDet < maximoCol * t; conDet++) {
-
                         if (conDet < ListDetail.size()) {
                             HemoDetalle l = ListDetail.get(conDet);
                             cell1[celda].setPhrase(new Phrase(l.getPersonaValida(), font));
+                            cell1[celda].setHorizontalAlignment(Element.ALIGN_CENTER);
                             celda++;
                         } else break;
                     }
-
                 }
             }
             conDetalle = maximoCol * t;
             document.add(table);
-
-
-            /*LineSeparator ls2 = new LineSeparator();
-            ls2.setLineWidth(0.5f);
-            document.add(new Chunk(ls2));*/
-
-            table = new PdfPTable(new float[]{20, 40});
+            Date objDate = new Date();
+            DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat hourFormat = new SimpleDateFormat("HH:mm");
+            table = new PdfPTable(new float[]{10,10,10,5,5});
             table.setWidthPercentage(96);
             table.addCell(createCell("Creado por: ", timesRomanBold12, Rectangle.NO_BORDER));
-            table.addCell(createCell(obj.getRecordUser(), timesRomanNormal12, Rectangle.NO_BORDER));
-
+            table.addCell(createCell(obj.getRecordUser(), font, Rectangle.NO_BORDER));
+            table.addCell(createCell("Impreso : ", timesRomanBold12, Rectangle.NO_BORDER));
+            table.addCell(createCell(dateformat.format(objDate) + " " + hourFormat.format(objDate), font, Rectangle.NO_BORDER));
+            int pageN = writer.getPageNumber();
+            table.addCell(createCell("Página: "+ writer.getCurrentPageNumber() +" de "+ " " , font, Rectangle.NO_BORDER));
             document.add(table);
         }
-
     }
 
     private String getDescripcionCatalogo(String codigo,String catroot){
@@ -1011,9 +1029,6 @@ public class PdfView extends AbstractPdfView {
         }
         return "-";
     }
-
-
-
 }
 
 class MyFooter extends PdfPageEventHelper {
@@ -1034,13 +1049,14 @@ class MyFooter extends PdfPageEventHelper {
                     document.bottom() - posicion, 0);
             posicion+=10;
         }
-        /*if (numberPage > 0) {
+
+        if (numberPage > 0) {
             Phrase footer = new Phrase("* " + String.valueOf(numberPage), ffont);
             ColumnText.showTextAligned(cb, Element.ALIGN_LEFT,
                     footer,
                     (document.left()) / 2 + document.leftMargin(),//(document.right() - document.left()) / 2 + document.leftMargin(),
                     document.bottom() - posicion, 0);
-        }*/
+        }
 
     }
     public List<String> getMensajes() {

@@ -279,6 +279,10 @@
                                 <label style="font-family: Roboto; font-size: 1em; font-weight: bold"> Densidad Urinaria:</label>
                                 <span class="badge badge-primary badge-pill" id="densidadU" style="font-family: Roboto; font-size: 1em"></span>
                             </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <label style="font-family: Roboto; font-size: 1em; font-weight: bold"> Persona Valida:</label>
+                                <span class="badge badge-primary badge-pill" id="Persona" style="font-family: Roboto; font-size: 1em"></span>
+                            </li>
                         </ul>
                     </div>
                     <div class="modal-footer">
@@ -422,6 +426,7 @@
             $("#sa").text(data.sa);
             $("#diuresis").text(data.diuresis);
             $("#densidadU").text(data.densidadU);
+            $("#Persona").text(data.personaValida);
         })
     }
 </script>

@@ -409,7 +409,7 @@
                 $('#pa').css('border-color','#FF0000');
                 swal("Error!","Valores en cero","error");
                 return false;
-            }else {
+            }else{
                 $.post(url.addDetalleHemoUrl, form1.serialize(), function (data) {
                     if (data.msj != null) {
                         swal("Error!", data.msj, "error");

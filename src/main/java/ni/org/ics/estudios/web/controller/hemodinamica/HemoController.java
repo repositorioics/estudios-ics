@@ -163,12 +163,14 @@ public class HemoController {
         }
 
     }
-
+    List<MessageResource> messagediuresis = new ArrayList<MessageResource>();
+    List<MessageResource> messagePersonaValida = new ArrayList<MessageResource>();
     /*Buscar lo faltante para modals*/
     @RequestMapping(value = "/ViewResutl", method = RequestMethod.GET, produces="application/json" )
     public @ResponseBody
     String BuscarResultado(@RequestParam(value = "idHemoDetalle") String idHemoDetalle)  throws ParseException {
         Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> model = new HashMap<String, Object>();
         HemoDetalle obj = datoshemodinamicaService.getByHemoDetalleId(idHemoDetalle);
         map.put("pa", obj.getPa());
         map.put("pp", obj.getPp());
@@ -177,16 +179,34 @@ public class HemoController {
         map.put("fr", obj.getFr());
         map.put("tc", obj.getTc());
         map.put("sa", obj.getSa());
-        map.put("diuresis", obj.getDiuresis());
+        messagediuresis = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getDiuresis(),"DIURESIS");
+        map.put("diuresis",getDescripcionCatalogo(obj.getDiuresis(),"DIURESIS"));
+        messagePersonaValida = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getPersonaValida(),"PERSONAVALIDA");
+        map.put("personaValida", getDescripcionCatalogo2(obj.getPersonaValida(),"PERSONAVALIDA"));
         map.put("densidadU", (obj.getDensidadUrinaria() != null ? obj.getDensidadUrinaria():"-"));
-        map.put("personaValida", obj.getPersonaValida());
         String jsonResponse;
         jsonResponse = new Gson().toJson(map);
-        //escapar caracteres especiales, escape de los caracteres con valor num�rico mayor a 127
         UnicodeEscaper escaper = UnicodeEscaper.above(127);
         return escaper.translate(jsonResponse);
     }
-
+    private String getDescripcionCatalogo(String codigo,String catroot){
+        for(MessageResource rnv : messagediuresis){
+            if (rnv.getCatKey().equals(codigo)) {
+                if (catroot != "" && rnv.getCatRoot().equals(catroot))
+                    return rnv.getSpanish();
+            }
+        }
+        return "-";
+    }
+    private String getDescripcionCatalogo2(String codigo,String catroot){
+        for(MessageResource rnv : messagePersonaValida){
+            if (rnv.getCatKey().equals(codigo)) {
+                if (catroot != "" && rnv.getCatRoot().equals(catroot))
+                    return rnv.getSpanish();
+            }
+        }
+        return "-";
+    }
     /* Controlador para realizar por una búsqueda de participante
     * http://localhost:8080/estudios_ics/hemo/searchParticipant?participantCode=100
     * */
