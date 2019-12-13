@@ -1,6 +1,5 @@
 package ni.org.ics.estudios.web.controller.muestreoanual;
 
-import ni.org.ics.estudios.domain.muestreoanual.ReConsentimientoDen;
 import ni.org.ics.estudios.service.muestreoanual.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +20,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/consentimientos/*")
 public class ConsentimientosController {
-	@Resource(name="reconsentimientoService")
-	private ReConsentimientoDenService reconsentimientoService;
+	//@Resource(name="reconsentimientoService")
+	//private ReConsentimientoDenService reconsentimientoService;
 	@Resource(name="labBhcService")
 	private LabBHCService labBhcService;
 	@Resource(name="labSeroService")
@@ -36,8 +35,8 @@ public class ConsentimientosController {
 	@RequestMapping(value = "/consentimientos", method = RequestMethod.GET)
     public String fetchConsentimientosJSP(Model model) throws ParseException {
     	logger.debug("Mostrando Consentimientos en JSP");
-    	List<ReConsentimientoDen> consentimientos = reconsentimientoService.getReConsentimientos();
-    	model.addAttribute("consentimientos", consentimientos);
+    	//List<ReConsentimientoDen> consentimientos = reconsentimientoService.getReConsentimientos();
+    	//model.addAttribute("consentimientos", consentimientos);
     	List<Object> muestrasTotal = reporteService.getMuestrasTotal();
         model.addAttribute("muestrasTotal", muestrasTotal);  
         List<Object> muestrasxEstudio = reporteService.getMuestrasxEstudio();
@@ -45,5 +44,5 @@ public class ConsentimientosController {
         List<Object> muestrasxTubo = reporteService.getMuestrasxTubo();
         model.addAttribute("muestrasTubo", muestrasxTubo);
     	return "consentimientos/consentimientos";
-	}   
+	}
 }
