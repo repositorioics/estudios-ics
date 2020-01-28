@@ -44,8 +44,7 @@ public class DatosCoordenadas implements Serializable {
     private Character actual; //10
     private String telefono; //11
     private Integer recurso1; //12
-
-
+    private String Observacion;
 
 
 
@@ -196,6 +195,15 @@ public class DatosCoordenadas implements Serializable {
 
     public void setMovilInfo(MovilInfo movilInfo) {
         this.movilInfo = movilInfo;
+    }
+
+    @Column(name = "OBSERVACION", nullable = true, length = 250)
+    public String getObservacion() {
+        return Observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        Observacion = observacion;
     }
 
     @Override

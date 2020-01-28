@@ -125,6 +125,12 @@
                                            </c:forEach>
                                        </select>
                                    </div>
+                               <div class="col-md-12">
+                                   <div class="form-group">
+                                       <label for="observacion">Observación: </label>
+                                       <input type="text" class="form-control" id="observacion" name="observacion"/>
+                                   </div>
+                               </div>
                                <br>
                                <br>
                                <hr/>
@@ -245,6 +251,7 @@
                     $("#casacohortefamilia").val("");
                     $("#estudios").val("");
                     $("#nombre").val("");
+                    $("#observacion").val("");
                     $("#parametro").focus();
                 }
                 else{
@@ -258,6 +265,7 @@
                         $("#casacohortefamilia").val("");
                         $("#estudios").val("");
                         $("#nombre").val("");
+                        $("#observacion").val("");
                         $("#parametro").focus();
                     }else{
                         $("#IdParticipante").val(data.codigo);
@@ -280,6 +288,7 @@
                 $("#casacohortefamilia").val("");
                 $("#estudios").val("");
                 $("#nombre").val("");
+                $("#observacion").val("");
                 $("#parametro").focus();
             });
         }

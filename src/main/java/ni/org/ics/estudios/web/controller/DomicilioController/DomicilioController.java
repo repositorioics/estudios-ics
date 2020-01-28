@@ -184,6 +184,7 @@ public class DomicilioController {
                                       ,@RequestParam(value = "direccion", required = true) String direccion
                                       ,@RequestParam(value = "razonnogeoref", required = true) String razonnogeoref
                                       ,@RequestParam(value = "recurso1", required = true) Integer recurso1
+                                          ,@RequestParam(value = "observacion", required = false) String observacion
 
     ){
         try{
@@ -215,6 +216,7 @@ public class DomicilioController {
             obj.setActual(Character.valueOf(imp));
             obj.setRecurso1(Integer.valueOf(recurso1));
             obj.setConpunto("0");
+            obj.setObservacion(observacion);
             MovilInfo movil = new MovilInfo();
             movil.setIdInstancia(Integer.valueOf(148));
             movil.setInstancePath("Server");
