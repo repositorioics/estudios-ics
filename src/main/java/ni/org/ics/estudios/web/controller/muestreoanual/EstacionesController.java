@@ -1,7 +1,5 @@
 package ni.org.ics.estudios.web.controller.muestreoanual;
 
-import ni.org.ics.estudios.domain.muestreoanual.CambioEstudio;
-import ni.org.ics.estudios.domain.muestreoanual.ConsentimientoChik;
 import ni.org.ics.estudios.domain.muestreoanual.MuestraMA;
 import ni.org.ics.estudios.domain.muestreoanual.Obsequio;
 import ni.org.ics.estudios.service.muestreoanual.*;
@@ -30,8 +28,8 @@ public class EstacionesController {
 	private ReporteService reporteService;
 	@Resource(name="obsequiosMAService")
 	private ObsequioService obsequioService;
-	@Resource(name="reconsentimientoService")
-	private ReConsentimientoDenService reconsentimientoService;
+	//@Resource(name="reconsentimientoService")
+	//private ReConsentimientoDenService reconsentimientoService;
 	@Resource(name="newVacunaService")
 	private NewVacunaService newVacunaService;
 	private static final Logger logger = LoggerFactory.getLogger(EstacionesController.class);
@@ -126,10 +124,10 @@ public class EstacionesController {
 	@RequestMapping(value = "/consentimientoschik", method = RequestMethod.GET)
     public String fetchConsentimientosJSP(Model model) throws ParseException {
     	logger.debug("Mostrando Consentimientos en JSP");
-    	List<ConsentimientoChik> consentimientos = reconsentimientoService.getConsentimientosChik();
+    	/*List<ConsentimientoChik> consentimientos = reconsentimientoService.getConsentimientosChik();
     	List<Object> conteoReconsentimientos = reconsentimientoService.getCountConsentimientosChik();
     	model.addAttribute("consentimientos", consentimientos);
-    	model.addAttribute("conteoReconsentimientos", conteoReconsentimientos);
+    	model.addAttribute("conteoReconsentimientos", conteoReconsentimientos);*/
     	List<Object> muestrasTotal = reporteService.getMuestrasTotal();
         model.addAttribute("muestrasTotal", muestrasTotal);  
         List<Object> muestrasxEstudio = reporteService.getMuestrasxEstudio();
@@ -139,22 +137,22 @@ public class EstacionesController {
     	return "consentimientos/consentimientos_chik";
 	}   
 	
-	
+
 	@RequestMapping(value = "/chgest", method = RequestMethod.GET)
     public String fetchCambiosEstudiosJSP(Model model) throws ParseException {
     	logger.debug("Mostrando CambiosEstudios en JSP");
-    	List<CambioEstudio> cambios = reconsentimientoService.getCambiosEstudio();
+    	/*List<CambioEstudio> cambios = reconsentimientoService.getCambiosEstudio();
     	List<Object> conteoCambios = reconsentimientoService.getCountCambios();
     	model.addAttribute("cambios", cambios);
-    	model.addAttribute("conteoCambios", conteoCambios);
+    	model.addAttribute("conteoCambios", conteoCambios);*/
     	List<Object> muestrasTotal = reporteService.getMuestrasTotal();
-        model.addAttribute("muestrasTotal", muestrasTotal);  
+        model.addAttribute("muestrasTotal", muestrasTotal);
         List<Object> muestrasxEstudio = reporteService.getMuestrasxEstudio();
         model.addAttribute("muestrasEstudio", muestrasxEstudio);
         List<Object> muestrasxTubo = reporteService.getMuestrasxTubo();
         model.addAttribute("muestrasTubo", muestrasxTubo);
     	return "consentimientos/cambios_estudio";
-	} 
+	}
 
-	
+
 }

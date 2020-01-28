@@ -28,7 +28,11 @@ public class VisitaTerrenoMA {
 	
 	private String otraRelacionFam;
 	private String carnetSN;
-	
+	//para peso y talla muestreo 2020
+	private String estudiaSN;
+	private String nEscuela;
+	private String otraEscuela;
+	private String turno;
 	
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
@@ -135,5 +139,40 @@ public class VisitaTerrenoMA {
 	public void setCarnetSN(String carnetSN) {
 		this.carnetSN = carnetSN;
 	}
-	
+
+	@Column(name = "estudiaSN", nullable = true, length = 2)
+	public String getEstudiaSN() {
+		return estudiaSN;
+	}
+
+	public void setEstudiaSN(String estudiaSN) {
+		this.estudiaSN = estudiaSN;
+	}
+
+	@Column(name = "nEscuela", nullable = true, length = 4)
+	public String getnEscuela() {
+		return nEscuela;
+	}
+
+	public void setnEscuela(String nEscuela) {
+		this.nEscuela = nEscuela;
+	}
+
+	@Column(name = "otraEscuela", nullable = true, length = 100)
+	public String getOtraEscuela() {
+		return otraEscuela;
+	}
+
+	public void setOtraEscuela(String otraEscuela) {
+		this.otraEscuela = otraEscuela;
+	}
+
+	@Column(name = "turno", nullable = true, length = 2)
+	public String getTurno() {
+		return turno;
+	}
+
+	public void setTurno(String turno) {
+		this.turno = turno;
+	}
 }
