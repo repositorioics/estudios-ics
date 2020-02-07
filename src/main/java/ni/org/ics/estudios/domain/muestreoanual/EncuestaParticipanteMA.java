@@ -186,6 +186,22 @@ public class EncuestaParticipanteMA {
     private String nombreCDI;
     private String direccionCDI;
 	private MovilInfo movilInfo;
+	//MA2020
+	private String otroLugarCuidan;
+	private String enfermedadCronica;
+	private String tenidoDengue;
+	private String unidadSaludDengue;
+	private String centroSaludDengue;
+	private String otroCentroSaludDengue;
+	private String puestoSaludDengue;
+	private String otroPuestoSaludDengue;
+	private String hospitalDengue;
+	private String otroHospitalDengue;
+	private String hospitalizadoDengue;
+	private String ambulatorioDengue;
+	private String diagMedicoDengue;
+	private String rashUA; //sustitución de rash6m
+	private String consultaRashUA; //sustitución de consultaRashHormigueo
 
 	@EmbeddedId
 	public EncuestaParticipanteId getEpId() {
@@ -717,8 +733,6 @@ public class EncuestaParticipanteMA {
 	public void setCantCigarrosOtros(Integer cantCigarrosOtros) {
 		this.cantCigarrosOtros = cantCigarrosOtros;
 	}
-	
-	
 
 	public MovilInfo getMovilInfo() {
 		return movilInfo;
@@ -1627,4 +1641,139 @@ public class EncuestaParticipanteMA {
     public void setDireccionCDI(String direccionCDI) {
         this.direccionCDI = direccionCDI;
     }
+
+	@Column(name = "OTRO_LUGAR_CUIDAN")
+	public String getOtroLugarCuidan() {
+		return otroLugarCuidan;
+	}
+
+	public void setOtroLugarCuidan(String otroLugarCuidan) {
+		this.otroLugarCuidan = otroLugarCuidan;
+	}
+
+	@Column(name = "ENFERMEDAD_CRONICA", nullable = true, length = 2)
+	public String getEnfermedadCronica() {
+		return enfermedadCronica;
+	}
+
+	public void setEnfermedadCronica(String enfermedadCronica) {
+		this.enfermedadCronica = enfermedadCronica;
+	}
+
+	@Column(name = "TENIDO_DENGUE", nullable = true, length = 2)
+	public String getTenidoDengue() {
+		return tenidoDengue;
+	}
+
+	public void setTenidoDengue(String tenidoDengue) {
+		this.tenidoDengue = tenidoDengue;
+	}
+
+	@Column(name = "UNIDAD_SALUD_DENGUE", nullable = true, length = 2)
+	public String getUnidadSaludDengue() {
+		return unidadSaludDengue;
+	}
+
+	public void setUnidadSaludDengue(String unidadSaludDengue) {
+		this.unidadSaludDengue = unidadSaludDengue;
+	}
+
+	@Column(name = "CENTRO_SALUD_DENGUE", nullable = true, length = 2)
+	public String getCentroSaludDengue() {
+		return centroSaludDengue;
+	}
+
+	public void setCentroSaludDengue(String centroSaludDengue) {
+		this.centroSaludDengue = centroSaludDengue;
+	}
+
+	@Column(name = "OTRO_CENTRO_SALUD_DENGUE")
+	public String getOtroCentroSaludDengue() {
+		return otroCentroSaludDengue;
+	}
+
+	public void setOtroCentroSaludDengue(String otroCentroSaludDengue) {
+		this.otroCentroSaludDengue = otroCentroSaludDengue;
+	}
+
+	@Column(name = "PUESTO_SALUD_DENGUE", nullable = true, length = 2)
+	public String getPuestoSaludDengue() {
+		return puestoSaludDengue;
+	}
+
+	public void setPuestoSaludDengue(String puestoSaludDengue) {
+		this.puestoSaludDengue = puestoSaludDengue;
+	}
+
+	@Column(name = "OTRO_PUESTO_SALUD_DENGUE")
+	public String getOtroPuestoSaludDengue() {
+		return otroPuestoSaludDengue;
+	}
+
+	public void setOtroPuestoSaludDengue(String otroPuestoSaludDengue) {
+		this.otroPuestoSaludDengue = otroPuestoSaludDengue;
+	}
+
+	@Column(name = "HOSPITAL_DENGUE", nullable = true, length = 3)
+	public String getHospitalDengue() {
+		return hospitalDengue;
+	}
+
+	public void setHospitalDengue(String hospitalDengue) {
+		this.hospitalDengue = hospitalDengue;
+	}
+
+	@Column(name = "OTRO_HOSPITAL_DENGUE")
+	public String getOtroHospitalDengue() {
+		return otroHospitalDengue;
+	}
+
+	public void setOtroHospitalDengue(String otroHospitalDengue) {
+		this.otroHospitalDengue = otroHospitalDengue;
+	}
+
+	@Column(name = "HOSPITALIZADO_DENGUE", nullable = true, length = 2)
+	public String getHospitalizadoDengue() {
+		return hospitalizadoDengue;
+	}
+
+	public void setHospitalizadoDengue(String hospitalizadoDengue) {
+		this.hospitalizadoDengue = hospitalizadoDengue;
+	}
+
+	@Column(name = "AMBULATORIO_DENGUE", nullable = true, length = 2)
+	public String getAmbulatorioDengue() {
+		return ambulatorioDengue;
+	}
+
+	public void setAmbulatorioDengue(String ambulatorioDengue) {
+		this.ambulatorioDengue = ambulatorioDengue;
+	}
+
+	@Column(name = "DX_MEDICO_DENGUE")
+	public String getDiagMedicoDengue() {
+		return diagMedicoDengue;
+	}
+
+	public void setDiagMedicoDengue(String diagMedicoDengue) {
+		this.diagMedicoDengue = diagMedicoDengue;
+	}
+
+	@Column(name = "RASH_UA", nullable = true, length = 2)
+	public String getRashUA() {
+		return rashUA;
+	}
+
+	public void setRashUA(String rashUA) {
+		this.rashUA = rashUA;
+	}
+
+	@Column(name = "CONSULTA_RASH_UA", nullable = true, length = 2)
+	public String getConsultaRashUA() {
+		return consultaRashUA;
+	}
+
+	public void setConsultaRashUA(String consultaRashUA) {
+		this.consultaRashUA = consultaRashUA;
+	}
 }

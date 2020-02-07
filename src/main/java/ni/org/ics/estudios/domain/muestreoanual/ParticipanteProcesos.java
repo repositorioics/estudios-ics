@@ -67,7 +67,12 @@ public class ParticipanteProcesos implements Auditable {
     //17072019. Saber si el participante es seleccionado para el estudio ZEN(Zika en Ninos)
     private String estudioZen;
     private String mxSuperficie; //1:asent mx superficie, 2:consent manos, 3:Ambos, 0 o null:No aplica
-
+	//MA2020
+	private String mostrarAlfabeto;
+	private String mostrarPadreAlfabeto;
+	private String mostrarMadreAlfabeta;
+	private String mostrarNumParto;
+	private String antecedenteTutorCP;
     private MovilInfo movilInfo;
 
 	@Id
@@ -459,7 +464,52 @@ public class ParticipanteProcesos implements Auditable {
         this.mxSuperficie = mxSuperficie;
     }
 
-    public MovilInfo getMovilInfo() {
+	@Column(name = "preguntar_alfabeto", nullable = true, length = 2)
+	public String getMostrarAlfabeto() {
+		return mostrarAlfabeto;
+	}
+
+	public void setMostrarAlfabeto(String mostrarAlfabeto) {
+		this.mostrarAlfabeto = mostrarAlfabeto;
+	}
+
+	@Column(name = "preguntar_padre_alfabeto", nullable = true, length = 2)
+	public String getMostrarPadreAlfabeto() {
+		return mostrarPadreAlfabeto;
+	}
+
+	public void setMostrarPadreAlfabeto(String mostrarPadreAlfabeto) {
+		this.mostrarPadreAlfabeto = mostrarPadreAlfabeto;
+	}
+
+	@Column(name = "preguntar_madre_alfabeto", nullable = true, length = 2)
+	public String getMostrarMadreAlfabeta() {
+		return mostrarMadreAlfabeta;
+	}
+
+	public void setMostrarMadreAlfabeta(String mostrarMadreAlfabeta) {
+		this.mostrarMadreAlfabeta = mostrarMadreAlfabeta;
+	}
+
+	@Column(name = "preguntar_num_parto", nullable = true, length = 2)
+	public String getMostrarNumParto() {
+		return mostrarNumParto;
+	}
+
+	public void setMostrarNumParto(String mostrarNumParto) {
+		this.mostrarNumParto = mostrarNumParto;
+	}
+
+	@Column(name = "preguntar_antecedente_tutor", nullable = true, length = 2)
+	public String getAntecedenteTutorCP() {
+		return antecedenteTutorCP;
+	}
+
+	public void setAntecedenteTutorCP(String antecedenteTutorCP) {
+		this.antecedenteTutorCP = antecedenteTutorCP;
+	}
+
+	public MovilInfo getMovilInfo() {
         return movilInfo;
     }
 

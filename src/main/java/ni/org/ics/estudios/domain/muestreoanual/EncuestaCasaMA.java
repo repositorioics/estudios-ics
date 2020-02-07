@@ -132,7 +132,10 @@ public class EncuestaCasaMA {
     private Integer yearFabCamion;
     private String opcFabOtroMedioTrans;
     private Integer yearFabOtroMedioTrans;
-
+	//MA2020
+	private String cambiadoCasa;
+	private String remodelacionCasa;
+	private String tieneVehiculo;
     @Id
     @Column(name = "codigo", length = 50, nullable = false)
     public String getCodigo() {
@@ -1106,4 +1109,31 @@ public class EncuestaCasaMA {
     public void setYearFabOtroMedioTrans(Integer yearFabOtroMedioTrans) {
         this.yearFabOtroMedioTrans = yearFabOtroMedioTrans;
     }
+
+	@Column(name = "cambiado_casa", nullable = true, length = 2)
+	public String getCambiadoCasa() {
+		return cambiadoCasa;
+	}
+
+	public void setCambiadoCasa(String cambiadoCasa) {
+		this.cambiadoCasa = cambiadoCasa;
+	}
+
+	@Column(name = "remodelacion_casa", nullable = true, length = 2)
+	public String getRemodelacionCasa() {
+		return remodelacionCasa;
+	}
+
+	public void setRemodelacionCasa(String remodelacionCasa) {
+		this.remodelacionCasa = remodelacionCasa;
+	}
+
+	@Column(name = "tiene_vehiculo", nullable = true, length = 2)
+	public String getTieneVehiculo() {
+		return tieneVehiculo;
+	}
+
+	public void setTieneVehiculo(String tieneVehiculo) {
+		this.tieneVehiculo = tieneVehiculo;
+	}
 }
