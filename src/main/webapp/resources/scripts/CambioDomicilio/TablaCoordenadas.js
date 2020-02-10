@@ -98,6 +98,7 @@ var SearchCoordenadas = function () {
                                 valor = '<a class="btn btn-info" onclick="Modificar()"><i class="fa fa-refresh"></i></a>'
                             }
                             var getCode = data[i].codigo; //"<strong class='pd-name'>"+ data[i].codigo +"</strong>";
+                            var obs = (data[i].observacion != null) ? data[i].observacion : "- -"
 
                             table.row.add([
                                 getCode,
@@ -112,7 +113,8 @@ var SearchCoordenadas = function () {
                                 data[i].estudios,
                                 text,
                                 datestring,
-                                valor])
+                                valor,
+                            obs])
                                 .draw( false );
                         }
                     }

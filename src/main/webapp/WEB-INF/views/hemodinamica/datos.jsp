@@ -564,48 +564,28 @@
         }
         $("#fie").prop("disabled", true);
 
-        $("#fconsulta").datepicker({
-            autoclose: true,
-            format: "dd/mm/yyyy",
-            endDate: '-0d',
-            todayBtn:true
-    }).on("change", function(e){
-            $("#fie").prop("disabled", false);
-            var f1 = $("#fconsulta").val();
-            var f2= $("#fie").val();
-            $("#diasenf").val(0);
-            var validaFeecha = 0;
-            if (f2 ==="" || f2 ===null ){
-                $("#diasenf").val(0);
-            }else{
-                validaFeecha = restaFechas(f1,f2);
-                $("#diasenf").val(validaFeecha);
-            }
-
-        });
-
-        $("#fie").datepicker({
-            autoclose: true,
+        var getDate = function(input){
+            return new Date(input.date.valueOf());
+        }
+        $("#fconsulta, #fie").datepicker({
             format: "dd/mm/yyyy",
             todayBtn:true,
-            endDate:$("#fecha1").val()
-        }).on("change", function(e){
-            debugger;
+            todayHighlight: true,
+            autoclose: true,
+            endDate: '-0d'
+        });
+
+        $("#fconsulta").on("changeDate", function(selected){
+            $("#fie").prop("disabled", false);
+            $("#fie").val("");
+            $("#diasenf").val(0);
+            $('#fie').datepicker('setEndDate', getDate(selected));
+        });
+        $("#fie").on("changeDate", function(){
             var f1 = $("#fconsulta").val();
             var f2= $("#fie").val();
-            var validaFeecha = 0;
-            if(f1<f2){
-                $("#diasenf").val(validaFeecha);
-                swal("Error", "Inicio Enfermedad no debe ser Mayor que Consulta","error");
-                var f2= $("#fie").val(null);
-                $("#diasenf").val(0);
-                return;
-            }  else if(f2===null||f2===""){
-                $("#diasenf").val(0);
-            }else{
-                $("#diasenf").val(restaFechas(f1,f2));
-            }
-        });
+            $("#diasenf").val(restaFechas(f1,f2));
+        })
         restaFechas = function(f1,f2){
             var fechaConsulta = new Date(f1);
             var fechaInicioEnf = new Date(f2);
@@ -621,7 +601,7 @@
             var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
             var dif =  fFecha1 - fFecha2;
             var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
-            return dias +1;
+            return dias + 1;
         }
 
         /*$('#sistolica').keyup(function(){
@@ -756,7 +736,7 @@
                 nombre:{required: true},
                 silais:{required: true},
                 municipio:{required:true},
-                fecha:{required: true},
+                fie:{required: true},
                 fconsulta:{required: true},
                 numParametro:{
                     required:true,
@@ -784,7 +764,10 @@
                     number: true},
                     talla:{required:true,
                     number: true},
-                    diasenf:{required:true},
+                    diasenf:{
+                        required:true,
+                        min:1
+                    },
                     uSalud:{required:true}
             },
             errorElement: 'em',

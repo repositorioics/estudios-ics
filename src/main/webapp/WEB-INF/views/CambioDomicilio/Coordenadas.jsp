@@ -116,6 +116,7 @@
                                   <th scope="col" class="text-center">Actual</th>
                                   <th scope="col" class="text-center">Registrado</th>
                                   <th scope="col" class="text-center hide">Acción</th>
+                                  <th scope="col" class="text-center">Observación</th>
                               </tr>
                               </thead>
                               <tbody></tbody>
@@ -134,6 +135,7 @@
                                   <th scope="col" class="text-center">Actual</th>
                                   <th scope="col" class="text-center">Registrado</th>
                                   <th scope="col" class="text-center hide">Acción</th>
+                                  <th scope="col" class="text-center">Observación</th>
                               </tr>
                               </tfoot>
                           </table>

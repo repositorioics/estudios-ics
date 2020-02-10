@@ -376,8 +376,7 @@ public class PdfView extends AbstractPdfView {
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(0);
             table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase(  obj.getnExpediente().substring(0,2)+" / "+ obj.getnExpediente().substring(2,4)+" / "+ obj.getnExpediente().substring(4,6) ));
+            cell = new PdfPCell(new Phrase(obj.getParticipante().getCodigo().toString()));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(0);
             table.addCell(cell);

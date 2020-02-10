@@ -1,45 +1,25 @@
 $(document).ready(function(){
-    $("#fconsulta").datepicker({
-        autoclose: true,
-        format: "dd/mm/yyyy",
-        endDate: '-0d',
-        todayBtn:true
-    }).on("change", function(e){
-        $("#fie").prop("disabled", false);
-        var f1 = $("#fconsulta").val();
-        var f2= $("#fie").val();
-        $("#diasenf").val(0);
-        var validaFeecha = 0;
-        if (f2 ==="" || f2 ===null ){
-            $("#diasenf").val(0);
-        }else{
-            validaFeecha = restaFechas(f1,f2);
-            $("#diasenf").val(validaFeecha);
-        }
-    });
-
-    $("#fie").datepicker({
-        autoclose: true,
+    var getDate = function(input){
+        return new Date(input.date.valueOf());
+    };
+    $("#fconsulta, #fie").datepicker({
         format: "dd/mm/yyyy",
         todayBtn:true,
+        todayHighlight: true,
+        autoclose: true,
         endDate: '-0d'
-    }).on("change", function(e){
+    });
+    $("#fconsulta").on("changeDate", function(selected){
         debugger;
+        $("#fie").val("");
+        $("#diasenf").val(0);
+        $('#fie').datepicker('setEndDate', getDate(selected));
+    });
+    $("#fie").on("changeDate", function(){
         var f1 = $("#fconsulta").val();
         var f2= $("#fie").val();
-        var validaFeecha = 0;
-        if(f1<f2){
-            $("#diasenf").val(validaFeecha);
-            swal("Error", "Inicio Enfermedad no debe ser Mayor que Consulta","error");
-            var f2= $("#fie").val(null);
-            $("#diasenf").val(0);
-            return;
-        }  else if(f2===null||f2===""){
-            $("#diasenf").val(0);
-        }else{
-            $("#diasenf").val(restaFechas(f1,f2));
-        }
-    });
+        $("#diasenf").val(restaFechas(f1,f2));
+    })
     restaFechas = function(f1,f2){
         var fechaConsulta = new Date(f1);
         var fechaInicioEnf = new Date(f2);
