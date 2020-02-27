@@ -28,6 +28,7 @@ public class AreaAmbiente extends BaseMetaData implements Auditable {
     private Integer numVentanas;
     private CasaCohorteFamilia casa;
     private String tipo;
+    private String numeroCuarto;
 
     @Id
     @Column(name = "CODIGO", length = 50)
@@ -93,6 +94,15 @@ public class AreaAmbiente extends BaseMetaData implements Auditable {
 
     public void setCasa(CasaCohorteFamilia casa) {
         this.casa = casa;
+    }
+
+    @Column(name = "NUMERO_CUARTO", length = 2)
+    public String getNumeroCuarto() {
+        return numeroCuarto;
+    }
+
+    public void setNumeroCuarto(String numeroCuarto) {
+        this.numeroCuarto = numeroCuarto;
     }
 
     @Override
