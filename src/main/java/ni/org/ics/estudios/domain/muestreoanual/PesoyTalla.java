@@ -37,6 +37,7 @@ public class PesoyTalla {
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
 	private Integer otrorecurso2;
+	private String estudiosAct; // estudios actuales al momento de llenar la encuesta
 
 	@Column(name = "peso1", nullable = true)
 	public Double getPeso1() {
@@ -190,4 +191,13 @@ public class PesoyTalla {
     public void setRazonNoTomoMedidas(String razonNoTomoMedidas) {
         this.razonNoTomoMedidas = razonNoTomoMedidas;
     }
+
+	@Column(name = "est_actuales")
+	public String getEstudiosAct() {
+		return estudiosAct;
+	}
+
+	public void setEstudiosAct(String estudiosAct) {
+		this.estudiosAct = estudiosAct;
+	}
 }

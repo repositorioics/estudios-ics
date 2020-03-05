@@ -21,14 +21,14 @@ public class VisitaTerrenoMA {
 	private VisitaTerrenoId visitaId;
 	private Integer visitaSN;
 	private Integer motNoVisita;
+	private String otroMotNoVisita;//MA2020
 	private String acomp;
 	private Integer relacionFam;
-	
 	private Integer asentimiento;
 	
 	private String otraRelacionFam;
 	private String carnetSN;
-	//para peso y talla muestreo 2020
+	//para peso y talla muestreo 2020. Una vez iniciadas las encuestas de casa y participante se quitaron éstas preguntas, el 13022020
 	private String estudiaSN;
 	private String nEscuela;
 	private String otraEscuela;
@@ -82,8 +82,7 @@ public class VisitaTerrenoMA {
 	public void setRelacionFam(Integer relacionFam) {
 		this.relacionFam = relacionFam;
 	}
-	
-	
+
 	@Column(name = "asentimiento", nullable = true)
 	public Integer getAsentimiento() {
 		return asentimiento;
@@ -93,8 +92,6 @@ public class VisitaTerrenoMA {
 		this.asentimiento = asentimiento;
 	}
 
-	
-
 	public MovilInfo getMovilInfo() {
 		return movilInfo;
 	}
@@ -102,8 +99,7 @@ public class VisitaTerrenoMA {
 	public void setMovilInfo(MovilInfo movilInfo) {
 		this.movilInfo = movilInfo;
 	}
-	
-	
+
 	@Column(name = "otrorecurso1", nullable = true, length = 10)
 	public Integer getOtrorecurso1() {
 		return otrorecurso1;
@@ -174,5 +170,14 @@ public class VisitaTerrenoMA {
 
 	public void setTurno(String turno) {
 		this.turno = turno;
+	}
+
+	@Column(name = "otroMotNoVisita")
+	public String getOtroMotNoVisita() {
+		return otroMotNoVisita;
+	}
+
+	public void setOtroMotNoVisita(String otroMotNoVisita) {
+		this.otroMotNoVisita = otroMotNoVisita;
 	}
 }

@@ -962,3 +962,15 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_02', '0', 'UO1_CAT_SNDNA', NULL, '0', 2, '0', 'N');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_03', '2', 'UO1_CAT_SNDNA', NULL, '0', 4, '0', 'NA');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('UO1_CAT_SNDNA_999', '999', 'UO1_CAT_SNDNA', NULL, '0', 3, '0', 'D');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo razones no completa informacion MA');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_01', '1', 'CAT_RAZON_NO_DATA', NULL, '0', 1, '0', 'Acompañante desconoce informacion');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_02', '2', 'CAT_RAZON_NO_DATA', NULL, '0', 2, '0', 'No se pudo tomar todas las muestras');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_03', '3', 'CAT_RAZON_NO_DATA', NULL, '0', 3, '0', 'Abandono de Muestreo Anual');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_04', '4', 'CAT_RAZON_NO_DATA', NULL, '0', 4, '0', 'No desea dar informacion');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_05', '5', 'CAT_RAZON_NO_DATA', NULL, '0', 5, '0', 'Falta de tiempo por parte del acompañante');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_06', '6', 'CAT_RAZON_NO_DATA', NULL, '0', 6, '0', 'Solo revisaba información');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_07', '7', 'CAT_RAZON_NO_DATA', NULL, '0', 10, '0', 'Otra razón');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_08', '8', 'CAT_RAZON_NO_DATA', NULL, '0', 7, '0', 'Solo se realiza peso y talla');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_09', '9', 'CAT_RAZON_NO_DATA', NULL, '0', 8, '0', 'Peso y talla en otro equipo móvil');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_10', '10', 'CAT_RAZON_NO_DATA', NULL, '0', 9, '0', 'No comprendo las preguntas');
