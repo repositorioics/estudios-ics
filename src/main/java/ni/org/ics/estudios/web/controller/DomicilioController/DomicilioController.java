@@ -6,6 +6,7 @@ import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.muestreoanual.MovilInfo;
+import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
 import ni.org.ics.estudios.dto.DomicilioPdviDto;
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
@@ -16,6 +17,7 @@ import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
+import ni.org.ics.estudios.web.utils.JsonUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,10 +111,9 @@ public class DomicilioController {
     }
     /* ESTE METODO ES PARA RETORNAR UNA LISTA DE LA TABLA PDVI_CAMBIO DE DOMICILIO  */
     @RequestMapping(value = "/Coordenadas", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<DatosCoordenadas> fetchobjCoordenadasToJson(@RequestParam(value = "parametro", required = true)Integer parametro)
+    public @ResponseBody List<CoordenadasParticipanteDto> fetchobjCoordenadasToJson(@RequestParam(value = "parametro", required = true)Integer parametro)
             throws ParseException {
-        List<DatosCoordenadas> coordenadas = null;
-        logger.info("Obteniendo las coordenadas en JSON");
+        List<CoordenadasParticipanteDto> coordenadas = null;
         try{
             coordenadas =  DomicilioService.CoordenadasParticipante(parametro);
             return coordenadas;
@@ -120,8 +121,6 @@ public class DomicilioController {
             return coordenadas = null;
         }
     }
-
-
 
 
 @RequestMapping(value = "/ListPdvi", method = RequestMethod.GET)
@@ -184,7 +183,8 @@ public class DomicilioController {
                                       ,@RequestParam(value = "direccion", required = true) String direccion
                                       ,@RequestParam(value = "razonnogeoref", required = true) String razonnogeoref
                                       ,@RequestParam(value = "recurso1", required = true) Integer recurso1
-                                          ,@RequestParam(value = "observacion", required = false) String observacion
+                                      ,@RequestParam(value = "observacion", required = false) String observacion
+                                      ,@RequestParam(value = "fecha_reportado", required = false) String fecha_reportado
 
     ){
         try{
@@ -217,6 +217,7 @@ public class DomicilioController {
             obj.setRecurso1(Integer.valueOf(recurso1));
             obj.setConpunto("0");
             obj.setObservacion(observacion);
+            obj.setFechaReportado(fecha_reportado);
             MovilInfo movil = new MovilInfo();
             movil.setIdInstancia(Integer.valueOf(148));
             movil.setInstancePath("Server");

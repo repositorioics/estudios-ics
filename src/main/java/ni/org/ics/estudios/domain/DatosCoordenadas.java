@@ -1,13 +1,16 @@
 package ni.org.ics.estudios.domain;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.cohortefamilia.CasaCohorteFamilia;
 import ni.org.ics.estudios.domain.muestreoanual.MovilInfo;
 import org.hibernate.annotations.ForeignKey;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -45,6 +48,7 @@ public class DatosCoordenadas implements Serializable {
     private String telefono; //11
     private Integer recurso1; //12
     private String Observacion;
+    private String fechaReportado;
 
 
 
@@ -260,5 +264,14 @@ public class DatosCoordenadas implements Serializable {
 
     public void setRecurso1(Integer recurso1) {
         this.recurso1 = recurso1;
+    }
+
+    @Column(name = "FECHA_REPORTADO", nullable = true)
+    public String getFechaReportado() {
+        return fechaReportado;
+    }
+
+    public void setFechaReportado(String fechaReportado) {
+        this.fechaReportado = fechaReportado;
     }
 }

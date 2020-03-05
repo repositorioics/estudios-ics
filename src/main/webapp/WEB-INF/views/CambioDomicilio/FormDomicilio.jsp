@@ -8,6 +8,10 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
+    <!-- DATE PICKER -->
+    <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
+    <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
+    <!-- END DATE PICKER -->
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 </head>
@@ -115,7 +119,7 @@
                                        </select>
                                    </div>
 
-                                   <div class="form-group col-sm-6">
+                                   <div class="form-group col-sm-3">
                                        <label for="recurso1">Usuario:</label>
                                        <span class="required text-danger"> * </span>
                                        <select name="recurso1" id="recurso1" class="form-control" required="required">
@@ -125,6 +129,11 @@
                                            </c:forEach>
                                        </select>
                                    </div>
+                               <div class="form-group col-sm-3">
+                                   <label for="fecha_reportado">Fecha:</label>
+                                   <span class="required text-danger"> * </span>
+                                   <input type="text" id="fecha_reportado" name="fecha_reportado" class="form-control" data-date-end-date="+0d"/>
+                               </div>
                                <div class="col-md-12">
                                    <div class="form-group">
                                        <label for="observacion">Observación: </label>
@@ -200,8 +209,20 @@
 <script type="text/javascript" src="${selectJs}"></script>
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
+
+<!-- bootstrap datepicker -->
+<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
+<script src="${datepickerPlugin}"></script>
+
 <script type="text/javascript">
     var f1 = $("#formDom");
+    $("#fecha_reportado").datepicker({
+        format: "dd/mm/yyyy",
+        todayBtn:true,
+        todayHighlight: true,
+        autoclose: true,
+        endDate: '-0d'
+    });
     $(document).ready(function(){
         var parametros = {searchPartUrl: "${searchPartUrl}",
                                    list:"${ListadoUrl}"
@@ -323,7 +344,8 @@
                 },
                 telefono:{number: true},
                 recurso1:{required: true},
-                actual:{required: true}
+                actual:{required: true},
+                fecha_reportado:{required: true}
             },
             errorElement: 'em',
             errorPlacement: function ( error, element ) {

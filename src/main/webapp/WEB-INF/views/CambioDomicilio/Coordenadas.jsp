@@ -103,38 +103,36 @@
                           <table class="table table-striped dt-responsive nowrap" style="width:100%" id="tblCoor">
                               <thead>
                               <tr>
-                                  <th scope="col" class="text-center hide ">Id</th>
-                                  <th scope="col" class="text-center">ParticipanteId</th>
-                                  <th scope="col" class="text-center"> NombreCompleto</th>
-                                  <th scope="col"> Dirección</th>
-                                  <th scope="col" class="text-center"> Manzana</th>
+                                  <th scope="col" class="text-center">Id</th>
+                                  <th scope="col" class="text-center">Participante</th>
+                                  <th scope="col" class="text-center"> Casa</th>
+                                  <th scope="col" class="text-center">Casa Familia</th>
+                                  <th scope="col" class="text-center"> Fecha Cambio</th>
+                                  <th scope="col" class="text-center"> BarrioId</th>
                                   <th scope="col" class="text-center"> Barrio</th>
                                   <th scope="col" class="text-center">Otro Barrio</th>
-                                  <th scope="col" class="text-center">Casa</th>
-                                  <th scope="col" class="text-center">Casa Familia</th>
-                                  <th scope="col" class="text-center">Estudios</th>
-                                  <th scope="col" class="text-center">Actual</th>
-                                  <th scope="col" class="text-center">Registrado</th>
-                                  <th scope="col" class="text-center hide">Acción</th>
+                                  <th scope="col" class="text-center">Manzana</th>
+                                  <th scope="col"> Dirección</th>
+                                  <th scope="col" class="text-center">PersonalId</th>
+                                  <th scope="col" class="text-center">Recurso</th>
                                   <th scope="col" class="text-center">Observación</th>
                               </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                               <tr>
-                                  <th scope="col" class="text-center hide">Id</th>
-                                  <th scope="col" class="text-center">ParticipanteId</th>
-                                  <th scope="col" class="text-center"> NombreCompleto</th>
-                                  <th scope="col"> Dirección</th>
-                                  <th scope="col" class="text-center"> Manzana</th>
+                                  <th scope="col" class="text-center">Id</th>
+                                  <th scope="col" class="text-center">Participante</th>
+                                  <th scope="col" class="text-center"> Casa</th>
+                                  <th scope="col" class="text-center">Casa Familia</th>
+                                  <th scope="col" class="text-center"> Fecha Cambio</th>
+                                  <th scope="col" class="text-center"> BarrioId</th>
                                   <th scope="col" class="text-center"> Barrio</th>
                                   <th scope="col" class="text-center">Otro Barrio</th>
-                                  <th scope="col" class="text-center">Casa</th>
-                                  <th scope="col" class="text-center">Casa Familia</th>
-                                  <th scope="col" class="text-center">Estudios</th>
-                                  <th scope="col" class="text-center">Actual</th>
-                                  <th scope="col" class="text-center">Registrado</th>
-                                  <th scope="col" class="text-center hide">Acción</th>
+                                  <th scope="col" class="text-center">Manzana</th>
+                                  <th scope="col"> Dirección</th>
+                                  <th scope="col" class="text-center">PersonalId</th>
+                                  <th scope="col" class="text-center">Recurso</th>
                                   <th scope="col" class="text-center">Observación</th>
                               </tr>
                               </tfoot>

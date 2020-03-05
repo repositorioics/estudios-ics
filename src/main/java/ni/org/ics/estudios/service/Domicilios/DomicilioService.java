@@ -6,6 +6,7 @@ import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
+import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
 import ni.org.ics.estudios.dto.DomicilioPdviDto;
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
 import org.hibernate.Query;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,18 +77,22 @@ public class DomicilioService {
     }
 
      @SuppressWarnings("unchecked")
-     public List<DatosCoordenadas> CoordenadasParticipante(Integer parametro)throws Exception{
+     public List<CoordenadasParticipanteDto> CoordenadasParticipante(Integer parametro)throws Exception{
          try
          {
              Session session = sessionFactory.getCurrentSession();
-             Query query = session.createQuery("from DatosCoordenadas where participante.codigo =:parametro order by actual desc ");
+             //Query query = session.createQuery("from DatosCoordenadas where participante.codigo =:parametro order by actual desc ");
+             //Query query = session.createSQLQuery("from DatosCoordenadas d left join Personal p  on d.recurso1 = p.idPersona where d.participante.codigo = :parametro");
+             Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, fecha_reportado, " +
+                     "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d.idPersona,per.nombre AS NombrePersona,d.OBSERVACION " +
+                     " FROM datos_coordenadas AS d LEFT JOIN personal AS per ON d.idPersona = per.idPersona " +
+                     "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro DESC");
              query.setParameter("parametro",parametro);
              return query.list();
          }catch (Exception e){
              throw e;
          }
      }
-
     /* Metodo para Guardar el Datos Coordenadas */
     @SuppressWarnings("unchecked")
     public void SaveDomicilio(DatosCoordenadas obj) throws Exception {

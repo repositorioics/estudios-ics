@@ -20,9 +20,12 @@ var SearchCoordenadas = function () {
                         "targets": [0],
                         "visible": false,
                         "searchable": false
-                    },
-                    {
-                        "targets": [12],
+                    },{
+                        "targets": [5],
+                        "visible": false,
+                        "searchable": false
+                    },{
+                        "targets": [10],
                         "visible": false,
                         "searchable": false
                     }
@@ -63,63 +66,41 @@ var SearchCoordenadas = function () {
             function searchCoordenada(){$.getJSON(parametros.ListaCoordenadasUrl, {parametro : $('#parametro').val(), ajax : 'true' }, function(data) {
                     var len = data.length;
                     if(len==0){
-
                         swal("Advertencia!", "Datos no encontrados!", "warning");
                     }
                     else{
-                        for ( var i = 0; i < len; i++) {
-                            var d = new Date(data[i].movilInfo.today);
-                            var datestring =  ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
-                            NameComplete =  data[i].participante.nombre1+' '+ data[i].participante.nombre2+' '+ data[i].participante.apellido1+' '+data[i].participante.apellido1;
-                            var codigo =  data[i].codigo;
-                            ids = codigo;
-                            var text = "";
-                            var valor ="";
-                            switch (data[i].actual){
-                                case "0":
-                                    text = "No";
-                                    break;
-                                case "1":
-                                    text = "Si";
-                                    break;
-                                default:
-                                    text = "-";
-                            }
-                            var oBarrio;
-                            if (data[i].otroBarrio == "" || data[i].otroBarrio == null){
-                                oBarrio ="-"
-                            }else{
-                                oBarrio =  data[i].otroBarrio
-                            }
-                            if(data[i].actual == '0'){
-                                valor = '<a class="btn btn-info disabled" href='+ parametros.UpdateActualUrl + '><i class="fa fa-refresh"></i></a>'
-
-                            }else{
-                                valor = '<a class="btn btn-info" onclick="Modificar()"><i class="fa fa-refresh"></i></a>'
-                            }
-                            var getCode = data[i].codigo; //"<strong class='pd-name'>"+ data[i].codigo +"</strong>";
-                            var obs = (data[i].observacion != null) ? data[i].observacion : "- -"
-
+                        $.each(data, function(index, element){
+                            var codigo0 = element[0];
+                            var codigo1 = element[1];
+                            var codigo2 = element[2];
+                            var codigo3 = element[3];
+                            var codigo4 = element[4];
+                            var codigo5 = element[5];
+                            var codigo6 = element[6];
+                            var codigo7 = element[7];
+                            var codigo8 = element[8];
+                            var codigo9 = element[9];
+                            var codigo10 = element[10];
+                            var codigo11 = element[11];
+                            var codigo12 = element[12];
                             table.row.add([
-                                getCode,
-                                data[i].participante.codigo,
-                                NameComplete,
-                                data[i].direccion,
-                                (data[i].manzana != null) ? data[i].manzana : "-",
-                                data[i].barrio.nombre,
-                                oBarrio,
-                                data[i].codigoCasa,
-                                (data[i].casacohortefamilia != null) ? data[i].casacohortefamilia : "-",
-                                data[i].estudios,
-                                text,
-                                datestring,
-                                valor,
-                            obs])
-                                .draw( false );
-                        }
+                                codigo0,
+                                codigo1,
+                                codigo2,
+                                codigo3,
+                                codigo4,
+                                codigo5,
+                                codigo6,
+                                codigo7,
+                                codigo8,
+                                codigo9,
+                                codigo10,
+                                codigo11,
+                                codigo12
+                            ]).draw( false );
+                        })
                     }
-                })
-                    .fail(function() {
+                }).fail(function() {
                         swal("Error!", "Falló al obtener la información!", "error");
                     });
             }
