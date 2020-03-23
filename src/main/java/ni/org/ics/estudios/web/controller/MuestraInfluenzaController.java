@@ -1,16 +1,11 @@
 package ni.org.ics.estudios.web.controller;
 
 import com.google.gson.Gson;
-import ni.org.ics.estudios.domain.MuestraInfluenza;
-import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
-import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
-import ni.org.ics.estudios.service.MuestraInfluenzaService;
 import ni.org.ics.estudios.service.cohortefamilia.ParticipanteCohorteFamiliaService;
 import ni.org.ics.estudios.service.cohortefamilia.casos.ParticipanteCohorteFamiliaCasoService;
-import ni.org.ics.estudios.web.utils.DateUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +31,6 @@ import java.util.*;
 @RequestMapping("/lab/muestras/*")
 public class MuestraInfluenzaController {
     private static final Logger logger = LoggerFactory.getLogger(MuestraInfluenzaController.class);
-
-    @Resource(name = "muestraInfluenzaService")
-    private MuestraInfluenzaService muestraInfluenzaService;
 
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
@@ -67,7 +59,7 @@ public class MuestraInfluenzaController {
                                           @RequestParam(value="registrado", required=false ) String registrado,
                                           @RequestParam(value="tipoEtiquetas", required=false ) String tipoEtiquetas) throws Exception {
         logger.debug("buscar participanteChf para monitoreo intensivo"+tipoEtiquetas);
-        List<MuestraInfluenza> muestras = new ArrayList<MuestraInfluenza>();
+        /*List<MuestraInfluenza> muestras = new ArrayList<MuestraInfluenza>();
         Map<Integer, Object> map = new HashMap<Integer, Object>();
         if (registrado!=null) {
             muestras = muestraInfluenzaService.getMuestrasInfluenza(codigoParticipante, codigoMx, DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy"), DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss"), codigoCasa);
@@ -161,7 +153,7 @@ public class MuestraInfluenzaController {
         }
         if (map.size()>0)
             return createJsonResponse(map);
-        else
+        else*/
             return createJsonResponse("No se encontraron resultados");
     }
 

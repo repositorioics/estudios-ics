@@ -146,7 +146,6 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="cancel" /></button>
                             <button type="button" id="btnOkAct" class="btn btn-info" onclick="ejecutarAccion()"><spring:message code="ok" /></button>
-                            <button type="button" id="btnOkPrint" class="btn btn-info" onclick="printSelected()"><spring:message code="ok" /></button>
                             <button type="button" id="btnOkClose" class="btn btn-info"><spring:message code="ok" /></button>
                         </div>
                     </div>
@@ -262,7 +261,6 @@
             $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
             $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("-")+1))+'?</h3>');
             $('#btnOkAct').show();
-            $('#btnOkPrint').hide();
             $('#dvSalida').hide();
             $('#btnOkClose').hide();
             $('#basic').modal('show');
@@ -273,52 +271,9 @@
             $('#titulo').html('<h2 class="modal-title">'+"${cerrarCaso}"+'</h2>');
             $('#cuerpo').html('');
             $('#btnOkAct').hide();
-            $('#btnOkPrint').hide();
             $('#dvSalida').show();
             $('#btnOkClose').show();
             $('#basic').modal('show');
-        });
-
-        var form1 = $('#print-form');
-        form1.validate({
-            errorElement: 'span', //default input error message container
-            focusInvalid: false, // do not focus the last invalid input
-            rules: {
-                visita: {
-                    required: true
-                },
-                etiquetas: {
-                    required: true
-                }
-            },
-            ignore: ':hidden:not("#etiquetas")',
-            errorPlacement: function ( error, element ) {
-                // Add the `help-block` class to the error element
-                error.addClass( 'form-control-feedback col-md-4' );
-                if ( element.prop( 'type' ) === 'checkbox' ) {
-                    error.insertAfter( element.parent( 'label' ) );
-                } else {
-                    error.insertAfter( element ); //cuando no es input-group
-                    //error.insertAfter(element.parent('.input-group'));
-                }
-            },
-            highlight: function ( element, errorClass, validClass ) {
-                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
-                $( element ).parents( '.input-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
-                $( element ).parents( '.input-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
-            },
-            submitHandler: function (form) {
-                $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
-                $('#cuerpo').html('<h3>'+'Imprimir seleccionados?</h3>');
-                $('#btnOkAct').hide();
-                $('#btnOkPrint').show();
-                $('#dvSalida').hide();
-                $('#btnOkClose').hide();
-                $('#basic').modal('show');
-            }
         });
 
         var form2 = $('#close-form');
@@ -384,89 +339,6 @@
 
     function ejecutarAccion() {
         window.location.href = $('#accionUrl').val();
-    }
-
-    function printSelected() {
-        var oTT = TableTools.fnGetInstance('lista_casos');
-        var aSelectedTrs = oTT.fnGetSelected();
-        var len = aSelectedTrs.length;
-        if (len > 0) {
-            var casas = [];
-            for (var i = 0; i < len; i++) {
-                var codigoCasa = aSelectedTrs[i].cells[0].innerHTML;
-                var fechaSalida = aSelectedTrs[i].cells[4].innerHTML;
-                if (fechaSalida.length>0){
-                    $('#basic').modal('toggle');
-                    toastr.warning("${casoInactivo}");
-                }
-                else {
-                    if (i + 1 < len) {
-                        casas += codigoCasa + ",";
-                    } else {
-                        casas += codigoCasa;
-                    }
-                }
-            }
-            //codesLab = reemplazar(codesLab, ".", "*");
-            //console.log(casas);
-            if(casas.length>0) {
-                getCodesLab(casas);
-            }
-
-        } else {
-            $('#basic').modal('toggle');
-            toastr.warning("${seleccionarCaso}");
-        }
-    }
-
-    function getCodesLab(casas)
-    {
-        var strValores = '';
-        var valores = $('#etiquetas').val();
-        for (var i = 0; i < valores.length; i++) {
-            if (i == 0)
-                strValores = valores[i];
-            else
-                strValores = strValores + ',' + valores[i];
-        }
-        $.getJSON( "${getCodesUrl}"
-                , {casas : casas,
-                    etiquetas : strValores}
-                , function( data )
-                {
-                    var total = data.TOTAL;
-                    var codigosLab="";
-                    for(var indice =0;indice<total;indice++){
-                        if (indice < total-1) {
-                            codigosLab += data["CODIGO"+indice] + ",";
-                        } else {
-                            codigosLab += data["CODIGO"+indice];
-                        }
-                    }
-                    //console.log(codigosLab);
-                    imprimir(codigosLab);
-                }
-        ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                    toastr.error( "error:" + errorThrown,{timeOut: 0});
-                });
-    }
-
-    function imprimir(strBarCodes){
-        $.getJSON("http://localhost:13001/print", {
-            barcodes: strBarCodes,
-            copias: 1,
-            ajax:'false'
-        }, function (data) {
-            console.log(data);
-            $('#basic').modal('toggle');
-            toastr.success("etiquetas impresas");
-        }).fail(function (jqXHR) {
-            console.log(jqXHR);
-            $('#basic').modal('toggle');
-            if (jqXHR.status!=200 && jqXHR.status!=0) {
-                toastr.error("error al imprimir etiquetas","Error",{timeOut: 0});
-            }
-        });
     }
 
 </script>

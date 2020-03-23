@@ -33,7 +33,6 @@
         <c:set var="seleccioneMuestra"><spring:message code="select.sample" /></c:set>
         <spring:url value="/lab/muestras/searchSamples" var="searchUrl"/>
         <spring:url value="/lab/muestras/searchLabel" var="searchLabelUrl"/>
-        <spring:url value="/super/particaso/getParticipantsCasos" var="getCodesUrl"/>
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">

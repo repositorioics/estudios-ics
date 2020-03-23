@@ -36,7 +36,6 @@
         <c:set var="seleccionarCaso"><spring:message code="select.case" /></c:set>
         <c:set var="casoInactivo"><spring:message code="inactive.case" /></c:set>
 
-        <spring:url value="/super/particaso/getParticipantsCasos" var="getCodesUrl"/>
         <spring:url value="/super/casacaso/closeCase" var="closeUrl"/>
         <div class="container-fluid">
             <div class="card">

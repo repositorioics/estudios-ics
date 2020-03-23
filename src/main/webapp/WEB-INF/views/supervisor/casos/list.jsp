@@ -114,25 +114,9 @@
                     <br>
                     <br>
                     <br>
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="col-md-12">
                             <form action="#" autocomplete="off" id="print-form" class="form-horizontal">
-                                <!--<div class="form-group row">
-                                    <label class="form-control-label col-md-4" for="visita"><spring:message code="visit" />
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="input-group col-md-6">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar-check-o"></i>
-                                    </span>
-                                        <select class="form-control select2-single" id="visita" name="visita">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${visitas}" var="visita">
-                                                <option value="${visita.messageKey}">${visita.spanish}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                </div>-->
                                 <div class="form-group row">
                                     <label class="form-control-label col-md-4" for="etiquetas"><spring:message code="label.types" />
                                         <span class="required">*</span>
@@ -161,7 +145,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="modal fade" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-aria-hidden="true">

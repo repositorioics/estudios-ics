@@ -136,6 +136,7 @@ public class EncuestaCasaMA {
 	private String cambiadoCasa;
 	private String remodelacionCasa;
 	private String tieneVehiculo;
+	private Integer participante;
     @Id
     @Column(name = "codigo", length = 50, nullable = false)
     public String getCodigo() {
@@ -1135,5 +1136,14 @@ public class EncuestaCasaMA {
 
 	public void setTieneVehiculo(String tieneVehiculo) {
 		this.tieneVehiculo = tieneVehiculo;
+	}
+
+	@Column(name = "part_seleccionado")
+	public Integer getParticipante() {
+		return participante;
+	}
+
+	public void setParticipante(Integer participante) {
+		this.participante = participante;
 	}
 }
