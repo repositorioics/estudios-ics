@@ -45,6 +45,8 @@ public class MuestraMA {
     //MA2019
     private String hd_sn;
     private String hdPorqueNo;
+    //MA2020
+	private Integer tuboPax;
 
 	@Column(name = "fiebre", nullable = true, length = 1)
 	public Integer getFiebreM() {
@@ -272,4 +274,13 @@ public class MuestraMA {
     public void setHdPorqueNo(String hdPorqueNo) {
         this.hdPorqueNo = hdPorqueNo;
     }
+
+	@Column(name = "tubopax")
+	public Integer getTuboPax() {
+		return tuboPax;
+	}
+
+	public void setTuboPax(Integer tuboPax) {
+		this.tuboPax = tuboPax;
+	}
 }
