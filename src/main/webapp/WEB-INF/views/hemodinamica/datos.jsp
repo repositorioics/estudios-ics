@@ -587,14 +587,14 @@
             $("#diasenf").val(restaFechas(f1,f2));
         })
         restaFechas = function(f1,f2){
-            var fechaConsulta = new Date(f1);
+            /*var fechaConsulta = new Date(f1);
             var fechaInicioEnf = new Date(f2);
             if(Date.parse(fechaConsulta) < Date.parse(fechaInicioEnf)){
                 swal("Error", "Inicio Enfermedad no debe ser Mayor que Consulta","error");
                 $("#fie").val("");
                 $("#diasenf").val("");
                 return;
-            }
+            }*/
             var aFecha1 = f1.split("/");
             var aFecha2 = f2.split("/");
             var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
