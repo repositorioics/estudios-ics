@@ -6,4 +6,5 @@ package ni.org.ics.estudios.web.utils.pdf;
 public class Constants {
     public static final String TPR_DATOSGENERALES = "DATOSGENERALES";
     public static final String TPR_HEMOREPORTE = "HEMOREPORTE";
+    public static final String TPR_REPORTECARTA ="REPORTECARTA";
 }
