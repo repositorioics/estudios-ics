@@ -3,12 +3,17 @@ package ni.org.ics.estudios.web.controller;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
+import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.domain.scancarta.DetalleParte;
+import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
+import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
+import ni.org.ics.estudios.service.scancarta.ScanCartaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.pdf.Constants;
 import ni.org.ics.estudios.web.utils.pdf.DatosGeneralesParticipante;
@@ -44,9 +49,16 @@ public class ReportesController {
     @Resource(name = "estudioService")
     private EstudioService estudioService;
 
+    @Resource(name = "participanteProcesosService")
+    private ParticipanteProcesosService participanteProcesosService;
+
     /* Instancia de mi Servicio Hemodinamico */
     @Resource(name = "datoshemodinamicaService")
     private DatoshemodinamicaService datoshemodinamicaService;
+
+    /* Instancia de mi Servicio ScanCarta */
+    @Resource(name = "scanCartaService")
+    private ScanCartaService scanCartaService;
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -125,5 +137,26 @@ public class ReportesController {
         return pdfHemodinamic;
     }
 
+    /* Este controlador devuelve archivo ScanCarta */
+    @RequestMapping(value = "/ReporteCarta", method = RequestMethod.GET)
+    public ModelAndView ReporteCarta(@RequestParam(value = "idparticipantecarta", required = true)Integer idparticipantecarta)
+        throws  Exception{
+        ModelAndView ReporteCarta = new ModelAndView("pdfView");
+        ParticipanteCarta obj = scanCartaService.getCartasParticipante(idparticipantecarta);
+        ReporteCarta.addObject("obj",obj);
+        if (obj != null){
+            ParticipanteProcesos procesos = participanteProcesosService.getParticipante(obj.getParticipante().getCodigo());
+            ReporteCarta.addObject("procesos",procesos);
+        }
+        List<DetalleParte> dp = scanCartaService.getDetalleParteList(idparticipantecarta);
+        ReporteCarta.addObject("dp",dp);
+        List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+        relFam.addAll(messageResourceService.getCatalogo("PROYECTO"));
+        relFam.addAll(messageResourceService.getCatalogo("SCANCARTA"));
+        relFam.addAll(messageResourceService.getCatalogo("TIPOASENTIMIENTO"));
+        ReporteCarta.addObject("relFam",relFam);
+        ReporteCarta.addObject("TipoReporte", Constants.TPR_REPORTECARTA);
+         return ReporteCarta;
+    }
 
 }
