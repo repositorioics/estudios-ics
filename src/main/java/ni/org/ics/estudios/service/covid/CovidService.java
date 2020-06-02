@@ -20,6 +20,8 @@ public class CovidService {
     private SessionFactory sessionFactory;
 
 
+
+
     public ParticipanteCohorteFamilia getParticipanteCHFByCodigo(Integer codigo){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from ParticipanteCohorteFamilia where participante.codigo = :codigo");
