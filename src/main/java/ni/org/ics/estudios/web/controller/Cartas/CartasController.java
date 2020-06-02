@@ -31,6 +31,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ni.org.ics.estudios.domain.Participante;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -90,7 +91,7 @@ public class CartasController {
     public ModelAndView Crear(ModelMap model)  throws Exception  {
         ModelAndView modeliew = new ModelAndView();
         try{
-            List<Carta> carta = scanCartaService.getScanCartas();
+            List<Cartas> carta = scanCartaService.getScanCartas();
             model.addAttribute("carta",carta);
             List<Version> version = scanCartaService.getVersioCarta(1);
             model.addAttribute("version", version);
@@ -396,6 +397,31 @@ public class CartasController {
     }
 
 
+    @RequestMapping(value = "/HabYDesCarta/{accion}/{idcarta}", method= RequestMethod.GET)
+    public String HabYDesParte(@PathVariable("idcarta") String idcarta,
+                               @PathVariable("accion") String accion, RedirectAttributes redirectAttributes) throws Exception{
+        String redirecTo = "404";
+        try{
+            Integer id = Integer.parseInt(idcarta);
+            if (accion.matches("bloq")){
+                redirecTo = "redirect:/CatalogoCarta/CrearNuevaCarta";
+                scanCartaService.DesHabilitarCarta(id);
+                redirectAttributes.addAttribute("usuarioDeshabilitado", true);
+                redirectAttributes.addFlashAttribute("nombreUsuario", idcarta);
+            }
+            else if (accion.matches("Unbloq")){
+                redirecTo = "redirect:/CatalogoCarta/CrearNuevaCarta";
+                scanCartaService.HabilitaCarta(id);
+                redirectAttributes.addAttribute("usuarioHabilitado", true);
+                redirectAttributes.addFlashAttribute("nombreUsuario", idcarta);
+            }else {
+                redirecTo = "redirect:/CatalogoCarta/CrearNuevaCarta";
+            }
+        }catch (Exception ex){
+            return redirecTo;
+        }
+        return redirecTo;
+    }
 
     /*  Esta Funcion retorna un Json  */
     private ResponseEntity<String> createJsonResponse( Object o )
