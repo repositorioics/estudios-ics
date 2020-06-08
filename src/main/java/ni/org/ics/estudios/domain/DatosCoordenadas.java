@@ -1,6 +1,6 @@
 package ni.org.ics.estudios.domain;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
+//import jdk.nashorn.internal.ir.annotations.Ignore;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.cohortefamilia.CasaCohorteFamilia;

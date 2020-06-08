@@ -35,6 +35,11 @@
                 <a href="<spring:url value="/covid/SaveForm/" htmlEscape="true "/>"><spring:message code="Formulario Positivo" /></a>
             </li>
         </ol>
+        <spring:url value="/covid/saveCaseCovid" var="saveUrl"/>
+        <spring:url value="/covid/searchParticipant" var="searchUrl"/>
+        <spring:url value="/covid/listCovid/" var="listaUrl"/>
+        <c:set var="successMessage"><spring:message code="process.success" /></c:set>
+        <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
         <div class="container-fluid">
             <div class="card bg-dark">
                 <div class="card-header">
@@ -44,7 +49,6 @@
                 </div>
                 <div class="card-body">
                     <div class="container">
-                        <spring:url value="/covid/listCovid/" var="listaUrl"/>
                         <div class="row">
                             <div class="col-md-12">
                                 <br/>
@@ -73,7 +77,16 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="page-title">
-                       hola
+                        <small>
+                            <c:choose>
+                                <c:when test="${agregando}">
+                                    <spring:message code="add" />
+                                </c:when>
+                                <c:otherwise>
+                                    <spring:message code="edit" />
+                                </c:otherwise>
+                            </c:choose>
+                        </small>
                     </h3>
                 </div>
                 <div class="card-block">
@@ -82,7 +95,7 @@
                         </div>
                         <div class="col-md-8">
                             <form action="#" autocomplete="off" id="version-form" class="form-horizontal">
-                                <input id="codigo" name="codigo" type="text"  class="form-control"/>
+                                <input id="codigo" name="codigo" hidden="hidden" type="text" value="${caso.codigoCaso.codigoCaso}" class="form-control"/>
                                 <div class="form-group row">
                                     <label class="form-control-label col-md-3" for="codigoCasa"><spring:message code="house" />
                                         <span class="required">*</span>
@@ -104,9 +117,10 @@
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i>
                                             </span>
                                         <input name="fechaInicio" id="fechaInicio" class="form-control date-picker" type="text" data-date-end-date="+0d"
-                                               value="" />
+                                               value="<fmt:formatDate value="${caso.fechaIngreso}" pattern="dd/MM/yyyy" />" required="required" />
                                     </div>
                                 </div>
+
                                 <div class="form-group row">
                                     <label class="form-control-label col-md-3" for="codigoParticipante"><spring:message code="positive" />
                                         <span class="required">*</span>
@@ -119,7 +133,26 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="form-control-label col-md-3" for="fif"><spring:message code="fif" />
+                                    <label class="col-md-3 form-control-label" for="partContacto"><spring:message code="lbl.positive.by"/><span class="required">*</span></label>
+                                    <div class="col-md-9">
+                                        <select name="positivoPor" id="positivoPor" class="form-control" required="required">
+                                            <option selected value=""><spring:message code="select" />...</option>
+                                            <c:forEach items="${positivoPor}" var="cat">
+                                                <c:choose>
+                                                    <c:when test="${caso.positivoPor eq cat.catKey}">
+                                                        <option selected value="${cat.catKey}">${cat.spanish}</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${cat.catKey}">${cat.spanish}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="FIS"><spring:message code="FIS" />
 										<span class="required">
 											 *
 										</span>
@@ -127,8 +160,16 @@
                                     <div class="input-group col-md-9">
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i>
                                             </span>
-                                        <input name="fif" id="fif" class="form-control date-picker" type="text" data-date-end-date="+0d"
-                                               value="" />
+                                        <input name="fis" id="fis" class="form-control date-picker" type="text" data-date-end-date="+0d" required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="fif"><spring:message code="fif" /> </label>
+                                    <div class="input-group col-md-9">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                            </span>
+                                        <input name="fif" id="fif" class="form-control date-picker" type="text" data-date-end-date="+0d" />
                                     </div>
                                 </div>
 
@@ -151,5 +192,53 @@
         </div>
     </div>
 </div>
+<jsp:include page="../fragments/bodyFooter.jsp" />
+<jsp:include page="../fragments/corePlugins.jsp" />
+<c:choose>
+    <c:when test="${cookie.eIcsLang.value == null}">
+        <c:set var="lenguaje" value="es"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
+    </c:otherwise>
+</c:choose>
+<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
+<script src="${validateJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />
+<script src="${loadingButtonsJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script src="${jQValidationLoc}"></script>
+<spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
+<script src="${validateAMJs}" type="text/javascript"></script>
+
+<!-- bootstrap datepicker -->
+<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
+<script src="${datepickerPlugin}"></script>
+<spring:url value="/resources/js/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{languagedt}.js" var="datePickerLoc">
+    <spring:param name="languagedt" value="${lenguaje}" /></spring:url>
+<script src="${datePickerLoc}"></script>
+<!-- GenesisUI main scripts -->
+<spring:url value="/resources/js/app.js" var="App" />
+<script src="${App}" type="text/javascript"></script>
+<spring:url value="/resources/js/views/handleDatePickers.js" var="handleDatePickers" />
+<script src="${handleDatePickers}"></script>
+<spring:url value="/resources/js/views/covid19/processCovid.js" var="processCovidJs" />
+<script src="${processCovidJs}"></script>
+
+<script>
+    jQuery(document).ready(function(){
+        var parameters = {
+            searchUrl : "${searchUrl}",
+            saveUrl: "${saveUrl}",
+            listaUrl: "${listaUrl}",
+            successmessage: "${successMessage}",
+            error: "${errorProcess}"
+        };
+        handleDatePickers("${lenguaje}");
+        processCasosCovid.init(parameters);
+    })
+</script>
 </body>
 </html>

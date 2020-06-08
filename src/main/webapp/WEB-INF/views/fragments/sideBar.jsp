@@ -41,6 +41,9 @@
                     <li class="nav-item posUO1">
                         <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
                     </li>
+                    <li class="nav-item posCovid19">
+                        <a class="nav-link" href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="Transmisión Covid-19" /></a>
+                    </li>
                 </ul>
             </li>
 
