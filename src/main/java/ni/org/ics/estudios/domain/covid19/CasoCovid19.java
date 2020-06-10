@@ -37,7 +37,7 @@ public class CasoCovid19 extends BaseMetaData implements Auditable {
 		this.codigoCaso = codigoCaso;
 	}
 
-	@ManyToOne(optional = true)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "CODIGO_CASA_CHF", nullable = true, referencedColumnName = "CODIGO_CHF")
     @ForeignKey(name = "FK_CASO_CASA_COVID")
 	public CasaCohorteFamilia getCasa() {

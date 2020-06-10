@@ -30,13 +30,18 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
-                    <i class="fa fa-angle-right"></i> <a href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><spring:message code="intensiveMonitoring" /></a>
+                    <i class="fa fa-angle-right"></i> <a href="<spring:url value="/covid/list/" htmlEscape="true "/>"><spring:message code="Transmición Covid-19" /></a>
                 </li>
             </ol>
+            <spring:url value="/covid/closeCase" var="closeUrl"/>
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-list-alt"></i> <spring:message code="Monitoreo Covid-19" />
+                        <c:set var="successLabel"><spring:message code="process.success" /></c:set>
+                        <c:set var="cerrarCaso"><spring:message code="close.case" /></c:set>
+                        <c:set var="confirmar"><spring:message code="confirm" /></c:set>
+                        <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
                     </div>
                     <div class="card-body">
                         <div class="container">
@@ -47,12 +52,12 @@
                                         <i class="fa fa-plus" aria-hidden="true"></i> Agregar Positivo</a>
                                 </div>
 
-                                <div class="col-md-12" style="border: 2px solid red">
+                                <div class="col-md-12">
                                     <br/>
                                     <br/>
                                     <hr/>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-bordered">
+                                        <table id="lista_casos" class="table table-hover table-bordered">
                                             <thead>
                                             <tr>
                                                 <th width="12%"><spring:message code="house" /></th>
@@ -64,30 +69,243 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>2</td>
-                                                <td>3</td>
-                                                <td>4</td>
-                                                <td>5</td>
-                                                <td>6</td>
-                                            </tr>
+                                            <c:forEach items="${casosCovid}" var="l">
+                                                <spring:url value="/covid/actions/disable/{codigo}"
+                                                            var="disableUrl">
+                                                    <spring:param name="codigo" value="${l.codigoCasoParticipante}-${l.participante.participante.codigo}" />
+                                                </spring:url>
+
+                                                <spring:url value="/covid/editCase/{codigo}"
+                                                            var="editUrl">
+                                                    <spring:param name="codigo" value="${l.codigoCasoParticipante}" />
+                                                </spring:url>
+                                                <spring:url value="/covid/participants/{codigo}"
+                                                            var="participantsUrl">
+                                                    <spring:param name="codigo" value="${l.codigoCaso.codigoCaso}" />
+                                                </spring:url>
+                                                <tr>
+                                                    <td>asdf</td>
+                                                    <td><fmt:formatDate value="${l.codigoCaso.fechaInicio}" pattern="dd/MM/yyyy" /></td>
+                                                    <td><c:out value="${l.participante.participante.codigo}" /></td>
+                                                    <td><fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /></td>
+                                                    <td><fmt:formatDate value="${l.codigoCaso.fechaInactiva}" pattern="dd/MM/yyyy" /></td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${l.codigoCaso.inactiva=='1'}">
+                                                                <button title="<spring:message code="edit" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-edit"></i></button>
+                                                                <a title="<spring:message code="participants" />" href="${fn:escapeXml(participantsUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-users"></i></a>
+                                                                <button title="<spring:message code="close.case" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-sign-out"></i></button>
+                                                                <button title="<spring:message code="disable" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-trash-o"></i></button>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                                                <a title="<spring:message code="participants" />" href="${fn:escapeXml(participantsUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-users"></i></a>
+                                                                <a title="<spring:message code="close.case" />" data-toggle="modal" data-id="${l.codigoCaso.codigoCaso}" class="btn btn-outline-primary btn-sm salida"><i class="fa fa-sign-out"></i></a>
+                                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-primary btn-sm desact"><i class="fa fa-trash-o"></i></a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+
                                             </tbody>
                                         </table>
 
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         </div>
                     </div>
                 </div>
              </div>
+
+            <div class="modal fade" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" data-aria-hidden="true"></button>
+                            <div id="titulo"></div>
+                        </div>
+                        <div class="modal-body">
+                            <input type=hidden id="accionUrl"/>
+                            <div id="cuerpo"></div>
+                            <form action="#" autocomplete="off" id="close-form" class="form-horizontal">
+                                <div id="dvSalida" class="form-group row">
+                                    <label class="form-control-label col-md-3" for="fechaSalida"><spring:message code="logoutdate" />
+                                            <span class="required">
+                                                 *
+                                            </span>
+                                    </label>
+                                    <div class="input-group col-md-9">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                                </span>
+                                        <input name="fechaSalida" id="fechaSalida" class="form-control date-picker" type="text" data-date-end-date="+0d" value="" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="cancel" /></button>
+                            <button type="button" id="btnOkAct" class="btn btn-info" onclick="ejecutarAccion()"><spring:message code="ok" /></button>
+                            <button type="button" id="btnOkClose" class="btn btn-info"><spring:message code="ok" /></button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
         </div>
 </div>
 
+<jsp:include page="../fragments/bodyFooter.jsp" />
+<jsp:include page="../fragments/corePlugins.jsp" />
+<c:choose>
+    <c:when test="${cookie.eIcsLang.value == null}">
+        <c:set var="lenguaje" value="es"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
+    </c:otherwise>
+</c:choose>
+<!-- GenesisUI main scripts -->
+<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
+<script src="${dataTableJs}" type="text/javascript"></script>
+
+<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
+<script type="text/javascript" src="${dataTablesBS}"></script>
+
+<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
+<script type="text/javascript" src="${dataTablesTT}"></script>
+
+<spring:url value="/resources/js/libs/data-tables/TableTools/swf/copy_csv_xls_pdf.swf" var="dataTablesTTSWF" />
+
+<spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
+<script type="text/javascript" src="${selectJs}"></script>
+<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
+<script src="${validateJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script src="${jQValidationLoc}"></script>
+<!-- bootstrap datepicker -->
+<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
+<script src="${datepickerPlugin}"></script>
+<spring:url value="/resources/js/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{languagedt}.js" var="datePickerLoc">
+    <spring:param name="languagedt" value="${lenguaje}" /></spring:url>
+<script src="${datePickerLoc}"></script>
+
+<spring:url value="/resources/js/views/handleDatePickers.js" var="handleDatePickers" />
+<script src="${handleDatePickers}"></script>
+<spring:url value="/resources/js/app.js" var="App" />
+<script src="${App}" type="text/javascript"></script>
+<c:choose>
+    <c:when test="${cookie.eIcsLang.value == null}">
+        <c:set var="lenguaje" value="es"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
+    </c:otherwise>
+</c:choose>
+
+<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script>
+    jQuery(document).ready(function() {
+        $('#lista_casos').DataTable();
+        $("#fechaSalida").datepicker({
+            format: "dd/mm/yyyy",
+            todayBtn:true,
+            todayHighlight: true,
+            autoclose: true,
+            endDate: '-0d'
+        });
+        var form2 = $('#close-form');
+        form2.validate({
+            errorElement: 'span', //default input error message container
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                fechaSalida: {
+                    required: true
+                }
+            },
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( 'form-control-feedback col-md-8' );
+                if ( element.prop( 'type' ) === 'checkbox' ) {
+                    error.insertAfter( element.parent( 'label' ) );
+                } else {
+                    //error.insertAfter( element ); //cuando no es input-group
+                    error.insertAfter(element.parent('.input-group'));
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+            }
+        });
+        $("#btnOkClose").click(function(){
+            if (form2.valid()){
+                processCase();
+            }
+        });
+        function processCase(){
+            $.post( "${closeUrl}"
+                    , {codigo: $('#accionUrl').val(), fechaDesactivacion: $('#fechaSalida').val()}
+                    , function( data )
+                    {
+                        var registro = JSON.parse(data);
+                        console.log(registro);
+                        if (registro.codigoCaso === undefined) {
+                            toastr.error(data,"Error",{timeOut: 0});
+                        }
+                        else {
+                            toastr.success("${successLabel}");
+                            window.setTimeout(function () {
+                                window.location.reload();
+                            }, 1500);
+                        }
+                    }
+                    , 'text' )
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                        toastr.error( "error:" + errorThrown,{timeOut: 0});
+                    });
+
+
+        }
+
+    });
+
+
+    $(".desact").click(function(){
+        $('#accionUrl').val($(this).data('id').substr(0,$(this).data('id').lastIndexOf("-")));
+        $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
+        $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("-")+1))+'?</h3>');
+        $('#btnOkAct').show();
+        $('#dvSalida').hide();
+        $('#btnOkClose').hide();
+        $('#basic').modal('show');
+    });
+
+
+    $(".salida").click(function(){
+            $('#accionUrl').val($(this).data('id'));
+        $('#titulo').html('<h2 class="modal-title">'+"${cerrarCaso}"+'</h2>');
+            $('#cuerpo').html('');
+            $('#btnOkAct').hide();
+            $('#btnOkPrint').hide();
+            $('#dvSalida').show();
+            $('#btnOkClose').show();
+            $('#basic').modal('show');
+    });
+
+    function ejecutarAccion() {
+        window.location.href = $('#accionUrl').val();
+    }
+</script>
 </body>
 </html>
