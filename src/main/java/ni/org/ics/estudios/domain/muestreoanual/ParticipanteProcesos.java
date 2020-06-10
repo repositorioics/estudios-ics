@@ -74,6 +74,9 @@ public class ParticipanteProcesos implements Auditable {
 	private String mostrarNumParto;
 	private String antecedenteTutorCP;
     private MovilInfo movilInfo;
+    //Covid19
+    private String consCovid19;
+    private String subEstudios;
 
 	@Id
 	@Column(name = "codigo", nullable = false, length = 6)
@@ -509,7 +512,25 @@ public class ParticipanteProcesos implements Auditable {
 		this.antecedenteTutorCP = antecedenteTutorCP;
 	}
 
-	public MovilInfo getMovilInfo() {
+    @Column(name = "cons_covid19", nullable = true, length = 2)
+    public String getConsCovid19() {
+        return consCovid19;
+    }
+
+    public void setConsCovid19(String consCovid19) {
+        this.consCovid19 = consCovid19;
+    }
+
+    @Column(name = "subestudios", nullable = true, length = 10)
+    public String getSubEstudios() {
+        return subEstudios;
+    }
+
+    public void setSubEstudios(String subEstudios) {
+        this.subEstudios = subEstudios;
+    }
+
+    public MovilInfo getMovilInfo() {
         return movilInfo;
     }
 

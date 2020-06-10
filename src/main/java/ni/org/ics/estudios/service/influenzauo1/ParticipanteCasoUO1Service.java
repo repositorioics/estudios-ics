@@ -48,4 +48,5 @@ public class ParticipanteCasoUO1Service {
         return (ParticipanteCasoUO1)query.uniqueResult();
     }
 
+
 }

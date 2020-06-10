@@ -13,8 +13,8 @@ import java.util.Date;
  * V1.0
  */
 @Entity
-@Table(name = "covid_casas_casos", catalog = "estudios_ics", uniqueConstraints={@UniqueConstraint(columnNames = {"CODIGO_CASA_CHF","FECHA_INICIO"})})
-public class CasaCasoCovid19 extends BaseMetaData implements Auditable {
+@Table(name = "covid_casos", catalog = "estudios_ics")
+public class CasoCovid19 extends BaseMetaData implements Auditable {
 
     /**
 	 * 
@@ -22,13 +22,13 @@ public class CasaCasoCovid19 extends BaseMetaData implements Auditable {
 	private static final long serialVersionUID = 1L;
 	private String codigoCaso;
 	private CasaCohorteFamilia casa;
-	private Date fechaInicio;
-	private String inactiva;
-	private Date fechaInactiva;
+	private Date fechaIngreso;
+	private String inactivo;
+	private Date fechaInactivo;
 	
     
 	@Id
-    @Column(name = "CODIGO_CASO", length = 50, nullable = false)
+    @Column(name = "CODIGO_CASO", length = 36, nullable = false)
     public String getCodigoCaso() {
 		return codigoCaso;
 	}
@@ -37,8 +37,8 @@ public class CasaCasoCovid19 extends BaseMetaData implements Auditable {
 		this.codigoCaso = codigoCaso;
 	}
 
-	@ManyToOne
-    @JoinColumn(name = "CODIGO_CASA_CHF", nullable = false)
+	@ManyToOne(optional = true)
+    @JoinColumn(name = "CODIGO_CASA_CHF", nullable = true, referencedColumnName = "CODIGO_CHF")
     @ForeignKey(name = "FK_CASO_CASA_COVID")
 	public CasaCohorteFamilia getCasa() {
 		return casa;
@@ -49,43 +49,43 @@ public class CasaCasoCovid19 extends BaseMetaData implements Auditable {
 	}
 
 
-	@Column(name = "FECHA_INICIO", nullable = false)
-	public Date getFechaInicio() {
-		return fechaInicio;
+	@Column(name = "FECHA_INGRESO", nullable = false)
+	public Date getFechaIngreso() {
+		return fechaIngreso;
 	}
 
-	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
+	public void setFechaIngreso(Date fechaInicio) {
+		this.fechaIngreso = fechaInicio;
 	}
 	
-	@Column(name = "INACTIVA", length = 2, nullable = false)
-	public String getInactiva() {
-		return inactiva;
+	@Column(name = "INACTIVO", length = 2, nullable = false)
+	public String getInactivo() {
+		return inactivo;
 	}
 
-	public void setInactiva(String inactiva) {
-		this.inactiva = inactiva;
+	public void setInactivo(String inactivo) {
+		this.inactivo = inactivo;
 	}
 
-	@Column(name = "FECHA_INACTIVA", nullable = true)
-	public Date getFechaInactiva() {
-		return fechaInactiva;
+	@Column(name = "FECHA_INACTIVO", nullable = true)
+	public Date getFechaInactivo() {
+		return fechaInactivo;
 	}
 
-	public void setFechaInactiva(Date fechaInactiva) {
-		this.fechaInactiva = fechaInactiva;
+	public void setFechaInactivo(Date fechaInactivo) {
+		this.fechaInactivo = fechaInactivo;
 	}
 
 	@Override
 	public String toString(){
-		return casa.getCodigoCHF() + "-" + fechaInicio;
+		return casa.getCodigoCHF() + "-" + fechaIngreso;
 	}
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CasaCasoCovid19)) return false;
+        if (!(o instanceof CasoCovid19)) return false;
 
-        CasaCasoCovid19 that = (CasaCasoCovid19) o;
+        CasoCovid19 that = (CasoCovid19) o;
 
         if (!codigoCaso.equals(that.codigoCaso)) return false;
 

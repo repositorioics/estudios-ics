@@ -42,6 +42,7 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     private String aceptaParteB; //Consentimiento para almacenamiento y uso de muestras en estudios futuros
     private String aceptaParteC; //Consentimiento adicional para estudios genéticos
     private String aceptaParteD; //Consentimiento adicional para ZIKA (Estudio Cohorte Dengue)
+    private String aceptaParteE; //Consentimiento para almacenamiento y uso de meustras en estudios futuros EstudioFLu
     private String version; //Indicar la versión actual al momento de registrar la carta
     //reconsentimiento dengue 2018
     private String otroMotivoRechazoParteA;
@@ -60,6 +61,7 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     private String apellido1MxSuperficie;
     private String apellido2MxSuperficie;
     private String casaChf;
+
 
     @Id
     @Column(name = "CODIGO", nullable = false, insertable = true, updatable = false, length = 36)
@@ -399,6 +401,15 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
 
     public void setCasaChf(String casaChf) {
         this.casaChf = casaChf;
+    }
+
+    @Column(name = "ACEPTA_PARTE_E", length = 1)
+    public String getAceptaParteE() {
+        return aceptaParteE;
+    }
+
+    public void setAceptaParteE(String aceptaParteE) {
+        this.aceptaParteE = aceptaParteE;
     }
 
     @Override
