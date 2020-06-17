@@ -86,7 +86,7 @@
                         </div>
                         <div class="col-md-8">
                             <form action="#" autocomplete="off" id="version-form" class="form-horizontal">
-                                <input id="codigo" name="codigo" type="text" value="${caso.codigoCaso.codigoCaso}"  class="form-control"/>
+                                <input id="codigo" name="codigo" type="text" value="${caso.codigoCaso.codigoCaso}" hidden="hidden" class="form-control"/>
                                 <div class="form-group row">
                                     <label class="form-control-label col-md-3" for="codigoCasa"><spring:message code="house" />
                                         <span class="required">*</span>

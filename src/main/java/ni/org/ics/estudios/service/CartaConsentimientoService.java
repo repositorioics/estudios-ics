@@ -63,6 +63,25 @@ public class CartaConsentimientoService {
         return query.list();
     }
 
+    /**
+     * Obtiene las cartas de consentimiento para cohorte pediatrica de un participante en el subestudio covid
+     * //4=Influenza, 5=U01
+     * version de las cartas es 1, y tienen que tener dato en ParteD que es la parte que se anexo para consentir subestudio Covid
+     * CP indica que es Cohorte Pediatrica
+      * @param codParticipante a obtener cartas
+     * @return
+     */
+    public List<CartaConsentimiento> getCartaConsCovidCPByCodParticipante(Integer codParticipante)
+    {
+        Session session = sessionFactory.getCurrentSession();
+        String sqlQuery = "from CartaConsentimiento where participante.codigo = :codigo " + " and tamizaje.cohorte = 'CP' and tamizaje.estudio.codigo in (4,5) and version = '1' and aceptaParteD is not null";
+        sqlQuery += " order by fechaFirma asc";
+        Query query = session.createQuery(sqlQuery);
+
+        query.setParameter("codigo", codParticipante);
+        return query.list();
+    }
+
     public List<CartaConsentimiento> getCartaConsentimientoByCodCasaEstudio(String casaChf, Integer estudio)
     {
         Session session = sessionFactory.getCurrentSession();

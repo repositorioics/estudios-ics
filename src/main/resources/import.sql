@@ -974,3 +974,34 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_08', '8', 'CAT_RAZON_NO_DATA', NULL, '0', 7, '0', 'Solo se realiza peso y talla');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_09', '9', 'CAT_RAZON_NO_DATA', NULL, '0', 8, '0', 'Peso y talla en otro equipo móvil');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_RAZON_NO_DATA_10', '10', 'CAT_RAZON_NO_DATA', NULL, '0', 9, '0', 'No comprendo las preguntas');
+
+/*COVID19*/
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'covid19.positives', 'Positivos Covid19','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'covid19.participants.list', 'Lista de participantes','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'chf.house', 'Casa CHF','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'FIS', 'FIS','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_POSITIVO_POR', NULL, NULL, NULL, '1', 0, '0', 'Caso Covid19 positivo por');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_POSITIVO_01', '01', 'COVID_CAT_POSITIVO_POR', NULL, '0', 1, '0', 'Clínica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_POSITIVO_02', '02', 'COVID_CAT_POSITIVO_POR', NULL, '0', 2, '0', 'PCR');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG', NULL, NULL, NULL, '1', 0, '0', 'Catalogo visitas seguimiento Covid19');
+/* para transmision*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_01', '1', 'COVID_CAT_VIS_SEG', NULL, '0', 1, '0', 'Visita 1');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_02', '2', 'COVID_CAT_VIS_SEG', NULL, '0', 2, '0', 'Visita 2');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_03', '3', 'COVID_CAT_VIS_SEG', NULL, '0', 3, '0', 'Visita 3');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_04', '4', 'COVID_CAT_VIS_SEG', NULL, '0', 4, '0', 'Visita 4');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_05', '5', 'COVID_CAT_VIS_SEG', NULL, '0', 5, '0', 'Visita 5');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_06', '6', 'COVID_CAT_VIS_SEG', NULL, '0', 6, '0', 'Visita 6');
+/*para pediatrica*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_I', 'I', 'COVID_CAT_VIS_SEG', NULL, '0', 1, '0', 'Visita Inicial');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VIS_SEG_F', 'F', 'COVID_CAT_VIS_SEG', NULL, '0', 7, '0', 'Visita Final');
+
+/*Tamizaje TCovid*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_CI_INDICE', NULL, NULL, NULL, '1', 0, '0', 'Catalogo criterios de inclusion TCovid índice');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_CI_INDICE_01', '1', 'COVID_CAT_CI_INDICE', NULL, '0', 1, '0', 'Vivir en área de cobertura del CSSFV.');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_CI_INDICE_02', '2', 'COVID_CAT_CI_INDICE', NULL, '0', 2, '0', 'Ser participante en el estudio de Cohorte de familia de Influenza');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_CI_MIEMBRO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo criterios de inclusion TCovid miembro del hogar');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_CI_MIEMBRO_01', '1', 'COVID_CAT_CI_MIEMBRO', NULL, '0', 1, '0', 'Participante estudio Dinámica de Transmisión de Influenza');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_CI_MIEMBRO_02', '2', 'COVID_CAT_CI_MIEMBRO', NULL, '0', 2, '0', 'Vivir con una persona que tiene coronavirus o síntomas de coronavirus');

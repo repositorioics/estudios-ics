@@ -139,4 +139,19 @@ public class MuestraController {
         }
         return respuestaList;
     }
+
+    /**
+     * Acepta una solicitud GET para JSON
+     * @return JSON
+     */
+    @RequestMapping(value = "muestrasCasosCovid19", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<Muestra> getMuestrasCasosCovid19() throws Exception{
+        logger.info("Descargando toda la informacion de formularios muestras COVID19 para el usuario ");
+        List<Muestra> respuestaList = muestraService.getMuestrasCovid19();
+        if (respuestaList == null){
+            logger.debug("Nulo");
+        }
+        return respuestaList;
+    }
 }

@@ -78,7 +78,7 @@ public class CasoCovid19 extends BaseMetaData implements Auditable {
 
 	@Override
 	public String toString(){
-		return casa.getCodigoCHF() + "-" + fechaIngreso;
+		return codigoCaso + "-" + fechaIngreso;
 	}
 	@Override
     public boolean equals(Object o) {

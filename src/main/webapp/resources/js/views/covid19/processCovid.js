@@ -45,13 +45,19 @@ var processCasosCovid = function(){
                         //registro = JSON.parse(data);
                         console.log(data);
                         if (data.mensaje != undefined) {
-                            toastr.error(data.mensaje,"Error",{timeOut: 0});
+                            toastr.error(data.mensaje,"Error",{timeOut: 5000});
                             $("#codigoCasa").val("");
                             $("#codigoParticipante").val("");
+                            $("#estudios").val("");
                         }
                         else {
-                            $("#codigoCasa").val(data.participante.casa.codigo);
-                            $("#codigoParticipante").val(data.participante.codigo);
+                            $("#codigoCasa").val(data.casaFamilia);
+                            $("#codigoParticipante").val(data.codigo);
+                            console.log(data.estudios);
+                            $("#estudios").val(data.estudios);
+                            if (data.validacion != null){
+                                toastr.warning(data.validacion);
+                            }
                         }
                     }
                 ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
@@ -64,7 +70,7 @@ var processCasosCovid = function(){
                 errorElement: 'span', //default input error message container
                 focusInvalid: false, // do not focus the last invalid input
                 rules: {
-                    codigoCasa: {
+                    positivoPor: {
                         required: true
                     },
                     fechaInicio: {
@@ -73,7 +79,7 @@ var processCasosCovid = function(){
                     codigoParticipante: {
                         required: true
                     },
-                    fif: {
+                    fis: {
                         required: true
                     }
                 },
@@ -105,7 +111,7 @@ var processCasosCovid = function(){
                         registro = JSON.parse(data);
                         console.log(registro);
                         if (registro.codigoCaso === undefined) {
-                            toastr.error(data,"Error",{timeOut: 0});
+                            toastr.error(data,"Error",{timeOut: 5000});
                         }
                         else {
                             toastr.success(parametros.successmessage);

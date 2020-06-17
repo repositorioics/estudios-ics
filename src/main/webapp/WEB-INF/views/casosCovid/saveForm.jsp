@@ -11,6 +11,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
     <!-- DATE PICKER -->
@@ -30,9 +31,9 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><spring:message code="Listado Covid-19" /></a>
+                <a href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><spring:message code="covid19.positives" /></a>
                 <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/covid/SaveForm/" htmlEscape="true "/>"><spring:message code="Formulario Positivo" /></a>
+                <a href="<spring:url value="/covid/SaveForm/" htmlEscape="true "/>"><spring:message code="add" /> <spring:message code="positive" /></a>
             </li>
         </ol>
         <spring:url value="/covid/saveCaseCovid" var="saveUrl"/>
@@ -52,7 +53,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <br/>
-                                <hr/>
                                 <form action="#" autocomplete="off" id="search-participant-form" class="form-horizontal">
                                     <div class="form-group row">
                                         <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
@@ -97,14 +97,34 @@
                             <form action="#" autocomplete="off" id="version-form" class="form-horizontal">
                                 <input id="codigo" name="codigo" hidden="hidden" type="text" value="${caso.codigoCaso.codigoCaso}" class="form-control"/>
                                 <div class="form-group row">
-                                    <label class="form-control-label col-md-3" for="codigoCasa"><spring:message code="house" />
+                                    <label class="form-control-label col-md-3" for="estudios"><spring:message code="userstudies" />
+                                    </label>
+                                    <div class="input-group col-md-9">
+                                                <span class="input-group-addon">
+													<i class="fa fa-list"></i>
+												</span>
+                                        <input id="estudios" name="estudios" type="text" readonly  class="form-control" value="${estudios}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="codigoCasa"><spring:message code="chf.house" /> (Sí pertenece a CHF)
+                                    </label>
+                                    <div class="input-group col-md-9">
+                                                <span class="input-group-addon">
+													<i class="fa fa-user"></i>
+												</span>
+                                        <input id="codigoCasa" name="codigoCasa" type="text" readonly  class="form-control" value="${caso.codigoCaso.casa.codigoCHF}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="codigoParticipante"><spring:message code="positive" />
                                         <span class="required">*</span>
                                     </label>
                                     <div class="input-group col-md-9">
                                                 <span class="input-group-addon">
 													<i class="fa fa-user"></i>
 												</span>
-                                        <input id="codigoCasa" name="codigoCasa" type="text" readonly  class="form-control"/>
+                                        <input id="codigoParticipante" name="codigoParticipante" type="text" readonly  class="form-control" value="${caso.participante.codigo}"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -117,23 +137,12 @@
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i>
                                             </span>
                                         <input name="fechaInicio" id="fechaInicio" class="form-control date-picker" type="text" data-date-end-date="+0d"
-                                               value="<fmt:formatDate value="${caso.fechaIngreso}" pattern="dd/MM/yyyy" />" required="required" />
+                                               value="<fmt:formatDate value="${caso.codigoCaso.fechaIngreso}" pattern="dd/MM/yyyy" />" required="required" />
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="form-control-label col-md-3" for="codigoParticipante"><spring:message code="positive" />
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="input-group col-md-9">
-                                                <span class="input-group-addon">
-													<i class="fa fa-user"></i>
-												</span>
-                                        <input id="codigoParticipante" name="codigoParticipante" type="text" readonly  class="form-control"/>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="partContacto"><spring:message code="lbl.positive.by"/><span class="required">*</span></label>
+                                    <label class="col-md-3 form-control-label" for="positivoPor"><spring:message code="lbl.positive.by"/><span class="required">*</span></label>
                                     <div class="col-md-9">
                                         <select name="positivoPor" id="positivoPor" class="form-control" required="required">
                                             <option selected value=""><spring:message code="select" />...</option>
@@ -160,7 +169,8 @@
                                     <div class="input-group col-md-9">
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i>
                                             </span>
-                                        <input name="fis" id="fis" class="form-control date-picker" type="text" data-date-end-date="+0d" required="required" />
+                                        <input name="fis" id="fis" class="form-control date-picker" type="text" data-date-end-date="+0d" required="required"
+                                               value="<fmt:formatDate value="${caso.fis}" pattern="dd/MM/yyyy" />"/>
                                     </div>
                                 </div>
 
@@ -169,7 +179,8 @@
                                     <div class="input-group col-md-9">
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i>
                                             </span>
-                                        <input name="fif" id="fif" class="form-control date-picker" type="text" data-date-end-date="+0d" />
+                                        <input name="fif" id="fif" class="form-control date-picker" type="text" data-date-end-date="+0d"
+                                               value="<fmt:formatDate value="${caso.fif}" pattern="dd/MM/yyyy" />"/>
                                     </div>
                                 </div>
 

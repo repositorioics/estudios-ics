@@ -1,14 +1,12 @@
 package ni.org.ics.estudios.service.covid;
 
-import ni.org.ics.estudios.domain.Participante;
-import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
 //import ni.org.ics.estudios.domain.covid19.CasaCasoCovid19;
-import ni.org.ics.estudios.domain.covid19.CasoCovid19;
-import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
-import ni.org.ics.estudios.domain.covid19.ParticipanteCovid19;
+import ni.org.ics.estudios.domain.covid19.*;
+import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,20 +31,31 @@ public class CovidService {
         return query.list();
     }
 
-    public void saveOrUpdateParticipanteCovid19(ParticipanteCovid19 participanteCovid19){
-        Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(participanteCovid19);
-    }
-
     public List<CasoCovid19> getCasosCovid19(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from CasoCovid19 c where c.pasive = '0' and c.inactivo = '0'");
         return query.list();
     }
 
-    public void saveOrUpdateCasoCovid19(CasoCovid19 casa){
+    public CasoCovid19 getCasoCovid19ByCodigo(String codigoCaso){
         Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(casa);
+        Query query = session.createQuery("from CasoCovid19 c where c.codigoCaso = :codigoCaso");
+        query.setParameter("codigoCaso", codigoCaso);
+        return (CasoCovid19)query.uniqueResult();
+    }
+
+    /**
+     * Obtener datos de participante según su código para validar si aplica o no en la activación del caso
+     * @param codigo Código de participante
+     * @return ParticipanteBusquedaDto
+     */
+    public ParticipanteBusquedaDto getDatosParticipanteByCodigo(Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select p.codigo as codigo, p.casa.codigo as casaPediatrica, pp.casaCHF as casaFamilia, pp.estudio as estudios, pp.subEstudios as subEstudios, pp.estPart as estado " +
+                "from Participante p, ParticipanteProcesos pp where p.codigo = pp.codigo and p.codigo= :codigo");
+        query.setParameter("codigo", codigo);
+        query.setResultTransformer(Transformers.aliasToBean(ParticipanteBusquedaDto.class));
+        return (ParticipanteBusquedaDto)query.uniqueResult();
     }
 
     /***
@@ -58,17 +67,11 @@ public class CovidService {
         return query.list();
     }
 
-    public void saveOrUpdateParticipanteCasoCovid19(ParticipanteCasoCovid19 participanteCasoCovid19){
+    public ParticipanteCasoCovid19 getParticipanteCasoCovid19ByCodCasoPart(String codigoCasoParticipante){
         Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(participanteCasoCovid19);
-    }
-
-    // Metodo para buscar codigo en Covid_Participante
-    public ParticipanteCovid19 getParticipanteCovidById(Integer codigo){
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCovid19 where participante.codigo= :codigo");
-        query.setParameter("codigo", codigo);
-        return (ParticipanteCovid19)query.uniqueResult();
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.codigoCasoParticipante = :codigoCasoParticipante");
+        query.setParameter("codigoCasoParticipante", codigoCasoParticipante);
+        return (ParticipanteCasoCovid19)query.uniqueResult();
     }
 
     /***
@@ -83,13 +86,17 @@ public class CovidService {
         return (ParticipanteCasoCovid19)query.uniqueResult();
     }
 
-
-    // Metodo para Obtener los participantes de una casa.
-    public List<ParticipanteCohorteFamilia> getParticipantesCHFByCodigoCasa(String codigo){
+    /***
+     * Obtiene un participante de monitoreo por código de participante reportado como positivo y codigo caso
+     * @param codigo Código de participante
+     * @return ParticipanteCasoCovid19
+     */
+    public ParticipanteCasoCovid19 getParticipanteCasoCovid19ByCodigoAndCodCaso(Integer codigo, String codigoCaso){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select pchf from ParticipanteCohorteFamilia pchf, ParticipanteProcesos p where pchf.participante.codigo = p.codigo and pchf.casaCHF.codigoCHF = :codigo and pchf.pasive = '0' and p.estPart = 1");
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.inactivo = '0' and p.enfermo = 'S' and p.participante.codigo = :codigo and p.codigoCaso.codigoCaso = :codigoCaso");
         query.setParameter("codigo", codigo);
-        return query.list();
+        query.setParameter("codigoCaso", codigoCaso);
+        return (ParticipanteCasoCovid19)query.uniqueResult();
     }
 
     //  Metodo para obtener listado casos positivos / no positivos Codvid
@@ -102,35 +109,23 @@ public class CovidService {
 
     //Seleccionar los participantes
     @SuppressWarnings("unchecked")
-    public List<ParticipanteCasoCovid19> getParticipantesCohorteFamiliaCasoByCodigoCaso(String codigo){
+    public List<ParticipanteCasoCovid19> getParticipantesCasoCovid19ByCodigoCaso(String codigo){
         Session session = sessionFactory.getCurrentSession();
-        //Query query = session.createQuery("from ParticipanteCohorteFamiliaCaso p where p.pasive = '0' and p.codigoCaso.pasive = '0' and p.codigoCaso.codigoCaso = :codigo order by p.participante.participante.codigo");
-        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.pasive = '0' and p.codigoCaso.codigoCaso = :codigo order by p.participante.participante.codigo");
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.pasive = '0' and p.codigoCaso.codigoCaso = :codigo order by p.participante.codigo");
         query.setParameter("codigo", codigo);
         return query.list();
     }
-    // obtiene el caso positivo
-    public ParticipanteCasoCovid19 getParticipanteCasoPositivo(String codigo){
+
+    public List<VisitaSeguimientoCasoCovid19> getVisitaSeguimientoCasos(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.codigoCasoParticipante = :codigo");
-        query.setParameter("codigo", codigo);
-        return (ParticipanteCasoCovid19)query.uniqueResult();
+        Query query = session.createQuery("from VisitaSeguimientoCasoCovid19 v where v.pasive = '0' and v.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
+        return query.list();
     }
 
-    public ParticipanteCasoCovid19 getCasoByCodigo2(String codigo){
+    public List<VisitaFallidaCasoCovid19> getVisitasFallidasCasosActivosCovid19(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCasoCovid19 where pasive = '0' and codigoCasoParticipante = :codigo");
-        query.setParameter("codigo", codigo);
-        return (ParticipanteCasoCovid19)query.uniqueResult();
-    }
-
-
-    /* Obtiene Un Participante por su codigo */
-    public Participante getParticipanteByCodigo(Integer codigo){
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Participante where codigo = :codigo");
-        query.setParameter("codigo",codigo);
-        return (Participante)query.uniqueResult();
+        Query query = session.createQuery("from VisitaFallidaCasoCovid19 v where v.pasive = '0' and v.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
+        return query.list();
     }
 
     // Metodo para guardar CasoCovid19
@@ -144,5 +139,19 @@ public class CovidService {
         session.saveOrUpdate(participante);
     }
 
+    public void saveOrUpdateParticipanteCovid19(ParticipanteCovid19 participanteCovid19){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(participanteCovid19);
+    }
+
+    public void saveOrUpdateVisitaSeguimientoCasoCovid19(VisitaSeguimientoCasoCovid19 visitaSeguimientoCasoCovid19){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(visitaSeguimientoCasoCovid19);
+    }
+
+    public void saveOrUpdateVisitaFallidaCasoCovid19(VisitaFallidaCasoCovid19 visitaFallidaCasoCovid19){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(visitaFallidaCasoCovid19);
+    }
 
 }
