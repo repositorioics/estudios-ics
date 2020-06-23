@@ -106,7 +106,7 @@ public class MuestraService {
         Calendar hoy = Calendar.getInstance();
         int anioActual = hoy.get(Calendar.YEAR);
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('7') and recordDate >= :primerDia");
+        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('7','8') and recordDate >= :primerDia");
         query.setParameter("primerDia", DateUtil.StringToDate("01/01/"+String.valueOf(anioActual), "dd/MM/yyyy"));
         return  query.list();
     }

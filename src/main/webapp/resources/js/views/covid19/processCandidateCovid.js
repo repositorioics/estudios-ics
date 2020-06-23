@@ -2,7 +2,7 @@
  * Created by ICS on 02/06/2020.
  */
 
-var processCasosCovid = function(){
+var processCandidateCovid = function(){
 
     return {
         init: function (parametros) {
@@ -46,15 +46,13 @@ var processCasosCovid = function(){
                         console.log(data);
                         if (data.mensaje != undefined) {
                             toastr.error(data.mensaje,"Error",{timeOut: 5000});
-                            $("#codigoCasa").val("");
+                            $("#casaCHF").val("");
                             $("#codigoParticipante").val("");
                             $("#estudios").val("");
                         }
                         else {
-                            $("#codigoCasa").val("");
-                            //$("#codigoCasa").val(data.casaFamilia);
+                            $("#casaCHF").val(data.casaFamilia);
                             $("#codigoParticipante").val(data.codigo);
-                            console.log(data.estudios);
                             $("#estudios").val(data.estudios);
                             if (data.validacion != null){
                                 toastr.warning(data.validacion);
@@ -66,15 +64,12 @@ var processCasosCovid = function(){
                     });
             }
 
-            var form2 = $('#version-form');
+            var form2 = $('#candiate-form');
             form2.validate({
                 errorElement: 'span', //default input error message container
                 focusInvalid: false, // do not focus the last invalid input
                 rules: {
                     positivoPor: {
-                        required: true
-                    },
-                    fechaInicio: {
                         required: true
                     },
                     codigoParticipante: {
@@ -103,15 +98,15 @@ var processCasosCovid = function(){
                     $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
                 },
                 submitHandler: function (form) {
-                    processVersion();
+                    processCandidate();
                 }
             });
 
-            function processVersion(){
+            function processCandidate(){
                 $.post( parametros.saveUrl, form2.serialize(), function( data ){
                         registro = JSON.parse(data);
                         console.log(registro);
-                        if (registro.codigoCaso === undefined) {
+                        if (registro.codigo === undefined) {
                             toastr.error(data,"Error",{timeOut: 5000});
                         }
                         else {

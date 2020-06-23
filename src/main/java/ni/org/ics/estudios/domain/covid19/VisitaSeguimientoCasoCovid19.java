@@ -28,6 +28,8 @@ public class VisitaSeguimientoCasoCovid19 extends BaseMetaData implements Audita
 	private Float temp;
 	private Integer saturacionO2;
 	private Integer frecResp;
+    private Date fecIniPrimerSintoma;
+    private String primerSintoma;
 
     @Id
     @Column(name = "CODIGO_VISITA_CASO", length = 36, nullable = false)
@@ -113,7 +115,25 @@ public class VisitaSeguimientoCasoCovid19 extends BaseMetaData implements Audita
 		this.frecResp = frecResp;
 	}
 
-	@Override
+    @Column(name = "PRIMER_SINTOMA_FECINI", nullable = true)
+    public Date getFecIniPrimerSintoma() {
+        return fecIniPrimerSintoma;
+    }
+
+    public void setFecIniPrimerSintoma(Date fecIniPrimerSintoma) {
+        this.fecIniPrimerSintoma = fecIniPrimerSintoma;
+    }
+
+    @Column(name = "PRIMER_SINTOMA", length = 100,nullable = true)
+    public String getPrimerSintoma() {
+        return primerSintoma;
+    }
+
+    public void setPrimerSintoma(String primerSintoma) {
+        this.primerSintoma = primerSintoma;
+    }
+
+    @Override
 	public String toString(){
 		return codigoParticipanteCaso.getCodigoCaso().getCasa().getCodigoCHF() + "-" + codigoParticipanteCaso.getParticipante().getCodigo() + "-" + codigoParticipanteCaso.getCodigoCaso().getFechaIngreso();
 	}

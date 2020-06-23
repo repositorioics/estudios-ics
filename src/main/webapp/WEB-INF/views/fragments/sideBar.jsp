@@ -41,8 +41,11 @@
                     <li class="nav-item posUO1">
                         <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
                     </li>
+                    <li class="nav-item candCovid19">
+                        <a class="nav-link" href="<spring:url value="/super/covid/listCandidates/" htmlEscape="true "/>"><i class="icon-user-following"></i><spring:message code="covid19.candidates" /></a>
+                    </li>
                     <li class="nav-item posCovid19">
-                        <a class="nav-link" href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="covid19.positives" /></a>
+                        <a class="nav-link" href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><i class="fa fa-user-plus"></i><spring:message code="covid19.positives" /></a>
                     </li>
                 </ul>
             </li>

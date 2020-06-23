@@ -79,7 +79,7 @@
                                     <td>${parti.participante.nombreCompleto}</td>
                                     <td> <c:out value="${edadParts[0]} años ${edadParts[1]} meses ${edadParts[2]} dias" /> </td>
                                     <c:choose>
-                                        <c:when test="${parti.enfermo eq 'S'}">
+                                        <c:when test="${parti.enfermo eq 'S' or parti.enfermo eq 'I'}">
                                             <td align="center"><span class="badge badge-success"><spring:message code="CHF_CAT_SINO_SI" /></span></td>
                                         </c:when>
                                         <c:otherwise>
@@ -97,7 +97,7 @@
                                     <td> <fmt:formatDate value="${parti.fif}" pattern="dd/MM/yyyy" /> </td>
                                     <td align="center">
                                         <c:choose>
-                                            <c:when test="${parti.pasive=='1' or parti.enfermo eq 'S'}">
+                                            <c:when test="${parti.pasive=='1' or parti.enfermo eq 'S' or parti.enfermo eq 'I'}">
                                                 <button title="<spring:message code="disable" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-trash-o"></i></button>
                                             </c:when>
                                             <c:otherwise>

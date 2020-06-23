@@ -81,7 +81,7 @@ public class CovidService {
      */
     public ParticipanteCasoCovid19 getParticipanteCasoCovid19Pos(Integer codigo){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.inactivo = '0' and p.enfermo = 'S' and p.participante.codigo = :codigo");
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.inactivo = '0' and p.enfermo <> 'N' and p.participante.codigo = :codigo");
         query.setParameter("codigo", codigo);
         return (ParticipanteCasoCovid19)query.uniqueResult();
     }
@@ -93,7 +93,7 @@ public class CovidService {
      */
     public ParticipanteCasoCovid19 getParticipanteCasoCovid19ByCodigoAndCodCaso(Integer codigo, String codigoCaso){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.inactivo = '0' and p.enfermo = 'S' and p.participante.codigo = :codigo and p.codigoCaso.codigoCaso = :codigoCaso");
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.codigoCaso.inactivo = '0' and p.enfermo <> 'N' and p.participante.codigo = :codigo and p.codigoCaso.codigoCaso = :codigoCaso");
         query.setParameter("codigo", codigo);
         query.setParameter("codigoCaso", codigoCaso);
         return (ParticipanteCasoCovid19)query.uniqueResult();
@@ -103,7 +103,7 @@ public class CovidService {
     @SuppressWarnings("unchecked")
     public List<ParticipanteCasoCovid19> getParticipanteCasosPositivosCovid(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.enfermo = 'S' and p.codigoCaso.pasive = '0'");
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.enfermo <> 'N' and p.codigoCaso.pasive = '0'");
         return query.list();
     }
 
@@ -125,6 +125,44 @@ public class CovidService {
     public List<VisitaFallidaCasoCovid19> getVisitasFallidasCasosActivosCovid19(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from VisitaFallidaCasoCovid19 v where v.pasive = '0' and v.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
+        return query.list();
+    }
+
+    public CandidatoTransmisionCovid19 getCandidatoTransmisionCovid19(String codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' and v.codigo = :codigo");
+        query.setParameter("codigo", codigo);
+        return (CandidatoTransmisionCovid19)query.uniqueResult();
+    }
+
+    public List<CandidatoTransmisionCovid19> getCandidatosTransmisionCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0'");
+        return query.list();
+    }
+
+    /**
+     * Obtiene todos los candidatos PENDIENTE para realizar tamizaje caso indice
+    * */
+    public List<CandidatoTransmisionCovid19> getCandidatosPendientesTransmisionCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' and v.consentimiento = 'PENDIENTE'");
+        return query.list();
+    }
+
+    /***
+     * Obtiene una lista con los SintomasVisitaCasoCovid19 de los casos activos en seguimiento
+     * @return List<SintomasVisitaCasoCovid19>
+     */
+    public List<SintomasVisitaCasoCovid19> getSintomasVisitasCasosCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from SintomasVisitaCasoCovid19 s where s.pasive = '0' and s.codigoCasoVisita.pasive = '0' and s.codigoCasoVisita.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
+        return query.list();
+    }
+
+    public List<DatosAislamientoVisitaCasoCovid19> getDatosAislamientoVisitasCasosCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from DatosAislamientoVisitaCasoCovid19 d where d.pasive = '0' and d.codigoCasoVisita.pasive = '0' and d.codigoCasoVisita.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
         return query.list();
     }
 
@@ -152,6 +190,21 @@ public class CovidService {
     public void saveOrUpdateVisitaFallidaCasoCovid19(VisitaFallidaCasoCovid19 visitaFallidaCasoCovid19){
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(visitaFallidaCasoCovid19);
+    }
+
+    public void saveOrUpdateCandidatoTransmisionCovid19(CandidatoTransmisionCovid19 candidato){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(candidato);
+    }
+
+    public void saveOrUpdateSintomasVisitaCasoCovid19(SintomasVisitaCasoCovid19 sintoma){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(sintoma);
+    }
+
+    public void saveOrUpdateDatosAislamientoVisitaCasoCovid19(DatosAislamientoVisitaCasoCovid19 dato){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(dato);
     }
 
 }
