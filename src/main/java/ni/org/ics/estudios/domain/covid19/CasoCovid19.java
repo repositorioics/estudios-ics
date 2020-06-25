@@ -48,7 +48,6 @@ public class CasoCovid19 extends BaseMetaData implements Auditable {
 		this.casa = casa;
 	}
 
-
 	@Column(name = "FECHA_INGRESO", nullable = false)
 	public Date getFechaIngreso() {
 		return fechaIngreso;

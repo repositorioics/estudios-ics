@@ -77,6 +77,9 @@ var processCandidateCovid = function(){
                     },
                     fis: {
                         required: true
+                    },
+                    fechaIngreso: {
+                        required: true
                     }
                 },
                 errorPlacement: function ( error, element ) {

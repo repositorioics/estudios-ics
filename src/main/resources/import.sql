@@ -1050,6 +1050,7 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_LUGARES_AVC_05', '5', 'COVID_LUGARES_AVC', NULL, '0', 5, '0', 'Transporte público');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_LUGARES_AVC_06', '6', 'COVID_LUGARES_AVC', NULL, '0', 6, '0', 'Centro de Salud u Hospital ');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_LUGARES_AVC_998', '998', 'COVID_LUGARES_AVC', NULL, '0', 7, '0', 'Otros');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_LUGARES_AVC_07', '7', 'COVID_LUGARES_AVC', NULL, '0', 8, '0', 'Ninguno');
 
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNR', NULL, NULL, NULL, '1', 0, '0', 'Catalogo Si/No/No Responde Aislamiento Covid19');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNR_01', '1', 'COVID_CAT_SNNR', NULL, '0', 1, '0', 'Si');

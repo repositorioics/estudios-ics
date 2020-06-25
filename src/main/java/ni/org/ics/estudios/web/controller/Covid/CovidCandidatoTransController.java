@@ -94,6 +94,8 @@ public class CovidCandidatoTransController {
             , @RequestParam( value="positivoPor", required=true, defaultValue="" ) String positivoPor
             , @RequestParam( value="fif", required=false, defaultValue="" ) String fif
             , @RequestParam( value="fis", required=true, defaultValue="" ) String fis
+            , @RequestParam( value = "fechaIngreso", required = true, defaultValue = "") String fechaIngreso
+
     )throws Exception{
         try{
             CandidatoTransmisionCovid19 candidatoTransmisionCovid19 = this.covidService.getCandidatoTransmisionCovid19(codigo);
@@ -115,6 +117,7 @@ public class CovidCandidatoTransController {
 
             candidatoTransmisionCovid19.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
             candidatoTransmisionCovid19.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
+            candidatoTransmisionCovid19.setFechaIngreso(DateUtil.StringToDate(fechaIngreso, "dd/MM/yyyy"));
             candidatoTransmisionCovid19.setPositivoPor(positivoPor);
             Participante participante = participanteService.getParticipanteByCodigo(codigoParticipante);
             candidatoTransmisionCovid19.setParticipante(participante);
@@ -144,6 +147,8 @@ public class CovidCandidatoTransController {
             ParticipanteCasoCovid19 participanteCaso = covidService.getParticipanteCasoCovid19Pos(codigo);
             if (participante.getEstudios().equalsIgnoreCase("Dengue"))
                 return JsonUtil.createJsonResponse("Participante pertenece cohorte Dengue");
+            if (!participante.getEstudios().contains("CH Familia"))
+                return JsonUtil.createJsonResponse("Participante no pertenece Cohorte Familia");
             if (participanteCaso!=null){
                 if (participanteCaso.getCodigoCaso().getCasa()!=null)
                     return JsonUtil.createJsonResponse("Participante se encuentra activo como positivo en la casa: "+participanteCaso.getCodigoCaso().getCasa().getCodigoCHF());

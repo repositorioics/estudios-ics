@@ -127,8 +127,8 @@
                                         <input id="codigoParticipante" name="codigoParticipante" type="text" readonly  class="form-control" value="${candidato.participante.codigo}"/>
                                     </div>
                                 </div>
-                                <!--<div class="form-group row">
-                                    <label class="form-control-label col-md-3" for="fechaInicio"><spring:message code="logindate" />
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="fechaIngreso"><spring:message code="logindate" />
 										<span class="required">
 											 *
 										</span>
@@ -136,10 +136,10 @@
                                     <div class="input-group col-md-9">
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i>
                                             </span>
-                                        <input name="fechaInicio" id="fechaInicio" class="form-control date-picker" type="text" data-date-end-date="+0d"
-                                               value="<fmt:formatDate value="${caso.codigoCaso.fechaIngreso}" pattern="dd/MM/yyyy" />" required="required" />
+                                        <input name="fechaIngreso" id="fechaIngreso" class="form-control date-picker" type="text" data-date-end-date="+0d"
+                                               value="<fmt:formatDate value="${candidato.fechaIngreso}" pattern="dd/MM/yyyy" />" required="required" />
                                     </div>
-                                </div>-->
+                                </div>
 
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="positivoPor"><spring:message code="lbl.positive.by"/><span class="required">*</span></label>

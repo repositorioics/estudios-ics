@@ -28,7 +28,8 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
 	private String positivoPor;
 	private String consentimiento;
     private String estActuales;
-    
+    private Date fechaIngreso;
+
 	@Id
     @Column(name = "CODIGO", length = 36, nullable = false)
 	public String getCodigo() {
@@ -102,6 +103,15 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
 
     public void setEstActuales(String estActuales) {
         this.estActuales = estActuales;
+    }
+
+    @Column(name = "FECHA_INGRESO", nullable = false)
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaInicio) {
+        this.fechaIngreso = fechaInicio;
     }
 
     @Override

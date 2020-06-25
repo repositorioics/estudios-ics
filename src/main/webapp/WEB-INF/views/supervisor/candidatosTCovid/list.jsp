@@ -58,7 +58,7 @@
                                     <tr>
                                         <th width="12%"><spring:message code="candidate" /></th>
                                         <th width="12%"><spring:message code="chf.house" /></th>
-                                        <th width="12%"><spring:message code="dateCreated" /></th>
+                                        <th width="12%"><spring:message code="logindate" /></th>
                                         <th width="12%"><spring:message code="lbl.positive.by" /></th>
                                         <th width="12%"><spring:message code="FIS" /></th>
                                         <th width="12%"><spring:message code="fif" /></th>
@@ -79,7 +79,7 @@
                                         <tr>
                                             <td><c:out value="${l.participante.codigo}" /></td>
                                             <td><c:out value="${l.casaCHF}" /></td>
-                                            <td><fmt:formatDate value="${l.recordDate}" pattern="dd/MM/yyyy" /></td>
+                                            <td><fmt:formatDate value="${l.fechaIngreso}" pattern="dd/MM/yyyy" /></td>
                                             <td>
                                                 <c:forEach items="${positivoPor}" var="cat">
                                                     <c:if test="${cat.catKey eq l.positivoPor}">
