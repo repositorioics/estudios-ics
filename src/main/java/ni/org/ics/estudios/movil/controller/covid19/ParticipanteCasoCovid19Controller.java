@@ -45,7 +45,9 @@ public class ParticipanteCasoCovid19Controller {
         }else{
             List<ParticipanteCasoCovid19> participanteCasoCovid19List = Arrays.asList(objetos);
             for(ParticipanteCasoCovid19 participanteCasoCovid19 : participanteCasoCovid19List) {
-                covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid19);
+                ParticipanteCasoCovid19 tmp = covidService.getParticipanteCasoCovid19ByCodCasoPart(participanteCasoCovid19.getCodigoCasoParticipante());
+                if (tmp==null || !tmp.getConsentimiento().equals("1"))
+                    covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid19);
             }
         }
         return "Datos recibidos!";

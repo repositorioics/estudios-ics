@@ -308,4 +308,25 @@ public class ParticipanteController {
             return null;
         }
     }
+
+    /**
+     * Retorna participantes. Acepta una solicitud GET para JSON
+     * @return participantes JSON
+     */
+    @RequestMapping(value = "participantesprocesosCovid19", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<ParticipanteProcesos> getParticipantesCovidProcesos() {
+        try {
+            logger.info("Descargando toda la informacion de procesos participantes casos activos covid19");
+            List<ParticipanteProcesos> participantes = participanteProcesosService.getParticipantesCovidProcesos();
+            if (participantes == null) {
+                logger.debug(new Date() + " - Nulo");
+            }
+            return participantes;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 }

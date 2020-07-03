@@ -62,7 +62,14 @@ public class ParticipanteProcesosService {
 	}
 
 
-
+    public List<ParticipanteProcesos> getParticipantesCovidProcesos() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        // Create a Hibernate query (HQL)
+        Query query = session.createQuery("FROM ParticipanteProcesos p where p.codigo in (select pc.participante.codigo from ParticipanteCasoCovid19 pc where pc.pasive = '0' and pc.codigoCaso.inactivo = '0' and pc.codigoCaso.pasive = '0')");
+        // Retrieve all
+        return  query.list();
+    }
 
 
 	@SuppressWarnings("unchecked")

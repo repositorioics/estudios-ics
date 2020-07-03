@@ -166,6 +166,26 @@ public class CovidService {
         return query.list();
     }
 
+    /***
+     * Obtiene una lista con las visitas finales de casos activos covid19
+     * @return List<VisitaFinalCasoCovid19>
+     */
+    public List<VisitaFinalCasoCovid19> getVisitasFinalesCasosCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from VisitaFinalCasoCovid19 d where d.pasive = '0' and d.pasive = '0' and d.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
+        return query.list();
+    }
+
+    /***
+     * Obtiene una lista con los sintomas de visitas finales de casos activos covid19
+     * @return List<SintomasVisitaFinalCovid19>
+     */
+    public List<SintomasVisitaFinalCovid19> getSintomasVisitasFinalesCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from SintomasVisitaFinalCovid19 s where s.pasive = '0' and s.codigoVisitaFinal.pasive = '0' and s.codigoVisitaFinal.codigoParticipanteCaso.codigoCaso.inactivo = '0'");
+        return query.list();
+    }
+
     // Metodo para guardar CasoCovid19
     public void saveOrUpdateCasoCovid19(CasoCovid19 casocovid19){
         Session session = sessionFactory.getCurrentSession();
@@ -205,6 +225,16 @@ public class CovidService {
     public void saveOrUpdateDatosAislamientoVisitaCasoCovid19(DatosAislamientoVisitaCasoCovid19 dato){
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(dato);
+    }
+
+    public void saveOrUpdateVisitaFinalCasoCovid19(VisitaFinalCasoCovid19 visita){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(visita);
+    }
+
+    public void saveOrUpdateSintomasVisitaFinalCovid19(SintomasVisitaFinalCovid19 sintomas){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(sintomas);
     }
 
 }
