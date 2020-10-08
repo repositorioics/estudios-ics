@@ -8,8 +8,12 @@
     <jsp:include page="../fragments/headTag.jsp" />
     <spring:url value="/resources/css/dataTables.bootstrap4.min.css" var="bdat4" />
     <link rel="stylesheet" href="${bdat4}" type="text/css"/>
-    <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
-    <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
+    <!-- <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
+    <link rel="stylesheet" href="${bdrespat4}" type="text/css"/> -->
+    <spring:url value="/resources/css/bootstrap.css" var="bootwatch" />
+    <link rel="stylesheet" href="${bootwatch}" type="text/css"/>
+
+
 
     <style>
         #page-loader {
@@ -137,7 +141,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="card shadow-lg p-3 mb-5 bg-white text-black-50">
+                        <div class="card shadow-lg p-1 mb-5 bg-white text-black-50">
                             <div class="card-header">
                                 <h5> <i class="fa fa-id-card-o" aria-hidden="true"></i> Cartas Participante</h5>
                             </div>
@@ -178,6 +182,7 @@
                                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Detalle" /></th>
                                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Reporte" /></th>
                                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Retirar" /></th>
+                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="Covid" /></th>
                                             </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -194,6 +199,7 @@
                 <spring:url value="/cartas/EditCarta" var="EditCartaUrl"></spring:url>
                 <spring:url value="/cartas/UpdateRetiro" var="UpdateRetiroUrl"/>
                 <spring:url value="/reportes/ReporteCarta/" var="pdfCartaUrl"/>
+                <spring:url value="/cartas/MasCartas" var="MasCartaUrl"/>
             </div>
         </div>
 
@@ -342,7 +348,8 @@
                 searchPartesUrl : "${searchPartesUrl}",
                 EditCartaUrl : "${EditCartaUrl}",
                 UpdateRetiroUrl:"${UpdateRetiroUrl}",
-                pdfCartaUrl:"${pdfCartaUrl}"
+                pdfCartaUrl:"${pdfCartaUrl}",
+                MasCartaUrl: "${MasCartaUrl}"
             };
         SearchCartaParticipant.init(parametros);
 

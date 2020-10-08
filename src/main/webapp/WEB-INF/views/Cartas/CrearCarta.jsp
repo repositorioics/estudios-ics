@@ -6,8 +6,11 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
-    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
-    <link href="${boot}" rel="stylesheet" type="text/css"/>
+    <!-- <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
+    <link href="${boot}" rel="stylesheet" type="text/css"/>-->
+    <spring:url value="/resources/css/bootstrap.css" var="bootwatch" />
+    <link rel="stylesheet" href="${bootwatch}" type="text/css"/>
+
     <style>
         span.error {
             display:block;
@@ -122,11 +125,7 @@
                 transform: rotate(360deg);
                 /* Firefox 16+, IE 10+, Opera */
             }
-        }
-
-
-
-        /*Fin preload*/
+        } /*Fin preload*/
     </style>
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
@@ -264,7 +263,7 @@
                     </div><!-- fin step 01  -->
 
                     <div id="step-2">
-                        <form id="form-scan" class="needs-validation" novalidate>
+                        <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
                             <h3 class="border-bottom border-gray pb-2" style="font-family: Roboto">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i> Tipo Carta</h3>
                             <div class="row">
@@ -349,7 +348,7 @@
                                     <div id="DivtipoAsent">
                                         <div class="form-group">
                                             <label for="tipoasentimiento">Tipo Asentimiento: </label>
-                                            <select name="tipoasentimiento" id="tipoasentimiento" class="form-control" required="required">
+                                            <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
                                                 <option selected value=""><spring:message code="select" />...</option>
                                                 <c:forEach items="${tpoasent}" var="ta">
                                                     <option value="${ta.catKey}"><spring:message code="${ta.spanish}" /></option>
@@ -363,7 +362,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="proyecto">Proyecto: </label>
-                                        <select name="proyecto" id="proyecto" class="form-control" required="required">
+                                        <select name="proyecto" id="proyecto" class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
                                             <c:forEach items="${proyecto}" var="p">
                                                 <option value="${p.catKey}"><spring:message code="${p.spanish}" /></option>
@@ -452,7 +451,7 @@
                             </div>
                             <br/>
                             <br/>
-
+                            <input type="text" name="aptoCovid" id="aptoCovid" hidden="hidden" disabled/>
                             <hr/>
                             <div class="col-md-4">
                                 <button type="submit" id="btnSave" class="btn btn-primary btn-block btn-lg">
@@ -552,6 +551,14 @@
                 previous: 'Prev'
             }
         });
+        $("#carta").select2();
+        $("#version").select2();
+        $("#person").select2();
+        $("#relfam").select2();
+        $("#proyecto").select2();
+        $("#asentimiento").select2();
+        $("#tipoasentimiento").select2();
+
         var parametros = {
             searchPartUrl: "${searchPartUrl}",
             Lista2ScanCartaUrl :"${Lista2ScanCartaUrl}",

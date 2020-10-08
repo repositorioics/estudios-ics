@@ -137,9 +137,9 @@
         <c:set var="successmessage"><spring:message code="process.success" /></c:set>
         <c:set var="errormessage"><spring:message code="process.errors" /></c:set>
         <div class="container-fluid">
-            <div class="container-fluid">
+
                 <div class="animated fadeIn">
-                    <div class="card text-black-50 bg-secondary">
+                    <div class="card text-black-50">
                         <div class="card-header">
                             <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinamica" />
                         </div>
@@ -195,16 +195,16 @@
                                         <label for="dx">Diagnóstico:</label>
                                         <textarea  class="form-control focusNext" id="dx" name="dx" cols="30" rows="2" placeholder="Ingrese el diagnóstico" tabindex="1">${objDet.dx}</textarea>
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-3">
                                         <label for="fecha">Fecha:</label>
                                         <input type="text" class="form-control focusNext" tabindex="2" value="<fmt:formatDate value="${objDet.fecha}" pattern="dd/MM/yyyy"/>"  id="fecha" name="fecha" required>
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-3">
                                         <label for="hora">Hora:</label>
                                         <input type="time" class="form-control focusNext" tabindex="3" id="hora" name="hora" value="${objDet.hora}" required>
                                     </div>
 
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-6">
                                         <label for="nivelConciencia">Nivel de Consciencia:</label>
                                         <select class="form-control focusNext" id="nivelConciencia" name="nivelConciencia" tabindex="4" required="required" tabindex="4">
                                             <option selected value=""><spring:message code="select" />...</option>
@@ -221,25 +221,22 @@
                                         </select>
                                     </div>
 
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="pa">P/A mmHg:</label>
+                                    <div class="form-group col-sm-6">
+                                        <label for="pa">P/S mmHg:</label>
                                         <input type="text" class="form-control focusNext" id="pa" name="pa" value="${objDet.pa}" placeholder="P/A mmHg" required tabindex="5">
                                     </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="pp">PP mmHg:</label>
-                                        <input type="text" class="form-control focusNext" id="pp" name="pp" value="${objDet.pp}" placeholder="PP mmHg" readonly required tabindex="6">
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="pam">PAM mmHg:</label>
-                                        <input type="text" class="form-control focusNext" id="pam" name="pam" value="${objDet.pam}" placeholder="PAM mmHg" readonly  required tabindex="7">
+
+                                    <div class="form-group col-sm-6">
+                                        <label for="pd">P/D mmHg:</label>
+                                        <input type="text" class="form-control focusNext" id="pd" name="pd" value="${objDet.pd}" placeholder="P/S mmHg" required tabindex="5">
                                     </div>
 
-                                    <div class="form-group col-sm-4">
+
+                                    <div class="form-group col-sm-2">
                                         <label for="fc">F.C por Minuto:</label>
                                         <input type="text" class="form-control focusNext" id="fc" name="fc" placeholder="F.C por Minuto" value="${objDet.fc}" required tabindex="8">
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-2">
                                         <label for="fr">F.R por Minuto:</label>
                                         <input type="text" class="form-control focusNext" id="fr" name="fr" value="${objDet.fr}" placeholder="F.R por Minuto" required tabindex="9">
                                     </div>
@@ -316,17 +313,16 @@
                                                         <option value="${d.catKey}"><spring:message code="${d.spanish}" /></option>
                                                     </c:otherwise>
                                                 </c:choose>
-
                                             </c:forEach>
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-2">
                                         <label for="densidadUrinaria">Densidad Urinaria:</label>
                                         <input type="text" class="form-control focusNext" id="densidadUrinaria" tabindex="16" value="${objDet.densidadUrinaria}" name="densidadUrinaria" placeholder="Densidad Urinaria">
                                     </div>
 
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group col-sm-6">
                                         <label for="personaValida">Valorado Por:</label>
                                         <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="17">
                                             <option selected value=""><spring:message code="select" />...</option>
@@ -356,6 +352,15 @@
                                         <spring:param name="idDatoHemo" value="${objDet.datoshemodinamica.idDatoHemo}" />
                                     </spring:url>
                                     <div hidden="hidden">
+                                        <div class="form-group col-sm-3">
+                                            <label for="pp">PP mmHg:</label>
+                                            <input type="text" class="form-control focusNext" id="pp" name="pp" value="${objDet.pp}" placeholder="PP mmHg" readonly required tabindex="6">
+                                        </div>
+                                        <div class="form-group col-sm-3">
+                                            <label for="pam">PAM mmHg:</label>
+                                            <input type="text" class="form-control focusNext" id="pam" name="pam" value="${objDet.pam}" placeholder="PAM mmHg" readonly  required tabindex="7">
+                                        </div>
+
                                     <div class="form-group col-sm-6">
                                         <div class="bg">
                                             <div>
@@ -394,7 +399,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
         </div>
         <!-- /.conainer-fluid -->
     </div>
@@ -440,8 +445,8 @@
 <script type="text/javascript" src="${select2Js}"></script>
 
 
-<spring:url value="/resources/js/libs/jquery.maskedinput.js" var="maskJs" />
-<script type="text/javascript" src="${maskJs}"></script>
+<spring:url value="/resources/js/libs/notify.min.js" var="noty" />
+<script type="text/javascript" src="${noty}"></script>
 
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
@@ -473,6 +478,8 @@
             rules:{
                 pa:{required:true
                     //customphone:true
+                },
+                pd:{required:true
                 },
                 signo:{required:true},
                 nivelConciencia:{
@@ -551,16 +558,23 @@
                 });
             }
         }
-        $("#pa").keyup(function(){
-            var pa = $("#pa").val();
-            var result = pa.split("/");
-            var part1 = parseInt(result[0]);
-            var part2 = parseInt(result[1]);
+
+        $("#pd").keypress(function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if(code==13){
+                obtenerDatos();
+            }
+        });
+
+        function obtenerDatos(){
+            var sistolica = $("#pa").val();
+            var diastolica = $("#pd").val();
             var diferencia = 0;
-            if(part1 > part2)
-                diferencia = parseInt(part1)-parseInt(part2);
-            else
-                diferencia = parseInt(part2)-parseInt(part1);
+            if(parseInt(sistolica) > parseInt(diastolica))
+                diferencia = parseInt(sistolica)-parseInt(diastolica);
+            else{
+                diferencia = parseInt(diastolica)-parseInt(sistolica);
+            }
             if(isNaN(diferencia)){
                 $("#pp").val(0);
                 $("#pam").val(0);
@@ -568,13 +582,13 @@
             else{
                 $("#pp").val(diferencia);
             }
-            if(isNaN(part1) || isNaN(part2)){
+            if(isNaN(sistolica) || isNaN(diastolica)){
                 $("#pam").val(0);
             }else{
-                var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
+                var pam = ((parseInt(diastolica) * 2) + parseInt(sistolica)) / 3;
                 $("#pam").val(Math.round(pam));
             }
-        })
+        }
 
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter

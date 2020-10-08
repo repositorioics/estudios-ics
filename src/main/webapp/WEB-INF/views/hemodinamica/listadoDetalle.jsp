@@ -67,7 +67,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h5 style="font-family: Roboto">
-                                    <i class="fa fa-info" aria-hidden="true"></i> Información Participante
+                                    <i class="fa fa-info" aria-hidden="false"></i> Información Participante
                                 </h5>
                             </div>
                             <spring:url value="/hemo/adddetails/{idDatoHemo}" var="addDetailsUrl">
@@ -78,16 +78,14 @@
                             </spring:url>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="codigo" class="col-form-label">Código :</label>
                                             <input type="text" class="form-control" id="codigo" value="${codigo}" disabled>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-8">
                                         <div class="form-group">
                                             <label for="nombre" class="col-form-label">Participante :</label>
                                             <input type="text" class="form-control" id="nombre" value="${nombre}" disabled>
@@ -99,6 +97,7 @@
                                     <div class="form-group col-sm-4">
                                         <label for="edad" class="col-form-label">Edad :</label>
                                         <input type="text" class="form-control" id="edad" value="${edad}" disabled>
+                                        <small id="edadHelp" class="form-text text-muted">Años/Meses/Días.</small>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="expediente" class="col-form-label">N° Expediente :</label>
@@ -125,8 +124,7 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <a class="btn btn-info btn-md btn-lg btn-block" data-toggle="tooltip" data-placement="bottom"
-                                           title="Agregar Detalles" href="${fn:escapeXml(addDetailsUrl)}"
-                                           htmlEscape="true "/>
+                                           title="Agregar Detalles" href="${fn:escapeXml(addDetailsUrl)}" htmlEscape="true "/>
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                         <spring:message code="Agregar Detalles" />
                                         </a>
@@ -146,10 +144,8 @@
                         <div class="card">
                             <div class="card-header">
                                 <h5 style="font-family: Roboto">
-                                    Detalles Hemodinámicos
+                                    <i class="fa fa-align-justify"></i> Detalles Hemodinámicos
                                 </h5>
-                                <strong> <i class="fa fa-align-justify"></i> -  </strong>
-                                <small></small>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -236,7 +232,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Sintomas</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Síntomas</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -244,8 +240,12 @@
                     <div class="modal-body">
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <label style="font-family: Roboto; font-size: 1em; font-weight: bold"> Presión Arterial:</label>
+                                <label style="font-family: Roboto; font-size: 1em; font-weight: bold"> Presión Sistólica:</label>
                                 <span class="badge badge-primary badge-pill" id="pa" style="font-family: Roboto; font-size: 1em; font-weight: bold"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <label style="font-family: Roboto; font-size: 1em; font-weight: bold"> Presión Diastólica:</label>
+                                <span class="badge badge-primary badge-pill" id="pd" style="font-family: Roboto; font-size: 1em; font-weight: bold"></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <label  style="font-family: Roboto; font-size: 1em; font-weight: bold">Presión Arterial Promedio:</label>
@@ -418,6 +418,7 @@
         $.getJSON("${searchResultUrl}", { idHemoDetalle : id,   ajax : 'true'  }, function(data){
             $("#exampleModal").modal("show");
             $("#pa").text(data.pa);
+            $("#pd").text(data.pd);
             $("#pp").text(data.pp);
             $("#pam").text(data.pam);
             $("#fcardi").text(data.fcardi);

@@ -578,6 +578,12 @@
 
 <script>
     $(document).ready(function(){
+        $("#carta").select2();
+        $("#version").select2();
+        $("#person").select2();
+        $("#asentimiento").select2();
+        $("#tipoasentimiento").select2();
+        $("#proyecto").select2();
         setTimeout(function () {
             $('#page-loader').fadeOut('slow');
         }, 1300);
@@ -741,9 +747,9 @@
                 }
         })
         function ActualizarScan(obj){
-            //console.log(obj);
+            console.log(obj);
             $.ajax({
-                url: '/estudios_ics/cartas/UpdateAll/',
+                url:  parametros.UpdateAllUrl,//'/estudios_ics/cartas/UpdateAll/',
                 type: "POST",
                 data: JSON.stringify(obj),
                 dataType: "JSON",

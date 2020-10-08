@@ -49,7 +49,7 @@
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div class="card text-black-50 bg-secondary">
+                    <div class="card text-black-50">
                         <div class="card-header">
                            <h5 style="font-family: Roboto">
                                <i class="fa fa-list"></i> <spring:message code="Detalles Hemodinámica" />
@@ -79,17 +79,17 @@
                                         <textarea name="dx" class="form-control focusNext" id="dx" cols="30" rows="2" placeholder="Ingrese el diagnóstico" tabindex="1"></textarea>
                                     </div>
 
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-3">
                                         <label for="fecha">Fecha:</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="text" class="form-control focusNext"  id="fecha" name="fecha" required tabindex="2">
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-3">
                                         <label for="hora">Hora:</label>
                                         <span class="required text-danger"> * </span>
                                         <input type="time" class="form-control focusNext" id="hora" name="hora" required tabindex="3">
                                     </div>
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-6">
                                     <label for="nivelConciencia">Nivel de Consciencia:</label>
                                     <span class="required text-danger"> * </span>
                                     <select class="form-control focusNext" id="nivelConciencia" name="nivelConciencia" required tabindex="4">
@@ -100,41 +100,49 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-sm-4">
-                                    <label for="pa">P/A mmHg:</label>
+                                <div class="form-group col-sm-6">
+                                    <label for="pa">P/S mmHg:</label>
                                     <span class="required text-danger"> * </span>
-                                    <input type="text" class="form-control focusNext" id="pa" name="pa" placeholder="P/A mmHg" required tabindex="5">
+                                    <input type="text" class="form-control focusNext" id="pa" name="pa" placeholder="Sistólica mmHg" required tabindex="5">
                                 </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="pp">PP mmHg:</label>
-                                    <input type="text" class="form-control focusNext" id="pp" name="pp" placeholder="PP mmHg" readonly required >
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="pam">PAM mmHg:</label>
-                                    <input type="text" class="form-control focusNext" id="pam" name="pam" placeholder="PAM mmHg" readonly  required >
-                                </div>
-                                <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-6">
+                                        <label for="pd">P/D mmHg:</label>
+                                        <span class="required text-danger"> * </span>
+                                        <input type="text" class="form-control focusNext" id="pd" name="pd" placeholder="Diastólica mmHg" required tabindex="6">
+                                    </div>
+                                        <div hidden="hidden">
+                                        <div class="form-group col-sm-2">
+                                            <label for="pp">PP mmHg:</label>
+                                            <input type="text" class="form-control focusNext" id="pp" name="pp" placeholder="PP mmHg" readonly required >
+                                        </div>
+                                        <div class="form-group col-sm-2">
+                                            <label for="pam">PAM mmHg:</label>
+                                            <input type="text" class="form-control focusNext" id="pam" name="pam" placeholder="PAM mmHg" readonly  required >
+                                        </div>
+                                    </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group col-sm-3">
                                     <label for="fc">F.C por Minuto:</label>
-                                    <input type="text" class="form-control focusNext" id="fc" name="fc" placeholder="F.C por Minuto" required tabindex="6">
+                                    <input type="text" class="form-control focusNext" id="fc" name="fc" placeholder="F.C por Minuto" required tabindex="7">
                                 </div>
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-3">
                                     <label for="fr">F.R por Minuto:</label>
-                                    <input type="text" class="form-control focusNext" id="fr" name="fr" placeholder="F.R por Minuto" required tabindex="7">
+                                    <input type="text" class="form-control focusNext" id="fr" name="fr" placeholder="F.R por Minuto" required tabindex="8">
                                 </div>
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-3">
                                     <label for="tc">T°C:</label>
-                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" tabindex="8">
+                                    <input type="text" class="form-control focusNext" id="tc" name="tc" placeholder="T°C" tabindex="9">
                                 </div>
 
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-3">
                                     <label for="sa">SA02%:</label>
-                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%"  tabindex="9">
+                                    <input type="text" class="form-control focusNext" id="sa" name="sa" placeholder="SA02%"  tabindex="10">
                                 </div>
 
                                 <div class="form-group col-sm-4">
                                     <label for="extremidades">Extremidades:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="extremidades" id="extremidades" class="form-control focusNext" required tabindex="10">
+                                    <select name="extremidades" id="extremidades" class="form-control focusNext" required tabindex="11">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${extremidades}" var="extrem">
                                             <option value="${extrem.catKey}">${extrem.spanish}</option>
@@ -144,7 +152,7 @@
                                 <div class="form-group col-sm-4">
                                     <label for="llenadoCapilar">Llenado Capilar (seg):</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="llenadoCapilar" id="llenadoCapilar" class="form-control focusNext" required tabindex="11"/>
+                                    <select name="llenadoCapilar" id="llenadoCapilar" class="form-control focusNext" required tabindex="12"/>
                                     <option selected value=""><spring:message code="select" />...</option>
                                     <c:forEach items="${llenadoCapilar}" var="llenado">
                                         <option value="${llenado.catKey}">${llenado.spanish}</option>
@@ -154,7 +162,7 @@
                                 <div class="form-group col-sm-4">
                                     <label for="pulsoCalidad">Pulso (Calidad):</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="pulsoCalidad" id="pulsoCalidad" class="form-control focusNext" required tabindex="12">
+                                    <select name="pulsoCalidad" id="pulsoCalidad" class="form-control focusNext" required tabindex="13">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${pulsoCalidad}" var="pulso">
                                             <option value="${pulso.catKey}">${pulso.spanish}</option>
@@ -164,7 +172,7 @@
 
                                 <div class="form-group col-sm-4">
                                     <label for="diuresis">Diuresis/ml/Kg/Hr:</label>
-                                    <select name="diuresis" id="diuresis" class="form-control focusNext" tabindex="13">
+                                    <select name="diuresis" id="diuresis" class="form-control focusNext" tabindex="14">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${diuresis}" var="d">
                                             <option value="${d.catKey}">${d.spanish}</option>
@@ -172,16 +180,16 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-2">
                                     <label for="densidadUrinaria">Densidad Urinaria:</label>
-                                    <input type="text" class="form-control focusNext" id="densidadUrinaria" tabindex="14"
+                                    <input type="text" class="form-control focusNext" id="densidadUrinaria" tabindex="15"
                                            name="densidadUrinaria" placeholder="Densidad Urinaria">
                                 </div>
 
-                                <div class="form-group col-sm-12">
+                                <div class="form-group col-sm-6">
                                     <label for="personaValida">Valorado Por:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="15">
+                                    <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="16">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${personaValida}" var="person">
                                             <option value="${person.catKey}">${person.spanish}</option>
@@ -290,6 +298,8 @@
 <script type="text/javascript" src="${select_esJs}"></script>
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
+<spring:url value="/resources/js/libs/notify.min.js" var="noty" />
+<script type="text/javascript" src="${noty}"></script>
 
 
 <spring:url value="/resources/js/app.js" var="App" />
@@ -306,7 +316,6 @@
             $("#btnGuardar").prop( "disabled", false );
         }
         if($("#numParams").val() != $("#contParams").val()){
-            debugger;
             $('#volver').bind("click", function (e) {
                 e.preventDefault();
             });
@@ -321,7 +330,6 @@
         $("#pulsoCalidad").select2();
         $("#personaValida").select2();
         $("#diuresis").select2();
-        //$("#pa").mask("999/999");
         $("#fecha").datepicker({
             autoclose: true,
             format: "dd/mm/yyyy",
@@ -336,8 +344,11 @@
         form1.validate({
             rules:{
                     pa:{required:true,
-                       customphone:true
+                        number: true
                     },
+                pd:{required:true,
+                    number: true
+                },
                 signo:{required:true},
                 nivelConciencia:{required:true},
                 extremidades:{required:true},
@@ -407,7 +418,7 @@
             };
             if( isNaN($('#pp').val()) || isNaN($('#pam').val()) || $('#pp').val()=== '0' || $('#pam').val() === '0' ){
                 $('#pa').css('border-color','#FF0000');
-                swal("Error!","Valores en cero","error");
+                $.notify("Error! Valores en cero","error");
                 return false;
             }else{
                 $.post(url.addDetalleHemoUrl, form1.serialize(), function (data) {
@@ -424,16 +435,24 @@
                 })
             }
         }
-        $("#pa").keyup(function(){
-            var pa = $("#pa").val();
-            var result = pa.split("/");
-            var part1 = parseInt(result[0]);
-            var part2 = parseInt(result[1]);
+
+        $("#pd").keypress(function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if(code==13){
+                obtenerDatos();
+            }
+        });
+
+        function obtenerDatos(){
+            debugger;
+            var sistolica = $("#pa").val();
+            var diastolica = $("#pd").val();
             var diferencia = 0;
-            if(part1 > part2)
-                diferencia = parseInt(part1)-parseInt(part2);
-            else
-                diferencia = parseInt(part2)-parseInt(part1);
+            if(parseInt(sistolica) > parseInt(diastolica))
+                diferencia = parseInt(sistolica)-parseInt(diastolica);
+            else{
+                diferencia = parseInt(diastolica)-parseInt(sistolica);
+            }
             if(isNaN(diferencia)){
                 $("#pp").val(0);
                 $("#pam").val(0);
@@ -441,13 +460,15 @@
             else{
                 $("#pp").val(diferencia);
             }
-             if(isNaN(part1) || isNaN(part2)){
+            if(isNaN(sistolica) || isNaN(diastolica)){
                 $("#pam").val(0);
             }else{
-                var pam = ((parseInt(part2) * 2) + parseInt(part1)) / 3;
+                var pam = ((parseInt(diastolica) * 2) + parseInt(sistolica)) / 3;
                 $("#pam").val(Math.round(pam));
             }
-        })
+        }
+
+
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter
             if (evt.key !== 'Enter') {

@@ -40,6 +40,7 @@ public class HemoDetalle extends BaseMetaData {
     private String personaValida;
     private Character impreso;
     private String pa;
+    private String pd;
     private String pp;
     private String pam;
     private String dx;
@@ -203,6 +204,15 @@ public class HemoDetalle extends BaseMetaData {
 
     public void setPa(String pa) {
         this.pa = pa;
+    }
+
+    @Column(name = "pd", nullable = false)
+    public String getPd() {
+        return pd;
+    }
+
+    public void setPd(String pd) {
+        this.pd = pd;
     }
 
     @Column(name = "pp", nullable = false)

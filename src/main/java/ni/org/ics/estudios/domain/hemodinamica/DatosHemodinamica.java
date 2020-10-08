@@ -215,7 +215,7 @@ public class DatosHemodinamica extends BaseMetaData {
     }
 
 
-    @Column(name = "IMCdetallado", nullable = false)
+    @Column(name = "IMCdetallado", nullable = true)
     public String getIMCdetallado(){return IMCdetallado;}
 
     public void setIMCdetallado(String IMCdetallado) {

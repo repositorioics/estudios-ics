@@ -161,7 +161,6 @@ public class HemoController {
         } catch (Exception e) {
             return  lista = null;
         }
-
     }
     List<MessageResource> messagediuresis = new ArrayList<MessageResource>();
     List<MessageResource> messagePersonaValida = new ArrayList<MessageResource>();
@@ -173,6 +172,7 @@ public class HemoController {
         Map<String, Object> model = new HashMap<String, Object>();
         HemoDetalle obj = datoshemodinamicaService.getByHemoDetalleId(idHemoDetalle);
         map.put("pa", obj.getPa());
+        map.put("pd", obj.getPd());
         map.put("pp", obj.getPp());
         map.put("pam", obj.getPam());
         map.put("fcardi", obj.getFc());
@@ -279,23 +279,24 @@ public class HemoController {
 
         /* Guardar datos Hemodinamica 29/05/2019 - first save */
         @RequestMapping(value="addHemodinamica", method=RequestMethod.POST)
-        public ResponseEntity<String>addHemodinamica(@RequestParam( value="asc", required=true ) double asc
-                , @RequestParam( value="direccion", required=true ) String direccion
+        public ResponseEntity<String>addHemodinamica(
+                //  @RequestParam( value="asc", required=true ) double asc
+                //, @RequestParam( value="imc", required=true ) double imc
+                //, @RequestParam( value="IMCdetallado", required=true ) String IMCdetallado
+                //, @RequestParam( value="municipio", required=true ) String municipio
+                //, @RequestParam( value="silais", required=true ) String silais
+                //, @RequestParam( value="uSalud",  required=true ) String uSalud
+                  @RequestParam( value="direccion", required=true ) String direccion
                 , @RequestParam( value="edad", required=true ) String edad
                 , @RequestParam( value="fecha", required=true ) String fecha
                 , @RequestParam( value="fconsulta", required=true ) String fconsulta
-                , @RequestParam( value="imc", required=true ) double imc
-                , @RequestParam( value="municipio", required=true ) String municipio
                 , @RequestParam( value="expediente", required=true ) String nExpediente
                 , @RequestParam( value="peso", required=true ) String peso
                 , @RequestParam( value="sector", required=true ) String sector
                 , @RequestParam(value = "barrioF") String barrioF
-                , @RequestParam( value="silais", required=true ) String silais
                 , @RequestParam( value="talla", required=true ) double talla
                 , @RequestParam( value="telefono", required=true ) String telefono
-                , @RequestParam( value="uSalud",  required=true ) String uSalud
                 , @RequestParam( value="idParticipante" ) int idParticipante
-                , @RequestParam( value="IMCdetallado", required=true ) String IMCdetallado
                 , @RequestParam( value="fie", required=true ) String fie
                 , @RequestParam( value="diasenf", required=true ) Integer diasenf
                 , @RequestParam( value="sdMin", required=false ) String sdMin
@@ -314,24 +315,26 @@ public class HemoController {
         ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
-            obj.setAsc(Double.valueOf(round(asc,2)));
+            double areasc = getAreaSupCorp(peso,talla);
+            obj.setAsc(Double.valueOf(round(areasc,2)));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
             obj.setFecha(DateUtil.StringToDate(fconsulta,"dd/MM/yyyy"));
-            obj.setImc(imc);
-            obj.setMunicipio(municipio);
+            double valorImc = getIMC(peso,talla);
+            obj.setImc(Double.valueOf(round(valorImc,2)));
+            obj.setMunicipio("Managua");
             obj.setnExpediente(nExpediente);
             obj.setPeso(peso);
             obj.setSector(sector);
             obj.setBarrioF(barrioF);
-            obj.setSilais(silais);
+            obj.setSilais("Managua");
             obj.setTalla(talla);
             obj.setTelefono(telefono);
-            obj.setuSalud(uSalud);
+            obj.setuSalud("Sócrates Flores Vivas");
             Participante p = new Participante();
             p.setCodigo(idParticipante);
             obj.setParticipante(p);
-            obj.setIMCdetallado(IMCdetallado);
+            obj.setIMCdetallado("-");
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             obj.setRecordDate(new Date());
             obj.setFie(DateUtil.StringToDate(fie, "dd/MM/yyyy"));
@@ -367,24 +370,24 @@ public class HemoController {
     @PathVariable(value="idDatoHemo") String idDatoHemo,
     * */
     @RequestMapping(value = "UpdateHemodinamica", method = RequestMethod.POST)
-    public ResponseEntity<String>UpdateHemodinamica(@RequestParam (value="idDatoHemo") String idDatoHemo,
-              @RequestParam( value="asc", required=true ) double asc
+    public ResponseEntity<String>UpdateHemodinamica(@RequestParam (value="idDatoHemo") String idDatoHemo
             , @RequestParam( value="direccion", required=true ) String direccion
             , @RequestParam( value="edad", required=true ) String edad
             , @RequestParam( value="fecha", required=true ) String fecha
             , @RequestParam( value="fconsulta", required=true ) String fconsulta
-            , @RequestParam( value="imc", required=true ) double imc
-            , @RequestParam( value="municipio", required=true ) String municipio
+            //, @RequestParam( value="imc", required=true ) double imc
+            //, @RequestParam( value="asc", required=true ) double asc
+            //, @RequestParam( value="IMCdetallado", required=true ) String IMCdetallado
+            //, @RequestParam( value="municipio", required=true ) String municipio
+            //, @RequestParam( value="uSalud",  required=true ) String uSalud
+            //, @RequestParam( value="silais", required=true ) String silais
             , @RequestParam( value="expediente", required=true ) String nExpediente
             , @RequestParam( value="peso", required=true ) String peso
             , @RequestParam( value="sector", required=true ) String sector
             , @RequestParam(value = "barrioF") String barrioF
-            , @RequestParam( value="silais", required=true ) String silais
             , @RequestParam( value="talla", required=true ) double talla
             , @RequestParam( value="telefono", required=true ) String telefono
-            , @RequestParam( value="uSalud",  required=true ) String uSalud
             , @RequestParam( value="idParticipante" ) int idParticipante
-            , @RequestParam( value="IMCdetallado", required=true ) String IMCdetallado
             , @RequestParam( value="fie", required=true ) String fie
             , @RequestParam( value="diasenf", required=true ) Integer diasenf
             , @RequestParam( value="sdMin", required=false ) String sdMin
@@ -403,26 +406,27 @@ public class HemoController {
     ){
         try{
             DatosHemodinamica obj = new DatosHemodinamica();
-
             obj.setIdDatoHemo(idDatoHemo);
-            obj.setAsc(Double.valueOf(round(asc,2)));
+            double areasc = getAreaSupCorp(peso,talla);
+            obj.setAsc(Double.valueOf(round(areasc,2)));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
             obj.setFecha(DateUtil.StringToDate(fconsulta, "dd/MM/yyyy"));
-            obj.setImc(imc);
-            obj.setMunicipio(municipio);
+            double valorImc = getIMC(peso,talla);
+            obj.setImc(Double.valueOf(round(valorImc,2)));
+            obj.setMunicipio("Managua");
             obj.setnExpediente(nExpediente);
             obj.setPeso(peso);
             obj.setSector(sector);
             obj.setBarrioF(barrioF.toUpperCase().trim());
-            obj.setSilais(silais);
+            obj.setSilais("Managua");
             obj.setTalla(talla);
             obj.setTelefono(telefono);
-            obj.setuSalud(uSalud);
+            obj.setuSalud("Sócrates Flores Vivas");
             Participante p = new Participante();
             p.setCodigo(idParticipante);
             obj.setParticipante(p);
-            obj.setIMCdetallado(IMCdetallado);
+            obj.setIMCdetallado("-");
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             obj.setRecordDate(new Date());
             obj.setFie(DateUtil.StringToDate(fie,"dd/MM/yyyy"));
@@ -451,6 +455,20 @@ public class HemoController {
             return  new ResponseEntity<String>( json, HttpStatus.OK);
         }
     }
+
+    public double getIMC(String peso, double altura){
+        double alturaMetro = (altura)/100;
+        double p = Double.parseDouble(peso);
+        double cuadrado = (alturaMetro*alturaMetro);
+        double imc = p / cuadrado;
+        return imc;
+    }
+    public double getAreaSupCorp(String peso, double talla){
+        //Area de Superficie Corporal (Haycock)
+        double p = Double.parseDouble(peso);
+        return  Math.sqrt((p * talla) / 3600);
+    }
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(value);
@@ -517,8 +535,9 @@ public class HemoController {
             ,@RequestParam( value="hora", required=true ) String hora
             ,@RequestParam( value="nivelConciencia", required=true ) String nivelConciencia
             ,@RequestParam( value="pa", required=true ) String pa
-            ,@RequestParam( value="pp", required=true ) String pp
-            ,@RequestParam( value="pam", required=true ) String pam
+            //,@RequestParam( value="pp", required=true ) String pp
+            ,@RequestParam( value="pd", required=true ) String pd
+            //,@RequestParam( value="pam", required=true ) String pam
             ,@RequestParam( value="fc", required=true ) String fc
             ,@RequestParam( value="fr", required=true ) String fr
             ,@RequestParam( value="tc" ) String tc
@@ -543,8 +562,13 @@ public class HemoController {
                 obj.setHora(hora);
                 obj.setNivelConciencia(nivelConciencia);
                 obj.setPa(pa);
-                obj.setPp(pp);
-                obj.setPam(pam);
+                Integer psistolica = Integer.parseInt(pa);
+                Integer pdiastolica = Integer.parseInt(pd);
+                Integer diferencia = PAM(psistolica,pdiastolica);
+                obj.setPp(""+diferencia);
+                obj.setPd(pd);
+                double aProm = ((pdiastolica * 2) + psistolica) / 3;
+                obj.setPam(""+ Math.round(aProm));
                 obj.setFc(fc);
                 obj.setFr(fr);
                 obj.setTc(tc);
@@ -590,8 +614,9 @@ public class HemoController {
             ,@RequestParam( value="hora", required=true ) String hora
             ,@RequestParam( value="nivelConciencia", required=true ) String nivelConciencia
             ,@RequestParam( value="pa", required=true ) String pa
-            ,@RequestParam( value="pp", required=true ) String pp
-            ,@RequestParam( value="pam", required=true ) String pam
+            ,@RequestParam( value="pd", required=true ) String pd
+            //,@RequestParam( value="pp", required=true ) String pp
+            //,@RequestParam( value="pam", required=true ) String pam
             ,@RequestParam( value="fc", required=true ) String fc
             ,@RequestParam( value="fr", required=true ) String fr
             ,@RequestParam( value="tc" ) String tc
@@ -615,8 +640,13 @@ public class HemoController {
             objDetalle.setHora(hora);
             objDetalle.setNivelConciencia(nivelConciencia);
             objDetalle.setPa(pa);
-            objDetalle.setPp(pp);
-            objDetalle.setPam(pam);
+            Integer psistolica = Integer.parseInt(pa);
+            Integer pdiastolica = Integer.parseInt(pd);
+            Integer dif = PAM(psistolica,pdiastolica);
+            objDetalle.setPp(""+dif);
+            objDetalle.setPd(pd);
+            double aProm = ((pdiastolica * 2) + psistolica) / 3;
+            objDetalle.setPam(""+ Math.round(aProm));
             objDetalle.setFc(fc);
             objDetalle.setFr(fr);
             objDetalle.setTc(tc);
@@ -646,9 +676,15 @@ public class HemoController {
         }
     }
 
-
-
-
+    public Integer PAM(Integer ps, Integer pd){
+        Integer diferencia=0;
+        if(ps > pd)
+            diferencia = (ps - pd);
+        else{
+            diferencia = (pd - ps);
+        }
+        return diferencia;
+    }
 
     /*  Esta Funcion retorna un Json  */
     private ResponseEntity<String> createJsonResponse( Object o )
@@ -661,6 +697,4 @@ public class HemoController {
         json = escaper.translate(json);
         return new ResponseEntity<String>( json, headers, HttpStatus.CREATED );
     }
-
-
 }
