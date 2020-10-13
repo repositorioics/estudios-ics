@@ -77,8 +77,13 @@ public class ParticipanteProcesos implements Auditable {
     //Covid19
     private String consCovid19;
     private String subEstudios;
+    //Parte E CHF para toma mx adicional Covid19
+    private String consChf;
+    private String cuestCovid;
+    private String muestraCovid;
 
-	@Id
+
+    @Id
 	@Column(name = "codigo", nullable = false, length = 6)
 	public Integer getCodigo() {
 		return codigo;
@@ -528,6 +533,33 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setSubEstudios(String subEstudios) {
         this.subEstudios = subEstudios;
+    }
+
+    @Column(name = "cons_chf", nullable = true, length = 2)
+    public String getConsChf() {
+        return consChf;
+    }
+
+    public void setConsChf(String consChf) {
+        this.consChf = consChf;
+    }
+
+    @Column(name = "cuest_covid19", nullable = true, length = 2)
+    public String getCuestCovid() {
+        return cuestCovid;
+    }
+
+    public void setCuestCovid(String cuestCovid) {
+        this.cuestCovid = cuestCovid;
+    }
+
+    @Column(name = "mx_adic_covid19", nullable = true, length = 2)
+    public String getMuestraCovid() {
+        return muestraCovid;
+    }
+
+    public void setMuestraCovid(String muestraCovid) {
+        this.muestraCovid = muestraCovid;
     }
 
     public MovilInfo getMovilInfo() {

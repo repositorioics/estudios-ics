@@ -1085,3 +1085,48 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_TRATAMIENTO_VFC_19', '19', 'COVID_TRATAMIENTO_VFC', NULL, '0', 19, '0', 'Prednisona');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_TRATAMIENTO_VFC_20', '20', 'COVID_TRATAMIENTO_VFC', NULL, '0', 20, '0', 'Ibuprofen');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_TRATAMIENTO_VFC_998', '998', 'COVID_TRATAMIENTO_VFC', NULL, '0', 21, '0', 'Otro medicamento');
+
+/*Cuestionario Covid19*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNSNC', NULL, NULL, NULL, '1', 0, '0', 'Catalogo Si/No/No Sabe/No Contesto');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNSNC_01', '1', 'COVID_CAT_SNNSNC', NULL, '0', 1, '0', 'Si');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNSNC_02', '0', 'COVID_CAT_SNNSNC', NULL, '0', 2, '0', 'No');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNSNC_997', '997', 'COVID_CAT_SNNSNC', NULL, '0', 4, '0', 'No Contesto');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SNNSNC_999', '999', 'COVID_CAT_SNNSNC', NULL, '0', 3, '0', 'No sabe/No esta seguro (a)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DONDE_BA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo dónde buscó ayuda médica para atender enfermedad');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DONDE_BA_01', '1', 'COVID_CAT_DONDE_BA', NULL, '0', 1, '0', 'Centro de Salud Sócrates Flores');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DONDE_BA_02', '2', 'COVID_CAT_DONDE_BA', NULL, '0', 2, '0', 'Otro Centro Salud');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DONDE_BA_03', '3', 'COVID_CAT_DONDE_BA', NULL, '0', 3, '0', 'Hospital');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DONDE_BA_04', '4', 'COVID_CAT_DONDE_BA', NULL, '0', 4, '0', 'Médico Privado');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DONDE_BA_05', '5', 'COVID_CAT_DONDE_BA', NULL, '0', 5, '0', 'No busqué ayuda medica');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIPO_SEG', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para el tipo de seguimiento diario que recibió');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIPO_SEG_01', '1', 'COVID_CAT_TIPO_SEG', NULL, '0', 1, '0', 'Contacto Telefónico');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIPO_SEG_02', '2', 'COVID_CAT_TIPO_SEG', NULL, '0', 2, '0', 'Visita en el Domicilio');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_BA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo cuánto tiempo después que iniciaron los síntomas buscó ayuda médica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_BA_01', '1', 'COVID_CAT_TIEMPO_BA', NULL, '0', 1, '0', 'Menos de dos días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_BA_02', '2', 'COVID_CAT_TIEMPO_BA', NULL, '0', 2, '0', 'Entre 2 a 7 días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_BA_03', '3', 'COVID_CAT_TIEMPO_BA', NULL, '0', 3, '0', 'Mas de 1 semana');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_BA_997', '997', 'COVID_CAT_TIEMPO_BA', NULL, '0', 5, '0', 'No contestó');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_BA_999', '999', 'COVID_CAT_TIEMPO_BA', NULL, '0', 4, '0', 'No Sabe/No esta Seguro(a)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD', NULL, NULL, NULL, '1', 0, '0', 'Catalogo serveridad enfermedad Covid19');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD_01', '1', 'COVID_CAT_SEVERIDAD', NULL, '0', 1, '0', 'Leve');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD_02', '2', 'COVID_CAT_SEVERIDAD', NULL, '0', 2, '0', 'Moderada');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD_03', '3', 'COVID_CAT_SEVERIDAD', NULL, '0', 3, '0', 'Severa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD_04', '4', 'COVID_CAT_SEVERIDAD', NULL, '0', 4, '0', 'Muy severa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD_997', '997', 'COVID_CAT_SEVERIDAD', NULL, '0', 6, '0', 'No contestó');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_SEVERIDAD_999', '999', 'COVID_CAT_SEVERIDAD', NULL, '0', 5, '0', 'No Sabe/No esta Seguro(a)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FUMA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo fumaba antes de que enfermara Covid19 o ahora');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FUMA_01', '1', 'COVID_CAT_FUMA', NULL, '0', 1, '0', 'Todo el día');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FUMA_02', '2', 'COVID_CAT_FUMA', NULL, '0', 2, '0', 'Algunos días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FUMA_03', '3', 'COVID_CAT_FUMA', NULL, '0', 3, '0', 'No Fumaba');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FUMA_997', '997', 'COVID_CAT_FUMA', NULL, '0', 5, '0', 'No contestó');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FUMA_999', '999', 'COVID_CAT_FUMA', NULL, '0', 4, '0', 'No Sabe/No esta Seguro(a)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR', NULL, NULL, NULL, '1', 0, '0', 'Catalogo unidad de medida tiempo de recuperación enfermedad');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR_01', '1', 'COVID_CAT_UNIDAD_MED_TR', NULL, '0', 1, '0', 'Dias');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR_02', '2', 'COVID_CAT_UNIDAD_MED_TR', NULL, '0', 2, '0', 'Semanas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR_03', '3', 'COVID_CAT_UNIDAD_MED_TR', NULL, '0', 3, '0', 'Meses');

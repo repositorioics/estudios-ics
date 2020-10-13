@@ -51,8 +51,7 @@ var processCasosCovid = function(){
                             $("#estudios").val("");
                         }
                         else {
-                            $("#codigoCasa").val("");
-                            //$("#codigoCasa").val(data.casaFamilia);
+                            $("#codigoCasa").val(data.casaFamilia);
                             $("#codigoParticipante").val(data.codigo);
                             console.log(data.estudios);
                             $("#estudios").val(data.estudios);

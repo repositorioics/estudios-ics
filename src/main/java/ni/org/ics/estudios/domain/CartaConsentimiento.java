@@ -61,7 +61,9 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     private String apellido1MxSuperficie;
     private String apellido2MxSuperficie;
     private String casaChf;
-
+    //muestra adicional chf covid19
+    private String motivoRechazoParteE;
+    private String otroMotivoRechazoParteE;
 
     @Id
     @Column(name = "CODIGO", nullable = false, insertable = true, updatable = false, length = 36)
@@ -410,6 +412,24 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
 
     public void setAceptaParteE(String aceptaParteE) {
         this.aceptaParteE = aceptaParteE;
+    }
+
+    @Column(name = "MOTIVO_RECHAZO_PARTE_E", nullable = true, length = 2)
+    public String getMotivoRechazoParteE() {
+        return motivoRechazoParteE;
+    }
+
+    public void setMotivoRechazoParteE(String motivoRechazoParteE) {
+        this.motivoRechazoParteE = motivoRechazoParteE;
+    }
+
+    @Column(name = "OTRO_MOT_RECHAZO_PARTE_E", nullable = true)
+    public String getOtroMotivoRechazoParteE() {
+        return otroMotivoRechazoParteE;
+    }
+
+    public void setOtroMotivoRechazoParteE(String otroMotivoRechazoParteE) {
+        this.otroMotivoRechazoParteE = otroMotivoRechazoParteE;
     }
 
     @Override

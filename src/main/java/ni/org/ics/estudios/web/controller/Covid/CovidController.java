@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.CartaConsentimiento;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.cohortefamilia.CasaCohorteFamilia;
+import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
 import ni.org.ics.estudios.domain.covid19.CasoCovid19;
 import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
@@ -12,6 +13,7 @@ import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.CartaConsentimientoService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.ParticipanteService;
+import ni.org.ics.estudios.service.cohortefamilia.ParticipanteCohorteFamiliaService;
 import ni.org.ics.estudios.service.covid.CovidService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
@@ -53,6 +55,10 @@ public class CovidController {
 
     @Resource(name="cartaConsentimientoService")
     private CartaConsentimientoService cartaConsentimientoService;
+
+    @Resource(name = "participanteCohorteFamiliaService")
+    private ParticipanteCohorteFamiliaService participanteCohorteFamiliaService;
+
 
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
@@ -144,56 +150,113 @@ public class CovidController {
             , @RequestParam( value="fis", required=true, defaultValue="" ) String fis
     )throws Exception{
         try{
-            CasoCovid19 covid_casos = this.covidService.getCasoCovid19ByCodigo(codigo);
-            ParticipanteCasoCovid19 participanteCovid = this.covidService.getParticipanteCasoCovid19ByCodigoAndCodCaso(codigoParticipante, codigo);
-            if (covid_casos == null || participanteCovid==null){
-                covid_casos = new CasoCovid19();
-                covid_casos.setCodigoCaso(StringUtil.getCadenaAlfanumAleatoria(36,true));
-                covid_casos.setDeviceid("server");
-                covid_casos.setEstado('1');
-                covid_casos.setPasive('0');
-                covid_casos.setRecordDate(new Date());
-                covid_casos.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                covid_casos.setFechaInactivo(null);
-                covid_casos.setInactivo("0");
+            Date dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+            CasoCovid19 casoCovid19 = null;
+            CasoCovid19 casoByCasa = null;
+            ParticipanteCasoCovid19 partCasoIndice = null;
+            boolean fueIndice = false, fueMiembro = false;
+             if (codigoCasa!=null) casoByCasa = this.covidService.getCasoCovid19ByCasaChf(codigoCasa);
+            if (casoByCasa!=null){
+                if (casoByCasa.getFechaIngreso().compareTo(dFechaInicio)!=0){
+                    return JsonUtil.createJsonResponse("Ya existe un caso activo para esta casa con fecha de inicio: "+DateUtil.DateToString(casoByCasa.getFechaIngreso(),"dd/MM/yyyy"));
+                }else {
+                    casoCovid19 = casoByCasa;//es el mismo caso
+                    codigo = casoCovid19.getCodigoCaso();
+                }
+            }else
+                casoCovid19 = this.covidService.getCasoCovid19ByCodigo(codigo);//es caso pediatrica
+
+            ParticipanteCasoCovid19 participanteCasoCovid = this.covidService.getParticipanteCasoCovid19ByCodigoAndCodCaso(codigoParticipante, codigo);
+            ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigoParticipante);
+
+            if (casoCovid19 == null && procesos.getEstudio().toLowerCase().contains("tcovid")){ //si es caso nuevo validar si el positivo tiene consentimiento de caso indice
+                fueIndice = this.covidService.esParticipanteIndiceCasoCovidByCodigo(codigoParticipante);
+                if (!fueIndice) return JsonUtil.createJsonResponse("Participante no tiene consentimiento de caso indice, debe registrarlo como candidato");
             }
 
-            covid_casos.setFechaIngreso(DateUtil.StringToDate(fechaInicio,"dd/MM/yyyy"));
-            if ((participanteCovid==null || covid_casos.getCasa()!=null) && codigoCasa!=null && !codigoCasa.isEmpty()) {//caso nuevo o cambio de casa familia del participante
+            if (casoCovid19 == null){//if (casoCovid19 == null || participanteCasoCovid==null){
+                casoCovid19 = new CasoCovid19();
+                casoCovid19.setCodigoCaso(StringUtil.getCadenaAlfanumAleatoria(36,true));
+                casoCovid19.setDeviceid("server");
+                casoCovid19.setEstado('1');
+                casoCovid19.setPasive('0');
+                casoCovid19.setRecordDate(new Date());
+                casoCovid19.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                casoCovid19.setFechaInactivo(null);
+                casoCovid19.setInactivo("0");
+            }else{
+                partCasoIndice = this.covidService.getParticipanteIndiceCasoCovid19ByCodigoCaso(casoCovid19.getCodigoCaso());
+
+            }
+
+            casoCovid19.setFechaIngreso(DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy"));
+            if ((participanteCasoCovid==null || casoCovid19.getCasa()!=null) && codigoCasa!=null && !codigoCasa.isEmpty()) {//caso nuevo o cambio de casa familia del participante
                 CasaCohorteFamilia casaChFam = new CasaCohorteFamilia();
                 casaChFam.setCodigoCHF(codigoCasa);
-                covid_casos.setCasa(casaChFam);
+                casoCovid19.setCasa(casaChFam);
             }
-            this.covidService.saveOrUpdateCasoCovid19(covid_casos); // Aqui mando a guardar en la 1er tabla
+            this.covidService.saveOrUpdateCasoCovid19(casoCovid19); // Aqui mando a guardar en la 1er tabla
 
-            if (participanteCovid==null) {
-                participanteCovid = new ParticipanteCasoCovid19();
-                participanteCovid.setCodigoCasoParticipante(StringUtil.getCadenaAlfanumAleatoria(36, true));
-                participanteCovid.setDeviceid("server");
-                participanteCovid.setEstado('1');
-                participanteCovid.setPasive('0');
-                participanteCovid.setRecordDate(new Date());
-                participanteCovid.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                participanteCovid.setEnfermo("S");
-
+            if (participanteCasoCovid==null) {
+                participanteCasoCovid = new ParticipanteCasoCovid19();
+                participanteCasoCovid.setCodigoCasoParticipante(StringUtil.getCadenaAlfanumAleatoria(36, true));
+                participanteCasoCovid.setDeviceid("server");
+                participanteCasoCovid.setEstado('1');
+                participanteCasoCovid.setPasive('0');
+                participanteCasoCovid.setRecordDate(new Date());
+                participanteCasoCovid.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             }
+            if (procesos.getEstudio().toLowerCase().contains("tcovid")) {
+                if (!partCasoIndice.getParticipante().getCodigo().equals(codigoParticipante))
+                    participanteCasoCovid.setEnfermo("S");//solo el primero se registra como Indice
+                else
+                    participanteCasoCovid.setEnfermo("I");
+            }
+            else participanteCasoCovid.setEnfermo("S");
 
-            ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigoParticipante);
-            if (procesos!=null && procesos.getSubEstudios().contains("2"))
-                participanteCovid.setConsentimiento("1");//Consentido
+            if (procesos.getSubEstudios().contains("2"))
+                participanteCasoCovid.setConsentimiento("1");//Consentido
             else
-                participanteCovid.setConsentimiento("2");//Pendiente
+                participanteCasoCovid.setConsentimiento("2");//Pendiente
 
-            participanteCovid.setFis(DateUtil.StringToDate(fis,"dd/MM/yyyy"));
-            participanteCovid.setFif(DateUtil.StringToDate(fif,"dd/MM/yyyy"));
-            participanteCovid.setPositivoPor(positivoPor);
-            participanteCovid.setCodigoCaso(covid_casos);
+            participanteCasoCovid.setFis(DateUtil.StringToDate(fis,"dd/MM/yyyy"));
+            participanteCasoCovid.setFif(DateUtil.StringToDate(fif,"dd/MM/yyyy"));
+            participanteCasoCovid.setPositivoPor(positivoPor);
+            participanteCasoCovid.setCodigoCaso(casoCovid19);
             Participante participante = participanteService.getParticipanteByCodigo(codigoParticipante);
-            participanteCovid.setParticipante(participante);
-            this.covidService.saveOrUpdateParticipanteCasoCovid19(participanteCovid);
+            participanteCasoCovid.setParticipante(participante);
+            this.covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid);
 
-            return JsonUtil.createJsonResponse(covid_casos);
+            //Agregar resto de participantes de la casa
+            List<ParticipanteCohorteFamilia> participantesCasa = participanteCohorteFamiliaService.getParticipantesCHFByCodigoCasa(codigoCasa);
+            for(ParticipanteCohorteFamilia pchf : participantesCasa){
+                if (!pchf.getParticipante().getCodigo().equals(codigoParticipante) && !pchf.getParticipante().getCodigo().equals(partCasoIndice.getParticipante().getCodigo())) { //omitir el positivo
+                    fueMiembro = this.covidService.esParticipanteMiembroCasoCovidByCodigo(pchf.getParticipante().getCodigo());
+                    participanteCasoCovid = this.covidService.getParticipanteCasoCovid19ByCodigoAndCodCaso(pchf.getParticipante().getCodigo(), codigo);
+                    if (participanteCasoCovid == null) {
+                        participanteCasoCovid = new ParticipanteCasoCovid19();
+                        participanteCasoCovid.setCodigoCasoParticipante(StringUtil.getCadenaAlfanumAleatoria(36, true));
+                        participanteCasoCovid.setDeviceid("server");
+                        participanteCasoCovid.setEstado('1');
+                        participanteCasoCovid.setPasive('0');
+                        participanteCasoCovid.setRecordDate(new Date());
+                        participanteCasoCovid.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        participanteCasoCovid.setEnfermo("N");
+                        participanteCasoCovid.setParticipante(pchf.getParticipante());
+                        participanteCasoCovid.setCodigoCaso(casoCovid19);
+                        procesos = this.participanteProcesosService.getParticipante(codigoParticipante);
+                        if (procesos != null && procesos.getSubEstudios().contains("2") && fueMiembro)  //solo si ya fue miembro ponerlo como consentido
+                            participanteCasoCovid.setConsentimiento("1");//Consentido
+                        else
+                            participanteCasoCovid.setConsentimiento("2");//Pendiente
+                        this.covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid);
+                    }
+                }
+            }
+
+            return JsonUtil.createJsonResponse(casoCovid19);
         }catch (Exception e){
+            logger.error(e.getMessage());
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.CREATED);
