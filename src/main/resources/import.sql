@@ -773,6 +773,8 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CP_CAT_NV_06', '7', 'CP_CAT_NV', NULL, '0', 6, '0', 'No se encontro tutor');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CP_CAT_NV_07', '8', 'CP_CAT_NV', NULL, '0', 7, '0', 'Acude a Consulta Medica sin Tutor');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CP_CAT_NV_08', '9', 'CP_CAT_NV', NULL, '0', 8, '0', 'Fuera del pais');
+/*Muestreo Covid19 2020*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CP_CAT_NV_998', '998', 'CP_CAT_NV', NULL, '0', 9, '0', 'Otro motivo');
 
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CP_CAT_TV', NULL, NULL, NULL, '1', 0, '0', 'Catalogo tipo de vivienda');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CP_CAT_TV_01', '1', 'CP_CAT_TV', NULL, '0', 1, '0', 'Propia');
