@@ -14,6 +14,7 @@
 	                <li class="nav-item users">
 	                    <a class="nav-link" href="<spring:url value="/admin/users/" htmlEscape="true "/>"><i class="icon-people"></i><spring:message code="users" /></a>
 	                </li>
+
                     <!--<li class="nav-item versionLetters">
                         <a class="nav-link" href="<spring:url value="/admin/vcartas/" htmlEscape="true "/>"><i class="icon-docs"></i><spring:message code="versionLetters" /></a>
                     </li> -->
@@ -91,6 +92,54 @@
                     </ul>
                 </li>
             </sec:authorize>
+
+
+            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+                <li class="nav-item nav-dropdown retiro">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-user-times" aria-hidden="true"></i>
+                        <spring:message code="Retiro" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item filedata">
+                            <a class="nav-link" href="<spring:url value="/retiro/saveRetiroForm" htmlEscape="true "/>">
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                <spring:message code="Realizar Retiro" /></a>
+                        </li>
+
+                        <li class="nav-item retiro">
+                            <a class="nav-link" href="<spring:url value="/retiro/ListRetiro" htmlEscape="true "/>">
+                                <i class="fa fa-list"></i>
+                                <spring:message code="Listado Retiro" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
+
+
+
+
+            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+                <li class="nav-item nav-dropdown Serologia">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-ambulance"  aria-hidden="true"></i>
+                        <spring:message code="Serologia" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item filedata">
+                            <a class="nav-link" href="<spring:url value="/Serologia/listSerologia" htmlEscape="true "/>">
+                                <i class="fa fa-list"></i>
+                                <spring:message code="Listado" /></a>
+                        </li>
+                        <li class="nav-item filedata">
+                            <a class="nav-link" href="<spring:url value="/Serologia/listEnviosMuestras" htmlEscape="true "/>">
+                                <i class="fa fa-send"></i>
+                                <spring:message code="Envios" /></a>
+                        </li>
+
+                    </ul>
+                </li>
+            </sec:authorize>
+
+
 
             <sec:authorize access="hasRole('ROLE_DOM')">
             <li class="nav-item nav-dropdown Domicilio">
