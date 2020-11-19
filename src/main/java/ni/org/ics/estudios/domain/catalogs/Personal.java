@@ -22,6 +22,7 @@ public class Personal extends BaseMetaData implements Auditable {
 
     private Cargo cargo;
 
+    private String activochf;
     @Id
     @Column(name = "CODIGO", nullable = false, length = 4)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,5 +86,14 @@ public class Personal extends BaseMetaData implements Auditable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Column(name = "activochf", nullable = true)
+    public String getActivochf() {
+        return activochf;
+    }
+
+    public void setActivochf(String activochf) {
+        this.activochf = activochf;
     }
 }
