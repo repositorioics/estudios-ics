@@ -29,7 +29,7 @@ public class HuellasController {
 
     @RequestMapping(value = "huellas", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List<Huella> getBarrios(){
+    List<Huella> getHuellas(){
         logger.info("Descargando toda la informacion de los datos de los huellas");
         List<Huella> barrios = huellaService.getHuellas();
         if (barrios == null){
