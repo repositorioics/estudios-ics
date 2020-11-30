@@ -4,8 +4,10 @@ import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
+import ni.org.ics.estudios.dto.HistorialRetiroDto;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import ni.org.ics.estudios.dto.ParticipanteSeroDto;
+import ni.org.ics.estudios.dto.RetiroDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -99,6 +101,7 @@ public class RetiroService {
         return query.list();
     }
 
+
     public Personal getSupervisorById(Integer idpersona)throws Exception {
         Session session = sessionFactory.getCurrentSession();
         Integer cargoId = 14;
@@ -136,13 +139,27 @@ public class RetiroService {
     public Retiros getRetiroByID(Integer idretiro) throws Exception {
         try {
             Session session = sessionFactory.getCurrentSession();
-            Query query = session.createQuery("from Retiros r where r.idretiro =:idretiro");
+            Query query = session.createQuery("from Retiros r where r.idretiro =:idretiro order by r.fecharetiro desc ");
             query.setParameter("idretiro", idretiro);
             Retiros objRetiro = (Retiros) query.uniqueResult();
             return objRetiro;
         }catch (Exception e){
             throw e;
         }
+    }
+
+
+    public Razones_Retiro getRazonRetiro(String razon)throws Exception{
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Query query  =  session.createQuery("from Razones_Retiro rr where rr.motivo= :razon");
+            query.setParameter("razon", razon);
+            return (Razones_Retiro) query.uniqueResult();
+        }catch (Exception e){
+            throw e;
+        }
+
+
     }
 
 
@@ -173,6 +190,21 @@ public class RetiroService {
             throw e;
         }
     }
+
+
+
+    //region documentacion_retiro_data_to_mysql (HISTORIAL)
+    @SuppressWarnings("unchecked")
+    public List<RetiroDto>ListOfRetiro(Integer parametro2){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from RetiroDto r where codigo_participante= :parametro2");
+        query.setParameter("parametro2",parametro2);
+        return  query.list();
+    }
+
+
+
+    //endregion
 
 
 
