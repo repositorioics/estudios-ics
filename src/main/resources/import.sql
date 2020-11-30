@@ -1132,3 +1132,9 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR_01', '1', 'COVID_CAT_UNIDAD_MED_TR', NULL, '0', 1, '0', 'Dias');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR_02', '2', 'COVID_CAT_UNIDAD_MED_TR', NULL, '0', 2, '0', 'Semanas');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_UNIDAD_MED_TR_03', '3', 'COVID_CAT_UNIDAD_MED_TR', NULL, '0', 3, '0', 'Meses');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS', NULL, NULL, NULL, '1', 0, '0', 'Catalogo causas del Retiro');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_A', '1', 'CAT_CAUSAS_RETIROS', NULL, '0', 1, '0', 'A - Decisión Padre-Tutor');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_B', '2', 'CAT_CAUSAS_RETIROS', NULL, '0', 2, '0', 'B - Decisión Nuestra');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_C', '3', 'CAT_CAUSAS_RETIROS', NULL, '0', 3, '0', 'C - Expiración de Participación');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_D', '4', 'CAT_CAUSAS_RETIROS', NULL, '0', 4, '0', 'D - Fallecimiento');

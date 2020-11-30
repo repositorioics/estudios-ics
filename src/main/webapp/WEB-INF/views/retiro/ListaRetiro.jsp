@@ -154,6 +154,17 @@
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
+<c:choose>
+    <c:when test="${cookie.eIcsLang.value == null}">
+        <c:set var="lenguaje" value="es"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
+    </c:otherwise>
+</c:choose>
+<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
@@ -188,7 +199,8 @@
     $(document).ready(function(){
         var parametros={
             ListaHojaRetiroUrl: "${ListaHojaRetiroUrl}",
-            DetallesRetiroUrl:"${DetallesRetiroUrl}"
+            DetallesRetiroUrl:"${DetallesRetiroUrl}",
+            dataTablesLang: "${dataTablesLang}"
     };
         ListadoRetiros.init(parametros);
 
@@ -201,7 +213,7 @@
             var jqxhr = $.getJSON(parametros.DetallesRetiroUrl, { idretiro : id,   ajax : 'true'  }, function(data){
                 console.warn(data);
                 if(data.mensaje != null) $.notify(data.mensaje,"error");
-                $("#casapediatrica").val(data.casafamilia);
+                $("#casafamilia").val(data.casafamilia);
                 $("#casapediatrica").val(data.casapediatrica);
                 $("#medicosupervisor").val(data.medicosupervisor);
                 $("#observacion").val(data.observacion);
@@ -210,7 +222,6 @@
                 $("#quiencomunica").val(data.quiencomunica);
                 $("#relFam").val(data.relFam);
                 $("#carnet").val(data.carnet);
-                $("#otrosmotivo").val(data.otrosmotivo);
                 $("#exampleModal").modal("show");
             }).fail(function(){
                 swal("Error","falló el servidor","error");
