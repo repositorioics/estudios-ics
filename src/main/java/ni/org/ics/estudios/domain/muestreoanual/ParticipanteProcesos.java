@@ -81,6 +81,8 @@ public class ParticipanteProcesos implements Auditable {
     private String consChf;
     private String cuestCovid;
     private String muestraCovid;
+    //Texto que indica si el participante ha sido positivo para Covid19(SARS-COV2)
+    private String posCovid;
 
 
     @Id
@@ -560,6 +562,15 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setMuestraCovid(String muestraCovid) {
         this.muestraCovid = muestraCovid;
+    }
+
+    @Column(name = "pos_covid", nullable = true, length = 100)
+    public String getPosCovid() {
+        return posCovid;
+    }
+
+    public void setPosCovid(String posCovid) {
+        this.posCovid = posCovid;
     }
 
     public MovilInfo getMovilInfo() {
