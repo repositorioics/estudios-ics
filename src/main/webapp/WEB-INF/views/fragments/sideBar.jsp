@@ -51,14 +51,6 @@
                 </ul>
             </li>
 
-                <!--     <li class="nav-item nav-dropdown supervision">
-                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-home"></i><spring:message code="Casas" /></a>
-                    <ul class="nav-dropdown-items">
-                        <li class="nav-item intensiveMonitoring">
-                            <a class="nav-link" href="<spring:url value="/CrearCasa/CrearCasa" htmlEscape="true "/>"><i class="fa fa-plus-circle"></i><spring:message code="Crear Casa" /></a>
-                        </li>
-                    </ul>
-                </li>-->
             </sec:authorize>
             <!--<li class="nav-item nav-dropdown laboratory">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-chemistry"></i><spring:message code="laboratory" /></a>
@@ -77,6 +69,36 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item nav-dropdown procesos">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-retweet" aria-hidden="true"></i>
+                    <spring:message code="Procesos" /></a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<spring:url value="/Registro/BuscarInfor" htmlEscape="true "/>">
+                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                            <spring:message code="Ver Procedimientos" /></a>
+                    </li>
+                </ul>
+            </li>
+
+
+        <!-- EN PROCESO MÓDULO DE REACTIVACION  * OMITIR *
+            <li class="nav-item nav-dropdown reactivacion">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-home"></i><spring:message code="Reactivar" /></a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item intensiveMonitoring">
+                        <a class="nav-link" href="<spring:url value="/reactivacion/ReactivarForm" htmlEscape="true "/>">
+                            <i class="fa fa-hand-o-up"></i><spring:message code="Reactivación" /></a>
+                    </li>
+
+                    <li class="nav-item filedata">
+                        <a class="nav-link" href="<spring:url value="/reactivacion/ListaReactivados" htmlEscape="true "/>">
+                            <strong><i class="fa fa-list"></i>  <spring:message code="Listado" /> </strong></a>
+                    </li>
+                </ul>
+            </li>
+            -->
 
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown hemodinamica">
