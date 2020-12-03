@@ -1138,3 +1138,8 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_B', '2', 'CAT_CAUSAS_RETIROS', NULL, '0', 2, '0', 'B - Decisión Nuestra');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_C', '3', 'CAT_CAUSAS_RETIROS', NULL, '0', 3, '0', 'C - Expiración de Participación');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CAUSAS_RETIROS_D', '4', 'CAT_CAUSAS_RETIROS', NULL, '0', 4, '0', 'D - Fallecimiento');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para el tipo de asentimiento que da el participante');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT_01', '1', 'CAT_TIPO_ASENT', NULL, '0', 1, '0', 'Verbal');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT_02', '2', 'CAT_TIPO_ASENT', NULL, '0', 2, '0', 'Escrito');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT_03', '0', 'CAT_TIPO_ASENT', NULL, '0', 3, '0', 'No da asentimiento');

@@ -83,6 +83,9 @@ public class ParticipanteProcesos implements Auditable {
     private String muestraCovid;
     //Texto que indica si el participante ha sido positivo para Covid19(SARS-COV2)
     private String posCovid;
+    //Parte E Dengue. MUESTRA DE SANGRE ADICIONAL
+    private String consDenParteE;
+    private String mxDenParteE;
 
 
     @Id
@@ -571,6 +574,24 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setPosCovid(String posCovid) {
         this.posCovid = posCovid;
+    }
+
+    @Column(name = "cons_den_parte_e", nullable = true, length = 2)
+    public String getConsDenParteE() {
+        return consDenParteE;
+    }
+
+    public void setConsDenParteE(String consDenParteE) {
+        this.consDenParteE = consDenParteE;
+    }
+
+    @Column(name = "mx_den_parte_e", nullable = true, length = 2)
+    public String getMxDenParteE() {
+        return mxDenParteE;
+    }
+
+    public void setMxDenParteE(String mxDenParteE) {
+        this.mxDenParteE = mxDenParteE;
     }
 
     public MovilInfo getMovilInfo() {
