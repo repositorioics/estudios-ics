@@ -75,6 +75,7 @@ var ListadoRetiros = function(){
                                 NameComplete,
                                 data[i].estudioretirado,
                                 data[i].motivo,
+                                data[i].observaciones,
                                 fregistro,
                                 ffallecido,
                                 valor = '<a class="btn btn-link btn-info like btnView" data-id='+ data[i].idretiro + '> <i class="text-info fa fa-eye"></i> </a>'

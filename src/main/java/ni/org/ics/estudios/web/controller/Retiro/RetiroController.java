@@ -184,7 +184,6 @@ public class RetiroController {
     }
 
 
-
     //Guardar Retiro
     @RequestMapping( value="GuardarRetiro", method=RequestMethod.POST)
     public ResponseEntity<String> saveCaseCovid( @RequestParam(value="codigoParticipante", required=false, defaultValue="" ) String codigoParticipante
@@ -289,30 +288,43 @@ public class RetiroController {
         Map<String, String> map = new HashMap<String, String>();
         Map<String, Object> model = new HashMap<String, Object>();
         Retiros obj = null;
-        Personal objPersonalMedico = null;
-        Personal objPersonalDocumenta = null;
+        Personal test = new Personal();
         try {
             obj = this.retiroservice.getRetiroByID(idretiro);
-            objPersonalMedico = this.retiroservice.getSupervisorById(obj.getMedicosupervisor());
-            objPersonalDocumenta = this.retiroservice.getSupervisorById(obj.getPersonadocumenta());
-            map.put("casapediatrica", (obj.getCodigocasapdcs().toString()  != null ? obj.getCodigocasapdcs().toString() : "-" ));
-            map.put("casafamilia", (obj.getCodigocasafamilia() != null ? obj.getCodigocasafamilia() : "-"));
+            Integer idsupervisor = obj.getMedicosupervisor();
+            test = this.retiroservice.getSupervisorById(idsupervisor);
+            map.put("medicosupervisor", (test != null) ? test.getNombre() : "-" );
+            Personal objPersonalDocumenta = this.retiroservice.getSupervisorById(obj.getPersonadocumenta());
+            map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
+
+            if (obj.getCodigocasapdcs() == null){
+                Integer numerocasa = 0;
+                map.put("casapediatrica", numerocasa.toString());
+            }else{
+                String casapediatrica = ""+obj.getCodigocasapdcs();
+                map.put("casapediatrica", casapediatrica );
+            }
+            if (obj.getCodigocasafamilia() == null || obj.getCodigocasafamilia() == "" ){
+                Integer numerocasa = 0;
+                map.put("casafamilia", numerocasa.toString());
+            }else{
+                map.put("casafamilia", (obj.getCodigocasafamilia() != null ? obj.getCodigocasafamilia() : "-"));
+            }
             map.put("otrosmotivo", (obj.getOtrosmotivo() != null ? obj.getOtrosmotivo() : "-") );
             map.put("observacion", obj.getObservaciones() != null ? obj.getObservaciones() : "-");
-            map.put("medicosupervisor", objPersonalMedico.getNombre() != null ? objPersonalMedico.getNombre() : "-" );
-            map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
             map.put("relfamId", obj.getRelfam().toString());
             map.put("quiencomunica",obj.getQuiencomunica());
             String resultadoCarnet =  (obj.getDevolviocarnet() == 0) ? "No":"Si";
             map.put("carnet", resultadoCarnet);
             messageRelFam = messageResourceService.getMensajeByCatalogAndCatKeys(""+obj.getRelfam(),"CP_CAT_RFTUTOR");
             map.put("relFam",getDescripcionCatalogo(""+obj.getRelfam(),"CP_CAT_RFTUTOR"));
+            map.put("observaciones", obj.getObservaciones());
             String jsonResponse;
             jsonResponse = new Gson().toJson(map);
             UnicodeEscaper escaper = UnicodeEscaper.above(127);
             return escaper.translate(jsonResponse);
         } catch (Exception e) {
-            String mensaje ="";
+            String mensaje = e.getMessage();
             map.put("mensaje", mensaje);
             String jsonResponse;
             jsonResponse = new Gson().toJson(map);

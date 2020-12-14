@@ -59,7 +59,6 @@
                        </form>
                    </div>
                        <hr/>
-
                    <div class="col-md-12">
                        <div class="table-responsive">
                            <table id="tableRetiro" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
@@ -70,10 +69,10 @@
                                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Nombre del Participante"/></th>
                                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Retiro" /></th>
                                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Motivo" /></th>
+                                   <th data-hide="phone,tablet" class="text-center"><spring:message code="Observación" /></th>
                                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Fecha Registro" /></th>
                                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Fallecido" /></th>
                                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Detalle" /></th>
-
                                </tr>
                                </thead>
                                <tbody></tbody>
@@ -113,7 +112,7 @@
                                 <input type="text" class="form-control" id="otrosmotivo" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="medicosupervisor">Personal Comunica</label>
+                                <label for="medicosupervisor">Supervisado Por</label>
                                 <input type="text" class="form-control" id="medicosupervisor" readonly>
                             </div>
                             <div class="form-group">
@@ -121,7 +120,7 @@
                                 <input type="text" class="form-control" id="personadocumenta" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="quiencomunica">Padre/Tutor</label>
+                                <label for="quiencomunica">Comunicado Por</label>
                                 <input type="text" class="form-control" id="quiencomunica" readonly>
                             </div>
                             <div class="form-row">
