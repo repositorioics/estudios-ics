@@ -102,6 +102,14 @@ public class RetiroController {
                 participante.setSusEstudios(frutas);
                 participante.setNombretutor(NombreTutor.toUpperCase());
 
+                String nombrecompleto = participante2.getNombre1().toUpperCase();
+                if (participante2.getNombre2() != null)
+                    nombrecompleto = nombrecompleto +" "+ participante2.getNombre2().toUpperCase();
+                    nombrecompleto = nombrecompleto +" "+ participante2.getApellido1().toUpperCase();
+                if (participante2.getApellido2() != null)
+                    nombrecompleto = nombrecompleto +" "+ participante2.getApellido2().toUpperCase();
+                participante.setNombreCompleto(nombrecompleto);
+
                 String madre = participante2.getNombre1Madre().toUpperCase();
                 if (participante2.getNombre2Madre() != null)
                     madre = madre + " " + participante2.getNombre2Madre().toUpperCase();
@@ -213,6 +221,9 @@ public class RetiroController {
             obj.setCodigocasapdcs(kpediatrica);
             obj.setCodigocasafamilia(casaFamilia);
             obj.setFecharetiro(DateUtil.StringToDate(fehaRetiro, "dd/MM/yyyy"));
+            if(!fechaFallecido.equals("")){
+                obj.setFechafallecido(DateUtil.StringToDate(fechaFallecido,"dd/MM/yyyy"));
+            }
             obj.setTipofecha("1");
             Integer supervisor = Integer.parseInt(medicosupervisor);
             obj.setMedicosupervisor(supervisor);
