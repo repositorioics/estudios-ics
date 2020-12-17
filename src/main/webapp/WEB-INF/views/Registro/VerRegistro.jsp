@@ -527,9 +527,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-
-
                                                             </div>
                                                         </div>
                                                     </div>
@@ -537,7 +534,6 @@
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="two" role="tabpanel" aria-labelledby="two-tab">
                                                 <div class="table-responsive">
-                                                    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
                                                     <hr>
                                                     <div class="container bootstrap snippets bootdey">
                                                         <div class="row">
@@ -545,7 +541,7 @@
                                                                 <div class="main-box no-header clearfix">
                                                                     <div class="main-box-body clearfix">
                                                                         <div class="table-responsive">
-                                                                            <table id="tblVerRetiro" class="table user-list">
+                                                                            <table id="tblVerRetiro" class="table table-hover table-bordered dt-responsive nowrap" style="width:100%">
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th><span>Código</span></th>
@@ -785,25 +781,25 @@
                         for( var i = 0; i < len; i++ ) {
                             var relacion;
                             switch(data.retiroList[i].relfam){
-                                case '1':
+                                case 1:
                                     relacion = "Madre";
                                     break;
-                                case '2':
+                                case 2:
                                     relacion = "Padre";
                                     break;
-                                case '3':
+                                case 3:
                                     relacion = "Abuelo(a)";
                                     break;
-                                case '4':
+                                case 4:
                                     relacion = "Tío(a)";
                                     break;
-                                case '5':
+                                case 5:
                                     relacion = "Hermano(a)";
                                     break;
-                                case '8':
+                                case 8:
                                     relacion = "Participante";
                                     break;
-                                case '998':
+                                case 998:
                                     relacion = "Otra relación familiar";
                             }
                             var getCode = data.codigo_participante;
