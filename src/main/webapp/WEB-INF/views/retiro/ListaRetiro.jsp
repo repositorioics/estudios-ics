@@ -48,6 +48,11 @@
                    <h5 class="card-header text-capitalize" style="font-family: Roboto"> <i class="fa fa-list" aria-hidden="true"></i>
                        Lista de Retirados</h5>
                    <br/>
+                   <a class="btn btn-primary btn-lg" href="<spring:url value="/retiro/saveRetiroForm" htmlEscape="true "/>">
+                       <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                       <spring:message code="Realizar Retiro"/></a>
+                   <hr/>
+
                    <div class="container">
                        <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal">
                            <div class="row">
@@ -220,6 +225,7 @@
                 $("#personadocumenta").val(data.personadocumenta);
                 $("#quiencomunica").val(data.quiencomunica);
                 $("#relFam").val(data.relFam);
+                console.log(data.carnet);
                 $("#carnet").val(data.carnet);
                 $("#exampleModal").modal("show");
             }).fail(function(){

@@ -325,7 +325,7 @@ public class RetiroController {
             map.put("observacion", obj.getObservaciones() != null ? obj.getObservaciones() : "-");
             map.put("relfamId", obj.getRelfam().toString());
             map.put("quiencomunica",obj.getQuiencomunica());
-            String resultadoCarnet =  (obj.getDevolviocarnet() == 0) ? "No":"Si";
+            String resultadoCarnet =  (obj.getDevolviocarnet() == '0') ? "No":"Si";
             map.put("carnet", resultadoCarnet);
             messageRelFam = messageResourceService.getMensajeByCatalogAndCatKeys(""+obj.getRelfam(),"CP_CAT_RFTUTOR");
             map.put("relFam",getDescripcionCatalogo(""+obj.getRelfam(),"CP_CAT_RFTUTOR"));
