@@ -8,19 +8,19 @@
                 <a class="nav-link" href="<spring:url value="/" htmlEscape="true "/>"><i class="icon-speedometer"></i><spring:message code="dashboard" /></a>
             </li>
             <sec:authorize access="hasRole('ROLE_ROOT')">
-            <li class="nav-item nav-dropdown administracion">
-	            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wrench"></i><spring:message code="admin" /></a>
-	            <ul class="nav-dropdown-items">
-	                <li class="nav-item users">
-	                    <a class="nav-link" href="<spring:url value="/admin/users/" htmlEscape="true "/>"><i class="icon-people"></i><spring:message code="users" /></a>
-	                </li>
-
-                    <!--<li class="nav-item versionLetters">
+                <li class="nav-item nav-dropdown administracion">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wrench"></i><spring:message code="admin" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item users">
+                            <a class="nav-link" href="<spring:url value="/admin/users/" htmlEscape="true "/>"><i class="icon-people"></i><spring:message code="users" /></a>
+                        </li>
+                        <!--<li class="nav-item versionLetters">
                         <a class="nav-link" href="<spring:url value="/admin/vcartas/" htmlEscape="true "/>"><i class="icon-docs"></i><spring:message code="versionLetters" /></a>
                     </li> -->
-	            </ul>
-	        </li>
+                    </ul>
+                </li>
             </sec:authorize>
+
             <sec:authorize access="hasAnyRole('ROLE_SUPER')">
                 <li class="nav-item nav-dropdown chfcasos">
                     <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="chfcasos" /></a>
@@ -31,25 +31,25 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-dropdown supervision">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-eye"></i><spring:message code="superv" /></a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item intensiveMonitoring">
-                        <a class="nav-link" href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><i class="icon-location-pin"></i><spring:message code="intensiveMonitoring" /></a>
-                    </li>
-                    <li class="nav-item visitsIM">
-                        <a class="nav-link" href="<spring:url value="/reportes/super/visitas/" htmlEscape="true "/>"><i class="icon-list"></i><spring:message code="visits" /></a>
-                    </li>
-                    <li class="nav-item posUO1">
-                        <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
-                    </li>
-                    <li class="nav-item candCovid19">
-                        <a class="nav-link" href="<spring:url value="/super/covid/listCandidates/" htmlEscape="true "/>"><i class="icon-user-following"></i><spring:message code="covid19.candidates" /></a>
-                    </li>
-                    <li class="nav-item posCovid19">
-                        <a class="nav-link" href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><i class="fa fa-user-plus"></i><spring:message code="covid19.positives" /></a>
-                    </li>
-                </ul>
-            </li>
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-eye"></i><spring:message code="superv" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item intensiveMonitoring">
+                            <a class="nav-link" href="<spring:url value="/super/casacaso/" htmlEscape="true "/>"><i class="icon-location-pin"></i><spring:message code="intensiveMonitoring" /></a>
+                        </li>
+                        <li class="nav-item visitsIM">
+                            <a class="nav-link" href="<spring:url value="/reportes/super/visitas/" htmlEscape="true "/>"><i class="icon-list"></i><spring:message code="visits" /></a>
+                        </li>
+                        <li class="nav-item posUO1">
+                            <a class="nav-link" href="<spring:url value="/super/UO1/" htmlEscape="true "/>"><i class="icon-user-follow"></i><spring:message code="uo1.positives" /></a>
+                        </li>
+                        <li class="nav-item candCovid19">
+                            <a class="nav-link" href="<spring:url value="/super/covid/listCandidates/" htmlEscape="true "/>"><i class="icon-user-following"></i><spring:message code="covid19.candidates" /></a>
+                        </li>
+                        <li class="nav-item posCovid19">
+                            <a class="nav-link" href="<spring:url value="/covid/listCovid/" htmlEscape="true "/>"><i class="fa fa-user-plus"></i><spring:message code="covid19.positives" /></a>
+                        </li>
+                    </ul>
+                </li>
 
             </sec:authorize>
             <!--<li class="nav-item nav-dropdown laboratory">
@@ -83,23 +83,6 @@
             </li>
 
 
-        <!-- EN PROCESO MÓDULO DE REACTIVACION  * OMITIR *
-            <li class="nav-item nav-dropdown reactivacion">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-home"></i><spring:message code="Reactivar" /></a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item intensiveMonitoring">
-                        <a class="nav-link" href="<spring:url value="/reactivacion/ReactivarForm" htmlEscape="true "/>">
-                            <i class="fa fa-hand-o-up"></i><spring:message code="Reactivación" /></a>
-                    </li>
-
-                    <li class="nav-item filedata">
-                        <a class="nav-link" href="<spring:url value="/reactivacion/ListaReactivados" htmlEscape="true "/>">
-                            <strong><i class="fa fa-list"></i>  <spring:message code="Listado" /> </strong></a>
-                    </li>
-                </ul>
-            </li>
-            -->
-
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown hemodinamica">
                     <a class="nav-link nav-dropdown-toggle" href="#">
@@ -115,30 +98,35 @@
                 </li>
             </sec:authorize>
 
-
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
-                <li class="nav-item nav-dropdown retiro">
+                <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-user-times" aria-hidden="true"></i>
-                        <spring:message code="Retiro" /></a>
+                        <spring:message code="Retirar" /></a>
                     <ul class="nav-dropdown-items">
-                        <li class="nav-item filedata">
-                            <a class="nav-link" href="<spring:url value="/retiro/saveRetiroForm" htmlEscape="true "/>">
-                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                                <spring:message code="Realizar Retiro" /></a>
-                        </li>
-
                         <li class="nav-item retiro">
                             <a class="nav-link" href="<spring:url value="/retiro/ListRetiro" htmlEscape="true "/>">
-                                <i class="fa fa-list"></i>
-                                <spring:message code="Listado Retiro" /></a>
+                                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                <spring:message code="Retirar" /></a>
                         </li>
                     </ul>
                 </li>
             </sec:authorize>
-
-
-
+            <!--  EN CONSTRUCCION ...
+            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+                <li class="nav-item nav-dropdown hemodinamica">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        <spring:message code="Reactivar" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item filedata">
+                            <a class="nav-link" href="<spring:url value="/reactivacion/ListaReactivados" htmlEscape="true "/>">
+                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                <spring:message code="Reactivar" /> </a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize> -->
 
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
@@ -156,30 +144,31 @@
                                 <i class="fa fa-send"></i>
                                 <spring:message code="Envios" /></a>
                         </li>
+                    </ul>
+                </li>
+            </sec:authorize>
 
+            <sec:authorize access="hasRole('ROLE_DOM')">
+                <li class="nav-item nav-dropdown Domicilio">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                        <spring:message code="Cambios Domicilio" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/Domicilio/Listado" htmlEscape="true "/>">
+                                <i class="fa fa-bank" aria-hidden="true"></i>
+                                <spring:message code="Domicilios" /></a>
+                        </li>
                     </ul>
                 </li>
             </sec:authorize>
 
 
-
-            <sec:authorize access="hasRole('ROLE_DOM')">
-            <li class="nav-item nav-dropdown Domicilio">
-                <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="fa fa-home" aria-hidden="true"></i>
-                    <spring:message code="Cambios Domicilio" /></a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<spring:url value="/Domicilio/Listado" htmlEscape="true "/>">
-                            <i class="fa fa-bank" aria-hidden="true"></i>
-                            <spring:message code="Domicilios" /></a>
-                    </li>
-                </ul>
-            </li>
-            </sec:authorize>
-	        <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/logout" htmlEscape="true" />"><i class="icon-lock"></i><spring:message code="logout" /></a>
             </li>
         </ul>
     </nav>
 </div>
+
+
