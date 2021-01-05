@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.lang.String;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -247,7 +248,8 @@ public class RetiroController {
             obj.setActual(true);
             obj.setEstado('1');
             obj.setPasive('0');
-            obj.setDeviceid("server");
+            String computerName = InetAddress.getLocalHost().getHostName();
+            obj.setDeviceid(computerName);
             obj.setRecordDate(new Date());
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
 

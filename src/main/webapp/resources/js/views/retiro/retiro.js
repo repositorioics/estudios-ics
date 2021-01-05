@@ -74,7 +74,6 @@ var RealizarRetiro = function(){
             }
 
             $("#causa").on("change", function(){
-                debugger;
                 var causa =this.value;
                 var $razon = $('#razonretiro');
                     $razon.select2().val("").trigger("change");
@@ -94,9 +93,6 @@ var RealizarRetiro = function(){
                    $.notify("Error al obtener los motivos", "error" );
                 });
             }
-
-
-
             $("#razonretiro").on("change", function(){
                 if(this.value == 'D1' || this.value == 'D2'){
                     $("#bar").fadeIn("slow");
@@ -114,17 +110,6 @@ var RealizarRetiro = function(){
                 }else{
                     $("#otherMot").fadeOut("slow");
                     $("#otromotivo").attr("required", "false");
-                }
-            });
-
-            $("#quiencomunica").on("focusout", function(){
-                //$("#aretiro").select2().val("Todos").trigger('change');
-                debugger;
-                if (this.value.length == 0) {
-                    $("#parentesco").select2().val("").trigger('change');
-                    $("#parentesco").select2().prop('disabled', true).trigger('change');
-                }else{
-                    $("#parentesco").select2().prop('disabled', false).trigger('change');
                 }
             });
 
@@ -169,7 +154,6 @@ var RealizarRetiro = function(){
             });
 
 
-
             // Initialize the leaveStep event
             $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
                 debugger;
@@ -191,6 +175,21 @@ var RealizarRetiro = function(){
                 }
             });
 
+            $("#quiencomunica").blur(function(){
+                if($(this).val() == ''){
+                    $("#parentesco").select2().val("").trigger("change");
+                    $("#parentesco").select2().prop('disabled', true).trigger('change');
+                    $("#parentesco").attr("required", "false");
+                }
+            });
+
+            $("#quiencomunica").bind("change paste keyup", function() {
+                var valor = $(this).val();
+                if(valor != null || valor != ""){
+                    $("#parentesco").select2().prop('disabled', false).trigger('change');
+                    $("#parentesco").attr("required", "true");
+                }
+            });
 
             $("#parametro").keypress(function(event) {
                 if (event.keyCode === 13) {
@@ -206,7 +205,6 @@ var RealizarRetiro = function(){
                     };
                 }
             });
-
         }
     }
 
@@ -259,20 +257,19 @@ var GuardarRetiro = function(){
 
             function processRetiro() {
                 var jqxhr = $.post( p.savePartRetiradoUrl, form2.serialize(), function( data ){
-                    $.notify("Efectuando retiro!.","success");
-                 }).done(function() {
+                    $('#page-loader').fadeIn('slow');
+                }).done(function() {
                     swal("Éxito!", "Retiro Realizado!", "success");
                     window.setTimeout(function(){
+                        $('#page-loader').fadeOut('slow');
                         location.reload(true);
-                    }, 1300);
+                    }, 1500);
                     $("#smartwizard").smartWizard("goToStep", 0);
                 }).fail(function() {
                     $.notify("Error al Guardar!.","error");
                 });
+
             }
-
-
-
         }
     }
 }();
