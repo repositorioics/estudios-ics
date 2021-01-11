@@ -56,7 +56,7 @@ public class expose {
                     map.put("frec_respiratoria_min",objFrec.getFrMinima());
                     map.put("frec_respiratoria_max", objFrec.getFrMaxima());
                 }
-            }else{
+            } else {
                 RangosFrecuenciasCardiacas objFrec = datoshemodinamicaService.ObtenerFCardiaca(part2, 18);
                 if (objFrec != null) {
                     map.put("frec_cardiaca_min", objFrec.getFcMinima());
