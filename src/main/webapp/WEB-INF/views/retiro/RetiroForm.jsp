@@ -285,14 +285,14 @@
                                 <input type="text" hidden="hidden" class="form-control" id="estado" name="estado">
 
                                 <div class="form-group col-md-6">
-                                    <label for="nombrePadre">Nombre de la Madre</label>
-                                    <input type="text" class="form-control" id="nombrePadre" readonly="readonly"/>
+                                    <label for="nombreMadre">Nombre de la Madre</label>
+                                    <input type="text" class="form-control" id="nombreMadre" readonly="readonly"/>
                                 </div>
 
 
                                 <div class="form-group col-md-6">
-                                    <label for="nombreMadre">Nombre del Padre</label>
-                                    <input type="text" class="form-control" id="nombreMadre" readonly="readonly"/>
+                                    <label for="nombrePadre">Nombre del Padre</label>
+                                    <input type="text" class="form-control" id="nombrePadre" readonly="readonly"/>
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -367,7 +367,7 @@
                                         <select name="recibidaPor" id="recibidaPor" required class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
                                             <c:forEach items="${supervisor}" var="rp">
-                                                <option value="${rp.idPersona}"> <spring:message code="${rp.nombre}" /></option>
+                                                <option value="${rp.idPersona}"> <spring:message code="${rp.idPersona} - ${rp.nombre}" /></option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -382,7 +382,7 @@
                                         <select name="medicosupervisor" id="medicosupervisor" required class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
                                             <c:forEach items="${supervisor}" var="s">
-                                                <option value="${s.idPersona}">${s.nombre}</option>
+                                                <option value="${s.idPersona}">${s.idPersona} - ${s.nombre}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
