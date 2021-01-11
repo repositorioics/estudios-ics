@@ -57,7 +57,14 @@ public class expose {
                     map.put("frec_respiratoria_max", objFrec.getFrMaxima());
                 }
             }else{
-                map.put("result","mayor de 18 años");
+                RangosFrecuenciasCardiacas objFrec = datoshemodinamicaService.ObtenerFCardiaca(part2, 18);
+                if (objFrec != null) {
+                    map.put("frec_cardiaca_min", objFrec.getFcMinima());
+                    map.put("frec_cardiaca_med", objFrec.getFcMedia());
+                    map.put("frec_cardiaca_prom", objFrec.getFcPromedio());
+                    map.put("frec_respiratoria_min",objFrec.getFrMinima());
+                    map.put("frec_respiratoria_max", objFrec.getFrMaxima());
+                }
             }
             String jsonResponse;
             jsonResponse = new Gson().toJson(map);
