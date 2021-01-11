@@ -40,11 +40,8 @@ public class MuestraService {
     
     @SuppressWarnings("unchecked")
 	public List<Muestra> getMuestrasTx() throws Exception{
-        Calendar hoy = Calendar.getInstance();
-        int anioActual = hoy.get(Calendar.YEAR);
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Muestra where pasive = '0' and proposito = '3' and recordDate >= :primerDia");
-        query.setParameter("primerDia", DateUtil.StringToDate("01/01/"+String.valueOf(anioActual), "dd/MM/yyyy"));
+        Query query = session.createQuery("from Muestra mx where mx.pasive = '0' and mx.proposito = '3' and mx.recordDate >= (select coalesce(min(caso.fechaInicio), current_date ) from CasaCohorteFamiliaCaso caso where caso.inactiva = '0' and caso.pasive = '0')");
         return  query.list();
     }
     
@@ -94,20 +91,14 @@ public class MuestraService {
     }
 
     public List<Muestra> getMuestrasUO1() throws Exception{
-        Calendar hoy = Calendar.getInstance();
-        int anioActual = hoy.get(Calendar.YEAR);
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('4','5') and recordDate >= :primerDia");
-        query.setParameter("primerDia", DateUtil.StringToDate("01/01/"+String.valueOf(anioActual), "dd/MM/yyyy"));
+        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('4','5') and recordDate >= (select coalesce(min(caso.fechaIngreso), current_date ) from ParticipanteCasoUO1 caso where caso.activo = '1' and caso.pasive = '0')");
         return  query.list();
     }
 
     public List<Muestra> getMuestrasCovid19() throws Exception{
-        Calendar hoy = Calendar.getInstance();
-        int anioActual = hoy.get(Calendar.YEAR);
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('7','8') and recordDate >= :primerDia");
-        query.setParameter("primerDia", DateUtil.StringToDate("01/01/"+String.valueOf(anioActual), "dd/MM/yyyy"));
+        Query query = session.createQuery("from Muestra where pasive = '0' and proposito in ('7','8') and recordDate >= (select coalesce(min(caso.fechaIngreso), current_date ) from CasoCovid19 caso where caso.inactivo = '0' and caso.pasive = '0')");
         return  query.list();
     }
 }

@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.lang.String;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -101,6 +102,14 @@ public class RetiroController {
                 }
                 participante.setSusEstudios(frutas);
                 participante.setNombretutor(NombreTutor.toUpperCase());
+
+                String nombrecompleto = participante2.getNombre1().toUpperCase();
+                if (participante2.getNombre2() != null)
+                    nombrecompleto = nombrecompleto +" "+ participante2.getNombre2().toUpperCase();
+                    nombrecompleto = nombrecompleto +" "+ participante2.getApellido1().toUpperCase();
+                if (participante2.getApellido2() != null)
+                    nombrecompleto = nombrecompleto +" "+ participante2.getApellido2().toUpperCase();
+                participante.setNombreCompleto(nombrecompleto);
 
                 String madre = participante2.getNombre1Madre().toUpperCase();
                 if (participante2.getNombre2Madre() != null)
@@ -213,6 +222,9 @@ public class RetiroController {
             obj.setCodigocasapdcs(kpediatrica);
             obj.setCodigocasafamilia(casaFamilia);
             obj.setFecharetiro(DateUtil.StringToDate(fehaRetiro, "dd/MM/yyyy"));
+            if(!fechaFallecido.equals("")){
+                obj.setFechafallecido(DateUtil.StringToDate(fechaFallecido,"dd/MM/yyyy"));
+            }
             obj.setTipofecha("1");
             Integer supervisor = Integer.parseInt(medicosupervisor);
             obj.setMedicosupervisor(supervisor);
@@ -236,7 +248,8 @@ public class RetiroController {
             obj.setActual(true);
             obj.setEstado('1');
             obj.setPasive('0');
-            obj.setDeviceid("server");
+            String computerName = InetAddress.getLocalHost().getHostName();
+            obj.setDeviceid(computerName);
             obj.setRecordDate(new Date());
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
 
@@ -314,7 +327,7 @@ public class RetiroController {
             map.put("observacion", obj.getObservaciones() != null ? obj.getObservaciones() : "-");
             map.put("relfamId", obj.getRelfam().toString());
             map.put("quiencomunica",obj.getQuiencomunica());
-            String resultadoCarnet =  (obj.getDevolviocarnet() == 0) ? "No":"Si";
+            String resultadoCarnet =  (obj.getDevolviocarnet() == '0') ? "No":"Si";
             map.put("carnet", resultadoCarnet);
             messageRelFam = messageResourceService.getMensajeByCatalogAndCatKeys(""+obj.getRelfam(),"CP_CAT_RFTUTOR");
             map.put("relFam",getDescripcionCatalogo(""+obj.getRelfam(),"CP_CAT_RFTUTOR"));

@@ -52,8 +52,6 @@ var ListadoRetiros = function(){
                         $("#parametro").focus();
                     }
                     else{
-                        console.log(data);
-                        //$.each(data, function(i) {});
                         for ( var i = 0; i < len; i++) {
                             var getCode = data[i].participante.codigo;
                             var fr = new Date(data[i].fecharetiro);
@@ -67,7 +65,9 @@ var ListadoRetiros = function(){
                             }
                             var datestring =  ("0" + fr.getDate()).slice(-2) + "/" + ("0"+(fr.getMonth()+1)).slice(-2) + "/" + fr.getFullYear();
                             var fReg = new Date(data[i].recordDate);
-                            var NameComplete =  data[i].participante.nombre1+' '+ data[i].participante.nombre2+' '+ data[i].participante.apellido1+' '+data[i].participante.apellido2;
+                            var nombre2 =   (data[i].participante.nombre2 === null) ? "-" : data[i].participante.nombre2;
+                            var apellido2 = (data[i].participante.apellido2 == null) ? "-" : data[i].participante.apellido2;
+                            var NameComplete =  data[i].participante.nombre1 +' '+ nombre2 +' '+ data[i].participante.apellido1+' '+ apellido2;
                             var fregistro = ("0" + fReg.getDate()).slice(-2) + "/" + ("0"+(fReg.getMonth()+1)).slice(-2) + "/" + fReg.getFullYear() +" "+  fReg.getHours().toString() + ":"+ fReg.getMinutes();
                             table.row.add([
                                 getCode,
