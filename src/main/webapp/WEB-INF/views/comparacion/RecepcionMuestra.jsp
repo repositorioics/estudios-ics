@@ -27,14 +27,14 @@
 
     <style>
         .bg-primary {
-            background-color: #ba0046 !important;
+            background-color: #eee !important;
         }
         .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-            background-color: #ba0046;
+            background-color: #eee;
         }
         .nav-tabs .nav-link, .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:hover, .nav-tabs .nav-link.disabled:focus {
             border-color: rgba(0, 0, 0, 0.1);
-            background-color: #ba0046;
+            background-color: #eee;
         }
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
@@ -194,21 +194,21 @@
             <div class="row">
             <div class="col-md-12 col-lg-12">
             <div class="card effect-1">
-            <div class="card-body bg-primary text-white mailbox-widget pb-0">
-                <h2 class="text-white pb-3" style="font-family: Roboto"> <i class="fa fa-tint"></i>  Recepción Muestra</h2>
+            <div class="card-body bg-primary text-dark mailbox-widget pb-0">
+                <h2 class="text-dark pb-3" style="font-family: Roboto"> <i class="fa fa-tint"></i>  Recepción Muestra</h2>
                 <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
 
                     <li class="nav-item">
                         <a class="nav-link active" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="true">
                             <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                            <span class="d-none d-md-block">Formulario</span>
+                            <span class="d-none d-md-block text-dark">Formulario</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="false">
                             <span class="d-block d-md-none"><i class="ti-email"></i></span>
-                            <span class="d-none d-md-block"> Lista</span>
+                            <span class="d-none d-md-block text-dark"> Lista</span>
                         </a>
                     </li>
 
@@ -423,7 +423,7 @@
                         <!-- Mail list-->
                         <div class="table-responsive">
                             <table id="tblMuestra" class="table email-table no-wrap table-hover v-middle mb-0 font-14">
-                                <thead class="bg-primary">
+                                <thead>
                                 <tr>
                                     <th class="text-center"><spring:message code="Código" /></th>
                                     <th class="text-center"><spring:message code="Fecha Registro" /></th>

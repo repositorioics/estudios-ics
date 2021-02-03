@@ -17,7 +17,7 @@
 
     <style>
         .bg-primary {
-            background-color: #1ba407 !important;
+            background-color: #eee!important;
          }
         .card {
             position: relative;
@@ -38,7 +38,7 @@
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
             color: #fff;
-            border-bottom: 4px solid #99e611;
+            border-bottom: 4px solid #ffffff;
         }
         .no-wrap td, .no-wrap th {
             white-space: nowrap;
@@ -54,10 +54,10 @@
         .nav-tabs .nav-link, .nav-tabs .nav-link.disabled:hover,
         .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:focus {
             border-color: rgba(0, 0, 0, 0.1);
-            background-color: #1ba407;
+            background-color: #eee;
         }
         .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-            background-color: #1ba407;
+            background-color: #eee;
         }
         .btn-raised {
             transition: box-shadow .4s cubic-bezier(.25, .8, .25, 1), transform .4s cubic-bezier(.25, .8, .25, 1);
@@ -359,19 +359,19 @@
             <div class="col-md-12 col-lg-12">
             <div class="card">
             <div class="card-body bg-primary text-white mailbox-widget pb-0">
-                <h2 class="text-white pb-3"style="font-family: Roboto">
+                <h2 class="text-dark pb-3"style="font-family: Roboto">
                     <i class="fa fa-tint" aria-hidden="true"></i> <spring:message code="Recepción BHC"/> </h2>
                 <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#sent"  role="tab" aria-selected="true">
                             <span class="d-block d-md-none"><i class="ti-email"></i></span>
-                            <span class="d-none d-md-block"> <spring:message code="Formulario"/> </span>
+                            <span class="d-none d-md-block text-dark"> <spring:message code="Formulario"/> </span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#inbox" role="tab" aria-selected="false">
                             <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                            <span class="d-none d-md-block"> <spring:message code="Listado"/>  </span>
+                            <span class="d-none d-md-block text-dark"> <spring:message code="Listado"/>  </span>
                         </a>
                     </li>
                 </ul>
@@ -520,7 +520,7 @@
                 <!-- Mail list-->
                 <div class="table-responsive">
                     <table id="tblbhc" class="table email-table no-wrap table-hover v-middle mb-0 font-14">
-                        <thead class="bg-primary">
+                        <thead>
                         <th width="11%"><spring:message code="code" /></th>
                         <th><spring:message code="dateAdded" /> </th>
                         <th><spring:message code="lbl.State" /> </th>

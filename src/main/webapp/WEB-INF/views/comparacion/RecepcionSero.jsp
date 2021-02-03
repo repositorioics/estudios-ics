@@ -24,7 +24,7 @@
 
     <style>
         .bg-primary {
-            background-color: #ee0a0a !important;
+            background-color: #eee !important;
         }
         .card {
             position: relative;
@@ -53,16 +53,16 @@
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
             color: #fff;
-            border-bottom: 4px solid #f2e407;
+            border-bottom: 4px solid #ffffff;
         }
 
         .nav-tabs .nav-link, .nav-tabs .nav-link.disabled:hover,
         .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:focus {
             border-color: rgb(255, 89, 44);
-            background-color: #ee0a0a;
+            background-color: #eee;
         }
         .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-            background-color: #ee0a0a;
+            background-color: #eee;
         }
 /**********************************/
 
@@ -393,19 +393,19 @@
             <div class="col-md-12 col-lg-12">
             <div class="card">
             <div class="card-body bg-primary text-white mailbox-widget pb-0">
-                <h2 class="text-white pb-3"style="font-family: Roboto">
+                <h2 class="text-dark pb-3"style="font-family: Roboto">
                     <i class="fa fa-tint" aria-hidden="true"></i> <spring:message code="Recepción Serologia"/> </h2>
                 <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#sent"  role="tab" aria-selected="true">
                             <span class="d-block d-md-none"><i class="ti-email"></i></span>
-                            <span class="d-none d-md-block"> <spring:message code="Formulario"/> </span>
+                            <span class="d-none d-md-block text-dark"> <spring:message code="Formulario"/> </span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#inbox" role="tab" aria-selected="false">
                             <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                            <span class="d-none d-md-block"> <spring:message code="Listado"/>  </span>
+                            <span class="d-none d-md-block text-dark"> <spring:message code="Listado"/>  </span>
                         </a>
                     </li>
                 </ul>
@@ -544,7 +544,7 @@
                 <!-- Mail list-->
                 <div class="table-responsive">
                     <table id="tblSero" class="table email-table no-wrap table-hover v-middle mb-0 font-14" style="width: 100%;">
-                        <thead class="bg-primary">
+                        <thead>
                         <th><spring:message code="id" /></th>
                         <th width="11%"><spring:message code="participant" /></th>
                         <th><spring:message code="dateAdded" /> </th>

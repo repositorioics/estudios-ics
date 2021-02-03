@@ -29,17 +29,17 @@
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/comparacion/bhc" htmlEscape="true "/>">
-                                <i class="fa fa-tint" aria-hidden="true" style="color: #00cd00"></i>
+                                <i class="fa fa-tint" aria-hidden="true"></i>
                                 <spring:message code="lbl.BHC" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/comparacion/serologia" htmlEscape="true "/>">
-                                <i class="fa fa-flask" aria-hidden="true" style="color: #ee0c0c"></i>
+                                <i class="fa fa-flask" aria-hidden="true"></i>
                                 <spring:message code="lbl.serologia" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/comparacion/muestra" htmlEscape="true "/>">
-                                <i class="fa fa-tint" aria-hidden="true" style="color: #ee1f27"></i>
+                                <i class="fa fa-tint" aria-hidden="true"></i>
                                 <spring:message code="Muestra" /></a>
                         </li>
                     </ul>
