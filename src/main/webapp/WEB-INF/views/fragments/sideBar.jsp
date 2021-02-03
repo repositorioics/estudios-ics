@@ -14,12 +14,38 @@
                         <li class="nav-item users">
                             <a class="nav-link" href="<spring:url value="/admin/users/" htmlEscape="true "/>"><i class="icon-people"></i><spring:message code="users" /></a>
                         </li>
-                        <!--<li class="nav-item versionLetters">
-                        <a class="nav-link" href="<spring:url value="/admin/vcartas/" htmlEscape="true "/>"><i class="icon-docs"></i><spring:message code="versionLetters" /></a>
-                    </li> -->
+                        <li class="nav-item casas">
+                            <a class="nav-link" href="<spring:url value="/casas/obtenerCasas/" htmlEscape="true "/>"><i class="fa fa-home" ></i><spring:message code="Crear Casas" /></a>
+                        </li>
                     </ul>
                 </li>
             </sec:authorize>
+
+            <sec:authorize access="hasAnyRole('ROLE_ROOT')">
+                <li class="nav-item nav-dropdown comparison">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-clipboard" aria-hidden="true"></i>
+                        <spring:message code="Comparación" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/comparacion/bhc" htmlEscape="true "/>">
+                                <i class="fa fa-tint" aria-hidden="true" style="color: #00cd00"></i>
+                                <spring:message code="lbl.BHC" /></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/comparacion/serologia" htmlEscape="true "/>">
+                                <i class="fa fa-flask" aria-hidden="true" style="color: #ee0c0c"></i>
+                                <spring:message code="lbl.serologia" /></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/comparacion/muestra" htmlEscape="true "/>">
+                                <i class="fa fa-tint" aria-hidden="true" style="color: #ee1f27"></i>
+                                <spring:message code="Muestra" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
+
 
             <sec:authorize access="hasAnyRole('ROLE_SUPER')">
                 <li class="nav-item nav-dropdown chfcasos">
@@ -112,22 +138,22 @@
                     </ul>
                 </li>
             </sec:authorize>
-            <!--  EN CONSTRUCCION ...
+            <!--
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
-                <li class="nav-item nav-dropdown hemodinamica">
+                <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
                         <spring:message code="Reactivar" /></a>
                     <ul class="nav-dropdown-items">
-                        <li class="nav-item filedata">
+                        <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/reactivacion/ListaReactivados" htmlEscape="true "/>">
                                 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
                                 <spring:message code="Reactivar" /> </a>
                         </li>
                     </ul>
                 </li>
-            </sec:authorize> -->
-
+            </sec:authorize>
+            -->
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
