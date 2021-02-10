@@ -52,9 +52,13 @@ var ProcessCase = function () {
                     codigoParticipante: {
                         required: true
                     },
-                    fif: {
-                        required: true
-                    }
+                    fis: {required: function () {
+                        return $('#fif').val().length <= 0;
+                    }},
+                    fif: {required: function () {
+                        return $('#fis').val().length <= 0;
+                    }}
+
                 },
                 errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
