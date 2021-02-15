@@ -177,17 +177,22 @@ public class CasaCohorteFamiliaCasoWController {
             , @RequestParam( value="codigoCasa", required=true ) String codigoCasa
             , @RequestParam( value="fechaInicio", required=false ) String fechaInicio
             , @RequestParam( value="codigoParticipante", required=false, defaultValue="" ) Integer codigoParticipante
-            , @RequestParam( value="fif", required=true, defaultValue="" ) String fif
+            , @RequestParam( value="fif", required=false, defaultValue="" ) String fif
+            , @RequestParam( value="fis", required=false, defaultValue="" ) String fis
     )
     {
         try{
             Date dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
             Date dFIF = DateUtil.StringToDate(fif, "dd/MM/yyyy");
+            Date dFIS = DateUtil.StringToDate(fis, "dd/MM/yyyy");
             if (dFechaInicio.after(new Date())){
                 return JsonUtil.createJsonResponse("Fecha de inicio es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
             }
-            if (dFIF.after(new Date())){
+            if (dFIF != null && dFIF.after(new Date())){
                 return JsonUtil.createJsonResponse("FIF es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
+            }
+            if (dFIS != null && dFIS.after(new Date())){
+                return JsonUtil.createJsonResponse("FIS es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
             }
             CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasoByCodigoCasa(codigoCasa);
             //CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasosByCodigoCasaFecha(codigoCasa,dFechaInicio);
@@ -230,6 +235,7 @@ public class CasaCohorteFamiliaCasoWController {
             participanteCaso.setEstado('1');
             participanteCaso.setEnfermo("S");
             participanteCaso.setFechaEnfermedad(dFIF);
+            participanteCaso.setFis(dFIS);
 
 
             this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCaso);
@@ -269,6 +275,7 @@ public class CasaCohorteFamiliaCasoWController {
                         participanteCaso.setCodigoCasoParticipante(StringUtil.getCadenaAlfanumAleatoria(36, true));
                         participanteCaso.setEnfermo("N");
                         participanteCaso.setFechaEnfermedad(null);
+                        participanteCaso.setFis(null);
                         participanteCaso.setRecordDate(new Date());
                         participanteCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         participanteCaso.setPasive('0');

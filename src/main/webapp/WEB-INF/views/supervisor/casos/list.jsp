@@ -65,10 +65,11 @@
                             <thead>
                             <tr>
                                 <th width="12%"><spring:message code="house" /></th>
-                                <th width="20%"><spring:message code="logindate" /></th>
+                                <th width="15%"><spring:message code="logindate" /></th>
                                 <th width="12%"><spring:message code="positive" /></th>
-                                <th width="20%"><spring:message code="fif" /></th>
-                                <th width="20%"><spring:message code="logoutdate" /></th>
+                                <th width="15%"><spring:message code="fif" /></th>
+                                <th width="15%"><spring:message code="FIS" /></th>
+                                <th width="15%"><spring:message code="logoutdate" /></th>
                                 <th width="16%"><spring:message code="actions" /></th>
                             </tr>
                             </thead>
@@ -90,6 +91,7 @@
                                     <td><fmt:formatDate value="${parti.codigoCaso.fechaInicio}" pattern="dd/MM/yyyy" /></td>
                                     <td><c:out value="${parti.participante.participante.codigo}" /></td>
                                     <td><fmt:formatDate value="${parti.fechaEnfermedad}" pattern="dd/MM/yyyy" /></td>
+                                    <td><fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.codigoCaso.fechaInactiva}" pattern="dd/MM/yyyy" /></td>
                                     <td>
                                         <c:choose>
@@ -263,12 +265,12 @@
                         {
                             "sExtends": "csv",
                             "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4 ]
+                            "mColumns": [ 0, 1, 2, 3, 4, 5 ]
                         },
                         {
                             "sExtends": "pdf",
                             "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4 ],
+                            "mColumns": [ 0, 1, 2, 3, 4, 5 ],
                             "sPdfOrientation": "landscape"
                         }
                     ]

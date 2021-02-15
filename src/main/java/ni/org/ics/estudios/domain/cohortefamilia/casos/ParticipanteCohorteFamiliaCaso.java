@@ -27,7 +27,7 @@ public class ParticipanteCohorteFamiliaCaso extends BaseMetaData implements Audi
 	private ParticipanteCohorteFamilia participante;
 	private String enfermo;
 	private Date fechaEnfermedad;
-	
+    private Date fis;
     
 	@Id
     @Column(name = "CODIGO_PARTICIPANTE_CASO", length = 50, nullable = false)
@@ -79,6 +79,16 @@ public class ParticipanteCohorteFamiliaCaso extends BaseMetaData implements Audi
 	public void setFechaEnfermedad(Date fechaEnfermedad) {
 		this.fechaEnfermedad = fechaEnfermedad;
 	}
+
+    @Column(name = "FIS", nullable = true)
+    public Date getFis() {
+        return fis;
+    }
+
+    public void setFis(Date fis) {
+        this.fis = fis;
+    }
+
 	@Override
 	public String toString(){
 		return codigoCaso.getCasa().getCodigoCHF() + "-" + participante.getParticipante().getCodigo() + "-" + codigoCaso.getFechaInicio();
