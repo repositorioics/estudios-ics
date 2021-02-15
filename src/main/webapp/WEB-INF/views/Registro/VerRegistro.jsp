@@ -256,6 +256,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/Registro/BuscarInfor" htmlEscape="true "/>">
+                    <spring:message code="Datos Generales" />
+                </a>
             </li>
         </ol>
         <div class="container-fluid">
@@ -310,7 +314,7 @@
                                                 <div class="container">
                                                     <div class="main-body">
                                                         <div class="row gutters-sm">
-                                                            <div class="col-md-4 mb-3">
+                                                            <div class="col-md-5 mb-3">
                                                                 <div class="card card1">
                                                                     <div class="card-body">
                                                                         <div class="d-flex flex-column align-items-center text-center">
@@ -407,7 +411,7 @@
                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-8">
+                                                            <div class="col-md-7">
                                                                 <div class="card card1 mb-3">
                                                                     <div class="card-body">
                                                                         <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2"> <strong> Información Del Participante </strong></i></h6>

@@ -115,8 +115,8 @@ public class RegistroController {
             historialDTO.setConsFlu(procesos.getConsFlu());
             historialDTO.setConsDeng(procesos.getConsDeng());
             historialDTO.setVacunas(procesos.getInfoVacuna());
+            historialDTO.setEncCasaCoh(procesos.getEnCasa());// aqui encuesta casa cohorte pediátrica
             historialDTO.setEncCHF(procesos.getEnCasaChf());
-            historialDTO.setEncCasaCoh(procesos.getEnCasaChf());
             historialDTO.setEncCasaSa(procesos.getEnCasaSa());
             historialDTO.setEstPart(procesos.getEstPart());
             historialDTO.setManzana(participante.getCasa().getManzana());
