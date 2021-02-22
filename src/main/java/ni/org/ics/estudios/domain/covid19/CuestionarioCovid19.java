@@ -132,6 +132,19 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String fumadoPrevioEnfermedad;
     /*24.	¿Usted fumaba cigarrillos todos los días o algunos días ahora? */
     private String fumaActualmente;
+    /*25	[Si P3==Si] Y si es mujer ¿Usted estaba embarazada al momento de ser diagnosticada o sospechosa de COVID19?*/
+    private String embarazada;
+    /*Si es Si, Recuerda las semanas de embarazo que tenia*/
+    private String recuerdaSemanasEmb;
+    private Integer semanasEmbarazo;
+    /*Si es Si, como finalizo el embarzo*/
+    private String finalEmbarazo;
+    private String otroFinalEmbarazo;
+    /*26.  [Si P3==Si] Si estaba embarazada recientemente al momento de ser diagnosticada con COVID19, ¿Usted estaba dando pecho materno?*/
+    private String dabaPecho;
+    /*27. ¿Usted estuvo empleado como trabajador de la salud desde el 1 de febrero de 2020?*/
+    private String trabajadorSalud;
+    private String periodoSintomas;//Almacena desde que perido se estan preguntando los sintomas de la pregunta 1
 
     @Id
     @Column(name = "CODIGO", length = 36, nullable = false)
@@ -971,6 +984,78 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
 
     public void setFumaActualmente(String fumaActualmente) {
         this.fumaActualmente = fumaActualmente;
+    }
+
+    @Column(name = "EMBARAZADA", length = 4, nullable = true)
+    public String getEmbarazada() {
+        return embarazada;
+    }
+
+    public void setEmbarazada(String embarazada) {
+        this.embarazada = embarazada;
+    }
+
+    @Column(name = "RECUERDA_SEMANAS_EMB", length = 4, nullable = true)
+    public String getRecuerdaSemanasEmb() {
+        return recuerdaSemanasEmb;
+    }
+
+    public void setRecuerdaSemanasEmb(String recuerdaSemanasEmb) {
+        this.recuerdaSemanasEmb = recuerdaSemanasEmb;
+    }
+
+    @Column(name = "SEMANAS_EMBARAZO", nullable = true)
+    public Integer getSemanasEmbarazo() {
+        return semanasEmbarazo;
+    }
+
+    public void setSemanasEmbarazo(Integer semanasEmbarazo) {
+        this.semanasEmbarazo = semanasEmbarazo;
+    }
+
+    @Column(name = "FINAL_EMBARAZO", length = 4, nullable = true)
+    public String getFinalEmbarazo() {
+        return finalEmbarazo;
+    }
+
+    public void setFinalEmbarazo(String finalEmbarazo) {
+        this.finalEmbarazo = finalEmbarazo;
+    }
+
+    @Column(name = "OTRO_FINAL_EMBARAZO", nullable = true)
+    public String getOtroFinalEmbarazo() {
+        return otroFinalEmbarazo;
+    }
+
+    public void setOtroFinalEmbarazo(String otroFinalEmbarazo) {
+        this.otroFinalEmbarazo = otroFinalEmbarazo;
+    }
+
+    @Column(name = "DABA_PECHO", length = 4, nullable = true)
+    public String getDabaPecho() {
+        return dabaPecho;
+    }
+
+    public void setDabaPecho(String dabaPecho) {
+        this.dabaPecho = dabaPecho;
+    }
+
+    @Column(name = "TRABAJADOR_SALUD", length = 4, nullable = true)
+    public String getTrabajadorSalud() {
+        return trabajadorSalud;
+    }
+
+    public void setTrabajadorSalud(String trabajadorSalud) {
+        this.trabajadorSalud = trabajadorSalud;
+    }
+
+    @Column(name = "PERIODO_SINTOMAS", length = 16, nullable = true)
+    public String getPeriodoSintomas() {
+        return periodoSintomas;
+    }
+
+    public void setPeriodoSintomas(String periodoSintomas) {
+        this.periodoSintomas = periodoSintomas;
     }
 
     @Override

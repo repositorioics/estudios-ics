@@ -1148,3 +1148,10 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.Place', 'Lugar','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.BHC', 'BHC','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.serologia', 'Serologia','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para el tipo de final de embarazo con covid19');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_01', '1', 'COVID_CAT_FINAL_EMB', NULL, '0', 1, '0', 'Aborto espontáneo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_02', '2', 'COVID_CAT_FINAL_EMB', NULL, '0', 2, '0', 'Inducido');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_03', '3', 'COVID_CAT_FINAL_EMB', NULL, '0', 3, '0', 'Nacimiento vivo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_04', '4', 'COVID_CAT_FINAL_EMB', NULL, '0', 4, '0', 'Aún embarazada');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_998', '998', 'COVID_CAT_FINAL_EMB', NULL, '0', 5, '0', 'Otro');
