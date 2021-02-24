@@ -46,7 +46,7 @@ public class ComparasionService {
     public void SaveBHC(RecepcionBHC details) throws Exception {
         try {
             Session session = sessionFactory.getCurrentSession();
-            session.save(details);
+            session.saveOrUpdate(details);
         }catch (Exception e){
             throw e;
         }
@@ -158,9 +158,34 @@ public class ComparasionService {
         Session session = sessionFactory.getCurrentSession();
         session.save(obj);
     }
-    public void ModificarSerologia(RecepcionSero objUp)throws Exception{
+    public Integer ModificarSerologia(RecepcionSero objUp)throws Exception{
+        try {
         Session session = sessionFactory.getCurrentSession();
-        session.update(objUp);
+        Integer cod = objUp.getCodigo();
+        String est = objUp.getEstado();
+        Date fechaSero = objUp.getFechaRecSero();
+        Date fechaReg = objUp.getFecreg();
+        String lug = objUp.getLugar();
+        String obs = objUp.getObservacion();
+        String userN = objUp.getUsername();
+        Double vol = objUp.getVolumen();
+        String id = objUp.getId();
+        Query query = session.createQuery("update RecepcionSero rs set rs.codigo =:cod, rs.estado=:est, rs.fechaRecSero=:fechaSero, rs.fecreg=:fechaReg, rs.lugar=:lug, rs.observacion=:obs, rs.username=:userN, rs.volumen=:vol where rs.id=:id");
+        query.setParameter("cod", cod);
+        query.setParameter("est", est);
+        query.setParameter("fechaSero", fechaSero);
+        query.setParameter("fechaReg", fechaReg);
+        query.setParameter("lug", lug);
+        query.setParameter("obs", obs);
+        query.setParameter("userN", userN);
+        query.setParameter("vol", vol);
+        query.setParameter("id", id);
+        Integer result = query.executeUpdate();
+        return result;
+    }catch (Exception e){
+        System.out.println(e.getMessage());
+        return 0;
+    }
     }
 
     //Lista todas las Serologia

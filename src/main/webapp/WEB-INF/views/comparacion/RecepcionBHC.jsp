@@ -335,6 +335,15 @@
             border-radius: 50rem !important;
         }
     </style>
+
+
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
+
+    <spring:url value="/resources/css/ClockPicker.css" var="clockcss" />
+    <link href="${clockcss}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp"/>
@@ -386,36 +395,53 @@
                                 <input type="text" class="form-control" id="accion" name="accion" value="${editando}"/>
                             </div>
                             <div class="form-group col-md-6">
-                                <input type="text" class="form-control" id="fechaToEdit" name="fechaToEdit" value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" />"/>
+                                <input type="text" class="form-control" id="fechaToEdit" name="fechaToEdit" value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy HH:mm:ss" />"/>
                             </div>
                         </div>
                         <div  class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="codigo">Código:</label>
                                 <span class="required text-danger"> * </span>
-                                <c:choose>
+                                <input type="text" class="form-control focusNext" name="codigo" id="codigo" value="${caso.recBhcId.codigo}" tabindex="1">
+                                <!--<c:choose>
                                     <c:when test = "${editando eq true}">
                                         <input type="text" class="form-control focusNext" name="codigo" id="codigo" value="${caso.recBhcId.codigo}" readonly>
                                     </c:when>
                                     <c:otherwise>
                                         <input type="text" class="form-control focusNext" name="codigo" id="codigo" tabindex="1">
                                     </c:otherwise>
-                                </c:choose>
+                                </c:choose>-->
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="fechaBhc">Fecha BHC:</label>
                                 <span class="required text-danger"> * </span>
                                 <input type="text" class="form-control focusNext" name="fechaBhc" id="fechaBhc" data-date-end-date="+0d" tabindex="2"
                                        value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" />">
                             </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="fechaRegistBhc">Fecha Registro:</label>
+                                <span class="required text-danger"> * </span>
+                                <input type="text" class="date_time form-control focusNext" name="fechaRegistBhc" id="fechaRegistBhc" tabindex="3"
+                                       value="<fmt:formatDate value="${caso.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" />">
+                            </div>
+                            <!--
+                            <div class="form-group col-md-2">
+                                <label for="fechaRegistBhc">Hora Registro:</label>
+                                <div class="input-group clock">
+                                    <input type="text" class="form-control focusNext" id="hora" name="hora" placeholder="Ahora" tabindex="4">
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                </div>
+                            </div>-->
                         </div>
                         <div class="">
-
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="lugar">Lugar:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select id="lugar" name="lugar" class="form-control focusNext" required="required" tabindex="3">
+                                    <select id="lugar" name="lugar" class="form-control focusNext" required="required" tabindex="5">
                                         <span class="required text-danger"> * </span>
                                         <option selected value=""><spring:message code="select"/>...</option>
                                         <c:forEach items="${lugar}" var="l">
@@ -434,7 +460,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="username">Usuario:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select id="username" name="username" class="form-control focusNext" required="required" tabindex="4">
+                                    <select id="username" name="username" class="form-control focusNext" required="required" tabindex="6">
                                         <option selected value=""><spring:message code="select"/>...</option>
                                         <c:forEach items="${usuarios}" var="u">
                                             <c:choose>
@@ -455,13 +481,13 @@
                             <div class="form-group col-md-8">
                                 <label for="observacion">Observación:</label>
                                 <input type="text" class="form-control focusNext" id="observacion" name="observacion" value="${caso.observacion}"
-                                       placeholder="Observación" tabindex="5">
+                                       placeholder="Observación" tabindex="7">
                             </div>
 
                             <div class="form-group col-md-4">
                                 <label for="volumen">Vólumen:</label>
                                 <span class="required text-danger"> * </span>
-                                <input type="text" class="form-control focusNext" name="volumen" id="volumen" value="${caso.volumen}" tabindex="6">
+                                <input type="text" class="form-control focusNext" name="volumen" id="volumen" value="${caso.volumen}" tabindex="8">
                             </div>
                         </div>
 
@@ -505,7 +531,7 @@
                             <div class="col-md-4">
                                 <a href="${fn:escapeXml(bhcUrl)}" class="btn btn-warning btn-lg btn-block btn-raised shadow rounded-pill">
                                     <i class="fa fa-ban" aria-hidden="true"></i>
-                                    <spring:message code="cancel" />
+                                    <spring:message code="Limpiar Formulario" />
                                 </a>
                             </div>
                         </div>
@@ -549,7 +575,7 @@
                                         <td><span class="badge badge-danger" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><fmt:formatDate value="${c.fecreg}" pattern="dd/MM/yyyy" /></td>
+                                <td><fmt:formatDate value="${c.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
                                 <td><c:out value="${c.lugar}" /></td>
                                 <td><c:out value="${c.observacion}" /></td>
                                 <c:choose>
@@ -613,7 +639,7 @@
                             </form>
                             <br/>
                             <div class="row justify-content-end no-gutters">
-                                <div class="col-auto pull-left"><button type="button" class="btn btn-light text-muted " data-dismiss="modal"><spring:message code="cancel" /></button></div>
+                                <div class="col-auto pull-left"><button type="button" class="btn btn-light text-muted " data-dismiss="modal"><spring:message code="Limpiar Formulario" /></button></div>
                                 <div class="col-auto"><button id="btnDelete" type="button" class="btn btn-danger px-4 pull-right" data-dismiss="modal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button></div>
                             </div>
                         </div>
@@ -677,6 +703,12 @@
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
 
+<spring:url value="/resources/js/libs/jquery.maskedinput.js" var="maskJs" />
+<script type="text/javascript" src="${maskJs}"></script>
+
+<spring:url value="/resources/js/libs/sweetalert.js" var="sweet" />
+<script type="text/javascript" src="${sweet}"></script>
+
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
 
@@ -694,6 +726,7 @@
             autoclose: true,
             endDate: '-0d'
         });
+        $("#fechaRegistBhc").mask("99/99/9999 99:99:99");
         $("#lugar").select2();
         $("#username").select2();
         $('#volumen').on('change', function () {

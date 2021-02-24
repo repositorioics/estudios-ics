@@ -172,6 +172,10 @@
             border-radius: .25em;
         }
     </style>
+
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -239,8 +243,8 @@
                                             </label>
                                             <div class="input-group col-md-10">
                                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                                <input id="participantCode" name="participantCode" type="text" value="" class="form-control focusNext" tabindex="1"/>
-                                                <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
+                                                <input id="participantCode" name="participantCode" type="text" value="" class="form-control" />
+                                                <button id="buscar" type="submit" class="btn btn-success">
                                                     <i class="fa fa-search" aria-hidden="true"></i>
                                                     <spring:message code="search" />
                                                 </button>
@@ -265,20 +269,28 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label for="codigoMx">Código:</label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control focusNext" name="codigoMx" id="codigoMx" value="${caso.mId.codigo}" tabindex="2">
                         </div>
-                        <div class="form-group col-md-4">
+
+
+                        <div class="form-group col-md-3">
                             <label for="fechaMx">Fecha Muestra:</label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control focusNext" tabindex="3" name="fechaMx" id="fechaMx" data-date-end-date="+0d" value="<fmt:formatDate value="${caso.mId.fechaMuestra}" pattern="dd/MM/yyyy" />">
                         </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="fechaReg">Fecha Registro:</label>
+                            <span class="required text-danger"> * </span>
+                            <input type="text" class="form-control focusNext" tabindex="4" name="fechaReg" id="fechaReg" value="<fmt:formatDate value="${caso.movilInfo.today}" pattern="dd/MM/yyyy HH:mm:ss" />">
+                        </div>
                         <div class="form-group col-md-4">
                             <label for="estudiosAct">Estudio:</label>
                             <span class="required text-danger"> * </span>
-                            <input type="text" class="form-control focusNext" tabindex="4" name="estudiosAct" readonly id="estudiosAct" value="${caso.estudiosAct}">
+                            <input type="text" class="form-control focusNext" tabindex="5" name="estudiosAct" readonly id="estudiosAct" value="${caso.estudiosAct}">
                         </div>
                     </div>
 
@@ -286,7 +298,7 @@
                         <div class="form-group col-md-3">
                             <label for="recurso1">Recurso 1:</label>
                             <span class="required text-danger"> * </span>
-                            <select id="recurso1" name="recurso1" class="form-control focusNext" tabindex="5" required="required">
+                            <select id="recurso1" name="recurso1" class="form-control focusNext" tabindex="6" required="required">
                                 <option selected value=""><spring:message code="select"/>...</option>
                                 <c:forEach items="${recurso}" var="r">
                                     <c:choose>
@@ -304,7 +316,7 @@
                         <div class="form-group col-md-3">
                             <label for="recurso2">Recurso 2:</label>
                             <span class="required text-danger"> * </span>
-                            <select id="recurso2" name="recurso2" class="form-control focusNext" required="required" tabindex="6">
+                            <select id="recurso2" name="recurso2" class="form-control focusNext" required="required" tabindex="7">
                                 <option selected value=""><spring:message code="select"/>...</option>
                                 <c:forEach items="${recurso}" var="r2">
                                     <c:choose>
@@ -322,7 +334,7 @@
                         <div class="form-group col-md-3">
                             <label for="usernameMx">Usuario:</label>
                             <span class="required text-danger"> * </span>
-                            <select id="usernameMx" name="usernameMx" class="form-control focusNext" tabindex="7" required="required">
+                            <select id="usernameMx" name="usernameMx" class="form-control focusNext" tabindex="8" required="required">
                                 <option selected value=""><spring:message code="select"/>...</option>
                                 <c:forEach items="${usuarios}" var="u">
                                     <c:choose>
@@ -340,7 +352,7 @@
                         <div class="form-group col-md-3">
                             <label for="terrenoMx">Terreno:</label>
                             <span class="required text-danger"> * </span>
-                            <select id="terrenoMx" name="terrenoMx" class="form-control focusNext" tabindex="8" required="required">
+                            <select id="terrenoMx" name="terrenoMx" class="form-control focusNext" tabindex="9" required="required">
                                 <span class="required text-danger"> * </span>
                                 <option selected value=""><spring:message code="select"/>...</option>
                                 <c:forEach items="${SiNo}" var="sn">
@@ -360,20 +372,20 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="txtpinchazo">Pinchazo:</label>
-                            <input type="number" class="form-control focusNext" tabindex="9" id="txtpinchazo" name="txtpinchazo" min="1" max="4" value="${caso.pinchazos}">
+                            <input type="number" class="form-control focusNext" tabindex="10" id="txtpinchazo" name="txtpinchazo" min="1" max="4" value="${caso.pinchazos}">
                         </div>
 
                         <div class="form-group col-md-3">
                             <label for="tubobhc">Tubo BHC:</label>
-                            <input type="text" class="form-control focusNext" tabindex="10" id="tubobhc" name="tubobhc" min="1" max="1" value="${caso.tuboBHC}">
+                            <input type="text" class="form-control focusNext" tabindex="11" id="tubobhc" name="tubobhc" min="1" max="1" value="${caso.tuboBHC}">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="tuboleuco">Tubo Leocusep:</label>
-                            <input type="text" class="form-control focusNext" tabindex="11" id="tuboleuco" name="tuboleuco" min="1" max="1" value="${caso.tuboLeu}">
+                            <input type="text" class="form-control focusNext" tabindex="12" id="tuboleuco" name="tuboleuco" min="1" max="1" value="${caso.tuboLeu}">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="tuborojo">Tubo Rojo:</label>
-                            <input type="text" class="form-control focusNext" tabindex="12" id="tuborojo" name="tuborojo" min="1" max="2" value="${caso.tuboRojo}">
+                            <input type="text" class="form-control focusNext" tabindex="13" id="tuborojo" name="tuborojo" min="1" max="2" value="${caso.tuboRojo}">
                         </div>
                     </div>
 
@@ -403,7 +415,7 @@
                         <div class="col-md-4">
                             <a href="${fn:escapeXml(refreshPageUrl)}" class="btn btn-warning btn-block btn-lg btn btn-raised shadow rounded-pill">
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                                <spring:message code="cancel" />
+                                <spring:message code="Limpiar Formulario" />
                             </a>
                         </div>
                     </div>
@@ -448,7 +460,7 @@
                                     <spring:url value="/comparacion/deletemuestra" var="deleteMuestraUrl"></spring:url>
                                     <tr>
                                         <td class="text-center">${mx.mId.codigo}</td>
-                                        <td class="text-center"><fmt:formatDate value="${mx.movilInfo.today}" pattern="dd/MM/yyyy"/></td>
+                                        <td class="text-center"><fmt:formatDate value="${mx.movilInfo.today}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
                                         <td class="text-center"><fmt:formatDate value="${mx.mId.fechaMuestra}" pattern="dd/MM/yyyy"/></td>
                                         <td class="text-center">${mx.movilInfo.username}</td>
                                         <c:choose>
@@ -508,9 +520,9 @@
 
                                         <td class="text-center"> <span class="label label-default"> ${mx.estudiosAct} </span> </td>
                                         <td class="text-center">
-                                            <a href="${fn:escapeXml(editMuestraUrl)}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm">
+                                           <!-- <a href="${fn:escapeXml(editMuestraUrl)}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm">
                                                 <i class="fa fa-edit"></i>
-                                            </a>
+                                            </a> -->
 
                                             <button id="btndelete" title="<spring:message code="Eliminar" />" data-id="${mx.mId.codigo}" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm btndelete">
                                                 <i class="fa fa-trash text-white" aria-hidden="true"></i>
@@ -575,6 +587,12 @@
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 
+<spring:url value="/resources/js/libs/jquery.maskedinput.js" var="maskJs" />
+<script type="text/javascript" src="${maskJs}"></script>
+
+<spring:url value="/resources/js/libs/sweetalert.js" var="sweet" />
+<script type="text/javascript" src="${sweet}"></script>
+
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
 
@@ -586,6 +604,7 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
     $(document).ready(function(){
+        $("#fechaReg").mask("99/99/9999 99:99:99");
         $("#recurso1").select2();
         $("#recurso2").select2();
         $("#usernameMx").select2();

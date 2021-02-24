@@ -112,8 +112,10 @@ public class ComparacionController {
                                              ,@RequestParam(value="volumen", required = false, defaultValue = "") String volumen
                                              ,@RequestParam(value="chkEstado", required = false, defaultValue = "") String chkEstado
                                              ,@RequestParam(value="chkPaxGene", required = false, defaultValue = "") String chkPaxGene
-            ,@RequestParam(value="accion", required = false, defaultValue = "") String accion
-            ,@RequestParam(value = "fechaToEdit", required = false, defaultValue = "")String fechaToEdit
+                                             ,@RequestParam(value="accion", required = false, defaultValue = "") String accion
+                                             ,@RequestParam(value = "fechaToEdit", required = false, defaultValue = "")String fechaToEdit
+            ,@RequestParam(value = "fechaRegistBhc", required = false, defaultValue = "")String fechaRegistBhc
+            ,@RequestParam(value = "hora", required = false, defaultValue = "")String hora
 
     )throws Exception{
         try{
@@ -124,7 +126,9 @@ public class ComparacionController {
                 robhc.setCodigo(codigo);
                 robhc.setFechaRecBHC(DateUtil.StringToDate(fechaBhc, "dd/MM/yyyy"));
                 objBhc.setRecBhcId(robhc);
-                objBhc.setFecreg(new Date());
+
+                objBhc.setFecreg(DateUtil.StringToDate(fechaRegistBhc,"dd/MM/yyyy HH:mm:ss"));
+                System.out.println("Seleccionada: "+fechaRegistBhc);
                 String estado = "0";
                 if (chkEstado.equals("on")) {
                     estado = "1";
@@ -231,43 +235,61 @@ public class ComparacionController {
     public ResponseEntity<String> saveSerologia(@RequestParam(value = "id", required = false, defaultValue = "") String id
             ,@RequestParam(value = "codigoparticipante", required = true) int codigoparticipante
             ,@RequestParam(value = "fechaSero", required = true) String fechaSero
+            ,@RequestParam(value = "fecreg",required = true) String fecreg
             ,@RequestParam(value = "volumen", required = true) String volumen
             ,@RequestParam(value = "lugar", required = false) String lugar
             ,@RequestParam(value = "observacion", required = true) String observacion
             ,@RequestParam(value = "username", required = true) String username
             ,@RequestParam(value = "chkEstado", required = true) String chkEstado
             ,@RequestParam(value = "accion", required = false, defaultValue = "") String accion
-
+            ,@RequestParam(value = "fechaReg", required = false, defaultValue = "") String fechaReg
     ) throws Exception {
         try {
             RecepcionSero objSerologia = new RecepcionSero();
-            if (accion.equals("true") && id!= null){
-                objSerologia.setId(id);
-            }
             String ComputerName = InetAddress.getLocalHost().getHostName();
             String user = SecurityContextHolder.getContext().getAuthentication().getName();
-            String codigoGenerado = ComputerName+"-"+user+"-"+codigoparticipante+"-"+ DateUtil.StringToDate(fechaSero, "dd/MM/yyyy HH:mm:ss");
-            objSerologia.setId(codigoGenerado);
-            objSerologia.setCodigo(codigoparticipante);
-            objSerologia.setFechaRecSero(DateUtil.StringToDate(fechaSero, "dd/MM/yyyy"));
-            objSerologia.setFecreg(new Date());
-            objSerologia.setVolumen(Double.parseDouble(volumen));
-            objSerologia.setLugar(lugar);
-            objSerologia.setObservacion(observacion);
-            objSerologia.setUsername(username);
-            String estado = "0";
-            if (chkEstado.equals("on")) {
-                estado = "1";
-            } else {
-                estado = "0";
-            }
-            objSerologia.setEstado(estado);
-            if (!id.isEmpty())
-                this.comparasionService.ModificarSerologia(objSerologia);
-            else
+            String fecha = DateUtil.DateToString(new Date(), "dd-MM-yyyy");
+            String codigoGenerado = ComputerName+"-"+user+"-"+codigoparticipante+"-"+fecha ;
+
+            if (accion.equals("true") && id != null){// actualiza el registro
+                objSerologia.setId(id);
+                objSerologia.setCodigo(codigoparticipante);
+                String estado = "0";
+                if (chkEstado.equals("on")) {
+                    estado = "1";
+                } else {
+                    estado = "0";
+                }
+                objSerologia.setEstado(estado);
+                objSerologia.setFechaRecSero(DateUtil.StringToDate(fechaSero, "dd/MM/yyyy"));
+                objSerologia.setFecreg(DateUtil.StringToDate(fechaReg,"dd/MM/yyyy HH:mm:ss"));
+                objSerologia.setLugar(lugar);
+                objSerologia.setObservacion(observacion);
+                objSerologia.setUsername(username);
+                objSerologia.setVolumen(Double.parseDouble(volumen));
+                if (!id.isEmpty())
+                    this.comparasionService.ModificarSerologia(objSerologia);
+            }else{//Guarda si es nuevo ***
+
+                objSerologia.setId(codigoGenerado);
+                objSerologia.setCodigo(codigoparticipante);
+                objSerologia.setFechaRecSero(DateUtil.StringToDate(fechaSero, "dd/MM/yyyy"));
+                Date FechaDelRegistro = DateUtil.StringToDate(fechaReg,"dd/MM/yyyy HH:mm:ss");
+                System.out.println("fecha registro: "+FechaDelRegistro);
+                objSerologia.setFecreg(DateUtil.StringToDate(fechaReg, "dd/MM/yyyy HH:mm:ss"));
+                objSerologia.setVolumen(Double.parseDouble(volumen));
+                objSerologia.setLugar(lugar);
+                objSerologia.setObservacion(observacion);
+                objSerologia.setUsername(username);
+                String estado = "0";
+                if (chkEstado.equals("on")) {
+                    estado = "1";
+                } else {
+                    estado = "0";
+                }
+                objSerologia.setEstado(estado);
                 this.comparasionService.GuardarSerologia(objSerologia);
-
-
+            }
             return createJsonResponse(objSerologia);
         } catch (Exception e) {
             Gson gson = new Gson();
@@ -349,8 +371,9 @@ public class ComparacionController {
     public String deletemuestra(@RequestParam(value = "codigoMuestra", required = false) int codigoMuestra,
                                 @RequestParam(value = "fechamuestra", required = false, defaultValue = "") String fechamuestra)throws Exception{
         try {
-            Date dfechabhc = DateUtil.StringToDate(fechamuestra,"dd/MM/yyyy");
-            Date enDate = DateUtil.StringToDate(fechamuestra,"dd/MM/yyyy");
+            Date dfechabhc = DateUtil.StringToDate(fechamuestra,"dd/MM/yyyy HH:mm:ss");
+            System.out.println(dfechabhc);
+            Date enDate = DateUtil.StringToDate(fechamuestra,"dd/MM/yyyy HH:mm:ss");
            Integer cod = this.comparasionService.deleteMuestra(codigoMuestra,dfechabhc,enDate);
            return "/comparacion/RecepcionMuestra";
         }catch (Exception e){
@@ -390,6 +413,7 @@ public class ComparacionController {
             ,@RequestParam(value = "tuborojo", required = false) String tuborojo
             ,@RequestParam(value = "estudiosAct", required = true) String estudiosAct
             ,@RequestParam(value = "chkEstado", required = false) String chkEstado
+            ,@RequestParam(value = "fechaReg", required = false) String fechaReg
             /*,@RequestParam(value = "chkEliminadoMx", required = false) String chkEliminadoMx
             ,@RequestParam(value = "chkEstadoMx", required = false) String chkEstadoMx*/
     )throws Exception{
@@ -414,7 +438,7 @@ public class ComparacionController {
             movil.setDeviceid(ComputerName);
             movil.setSimserial("111");
             movil.getPhonenumber();
-            movil.setToday(DateUtil.StringToDate(fechaMx, "dd/MM/yyyy"));
+            movil.setToday(DateUtil.StringToDate(fechaReg, "dd/MM/yyyy HH:mm:ss"));
             movil.setUsername(usernameMx);
             movil.setRecurso1(Integer.parseInt(recurso1));
             movil.setRecurso2(Integer.parseInt(recurso2));

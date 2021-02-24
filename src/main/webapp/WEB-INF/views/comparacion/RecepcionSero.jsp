@@ -16,7 +16,6 @@
 <!-- DATE PICKER -->
 <spring:url value="/resources/css/datepicker.css" var="datepickerCss"/>
 <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
-<!-- END DATE PICKER -->
 
 <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
 <link href="${boot}" rel="stylesheet" type="text/css"/>
@@ -370,6 +369,10 @@
 
 
     </style>
+
+<spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+<link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body  class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -388,6 +391,7 @@
         <div class="container-fluid">
             <div class="animated fadeIn">
             <spring:url value="/comparacion/saveSerologia" var="saveSeroUrl"/>
+            <spring:url value="/comparacion/serologia" var="refreshUrl"/>
             <div class="">
             <div class="row">
             <div class="col-md-12 col-lg-12">
@@ -422,25 +426,35 @@
                             <div class="form-group col-md-6">
                                 <input type="text" class="form-control" id="id" name="id" value="${caso.id}"/>
                             </div>
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" id="fecreg" name="fecreg" value="<fmt:formatDate value="${caso.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" />"/>
+                            </div>
                         </div>
                         <div  class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="codigoparticipante">Código:</label>
                                 <span class="required text-danger"> * </span>
-                                <c:choose>
+                                <input type="text" class="form-control focusNext" tabindex="1" name="codigoparticipante" id="codigoparticipante" value="${caso.codigo}">
+                                <!-- <c:choose>
                                     <c:when test = "${editando eq true}">
                                         <input type="text" class="form-control" name="codigoparticipante" id="codigoparticipante" value="${caso.codigo}" readonly>
                                     </c:when>
                                     <c:otherwise>
                                         <input type="text" class="form-control focusNext" tabindex="1" name="codigoparticipante" id="codigoparticipante">
                                     </c:otherwise>
-                                </c:choose>
+                                </c:choose> -->
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-3">
                                 <label for="fechaSero">Fecha Serologia:</label>
                                 <span class="required text-danger"> * </span>
                                 <input type="text" class="form-control focusNext" tabindex="2" name="fechaSero" id="fechaSero" data-date-end-date="+0d"
                                        value="<fmt:formatDate value="${caso.fechaRecSero}" pattern="dd/MM/yyyy" />">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="fechaReg">Fecha Registro:</label>
+                                <span class="required text-danger"> * </span>
+                                <input type="text" class="form-control focusNext" tabindex="2" name="fechaReg" id="fechaReg"
+                                       value="<fmt:formatDate value="${caso.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" />">
                             </div>
                         </div>
                         <div class="">
@@ -523,9 +537,9 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4">
-                                <a href="${fn:escapeXml(bhcUrl)}" class="btn btn-warning btn-lg btn-block btn-raised shadow rounded-pill">
+                                <a href="${fn:escapeXml(refreshUrl)}" class="btn btn-warning btn-lg btn-block btn-raised shadow rounded-pill">
                                     <i class="fa fa-ban" aria-hidden="true"></i>
-                                    <spring:message code="cancel" />
+                                    <spring:message code="Limpiar Formulario" />
                                 </a>
                             </div>
                         </div>
@@ -573,7 +587,7 @@
                                         <td><span class="badge badge-danger" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><fmt:formatDate value="${s.fecreg}" pattern="dd/MM/yyyy" /></td>
+                                <td><fmt:formatDate value="${s.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
                                 <td><c:out value="${s.lugar}" /></td>
                                 <td><c:out value="${s.observacion}" /></td>
                                 <td><c:out value="${s.username}" /></td>
@@ -649,6 +663,12 @@
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
 
+<spring:url value="/resources/js/libs/jquery.maskedinput.js" var="maskJs" />
+<script type="text/javascript" src="${maskJs}"></script>
+
+<spring:url value="/resources/js/libs/sweetalert.js" var="sweet" />
+<script type="text/javascript" src="${sweet}"></script>
+
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
 
@@ -685,6 +705,7 @@
         });
         $("#lugar").select2();
         $("#username").select2();
+        $("#fechaReg").mask("99/99/9999 99:99:99");
         $("#codigoparticipante").focus();
     });
 </script>
