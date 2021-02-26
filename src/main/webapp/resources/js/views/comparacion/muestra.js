@@ -78,6 +78,35 @@ var BuscarEstudios = function(){
             })
             function eliminarMx(id, col1){
                 swal({
+                        title: "Eliminar? ",
+                        text: "Código: " + id + " con Fecha: " + col1,
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        cancelButtonText: "No, cancel plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+
+                            $.post(parametro.deleteMuestraUrl,{codigoMuestra : id, fechamuestra: col1,ajax : 'true'}, function(data){
+                                swal("Eliminado!", "Con éxito!.", "success");
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1300);
+                            }).fail(function() {
+                                setTimeout(function () {
+                                    swal("Error!","Servidor no respode!","error");
+                                }, 1500);
+                            });
+                        } else {
+                            swal("Cancelado", "Registro está seguro! :)", "error");
+                        }
+                    });
+
+               /* swal({
                     title: "Eliminar? ",
                     text: "Código: " + id + " con Fecha: " + col1,
                     icon: "warning",
@@ -106,7 +135,7 @@ var BuscarEstudios = function(){
                     } else {
                         swal("Cancelado!", "Registro seguro. :)", "error");
                     }
-                });
+                });*/
             }
 
 
@@ -119,6 +148,9 @@ var BuscarEstudios = function(){
                         required: true
                     },
                     fechaMx: {
+                        required: true
+                    },
+                    fechaReg:{
                         required: true
                     },
                     recurso1: {

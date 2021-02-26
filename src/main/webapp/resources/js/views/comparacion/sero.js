@@ -23,7 +23,10 @@ var GuardarSero = function(){
                     codigoparticipante: {required: true,
                         number: true
                     },
-                    fechaBhc: {
+                    fechaSero: {
+                        required: true
+                    },
+                    fechaReg: {
                         required: true
                     },
                     volumen: {
@@ -90,7 +93,40 @@ var GuardarSero = function(){
             });
 
             function eliminar(id,col1,col2) {
+
                 swal({
+                        title: "Eliminar? ",
+                        text: "Registro: " + col1 + "Fecha: " + col2,
+                        type: "warning",
+
+                        dangerMode: true,
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Si, bórralo!",
+                        cancelButtonText: "No, borres plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            $.post(param.deleteseroUrl,{id : id, ajax : 'true'}, function(data){
+                                swal("Eliminado!", "con éxito!.", "success");
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1000);
+                            }).fail(function() {
+                                setTimeout(function () {
+                                    swal("Error!","Servidor no respode!","error");
+                                }, 1500);
+                            });
+
+                        } else {
+                            swal("Cancelado", "registro está seguro :)", "error");
+                        }
+                    });
+
+
+             /*   swal({
                     title: "Eliminar? ",
                     text: "Registro: " + col1 + "Fecha: " + col2,
                     icon: "warning",
@@ -120,7 +156,7 @@ var GuardarSero = function(){
                         swal("Cancelado!", "Registro seguro. :)", "error");
                     }
                 });
-
+                */
             }
 
 

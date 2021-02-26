@@ -31,10 +31,7 @@ import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ICS on 07/01/2021.
@@ -148,8 +145,8 @@ public class ComparacionController {
                 objBhc.setUsername(username);
                 double volbhc = Double.parseDouble(volumen);
                 objBhc.setVolumen(volbhc);
-                this.comparasionService.SaveBHC(objBhc);
-                map.put("msj", "Registro Guardado." );
+                Integer result = this.comparasionService.SaveBHC(objBhc);
+                if (result == 1) map.put("msj", "Registro Guardado." );
                 return JsonUtil.createJsonResponse(objBhc);
             }else{
 
@@ -182,6 +179,7 @@ public class ComparacionController {
         } catch (Exception e){
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
+            System.out.println("error: "+e.getMessage());
             return  new ResponseEntity<String>( json, HttpStatus.CREATED);
         }
     }
@@ -247,9 +245,8 @@ public class ComparacionController {
         try {
             RecepcionSero objSerologia = new RecepcionSero();
             String ComputerName = InetAddress.getLocalHost().getHostName();
-            String user = SecurityContextHolder.getContext().getAuthentication().getName();
-            String fecha = DateUtil.DateToString(new Date(), "dd-MM-yyyy");
-            String codigoGenerado = ComputerName+"-"+user+"-"+codigoparticipante+"-"+fecha ;
+            final String uuid = UUID.randomUUID().toString().replace("-", "");
+            String micodeUUID = ComputerName+"-"+uuid;
 
             if (accion.equals("true") && id != null){// actualiza el registro
                 objSerologia.setId(id);
@@ -271,7 +268,7 @@ public class ComparacionController {
                     this.comparasionService.ModificarSerologia(objSerologia);
             }else{//Guarda si es nuevo ***
 
-                objSerologia.setId(codigoGenerado);
+                objSerologia.setId(micodeUUID);
                 objSerologia.setCodigo(codigoparticipante);
                 objSerologia.setFechaRecSero(DateUtil.StringToDate(fechaSero, "dd/MM/yyyy"));
                 Date FechaDelRegistro = DateUtil.StringToDate(fechaReg,"dd/MM/yyyy HH:mm:ss");
@@ -422,7 +419,8 @@ public class ComparacionController {
             MovilInfo movil = new MovilInfo();
             String ComputerName = InetAddress.getLocalHost().getHostName();
             movil.setIdInstancia(Integer.valueOf(148));
-            movil.setInstancePath("Server");
+
+            movil.setInstancePath(ComputerName);
             String estado;
             if(chkEstado.equals("on")){
                 estado ="1";

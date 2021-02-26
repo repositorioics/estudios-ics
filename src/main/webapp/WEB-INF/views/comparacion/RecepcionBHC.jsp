@@ -395,7 +395,7 @@
                                 <input type="text" class="form-control" id="accion" name="accion" value="${editando}"/>
                             </div>
                             <div class="form-group col-md-6">
-                                <input type="text" class="form-control" id="fechaToEdit" name="fechaToEdit" value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy HH:mm:ss" />"/>
+                                <input type="text" class="form-control" id="fechaToEdit" name="fechaToEdit" value="<fmt:formatDate value="${caso.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" />"/>
                             </div>
                         </div>
                         <div  class="form-row">
@@ -591,7 +591,7 @@
                                 <td>
                                     <button id="swalDelete" title="<spring:message code="Eliminar" />" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm salida">
                                         <i class="fa fa-trash text-white" aria-hidden="true"></i></button>
-                                    <a href="${fn:escapeXml(editbhcUrl)}"  data-toggle="tooltip" data-placement="bottom" title="<spring:message code="edit" />" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                   <!-- <a href="${fn:escapeXml(editbhcUrl)}"  data-toggle="tooltip" data-placement="bottom" title="<spring:message code="edit" />" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>-->
                                 </td>
                             </tr>
 

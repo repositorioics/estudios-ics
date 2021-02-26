@@ -16,6 +16,9 @@ var GuardarBhc = function(){
                     fechaBhc: {
                         required: true
                     },
+                    fechaRegistBhc: {
+                        required: true
+                    },
                     volumen: {
                         required: true,
                         number: true
@@ -75,35 +78,65 @@ var GuardarBhc = function(){
             })
             function eliminar(col0,col1) {
                 swal({
-                    title: "Eliminar? ",
-                    text: "Registro: " + col0 + " con Fecha: " + col1,
-                    icon: "warning",
-                    buttons: [
-                        'No, cancélalo!',
-                        'Si, Eliminar!'
-                    ],
-                    dangerMode: true
-                }).then(function(isConfirm) {
-                    if (isConfirm) {
-                        swal({
-                            title: 'Eliminado!',
-                            text: 'Registro eliminado éxitosamente!',
-                            icon: 'success'
-                        }).then(function() {
-                            $.post(params.deletebhcUrl,{idbhc : col0, datebhc: col1, ajax : 'true'}, function(data){
+                        title: "Eliminar? ",
+                        text: "Registro: " + col0 + " con Fecha: " + col1,
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Si, Bórralo!",
+                        cancelButtonText: "No, Borres plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.post(params.deletebhcUrl, {idbhc: col0, datebhc: col1, ajax: 'true'}, function (data) {
+                                swal("Eliminado!", "con éxito!", "success");
                                 setTimeout(function () {
                                     location.reload();
                                 }, 1000);
-                            }).fail(function() {
+                            }).fail(function () {
                                 setTimeout(function () {
-                                    swal("Error!","Servidor no respode!","error");
+                                    swal("Error!", "Servidor no respode!", "error");
                                 }, 2000);
                             });
-                        });
-                    } else {
-                        swal("Cancelado!", "Registro seguro. :)", "error");
-                    }
-                });
+
+                        } else {
+                            swal("Cancelado!", "Registro está seguro! :)", "error");
+                        }
+
+                        /* swal({
+                         title: "Eliminar? ",
+                         text: "Registro: " + col0 + " con Fecha: " + col1,
+                         icon: "warning",
+                         buttons: [
+                         'No, cancélalo!',
+                         'Si, Eliminar!'
+                         ],
+                         dangerMode: true
+                         }).then(function(isConfirm) {
+                         if (isConfirm) {
+                         swal({
+                         title: 'Eliminado!',
+                         text: 'Registro eliminado éxitosamente!',
+                         icon: 'success'
+                         }).then(function() {
+                         $.post(params.deletebhcUrl,{idbhc : col0, datebhc: col1, ajax : 'true'}, function(data){
+                         setTimeout(function () {
+                         location.reload();
+                         }, 1000);
+                         }).fail(function() {
+                         setTimeout(function () {
+                         swal("Error!","Servidor no respode!","error");
+                         }, 2000);
+                         });
+                         });
+                         } else {
+                         swal("Cancelado!", "Registro seguro. :)", "error");
+                         }
+                         */
+
+                    });
 
                 document.addEventListener('keypress', function(evt) {
                     // Si el evento NO es una tecla Enter

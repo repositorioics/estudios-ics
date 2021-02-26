@@ -43,12 +43,14 @@ public class ComparasionService {
     //region SERVICIO BHC
 
     @SuppressWarnings("unchecked")
-    public void SaveBHC(RecepcionBHC details) throws Exception {
+    public Integer SaveBHC(RecepcionBHC details) throws Exception {
         try {
             Session session = sessionFactory.getCurrentSession();
             session.saveOrUpdate(details);
+            return  1;
         }catch (Exception e){
-            throw e;
+          System.out.println("Error: "+e.getMessage());
+            return 0;
         }
     }
 
@@ -156,7 +158,7 @@ public class ComparasionService {
     //Guardar Serologia
     public void GuardarSerologia(RecepcionSero obj)throws Exception{
         Session session = sessionFactory.getCurrentSession();
-        session.save(obj);
+        session.saveOrUpdate(obj);
     }
     public Integer ModificarSerologia(RecepcionSero objUp)throws Exception{
         try {
