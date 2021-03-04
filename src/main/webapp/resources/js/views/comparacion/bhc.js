@@ -42,9 +42,52 @@ var GuardarBhc = function(){
                     $(element).parents('.form-group').addClass('has-success').removeClass('has-danger');
                 },
                 submitHandler: function (form) {
-                    SaveBHC(params);
+                    if(checkEstado()){
+
+                        if(!checkPaxgene()){
+                               console.log("pax: "+checkPaxgene())
+                            swal({
+                                    title: "Deseas Guardar,",
+                                    text: "sin checkar el PaxGene?",
+                                    type: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonClass: "btn-warning",
+                                    confirmButtonText: "Si, continuar!",
+                                    cancelButtonText: "No, cancela plx!",
+                                    closeOnConfirm: false,
+                                    closeOnCancel: false
+                                },
+                                function(isConfirm) {
+                                    if (isConfirm) {
+                                        SaveBHC(params);
+                                    } else {
+                                        swal("Cancelado", "Continua... :)", "error");
+                                    }
+                                });
+                        }
+                    }
                 }
             });
+            function checkEstado(){
+                debugger;
+                var ckbox = $('#chkEstado');
+                var result = false;
+                if(ckbox.is(':checked') == true){
+                    result = true;
+                    return result;
+                }else {
+                    swal("Error","Check el Estado","warning");
+                    return;
+                }
+            }
+
+            function checkPaxgene(){
+                var chkPax = $("#chkPaxGene");
+                if(chkPax.is(':checked') == true)
+                return true;
+                else
+                return false;
+            }
 
             function SaveBHC(d) {
                $.post(d.saveBHCUrl, form1.serialize(), function (data) {

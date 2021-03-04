@@ -52,9 +52,25 @@ var GuardarSero = function(){
                     $(element).parents('.form-group').addClass('has-success').removeClass('has-danger');
                 },
                 submitHandler: function (form) {
-                    SaveSero(param);
+                    if(checkEstado()){
+                        SaveSero(param);
+                    }
                 }
             });
+
+            function checkEstado(){
+                debugger;
+                var ckbox = $('#chkEstado');
+                var  result=false;
+                if(ckbox.is(':checked') == true){
+                    result = true;
+                return result;
+                }else {
+                  swal("Error","Check el Estado","warning");
+                    return;
+                }
+            }
+
 
             function SaveSero(d) {
                 $.post(d.saveSeroUrl, form1.serialize(), function (data) {
