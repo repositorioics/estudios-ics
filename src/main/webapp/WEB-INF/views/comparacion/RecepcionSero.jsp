@@ -392,6 +392,8 @@
             <div class="animated fadeIn">
             <spring:url value="/comparacion/saveSerologia" var="saveSeroUrl"/>
             <spring:url value="/comparacion/serologia" var="refreshUrl"/>
+            <c:set var="successMessage"><spring:message code="process.success" /></c:set>
+            <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
             <div class="">
             <div class="row">
             <div class="col-md-12 col-lg-12">
@@ -513,7 +515,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="form-check form-check-inline">
                                 <c:choose>
                                     <c:when test="${caso.estado eq '1'}">
@@ -525,8 +527,7 @@
                                 </c:choose>
                                 <label class="form-check-label" for="chkEstado"><spring:message code="Estado" /></label>
                             </div>
-
-                        </div>
+                        </div> -->
 
                         <div class="form-row">
                             <div class="col-md-4">
@@ -686,7 +687,9 @@
             serologiaUrl:"${serologiaUrl}",
             editseroUrl:"${editseroUrl}",
             saveSeroUrl:"${saveSeroUrl}",
-            deleteseroUrl:"${deleteseroUrl}"
+            deleteseroUrl:"${deleteseroUrl}",
+            successmessage: "${successMessage}",
+            error: "${errorProcess}"
         };
         GuardarSero.init(parameter);
         $("#fechaSero").datepicker({

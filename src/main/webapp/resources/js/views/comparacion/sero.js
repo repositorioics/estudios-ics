@@ -52,24 +52,9 @@ var GuardarSero = function(){
                     $(element).parents('.form-group').addClass('has-success').removeClass('has-danger');
                 },
                 submitHandler: function (form) {
-                    if(checkEstado()){
-                        SaveSero(param);
-                    }
+                    SaveSero(param);
                 }
             });
-
-            function checkEstado(){
-                debugger;
-                var ckbox = $('#chkEstado');
-                var  result=false;
-                if(ckbox.is(':checked') == true){
-                    result = true;
-                return result;
-                }else {
-                  swal("Error","Check el Estado","warning");
-                    return;
-                }
-            }
 
 
             function SaveSero(d) {
@@ -78,15 +63,17 @@ var GuardarSero = function(){
                         swal("Error!",data.msjError,"error");
                     }
                     if(data.msj !=null){
-                        swal("¡Buen trabajo!", data.msj, "success");
+                       // swal("¡Buen trabajo!", data.msj, "success");
+                        toastr.success(data.msj);
                     }else{
-                        swal("¡Buen trabajo!", "Guardado con éxito", "success");
+                        //swal("¡Buen trabajo!", "Guardado con éxito", "success");
+                        toastr.success(param.successmessage);
                     }
                     setTimeout(function(){
                         window.location.href = param.serologiaUrl;
                       },1000);
                 }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                    swal("Error!","Servidor no respode!","error");
+                    toastr.error("Falló Servidor!",{timeOut: 5000});
                 });
             }
 

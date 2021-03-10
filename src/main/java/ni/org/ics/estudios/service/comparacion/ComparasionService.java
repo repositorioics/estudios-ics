@@ -136,8 +136,10 @@ public class ComparasionService {
     public List<UserSistema> getUsuarios()throws Exception{
         Session session = sessionFactory.getCurrentSession();
         boolean habil = true;
-        Query query = session.createQuery("from UserSistema us where us.enabled= :habil");
+        String sup = "sup";
+        Query query = session.createQuery("from UserSistema us where us.enabled= :habil and username like :sup ");
         query.setParameter("habil",habil);
+        query.setParameter("sup", '%' + sup + '%');
         return query.list();
     }
 

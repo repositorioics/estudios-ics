@@ -3,11 +3,13 @@ package ni.org.ics.estudios.service.Domicilios;
 import ni.org.ics.estudios.domain.Casa;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 
+import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
-import ni.org.ics.estudios.dto.DomicilioPdviDto;
+
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -31,7 +33,7 @@ public class DomicilioService {
     private SessionFactory sessionFactory;
 
 
-
+/*
     @SuppressWarnings("unchecked")
     public List<DomicilioPdviDto>ListOfPDVI(Integer parametro2)throws Exception{
         try
@@ -47,7 +49,7 @@ public class DomicilioService {
             throw e;
         }
     }
-
+*/
 
 
 
@@ -67,10 +69,13 @@ public class DomicilioService {
         }
     }
     /*poblar el Select Usuario*/
-    public List<Personal>ListPersonal()throws Exception{
+    public List<Personal_Cargo>ListPersonal()throws Exception{
         try{
             Session session = sessionFactory.getCurrentSession();
-            Query query = session.createQuery("from Personal order by Nombre");
+           // Query query = session.createQuery("from Personal order by Nombre");
+            Integer cods  [] ={ 1, 5, 6, 7 };
+            Query query  = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo in (:cods)" );
+            query.setParameterList("cods", cods);
             return query.list();
         }catch (Exception e)
         { throw e;}
@@ -151,4 +156,18 @@ public class DomicilioService {
     }
 
     /************/
+
+    //region Cambiar Casa.
+
+
+    // Obtener Participantes por Codigo de Casa Pediatrica
+    public List<Participante> getParticipantesByCodigoCasa(Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Participante p, ParticipanteProcesos pp where p.codigo = pp.codigo and p.casa.codigo =:codigo and p.pasive = '0'" +
+                " and pp.estPart = 1");
+        query.setParameter("codigo", codigo);
+        return query.list();
+    }
+
+    //endregion
 }

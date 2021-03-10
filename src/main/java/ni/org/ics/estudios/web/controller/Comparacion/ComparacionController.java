@@ -107,7 +107,6 @@ public class ComparacionController {
                                              ,@RequestParam(value= "username", required = false, defaultValue = "") String username
                                              ,@RequestParam(value="observacion", required = false, defaultValue = "") String observacion
                                              ,@RequestParam(value="volumen", required = false, defaultValue = "") String volumen
-                                             ,@RequestParam(value="chkEstado", required = false, defaultValue = "") String chkEstado
                                              ,@RequestParam(value="chkPaxGene", required = false, defaultValue = "") String chkPaxGene
                                              ,@RequestParam(value="accion", required = false, defaultValue = "") String accion
                                              ,@RequestParam(value = "fechaToEdit", required = false, defaultValue = "")String fechaToEdit
@@ -123,16 +122,8 @@ public class ComparacionController {
                 robhc.setCodigo(codigo);
                 robhc.setFechaRecBHC(DateUtil.StringToDate(fechaBhc, "dd/MM/yyyy"));
                 objBhc.setRecBhcId(robhc);
-
                 objBhc.setFecreg(DateUtil.StringToDate(fechaRegistBhc,"dd/MM/yyyy HH:mm:ss"));
-                System.out.println("Seleccionada: "+fechaRegistBhc);
-                String estado = "0";
-                if (chkEstado.equals("on")) {
-                    estado = "1";
-                } else {
-                    estado = "0";
-                }
-                objBhc.setEstado(estado);
+                objBhc.setEstado("1");
                 objBhc.setLugar(lugar);
                 objBhc.setObservacion(observacion);
                 Boolean pax = false;
@@ -151,12 +142,6 @@ public class ComparacionController {
             }else{
 
                 Date dateToEdit = DateUtil.StringToDate(fechaBhc, "dd/MM/yyyy");
-                String estado = "0";
-                if (chkEstado.equals("on")) {
-                    estado = "1";
-                } else {
-                    estado = "0";
-                }
                 Boolean pax = false;
                 if (chkPaxGene.equals("")) {
                     pax = false;
@@ -166,7 +151,7 @@ public class ComparacionController {
                 double volbhc = Double.parseDouble(volumen);
                 Date star = DateUtil.StringToDate(fechaToEdit,"dd/MM/yyyy");
                 Date fin =  DateUtil.StringToDate(fechaToEdit, "dd/MM/yyyy");
-
+                String estado = "1";
                 int result = this.comparasionService.editarManual(codigo,dateToEdit, estado,lugar,observacion,pax,username,volbhc,star,fin);
                 if (result>=1){
                     map.put("msj", "Registro Actualizado." );
@@ -238,7 +223,6 @@ public class ComparacionController {
             ,@RequestParam(value = "lugar", required = false) String lugar
             ,@RequestParam(value = "observacion", required = true) String observacion
             ,@RequestParam(value = "username", required = true) String username
-            ,@RequestParam(value = "chkEstado", required = true) String chkEstado
             ,@RequestParam(value = "accion", required = false, defaultValue = "") String accion
             ,@RequestParam(value = "fechaReg", required = false, defaultValue = "") String fechaReg
     ) throws Exception {
@@ -251,13 +235,7 @@ public class ComparacionController {
             if (accion.equals("true") && id != null){// actualiza el registro
                 objSerologia.setId(id);
                 objSerologia.setCodigo(codigoparticipante);
-                String estado = "0";
-                if (chkEstado.equals("on")) {
-                    estado = "1";
-                } else {
-                    estado = "0";
-                }
-                objSerologia.setEstado(estado);
+                objSerologia.setEstado("1");
                 objSerologia.setFechaRecSero(DateUtil.StringToDate(fechaSero, "dd/MM/yyyy"));
                 objSerologia.setFecreg(DateUtil.StringToDate(fechaReg,"dd/MM/yyyy HH:mm:ss"));
                 objSerologia.setLugar(lugar);
@@ -278,13 +256,7 @@ public class ComparacionController {
                 objSerologia.setLugar(lugar);
                 objSerologia.setObservacion(observacion);
                 objSerologia.setUsername(username);
-                String estado = "0";
-                if (chkEstado.equals("on")) {
-                    estado = "1";
-                } else {
-                    estado = "0";
-                }
-                objSerologia.setEstado(estado);
+                objSerologia.setEstado("1");
                 this.comparasionService.GuardarSerologia(objSerologia);
             }
             return createJsonResponse(objSerologia);

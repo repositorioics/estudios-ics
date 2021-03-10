@@ -14,6 +14,14 @@
     <!-- END DATE PICKER -->
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto; font-size: 14 }
+    </style>
+
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -31,7 +39,7 @@
         </ol>
         <div class="container-fluid">
            <div class="animated fadeIn">
-               <div class="card bg-secondary text-black-50">
+               <div class="card text-black-50">
                    <div class="card-header">
                        <h5> <i class="fa fa-home" aria-hidden="true"></i> Cambio de Domicilio</h5>
                    </div>
@@ -49,66 +57,79 @@
                        </form>
 
                        <spring:url value="/Domicilio/SaveInfo" var="saveUrl"/>
-                       <div class="row">
+                       <div class="">
                        <form action="#" class="form-horizontal" id="formDom" name="formDom" autocomplete="off" method="post" role="form">
                                <div class="row">
-                                   <div class="form-group col-sm-12">
+                                   <div class="form-group col-md-6">
                                        <label for="nombre">Nombre:</label>
                                        <input type="text" class="form-control" id="nombre" readonly/>
                                    </div>
-                                       <div class="form-group col-sm-3">
+                                       <div class="form-group col-md-3">
                                            <label for="IdParticipante">Código Participante:</label>
                                            <input type="text"name="IdParticipante" id="IdParticipante" min="0" class="form-control focusNext" required="required" readonly/>
                                        </div>
-                                       <div class="form-group col-sm-3">
-                                           <label for="codigoCasa">Casa Pediátrica:</label>
-                                           <span class="required text-danger"> * </span>
-                                           <input type="text" id="codigoCasa" name="codigoCasa" min="0" class="form-control focusNext" required="required" tabindex="1"/>
+
+                                       <div class="form-group col-md-3">
+                                           <label for="estudios">Estudio:</label>
+                                           <input type="text" class="form-control focusNext" id="estudios" name="estudios" tabindex="3" readonly/>
                                        </div>
-                                   <div class="form-group col-sm-3">
-                                       <label for="casacohortefamilia">Casa Familia:</label>
-                                       <input type="text" class="form-control focusNext" min="0" id="casacohortefamilia" name="casacohortefamilia" tabindex="2"/>
-
-                                   </div>
-                                   <div class="form-group col-sm-3">
-                                       <label for="estudios">Estudio:</label>
-                                       <input type="text" class="form-control focusNext" id="estudios" name="estudios" tabindex="3" readonly/>
-
-                                   </div>
                                </div>
 
-                           <div class="form-row">
-                               <div class="form-group col-sm-6">
-                                   <label for="barrio">Barrio:</label>
+                           <div class="row">
+
+                               <div class="form-group col-md-2">
+                                   <label for="codigoCasa">Casa Pediátrica:</label>
                                    <span class="required text-danger"> * </span>
-                                   <select  class="form-control" name="barrio" id="barrio" required="required">
-                                       <option selected value=""><spring:message code="select" />...</option>
-                                        <c:forEach items="${barrios}" var="barrio">
-                                            <option value="${barrio.codigo}">${barrio.nombre}</option>
-                                        </c:forEach>
-                                   </select>
+                                   <input type="text" id="codigoCasa" name="codigoCasa" min="0" class="form-control focusNext" required="required" tabindex="1"/>
                                </div>
 
-                               <div class="form-group col-md-3">
+                               <div class="form-group col-md-2">
+                                   <label for="casacohortefamilia">Casa Familia:</label>
+                                   <input type="text" class="form-control focusNext" min="0" id="casacohortefamilia" name="casacohortefamilia" tabindex="2"/>
+                               </div>
+
+
+                               <div class="form-group col-md-2">
                                    <label for="manzana">Manzana:</label>
                                    <span class="required text-danger"> * </span>
                                    <input type="text" class="form-control focusNext" required="required" min="0" name="manzana" id="manzana" tabindex="4"/>
                                </div>
-                               <div class="form-group col-md-3">
-                                   <label for="manzana">Tel.:</label>
+
+                               <div class="form-group col-md-6">
+                                   <label for="barrio">Barrio:</label>
+                                   <span class="required text-danger"> * </span>
+                                   <select  class="form-control" name="barrio" id="barrio" required="required">
+                                       <option selected value=""><spring:message code="select" />...</option>
+                                       <c:forEach items="${barrios}" var="barrio">
+                                           <option value="${barrio.codigo}">${barrio.nombre}</option>
+                                       </c:forEach>
+                                   </select>
+                               </div>
+
+                           </div>
+
+                           <div class="row">
+                               <div class="form-group col-sm-8">
+                                   <label for="direccion">Dirección:</label>
+                                   <span class="required text-danger"> * </span>
+                                   <input type="text" class="form-control focusNext" id="direccion" required="required" name="direccion" placeholder="Ingrese la Dirección" tabindex="6"/>
+                               </div>
+
+                               <div class="form-group col-md-4">
+                                   <label for="telefono">Tel.:</label>
                                    <input type="tel" class="form-control focusNext" min="0" name="telefono" id="telefono" tabindex="5"/>
                                </div>
 
+                           </div>
+
+                           <div class="form-row">
+
                                <div id="bar" class="form-group col-sm-12" style="display: none">
                                    <label for="otroBarrio">Barrio:</label>
-                                   <input type="text" class="form-control" id="otroBarrio" name="otroBarrio" style="text-transform:uppercase" />
+                                   <input type="text" class="form-control" id="otroBarrio" name="otroBarrio" />
                                </div>
-                               <div class="form-group col-sm-12">
-                                   <label for="direccion">Dirección:</label>
-                                   <span class="required text-danger"> * </span>
-                                   <input type="text" class="form-control focusNext" id="direccion" required="required" name="direccion" placeholder="Metrocentro 2c al lago" tabindex="6"/>
-                               </div>
-                                   <div class="form-group col-sm-6">
+
+                                   <div class="form-group col-md-4">
                                        <label for="razonnogeoref">GeoReferencia:</label>
                                        <span class="required text-danger"> * </span>
                                        <select name="razonnogeoref" id="razonnogeoref" class="form-control" required="required">
@@ -119,17 +140,17 @@
                                        </select>
                                    </div>
 
-                                   <div class="form-group col-sm-3">
+                                   <div class="form-group col-md-4">
                                        <label for="recurso1">Usuario:</label>
                                        <span class="required text-danger"> * </span>
                                        <select name="recurso1" id="recurso1" class="form-control" required="required">
                                            <option selected value=""> Seleccione...</option>
                                            <c:forEach items="${person}" var="person">
-                                               <option value="${person.idPersona}">${person.nombre}</option>
+                                               <option value="${person.personal.idPersona}">${person.personal.idPersona} - ${person.personal.nombre}</option>
                                            </c:forEach>
                                        </select>
                                    </div>
-                               <div class="form-group col-sm-3">
+                               <div class="form-group col-md-4">
                                    <label for="fecha_reportado">Fecha:</label>
                                    <span class="required text-danger"> * </span>
                                    <input type="text" id="fecha_reportado" name="fecha_reportado" class="form-control" data-date-end-date="+0d"/>
@@ -163,21 +184,21 @@
                                <div class="form-group col-sm-3">
                                    <button type="submit" id="btnSave" class="btn btn-primary btn-block btn-lg">
                                        <i class="fa fa-save" aria-hidden="true"></i>
-                                       Enviar
+                                       <spring:message code="save" />
                                    </button>
                                </div>
                                <div class="form-group col-sm-6"> </div>
                                <div class="form-group col-sm-3">
-                                   <a href="<spring:url value='/Domicilio/Listado' htmlEscape='true'/>" class="btn btn-danger btn-block btn-lg"><i class="fa fa-undo" aria-hidden="true"></i>
-                                       Cancel</a>
+                                   <a href="<spring:url value='/Domicilio/Listado' htmlEscape='true'/>" class="btn btn-warning btn-block btn-lg"><i class="fa fa-undo" aria-hidden="true"></i>
+                                       <spring:message code="cancel" /></a>
                                </div>
                            </div>
                        </form>
                        </div>
                        </div>
-                   <div class="card-footer text-muted">
+                       <div class="card-footer text-muted">
 
-                   </div>
+                       </div>
                </div>
            </div>
         </div>

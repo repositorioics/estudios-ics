@@ -1,13 +1,16 @@
 package ni.org.ics.estudios.web.controller.DomicilioController;
 
 import com.google.gson.Gson;
+import ni.org.ics.estudios.domain.Casa;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.muestreoanual.MovilInfo;
+import ni.org.ics.estudios.dto.CambioDomParticipanteDto;
 import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
-import ni.org.ics.estudios.dto.DomicilioPdviDto;
+
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
@@ -16,6 +19,7 @@ import ni.org.ics.estudios.service.Domicilios.DomicilioService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
+import ni.org.ics.estudios.users.model.UserSistema;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
@@ -27,14 +31,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.Null;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -128,7 +130,7 @@ public class DomicilioController {
         return "/CambioDomicilio/ListaCoordenadas";
     }
 
-    /*ESTE METODO ES PARA RETORNAR UNA LISTA DE LA TABLA PDVI_CAMBIO DE DOMICILIO  */
+    /*ESTE METODO ES PARA RETORNAR UNA LISTA DE LA TABLA PDVI_CAMBIO DE DOMICILIO
     @RequestMapping(value = "/ListaPdvi", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<DomicilioPdviDto> fetchCoordenadasToJson(@RequestParam(value = "parametro2", required = true)Integer parametro2)
             throws ParseException {
@@ -141,8 +143,7 @@ public class DomicilioController {
            return coordenadas = null;
      }
     }
-
-
+    */
     @RequestMapping(value = "/Home")
     public ModelAndView Home() throws Exception {
         ModelAndView modelView = new ModelAndView();
@@ -150,7 +151,7 @@ public class DomicilioController {
         modelView.addObject("barrios", barrios);
         List<MessageResource> NoGeo = messageResourceService.getCatalogo("CP_CAT_NOGEO");
         modelView.addObject("NoGeo", NoGeo);
-        List<Personal> person = DomicilioService.ListPersonal();
+        List<Personal_Cargo> person = DomicilioService.ListPersonal();
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/FormDomicilio");
         return modelView;
@@ -242,6 +243,105 @@ public class DomicilioController {
         }
 
     }
+
+    //region Cambiar Casa
+
+    //Guardar Cambio de Domicilio  /Domicilio/SaveListDom
+    @RequestMapping(value="SaveListDom", method= RequestMethod.POST, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody ResponseEntity<String>SaveListDom(@RequestBody CambioDomParticipanteDto data)throws Exception{
+
+        try{
+            for (int i = 0; i < data.getList().length ; i++) {
+                DomicilioService.allActualBaja(Integer.valueOf(data.getList()[i]));
+                DatosCoordenadas obj = new DatosCoordenadas();
+                String IdParticipante = ""+data.getList()[i];
+                UUID deviceUuid = new UUID(IdParticipante.hashCode(),new Date().hashCode());
+                obj.setCodigo(deviceUuid.toString());
+                Participante participant = new Participante();
+                participant.setCodigo(data.getList()[i]);
+
+                Integer codigo_participante = Integer.valueOf(data.getList()[i]);
+                Participante particip2 = this.datoshemodinamicaService.getParticipante(codigo_participante);
+                obj.setParticipante(participant);
+                //codigoCasa
+                Integer codeCasaP = particip2.getCasa().getCodigo();
+                obj.setCodigoCasa(codeCasaP);
+                if(data.getCasaFam() == "" ){
+                    obj.setCasacohortefamilia(0);
+                }else{
+                    obj.setCasacohortefamilia(Integer.valueOf(data.getCasaFam()));
+                }
+                Barrio b = new Barrio();
+                b.setCodigo(Integer.valueOf(data.getBarrio()));
+                obj.setBarrio(b);
+                obj.setOtroBarrio(data.getOtroBarrio().toUpperCase());
+                obj.setManzana(data.getManzana());
+                obj.setTelefono(data.getTelefono());
+                obj.setDireccion(data.getDir());
+                obj.setRazonNoGeoref(data.getRazonnogeoref());
+                ParticipanteProcesos process = this.participanteProcesosService.getParticipante(data.getList()[i]);
+                String estudios = process.getEstudio();
+                obj.setEstudios(estudios);
+                Character imp = '1';
+                obj.setActual(Character.valueOf(imp));
+                obj.setRecurso1(Integer.valueOf(data.getRecurso1()));
+                obj.setConpunto("0");
+                obj.setObservacion(data.getObservacion());
+                obj.setFechaReportado(data.getFecha_reportado());
+                MovilInfo movil = new MovilInfo();
+                movil.setIdInstancia(Integer.valueOf(148));
+                movil.setInstancePath("Server");
+                movil.setEstado("1");
+                Boolean t = false;
+                movil.setEliminado(t);
+                movil.setUltimoCambio(String.valueOf(new Date()));
+                movil.setStart(String.valueOf(new Date()));
+                movil.setEnd(String.valueOf(new Date()));
+                String nameComputer = InetAddress.getLocalHost().getHostName();
+                movil.setDeviceid(nameComputer);
+                movil.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+                movil.setToday(new Date());
+                movil.setRecurso1(Integer.parseInt(data.getRecurso1()));
+                movil.setRecurso2(0);
+                obj.setMovilInfo(movil);
+                DomicilioService.SaveDomicilio(obj);
+            }
+            return createJsonResponse(data);
+        }catch (Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return  new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+
+    //Domicilio/CambioPorCasa
+    @RequestMapping(value="/CambioPorCasa", method = RequestMethod.GET)
+    public ModelAndView CambioPorCasa(ModelMap model) throws Exception {
+        ModelAndView modelView = new ModelAndView();
+        List<Barrio> barrios = datoshemodinamicaService.getBarrios();
+        modelView.addObject("barrios", barrios);
+        List<MessageResource> NoGeo = messageResourceService.getCatalogo("CP_CAT_NOGEO");
+        modelView.addObject("NoGeo", NoGeo);
+        List<Personal_Cargo> person = DomicilioService.ListPersonal();
+        modelView.addObject("person", person);
+        modelView.setViewName("/CambioDomicilio/CambioDomPorCasa");
+        return modelView;
+    }
+
+    // Domicilio/searchByHouse
+    @RequestMapping(value = "searchByHouse", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<String> searchByHouse(@RequestParam(value="codCasa", required=true ) Integer codCasa) throws ParseException {
+        List<Participante> listParticipante = this.DomicilioService.getParticipantesByCodigoCasa(codCasa);
+        if (listParticipante == null) {
+            return JsonUtil.createJsonResponse("No se encontraron registros");
+        }
+        return JsonUtil.createJsonResponse(listParticipante);
+    }
+
+    //endregion
 
     /*  Esta Funcion retorna un Json  */
     private ResponseEntity<String> createJsonResponse( Object o )

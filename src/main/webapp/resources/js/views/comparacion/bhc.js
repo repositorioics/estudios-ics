@@ -42,68 +42,29 @@ var GuardarBhc = function(){
                     $(element).parents('.form-group').addClass('has-success').removeClass('has-danger');
                 },
                 submitHandler: function (form) {
-                    if(checkEstado()){
-
-                        if(!checkPaxgene()){
-                               console.log("pax: "+checkPaxgene())
-                            swal({
-                                    title: "Deseas Guardar,",
-                                    text: "sin checkar el PaxGene?",
-                                    type: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonClass: "btn-warning",
-                                    confirmButtonText: "Si, continuar!",
-                                    cancelButtonText: "No, cancela plx!",
-                                    closeOnConfirm: false,
-                                    closeOnCancel: false
-                                },
-                                function(isConfirm) {
-                                    if (isConfirm) {
-                                        SaveBHC(params);
-                                    } else {
-                                        swal("Cancelado", "Continua... :)", "error");
-                                    }
-                                });
-                        }
-                    }
+                    SaveBHC(params);
                 }
             });
-            function checkEstado(){
-                debugger;
-                var ckbox = $('#chkEstado');
-                var result = false;
-                if(ckbox.is(':checked') == true){
-                    result = true;
-                    return result;
-                }else {
-                    swal("Error","Check el Estado","warning");
-                    return;
-                }
-            }
 
-            function checkPaxgene(){
-                var chkPax = $("#chkPaxGene");
-                if(chkPax.is(':checked') == true)
-                return true;
-                else
-                return false;
-            }
 
             function SaveBHC(d) {
                $.post(d.saveBHCUrl, form1.serialize(), function (data) {
                    if(data.msjError != null){
-                       swal("Error!",data.msjError,"error");
+                       //swal("Error!",data.msjError,"error");
+                       toastr.error(data.msjError);
                    }
                    if(data.msj !=null){
-                       swal("¡Buen trabajo!", data.msj, "success");
+                       //swal("¡Buen trabajo!", data.msj, "success");
+                       toastr.success(data.msj);
                    }else{
-                       swal("¡Buen trabajo!", "Guardado con éxito", "success");
+                       toastr.success(params.successmessage);
+                       //swal("¡Buen trabajo!", "Guardado con éxito", "success");
                    }
                    setTimeout(function(){
                        window.location.href = params.bhcUrl;
                    },1000);
                 }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                   swal("Error!","Servidor no respode!","error");
+                   toastr.error("Error!","Servidor no respode!","error");
                 });
             }
             $("#codigo").keyup(function (){

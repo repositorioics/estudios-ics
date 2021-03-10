@@ -323,6 +323,10 @@
             color: #fff;
             background-color: #1BA407 !important;
         }
+        .badge-red {
+            color: #fff;
+            background-color: #ee0c0c !important;
+        }
         .badge-cyan {
             color: #fff;
             background-color: #007bff;
@@ -363,6 +367,8 @@
             <div class="animated fadeIn">
             <spring:url value="/comparacion/GuardarBhc" var="saveBHCUrl"/>
             <spring:url value="/comparacion/bhc" var="bhcUrl"/>
+            <c:set var="successMessage"><spring:message code="process.success" /></c:set>
+            <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
             <div class="">
             <div class="row">
             <div class="col-md-12 col-lg-12">
@@ -506,6 +512,7 @@
                             </div>
 
 
+                            <!--
                             <div class="form-check form-check-inline">
                                 <c:choose>
                                     <c:when test="${caso.estado eq '1'}">
@@ -517,6 +524,8 @@
                                 </c:choose>
                                 <label class="form-check-label" for="chkEstado"><spring:message code="Estado" /></label>
                             </div>
+                            -->
+
 
                         </div>
 
@@ -579,11 +588,11 @@
                                 <td><c:out value="${c.lugar}" /></td>
                                 <td><c:out value="${c.observacion}" /></td>
                                 <c:choose>
-                                  <c:when test="${c.paxgene}">
+                                  <c:when test="${c.paxgene eq true}">
                                       <td><span class="badge badge-verde" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px;"><i class="fa fa-check" aria-hidden="true"></i></span></td>
                                 </c:when>
                                 <c:otherwise>
-                                    <td><span class="badge badge-verde" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><i class="fa fa-times" aria-hidden="true"></i></span></td>
+                                    <td><span class="badge badge-red" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><i class="fa fa-times" aria-hidden="true"></i></span></td>
                                 </c:otherwise>
                                 </c:choose>
                                 <td><c:out value="${c.username}" /></td>
@@ -742,7 +751,9 @@
             editbhcUrl:"${editbhcUrl}",
             deletebhcUrl:"${deletebhcUrl}",
             bhcUrl: "${bhcUrl}",
-            dataTablesLang:"${dataTablesLang}"
+            dataTablesLang:"${dataTablesLang}",
+            successmessage: "${successMessage}",
+            error: "${errorProcess}"
         };
         GuardarBhc.init(direciones);
         BuscarParticipantebhc.init(direciones);

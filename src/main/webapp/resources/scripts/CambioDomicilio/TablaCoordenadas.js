@@ -10,6 +10,7 @@ var SearchCoordenadas = function () {
         init: function (parametros) {
             direct = parametros;
             var table  = $('#tblCoor').DataTable({
+                "autoWidth": false,
                 "order": [[ 10, "desc" ]],
                 "ordering": false,
                 "oLanguage": {
@@ -30,8 +31,8 @@ var SearchCoordenadas = function () {
                         "searchable": false
                     }
                 ],
-                searching: false,
-                paging: false
+                searching: true,
+                paging: true
 
             });
             $( '#select-Coordenadas-form' ).validate( {
@@ -64,6 +65,7 @@ var SearchCoordenadas = function () {
 
             //Buscar una lista de la tabla datos_coordenadas
             function searchCoordenada(){$.getJSON(parametros.ListaCoordenadasUrl, {parametro : $('#parametro').val(), ajax : 'true' }, function(data) {
+                console.log( data);
                     var len = data.length;
                     if(len==0){
                         swal("Advertencia!", "Datos no encontrados!", "warning");
