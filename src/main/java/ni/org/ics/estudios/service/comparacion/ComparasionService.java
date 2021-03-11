@@ -68,16 +68,17 @@ public class ComparasionService {
         }
     }
 
+    public int editarManual(String estado, int codigo, String fechaRegistBhc,  String lugar,String observa, boolean paxgene, String user, double vol, Date star, Date fin)throws Exception{
 
-    public int editarManual(int codigo, Date fechabhc, String estado, String lugar,String observa, boolean paxgene, String user, double vol, Date star, Date fin)throws Exception{
-            Session session = sessionFactory.getCurrentSession();
         try
         {
-            Query query = session.createQuery("UPDATE RecepcionBHC r set r.recBhcId.fechaRecBHC= :fechabhc, r.estado=:estado, r.lugar=:lugar, r.observacion=:observa, r.paxgene=:paxgene, r.username=:user ,r.volumen=:vol " +
+            Session session = sessionFactory.getCurrentSession();
+            Date fecreg = DateUtil.StringToDate(fechaRegistBhc,"dd/MM/yyyy HH:mm:ss");
+            Query query = session.createQuery("UPDATE RecepcionBHC r set r.estado=:estado, r.fecreg=:fecreg, r.lugar=:lugar, r.observacion=:observa, r.paxgene=:paxgene, r.username=:user ,r.volumen=:vol " +
                     " where r.recBhcId.fechaRecBHC between :star and :fin and  r.recBhcId.codigo=:codigo");
-            query.setParameter("codigo",codigo);
-            query.setParameter("fechabhc",fechabhc);
             query.setParameter("estado",estado);
+            query.setParameter("codigo",codigo);
+            query.setParameter("fecreg",fecreg);
             query.setParameter("lugar",lugar);
             query.setParameter("observa",observa);
             query.setParameter("paxgene",paxgene);

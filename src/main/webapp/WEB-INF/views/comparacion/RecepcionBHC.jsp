@@ -408,21 +408,30 @@
                             <div class="form-group col-md-4">
                                 <label for="codigo">Código:</label>
                                 <span class="required text-danger"> * </span>
-                                <input type="text" class="form-control focusNext" name="codigo" id="codigo" value="${caso.recBhcId.codigo}" tabindex="1">
-                                <!--<c:choose>
+                                <!--<input type="text" class="form-control focusNext" name="codigo" id="codigo" value="${caso.recBhcId.codigo}" tabindex="1">-->
+                                <c:choose>
                                     <c:when test = "${editando eq true}">
                                         <input type="text" class="form-control focusNext" name="codigo" id="codigo" value="${caso.recBhcId.codigo}" readonly>
                                     </c:when>
                                     <c:otherwise>
                                         <input type="text" class="form-control focusNext" name="codigo" id="codigo" tabindex="1">
                                     </c:otherwise>
-                                </c:choose>-->
+                                </c:choose>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="fechaBhc">Fecha BHC:</label>
                                 <span class="required text-danger"> * </span>
-                                <input type="text" class="form-control focusNext" name="fechaBhc" id="fechaBhc" data-date-end-date="+0d" tabindex="2"
-                                       value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" />">
+                                <c:choose>
+                                    <c:when test="${editando eq true}">
+                                        <input type="text" class="form-control focusNext" name="fechaBhc" id="fechaBhc" data-date-end-date="+0d" readonly tabindex="2"
+                                               value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" />">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input type="text" class="form-control focusNext" name="fechaBhc" id="fechaBhc" data-date-end-date="+0d" tabindex="2"
+                                               value="<fmt:formatDate value="${caso.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" />">
+                                    </c:otherwise>
+                                </c:choose>
+
                             </div>
 
                             <div class="form-group col-md-4">
@@ -600,7 +609,7 @@
                                 <td>
                                     <button id="swalDelete" title="<spring:message code="Eliminar" />" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm salida">
                                         <i class="fa fa-trash text-white" aria-hidden="true"></i></button>
-                                   <!-- <a href="${fn:escapeXml(editbhcUrl)}"  data-toggle="tooltip" data-placement="bottom" title="<spring:message code="edit" />" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>-->
+                                    <a href="${fn:escapeXml(editbhcUrl)}"  data-toggle="tooltip" data-placement="bottom" title="<spring:message code="edit" />" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
                                 </td>
                             </tr>
 
@@ -717,9 +726,6 @@
 
 <spring:url value="/resources/js/libs/sweetalert.js" var="sweet" />
 <script type="text/javascript" src="${sweet}"></script>
-
-<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
-<script type="text/javascript" src="${sw}"></script>
 
 
 <script>

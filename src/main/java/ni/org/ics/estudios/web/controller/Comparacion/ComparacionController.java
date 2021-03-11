@@ -152,7 +152,7 @@ public class ComparacionController {
                 Date star = DateUtil.StringToDate(fechaToEdit,"dd/MM/yyyy");
                 Date fin =  DateUtil.StringToDate(fechaToEdit, "dd/MM/yyyy");
                 String estado = "1";
-                int result = this.comparasionService.editarManual(codigo,dateToEdit, estado,lugar,observacion,pax,username,volbhc,star,fin);
+                int result = this.comparasionService.editarManual(estado, codigo,fechaRegistBhc,lugar,observacion,pax,username,volbhc,dateToEdit,star );
                 if (result>=1){
                     map.put("msj", "Registro Actualizado." );
                 return JsonUtil.createJsonResponse(map);
