@@ -13,6 +13,9 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
+    <spring:url value="/resources/js/libs/data-tables/TableTools/css/dataTables.tableTools.css" var="dtttcss" />
+    <link rel="stylesheet" href="${dtttcss}"/>
+
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 
@@ -24,7 +27,6 @@
 
     <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
     <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
-
 
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
@@ -194,8 +196,6 @@
         /* fin toastr*/
 
     </style>
-
-
 
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -427,9 +427,6 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#example').DataTable({
-            responsive: true
-        });
         $("#barrio").select2();
         $("#razonnogeoref").select2();
         $("#recurso1").select2();
@@ -440,7 +437,6 @@
             autoclose: true,
             endDate: '-0d'
         });
-
         var parametro = {
             searchByHouseUrl:"${searchByHouseUrl}",
             dataTablesLang: "${dataTablesLang}",

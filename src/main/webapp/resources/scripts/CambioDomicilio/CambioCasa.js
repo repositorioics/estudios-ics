@@ -9,11 +9,15 @@ var CambioCasa = function(){
 
             var table = $('#tblExample').DataTable({
                 responsive: true,
-                searching: true,
+                searching: false,
                 paging: true,
                 "oLanguage": {
                     "sUrl": parametro.dataTablesLang
-                }
+                }, "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }]
             });
             $("#telefono").mask("99999999");
             $(".num").keydown(function(event) {
@@ -48,9 +52,8 @@ var CambioCasa = function(){
                 e.preventDefault();
                 var isAllValid = true;
                 var list = [];
-                $("#tblExample input[type=checkbox]:checked").each(function () {
-                    var row = $(this).closest("tr")[0];
-                    list.push( parseInt(row.cells[1].innerHTML));
+                table.column(1).data().each( function ( value, index ) {
+                    list.push( parseInt(value));
                 });
                 if (list.length == 0 || $.isEmptyObject(list)) {
                     toastr.error("Debes checkar al menos un código.");
@@ -77,7 +80,6 @@ var CambioCasa = function(){
                     isAllValid = false;
                     return;
                 }
-                //
                 if (isAllValid) {
                     debugger;
                     var data={
@@ -95,7 +97,7 @@ var CambioCasa = function(){
                         otroBarrio : $("#otroBarrio").val()
                     };
 
-                    console.log(data);
+                    //console.log(data);
                     $.ajax({
                         type: 'POST',
                         url: parametro.saveUrl,
@@ -172,7 +174,6 @@ var CambioCasa = function(){
                                 casaFam = "-"
                             }else{
                              casaFam = element[i].casaFam;
-
                             }
                             table.row.add([
                                 valor,

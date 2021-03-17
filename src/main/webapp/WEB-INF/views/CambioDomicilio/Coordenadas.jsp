@@ -8,6 +8,9 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 
@@ -20,10 +23,16 @@
     <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
     <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
 
-
-
     <style>
-        .table thead tr th {
+
+        tfoot input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+
+
+      /*  .table thead tr th {
             text-transform: uppercase;
             font-size: 0.875em;
         }
@@ -39,6 +48,14 @@
             Word-wrap: break-Word;
             max-width: 400px;
         }
+         .container {
+            max-width: 1350px !important;
+        }
+        */
+
+      table.table thead .sorting {
+          background: none !important;
+      }
     </style>
 
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
@@ -61,8 +78,6 @@
         </ol>
         <div class="container-fluid">
             <div class="animate fadeIn">
-
-                <div class="container col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title" style="font-weight: bold"><i class="fa fa-list"></i> <spring:message code="Lista Coordenadas" /> </h5>
@@ -72,15 +87,16 @@
                         <spring:url value="/Domicilio/Home" var="FormUrl"></spring:url>
                         <spring:url value="/Domicilio/Coordenadas" var="ListaCoordenadasUrl"/>
                         <spring:url value="/Domicilio/CambioPorCasa" var="CambioDomUrl"></spring:url>
+
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <a href="${FormUrl}" id="btnModal" class="btn btn-primary btn-block">
                                     <i class="fa fa-plus"></i>
                                     <spring:message code="Agregar Coordenadas" />
                                 </a>
                             </div>
-                            <div class="col-md-4"> </div>
-                            <div class="col-md-4">
+                            <div class="col-md-8"> </div>
+                            <div class="col-md-2">
                                 <a href="${CambioDomUrl}" id="btnPorCasa" class="btn btn-primary btn-block">
                                     <i class="fa fa-home" aria-hidden="true"></i>
                                     <spring:message code="Cambio Domicilio por Casa" />
@@ -91,68 +107,70 @@
 
                         <form action="#" id="select-Coordenadas-form" autocomplete="off" class="form-horizontal">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-2">
+
+                                </div>
+                                <div class="col-md-8">
                                     <div class="form-group">
                                         <label class="form-control-label" for="parametro"><spring:message code="please.enter"/> <spring:message code="parameter"/></label>
                                         <input type="text" class="form-control" id="parametro" name="parametro" placeholder="<spring:message code="please.enter"/> <spring:message code="parameter"/>">
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+
+                                </div>
                             </div>
                         </form>
                         <div class="row">
-                            <div class="col-lg-12">
-
-
-                                <div class="col-md-12 col-lg-12">
-
+                            <div class="container">
+                                <div class="col-md-12">
                                     <div class="table-responsive">
                                         <table class="table table-hover dt-responsive nowrap" style="width:100%" id="tblCoor">
                                             <thead>
                                             <tr>
                                                 <th class="text-center">Id</th>
-                                                <th class="text-center">Participante</th>
-                                                <th class="text-center"> Casa</th>
-                                                <th class="text-center">Casa Familia</th>
-                                                <th class="text-center"> Fecha Cambio</th>
+                                                <th class="text-center"><spring:message code="PARTICIPANTE"/></th>
+                                                <th class="text-center"><spring:message code="CASA"/></th>
+                                                <th class="text-center"><spring:message code="CASA FAM"/></th>
+                                                <th class="text-center"><spring:message code="FECHA CAMBIO"/></th>
                                                 <th class="text-center"> BarrioId</th>
-                                                <th class="text-center"> Barrio</th>
-                                                <th class="text-center">Otro Barrio</th>
-                                                <th class="text-center">Manzana</th>
-                                                <th > Dirección</th>
+                                                <th class="text-center"><spring:message code="BARRIO"/></th>
+                                                <th class="text-center"><spring:message code="OTRO BARRIO"/></th>
+                                                <th class="text-center"><spring:message code="MANZANA"/></th>
+                                                <th > <spring:message code="DIRECCIÓN"/></th>
                                                 <th class="text-center">PersonalId</th>
-                                                <th class="text-center">Recurso</th>
-                                                <th class="text-center">Observación</th>
+                                                <th class="text-center"><spring:message code="RECURSO"/></th>
+                                                <th class="text-center"><spring:message code="OBSERVACIÓN"/></th>
                                             </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                             <tr>
                                                 <th  class="text-center">Id</th>
-                                                <th  class="text-center">Participante</th>
-                                                <th  class="text-center"> Casa</th>
-                                                <th  class="text-center">Casa Familia</th>
-                                                <th  class="text-center"> Fecha Cambio</th>
+                                                <th  class="text-center"><spring:message code="PARTICIPANTE"/></th>
+                                                <th  class="text-center"> <spring:message code="CASA"/></th>
+                                                <th  class="text-center"><spring:message code="CASA FAM"/></th>
+                                                <th  class="text-center"> <spring:message code="FECHA CAMBIO"/></th>
                                                 <th  class="text-center"> BarrioId</th>
-                                                <th  class="text-center"> Barrio</th>
-                                                <th  class="text-center">Otro Barrio</th>
-                                                <th  class="text-center">Manzana</th>
-                                                <th > Dirección</th>
+                                                <th  class="text-center"> <spring:message code="BARRIO"/></th>
+                                                <th  class="text-center"><spring:message code="OTRO BARRIO"/></th>
+                                                <th  class="text-center"><spring:message code="MANZANA"/></th>
+                                                <th > <spring:message code="DIRECCIÓN"/></th>
                                                 <th  class="text-center">PersonalId</th>
-                                                <th  class="text-center">Recurso</th>
-                                                <th  class="text-center">Observación</th>
+                                                <th  class="text-center"><spring:message code="RECURSO"/></th>
+                                                <th  class="text-center"><spring:message code="OBSERVACIÓN"/></th>
                                             </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="card-footer text-muted">
 
                     </div>
-                </div>
-
                 </div>
             </div>
         </div>
@@ -161,7 +179,6 @@
 </div>
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
-
 
 <spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
 <script type="text/javascript" src="${TablesResponsive}"></script>
@@ -212,12 +229,6 @@
 
 <script>
     jQuery(document).ready(function() {
-
-        $('#cbxShowHide').click(function(){
-            this.checked? $('#block').show(1000):$('#block').hide(1000);
-            $("#parametro2").focus();
-        });
-
         var parametros = {ListaCoordenadasUrl: "${ListaCoordenadasUrl}",
             notFound: "${notFound}",
             UpdateActualUrl:"${UpdateActualUrl}",
@@ -229,6 +240,7 @@
             dataTablesLang: "${dataTablesLang}" };
         SearchPdvi.init(parametro2);
         $("#parametro").focus();
+
     });
 
 </script>

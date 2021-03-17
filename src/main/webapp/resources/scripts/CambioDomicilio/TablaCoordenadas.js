@@ -10,9 +10,25 @@ var SearchCoordenadas = function () {
         init: function (parametros) {
             direct = parametros;
             var table  = $('#tblCoor').DataTable({
+                initComplete: function () {
+                    // Apply the search
+                    this.api().columns().every( function () {
+                        var that = this;
+
+                        $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                            if ( that.search() !== this.value ) {
+                                that
+                                    .search( this.value )
+                                    .draw();
+                            }
+                        } );
+                    } );
+                },
                 "autoWidth": false,
-                "order": [[ 10, "desc" ]],
-                "ordering": false,
+                "order": [[ 4, "asc" ]],
+                "ordering": true,
+                searching: true,
+                paging: true,
                 "oLanguage": {
                     "sUrl": parametros.dataTablesLang
                 },
@@ -30,11 +46,12 @@ var SearchCoordenadas = function () {
                         "visible": false,
                         "searchable": false
                     }
-                ],
-                searching: true,
-                paging: true
-
+                ]
             });
+            $('#tblCoor tfoot th').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+            } );
             $( '#select-Coordenadas-form' ).validate( {
                 rules: {
                     parametro: 'required'

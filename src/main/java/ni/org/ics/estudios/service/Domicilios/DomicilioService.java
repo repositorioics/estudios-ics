@@ -91,7 +91,7 @@ public class DomicilioService {
              Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, fecha_reportado, " +
                      "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d.idPersona,per.nombre AS NombrePersona,d.OBSERVACION " +
                      " FROM datos_coordenadas AS d LEFT JOIN personal AS per ON d.idPersona = per.idPersona " +
-                     "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro DESC");
+                     "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro asc");
              query.setParameter("parametro",parametro);
              return query.list();
          }catch (Exception e){
