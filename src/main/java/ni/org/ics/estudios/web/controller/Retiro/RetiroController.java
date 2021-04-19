@@ -192,7 +192,6 @@ public class RetiroController {
         }
     }
 
-
     //Guardar Retiro
     @RequestMapping( value="GuardarRetiro", method=RequestMethod.POST)
     public ResponseEntity<String> saveCaseCovid( @RequestParam(value="codigoParticipante", required=false, defaultValue="" ) String codigoParticipante
@@ -350,7 +349,6 @@ public class RetiroController {
             map.put("medicosupervisor", (test != null) ? test.getNombre() : "-" );
             Personal objPersonalDocumenta = this.retiroservice.getSupervisorById(obj.getPersonadocumenta());
             map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
-
             if (obj.getCodigocasapdcs() == null){
                 Integer numerocasa = 0;
                 map.put("casapediatrica", numerocasa.toString());
@@ -373,10 +371,7 @@ public class RetiroController {
             messageRelFam = messageResourceService.getMensajeByCatalogAndCatKeys(""+obj.getRelfam(),"CP_CAT_RFTUTOR");
             map.put("relFam",getDescripcionCatalogo(""+obj.getRelfam(),"CP_CAT_RFTUTOR"));
             map.put("observaciones", obj.getObservaciones());
-
             map.put("motivo", obj.getMotivo());
-
-
             String jsonResponse;
             jsonResponse = new Gson().toJson(map);
             UnicodeEscaper escaper = UnicodeEscaper.above(127);
@@ -412,16 +407,14 @@ public class RetiroController {
         return new ResponseEntity<String>( json, headers, HttpStatus.CREATED );
     }
 
-    private ResponseEntity<String> createJsonResponse( Object o )
-    {
+    private ResponseEntity<String> createJsonResponse( Object o ) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         Gson gson = new Gson();
         String json = gson.toJson(o);
         UnicodeEscaper escaper = UnicodeEscaper.above(127);
         json = escaper.translate(json);
-        return new ResponseEntity<String>( json, headers, HttpStatus.CREATED );
+        return new ResponseEntity<String>(json, headers, HttpStatus.CREATED);
     }
-
 
 }

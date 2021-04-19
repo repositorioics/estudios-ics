@@ -107,8 +107,6 @@
                     </li>
                 </ul>
             </li>
-
-
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown hemodinamica">
                     <a class="nav-link nav-dropdown-toggle" href="#">

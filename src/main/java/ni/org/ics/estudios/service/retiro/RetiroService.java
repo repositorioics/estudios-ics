@@ -206,8 +206,6 @@ public class RetiroService {
         }catch (Exception e){
             throw e;
         }
-
-
     }
 
 

@@ -482,7 +482,7 @@
     $(document).ready(function(){
         setTimeout(function () {
             $('#page-loader').fadeOut('slow');
-        }, 1400);
+        }, 1300);
         var parametros={
             ListaHojaRetiroUrl: "${ListaHojaRetiroUrl}",
             DetallesRetiroUrl:"${DetallesRetiroUrl}",
