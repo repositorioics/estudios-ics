@@ -67,7 +67,6 @@ public class RetiroController {
         return modelAndView;
     }
 
-
     //Obtener la lista de retiro por codigo participante
     @RequestMapping(value = "/ListaHojaRetiro", method = RequestMethod.GET, produces ="application/json")
     public @ResponseBody

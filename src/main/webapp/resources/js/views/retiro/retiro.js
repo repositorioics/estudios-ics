@@ -213,11 +213,8 @@ var RealizarRetiro = function(){
 }();
 
 var GuardarRetiro = function(){
-
     return{
-
         init: function(p){
-
             //Proceso Guardar
             var form2 = $('#retiro-participante-form');
             form2.validate({

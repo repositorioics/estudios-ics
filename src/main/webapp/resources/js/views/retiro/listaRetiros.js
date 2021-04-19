@@ -2,7 +2,6 @@
  * Created by ICS on 16/11/2020.
  */
 
-//var ListadoRetiros
 var ListadoRetiros = function(){
     return{
         init: function(parametros){

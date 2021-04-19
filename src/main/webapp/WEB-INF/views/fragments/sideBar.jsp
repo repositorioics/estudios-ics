@@ -187,7 +187,6 @@
                 </li>
             </sec:authorize>
 
-
             <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/logout" htmlEscape="true" />"><i class="icon-lock"></i><spring:message code="logout" /></a>
             </li>

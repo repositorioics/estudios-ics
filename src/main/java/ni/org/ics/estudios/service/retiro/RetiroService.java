@@ -338,7 +338,6 @@ public class RetiroService {
         }
     }
 
-
     //Metodo para activar procesos de UO1
     public boolean procesosEnNoUO1(Integer codigo){
         try{
