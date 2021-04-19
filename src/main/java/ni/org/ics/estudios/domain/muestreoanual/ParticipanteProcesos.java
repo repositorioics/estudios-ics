@@ -86,6 +86,7 @@ public class ParticipanteProcesos implements Auditable {
     //Parte E Dengue. MUESTRA DE SANGRE ADICIONAL
     private String consDenParteE;
     private String mxDenParteE;
+    private String informacionRetiro;
 
 
     @Id
@@ -592,6 +593,15 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setMxDenParteE(String mxDenParteE) {
         this.mxDenParteE = mxDenParteE;
+    }
+
+    @Column(name = "info_retiro", nullable = true, length = 255)
+    public String getInformacionRetiro() {
+        return informacionRetiro;
+    }
+
+    public void setInformacionRetiro(String informacionRetiro) {
+        this.informacionRetiro = informacionRetiro;
     }
 
     public MovilInfo getMovilInfo() {
