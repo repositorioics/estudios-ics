@@ -207,6 +207,166 @@
                 /* Firefox 16+, IE 10+, Opera */
             }
         }
+
+        /*ini*/
+        .toast-title {
+            font-weight: bold;
+        }
+        .toast-message {
+            -ms-word-wrap: break-word;
+            word-wrap: break-word;
+        }
+        .toast-message a,
+        .toast-message label {
+            color: #ffffff;
+        }
+        .toast-message a:hover {
+            color: #cccccc;
+            text-decoration: none;
+        }
+
+        .toast-close-button {
+            position: relative;
+            right: -0.3em;
+            top: -0.3em;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            -webkit-text-shadow: 0 1px 0 #ffffff;
+            text-shadow: 0 1px 0 #ffffff;
+            opacity: 0.8;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            filter: alpha(opacity=80);
+        }
+        .toast-close-button:hover,
+        .toast-close-button:focus {
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.4;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+            filter: alpha(opacity=40);
+        }
+        button.toast-close-button {
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+        }
+        .toast-top-full-width {
+            top: 0;
+            right: 0;
+            width: 100%;
+        }
+        .toast-bottom-full-width {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+        }
+        .toast-top-left {
+            top: 12px;
+            left: 12px;
+        }
+        .toast-top-right {
+            top: 12px;
+            right: 12px;
+        }
+        .toast-bottom-right {
+            right: 12px;
+            bottom: 12px;
+        }
+        .toast-bottom-left {
+            bottom: 12px;
+            left: 12px;
+        }
+        #toast-container {
+            position: fixed;
+            z-index: 999999;
+            /*overrides*/
+
+        }
+        #toast-container * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        #toast-container > div {
+            margin: 0 0 6px;
+            padding: 15px 15px 15px 50px;
+            width: 300px;
+            -moz-border-radius: 3px 3px 3px 3px;
+            -webkit-border-radius: 3px 3px 3px 3px;
+            border-radius: 3px 3px 3px 3px;
+            background-position: 15px center;
+            background-repeat: no-repeat;
+            -moz-box-shadow: 0 0 12px #999999;
+            -webkit-box-shadow: 0 0 12px #999999;
+            box-shadow: 0 0 12px #999999;
+            color: #ffffff;
+            opacity: 0.8;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            filter: alpha(opacity=80);
+        }
+        #toast-container > :hover {
+            -moz-box-shadow: 0 0 12px #000000;
+            -webkit-box-shadow: 0 0 12px #000000;
+            box-shadow: 0 0 12px #000000;
+            opacity: 1;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+            filter: alpha(opacity=100);
+            cursor: pointer;
+        }
+
+        #toast-container.toast-top-full-width > div,
+        #toast-container.toast-bottom-full-width > div {
+            width: 96%;
+            margin: auto;
+        }
+        .toast {
+            background-color: #030303;
+        }
+        .toast-success {
+            background-color: #51a351;
+        }
+        .toast-error {
+            background-color: #bd362f;
+        }
+        .toast-info {
+            background-color: #2f96b4;
+        }
+        .toast-warning {
+            background-color: #f89406;
+        }
+        /**/
+        @media all and (max-width: 240px) {
+            #toast-container > div {
+                padding: 8px 8px 8px 50px;
+                width: 11em;
+            }
+            #toast-container .toast-close-button {
+                right: -0.2em;
+                top: -0.2em;
+            }
+        }
+        @media all and (min-width: 241px) and (max-width: 480px) {
+            #toast-container > div {
+                padding: 8px 8px 8px 50px;
+                width: 18em;
+            }
+            #toast-container .toast-close-button {
+                right: -0.2em;
+                top: -0.2em;
+            }
+        }
+        @media all and (min-width: 481px) and (max-width: 768px) {
+            #toast-container > div {
+                padding: 15px 15px 15px 50px;
+                width: 25em;
+            }
+        }
+        /*fin*/
     </style>
 
 </head>
@@ -240,6 +400,8 @@
                 <spring:url value="/retiro/searchParticipant" var="BuscarParticipanteUrl"/>
                 <spring:url value="/retiro/GuardarRetiro" var="savePartRetiradoUrl"/>
                 <spring:url value="/retiro/getMotivo" var="MotivosUrl"/>
+                <c:set var="successMessage"><spring:message code="process.success" /></c:set>
+                <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
                 <!-- inicio smart wizard -->
                 <!-- SmartWizard html -->
                 <div id="smartwizard">
@@ -252,7 +414,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#step-2">
-                            <strong> <i class="fa fa-list" aria-hidden="true"></i> Datos</strong> <br>Personales
+                            <strong> <i class="fa fa-list" aria-hidden="true"></i> Datos</strong> <br>Familiares
                         </a>
                     </li>
                     <li class="nav-item">
@@ -367,7 +529,7 @@
                                         <select name="recibidaPor" id="recibidaPor" required class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
                                             <c:forEach items="${supervisor}" var="rp">
-                                                <option value="${rp.idPersona}"> <spring:message code="${rp.idPersona} - ${rp.nombre}" /></option>
+                                                <option value="${rp.personal.idPersona}"> <spring:message code="${rp.personal.idPersona} - ${rp.personal.nombre}" /></option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -381,8 +543,8 @@
                                         <label for="medicosupervisor">Personal quien llena el Documento</label>
                                         <select name="medicosupervisor" id="medicosupervisor" required class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${supervisor}" var="s">
-                                                <option value="${s.idPersona}">${s.idPersona} - ${s.nombre}</option>
+                                            <c:forEach items="${supervisorYdigitador}" var="s">
+                                                <option value="${s.personal.idPersona}">${s.personal.idPersona} - ${s.personal.nombre}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -509,10 +671,8 @@
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
 
-
 <spring:url value="/resources/js/libs/smartWizard/jquery.smartWizard.js" var="jqsw"/>
 <script type="application/javascript" src="${jqsw}"></script>
-
 
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
@@ -523,10 +683,8 @@
 <spring:url value="/resources/js/libs/notify.min.js" var="noty" />
 <script type="text/javascript" src="${noty}"></script>
 
-
 <spring:url value="/resources/js/views/retiro/retiro.js" var="ret"/>
 <script type="application/javascript" src="${ret}"></script>
-
 
 <script type="text/javascript">
     $(function () {
@@ -550,7 +708,9 @@
             BuscarParticipanteUrl : "${BuscarParticipanteUrl}",
             savePartRetiradoUrl : "${savePartRetiradoUrl}",
             saveUrl:"${saveUrl}",
-            MotivosUrl:"${MotivosUrl}"
+            MotivosUrl:"${MotivosUrl}",
+            successmessage: "${successMessage}",
+            error: "${errorProcess}"
         }
         handleDatePickers("${lenguaje}");
         RealizarRetiro.init(endPoints);

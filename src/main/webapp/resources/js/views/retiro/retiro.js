@@ -43,7 +43,8 @@ var RealizarRetiro = function(){
                 $.getJSON(params.BuscarParticipanteUrl, form1.serialize(), function (data) {
                         console.log(data);
                         if (data.mensaje != undefined) {
-                            $.notify(data.mensaje, "error");
+                            //$.notify(data.mensaje, "error");
+                            toastr.warning(data.mensaje,{timeout:1500});
                             $("#smartwizard").smartWizard("goToStep", 0);
                             $('#smartwizard').smartWizard("reset");
                         }
@@ -68,7 +69,8 @@ var RealizarRetiro = function(){
                         }
                     }
                 ).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        $.notifiy(errorThrown,'error');
+                        //$.notifiy(errorThrown,'error');
+                        toastr.error(errorThrown,{timeout:1000});
                         $('#smartwizard').smartWizard("reset");
                     });
             }
@@ -227,9 +229,6 @@ var GuardarRetiro = function(){
                     },
                     codigoParticipante: {
                         required: true
-                    },
-                    recibidaPor:{
-                        required: true
                     }
                 },
                 errorPlacement: function (error, element) {
@@ -259,14 +258,16 @@ var GuardarRetiro = function(){
                 var jqxhr = $.post( p.savePartRetiradoUrl, form2.serialize(), function( data ){
                     $('#page-loader').fadeIn('slow');
                 }).done(function() {
-                    swal("Éxito!", "Retiro Realizado!", "success");
+                    //swal("Éxito!", "Retiro Realizado!", "success");
+                    toastr.success(p.successmessage);
                     window.setTimeout(function(){
                         $('#page-loader').fadeOut('slow');
                         location.reload(true);
                     }, 1500);
                     $("#smartwizard").smartWizard("goToStep", 0);
                 }).fail(function() {
-                    $.notify("Error al Guardar!.","error");
+                    //$.notify("Error al Guardar!.","error");
+                    toastr.error(params.errorProcess);
                 });
 
             }

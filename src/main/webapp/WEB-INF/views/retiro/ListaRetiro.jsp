@@ -13,18 +13,180 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
-    <spring:url value="/resources/css/dtresponsive/twitter-bootstrap.css" var="boot1" />
+   <!-- <spring:url value="/resources/css/dtresponsive/twitter-bootstrap.css" var="boot1" />
     <link href="${boot1}" rel="stylesheet" type="text/css"/>
+    <spring:url value="/resources/css/dataTables.bootstrap4.min.css" var="bdat4" />
+    <link rel="stylesheet" href="${bdat4}" type="text/css"/>
+    <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
+    <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
+    -->
+    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
+    <link href="${boot}" rel="stylesheet" type="text/css"/>
 
     <spring:url value="/resources/css/bootstrapdt.css" var="bdt" />
     <link rel="stylesheet" href="${bdt}" type="text/css"/>
 
-    <spring:url value="/resources/css/dataTables.bootstrap4.min.css" var="bdat4" />
-    <link rel="stylesheet" href="${bdat4}" type="text/css"/>
-
-    <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
-    <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
     <style>
+
+    /*ini*/
+    .toast-title {
+        font-weight: bold;
+    }
+    .toast-message {
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+    }
+    .toast-message a,
+    .toast-message label {
+        color: #ffffff;
+    }
+    .toast-message a:hover {
+        color: #cccccc;
+        text-decoration: none;
+    }
+
+    .toast-close-button {
+        position: relative;
+        right: -0.3em;
+        top: -0.3em;
+        float: right;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffffff;
+        -webkit-text-shadow: 0 1px 0 #ffffff;
+        text-shadow: 0 1px 0 #ffffff;
+        opacity: 0.8;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+        filter: alpha(opacity=80);
+    }
+    .toast-close-button:hover,
+    .toast-close-button:focus {
+        color: #000000;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: 0.4;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+        filter: alpha(opacity=40);
+    }
+    button.toast-close-button {
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        -webkit-appearance: none;
+    }
+    .toast-top-full-width {
+        top: 0;
+        right: 0;
+        width: 100%;
+    }
+    .toast-bottom-full-width {
+        bottom: 0;
+        right: 0;
+        width: 100%;
+    }
+    .toast-top-left {
+        top: 12px;
+        left: 12px;
+    }
+    .toast-top-right {
+        top: 12px;
+        right: 12px;
+    }
+    .toast-bottom-right {
+        right: 12px;
+        bottom: 12px;
+    }
+    .toast-bottom-left {
+        bottom: 12px;
+        left: 12px;
+    }
+    #toast-container {
+        position: fixed;
+        z-index: 999999;
+        /*overrides*/
+
+    }
+    #toast-container * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #toast-container > div {
+        margin: 0 0 6px;
+        padding: 15px 15px 15px 50px;
+        width: 300px;
+        -moz-border-radius: 3px 3px 3px 3px;
+        -webkit-border-radius: 3px 3px 3px 3px;
+        border-radius: 3px 3px 3px 3px;
+        background-position: 15px center;
+        background-repeat: no-repeat;
+        -moz-box-shadow: 0 0 12px #999999;
+        -webkit-box-shadow: 0 0 12px #999999;
+        box-shadow: 0 0 12px #999999;
+        color: #ffffff;
+        opacity: 0.8;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+        filter: alpha(opacity=80);
+    }
+    #toast-container > :hover {
+        -moz-box-shadow: 0 0 12px #000000;
+        -webkit-box-shadow: 0 0 12px #000000;
+        box-shadow: 0 0 12px #000000;
+        opacity: 1;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+        filter: alpha(opacity=100);
+        cursor: pointer;
+    }
+
+    #toast-container.toast-top-full-width > div,
+    #toast-container.toast-bottom-full-width > div {
+        width: 96%;
+        margin: auto;
+    }
+    .toast {
+        background-color: #030303;
+    }
+    .toast-success {
+        background-color: #51a351;
+    }
+    .toast-error {
+        background-color: #bd362f;
+    }
+    .toast-info {
+        background-color: #2f96b4;
+    }
+    .toast-warning {
+        background-color: #f89406;
+    }
+    /**/
+    @media all and (max-width: 240px) {
+        #toast-container > div {
+            padding: 8px 8px 8px 50px;
+            width: 11em;
+        }
+        #toast-container .toast-close-button {
+            right: -0.2em;
+            top: -0.2em;
+        }
+    }
+    @media all and (min-width: 241px) and (max-width: 480px) {
+        #toast-container > div {
+            padding: 8px 8px 8px 50px;
+            width: 18em;
+        }
+        #toast-container .toast-close-button {
+            right: -0.2em;
+            top: -0.2em;
+        }
+    }
+    @media all and (min-width: 481px) and (max-width: 768px) {
+        #toast-container > div {
+            padding: 15px 15px 15px 50px;
+            width: 25em;
+        }
+    }
+    /*fin*/
 
         #page-loader {
             position: fixed;
@@ -176,7 +338,7 @@
                                         </form>
                                     </div>
                                     <hr/>
-                                    <div class="col-sm-12">
+                                    <div class="col-md-12">
                                         <div class="table-responsive">
                                             <table id="tableRetiro" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                                 <thead>
@@ -195,9 +357,7 @@
                                                 <tbody></tbody>
                                             </table>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -218,14 +378,22 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label for="casapediatrica">Casa PDCS</label>
                                     <input type="text" readonly class="form-control" id="casapediatrica" >
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label for="casafamilia">Casa Familia</label>
                                     <input type="text" class="form-control" id="casafamilia" readonly>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label for="motivo">Motivo</label>
+                                    <input type="text" class="form-control" id="motivo" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="motivoDetalle">Detalle del Motivo</label>
+                                <input type="text" class="form-control" id="motivoDetalle" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="otrosmotivo">Otros Motivos</label>
@@ -253,10 +421,7 @@
                                     <label for="carnet">Devolvió Carnet?</label>
                                     <input type="text" class="form-control" id="carnet" readonly>
                                 </div>
-
                             </div>
-
-
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -273,6 +438,8 @@
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
+
+
 <c:choose>
     <c:when test="${cookie.eIcsLang.value == null}">
         <c:set var="lenguaje" value="es"/>
@@ -291,17 +458,15 @@
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
 
-<spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
-<script type="text/javascript" src="${TablesResponsive}"></script>
 
-<spring:url value="/resources/js/libs/dataTableResponsive/dataTables.bootstrap4.min.js" var="Tablesb4" />
-<script type="text/javascript" src="${Tablesb4}"></script>
+<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
+<script src="${dataTableJs}" type="text/javascript"></script>
 
-<spring:url value="/resources/js/libs/dataTableResponsive/dataTables.responsive.min.js" var="TablesResponsive" />
-<script type="text/javascript" src="${TablesResponsive}"></script>
+<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
+<script type="text/javascript" src="${dataTablesBS}"></script>
 
-<spring:url value="/resources/js/libs/dataTableResponsive/responsive.bootstrap4.min.js" var="TResponsiveb4" />
-<script type="text/javascript" src="${TResponsiveb4}"></script>
+<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
+<script type="text/javascript" src="${dataTablesTT}"></script>
 
 
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
@@ -332,6 +497,7 @@
 
         function ver(id){
             var jqxhr = $.getJSON(parametros.DetallesRetiroUrl, { idretiro : id,   ajax : 'true'  }, function(data){
+                //console.log(data);
                 if(data.mensaje != null) $.notify(data.mensaje,"error");
                 $("#casafamilia").val(data.casafamilia);
                 $("#casapediatrica").val(data.casapediatrica);
@@ -342,6 +508,8 @@
                 $("#quiencomunica").val(data.quiencomunica);
                 $("#relFam").val(data.relFam);
                 $("#carnet").val(data.carnet);
+                $("#motivo").val(data.motivo);
+                $('#motivoDetalle').val(data.motivoDetalle);
                 $("#exampleModal").modal("show");
             }).fail(function(){
                 swal("Error","falló el servidor","error");

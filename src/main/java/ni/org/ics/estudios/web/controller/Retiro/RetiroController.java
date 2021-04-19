@@ -5,6 +5,7 @@ import com.sun.org.apache.xpath.internal.operations.*;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
@@ -139,10 +140,6 @@ public class RetiroController {
         }
     }
 
-
-
-
-
     //region Guardar Retiros
     @RequestMapping(value = "saveRetiroForm", method = RequestMethod.GET)
     public String saveRetiroForm(Model model) throws Exception {
@@ -162,8 +159,11 @@ public class RetiroController {
             List<MessageResource> causaRetiro = messageResourceService.getCatalogo("CAT_CAUSAS_RETIROS");
             model.addAttribute("causaRetiro",causaRetiro);
 
-            List<Personal> supervisor = this.retiroservice.getSupervisor();
+            List<Personal_Cargo> supervisor = this.retiroservice.getSupervisor();
             model.addAttribute("supervisor", supervisor);
+
+            List<Personal_Cargo> supervisorYdigitador = this.retiroservice.getSupervisorAndDigitador();
+            model.addAttribute("supervisorYdigitador", supervisorYdigitador);
 
             model.addAttribute("estudios", "");
             return "/retiro/RetiroForm";
@@ -237,7 +237,12 @@ public class RetiroController {
                 Integer parent = Integer.parseInt(parentesco);
                 obj.setRelfam(parent);
             }
-            Integer persona = Integer.parseInt(recibidaPor);
+            Integer persona = null;
+            if (recibidaPor.equals("")){
+
+            }else {
+                persona = Integer.parseInt(recibidaPor);
+            }
             obj.setPersonadocumenta(persona);
             obj.setMotivo(razonretiro);
             Character c = devolcioCarnet.equals("on") ? '1' : '0';
@@ -252,24 +257,37 @@ public class RetiroController {
             obj.setDeviceid(computerName);
             obj.setRecordDate(new Date());
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-
             String estudios = procesos.getEstudio();
             obj.setEstudiosanteriores(estudios);
 
             String[] arrayString = estudios.split("  ");
-
             ArrayList<String> frutas = new ArrayList<String>();
-
 
             for (int i = 0; i < arrayString.length; i++) {
                 frutas.add(arrayString[i]);
                 frutas.remove(aretiro);
             }
 
-            //validacion cuando es solo un estudio
+            if (arrayString.length == 1 ){
 
-            if (arrayString.length == 1) {
-                this.retiroservice.ActualizarCampoEstudioAndEstado(codigo);
+                if (aretiro.equals("CH Familia")) {
+                    this.retiroservice.procesosEnNoFamilia(codigo);
+                }
+                if (aretiro.equals("UO1")){
+                    //Aqui actualizar todos los procesos de uo1
+                }
+                if (aretiro.equals("Tcovid")){
+                    //Aqui actualizar procesos de Tcovid
+                }
+                if (aretiro.equals("Dengue")){
+                    //Aqui proces de dengue
+                }
+
+                //validacion cuando es solo un estudio y diferente a CH Family
+                if (!aretiro.equals("CH Familia")) {
+                    this.retiroservice.procesosAllEnNo(codigo);
+                    //this.retiroservice.ActualizarCampoEstudioAndEstado(codigo);
+                }
             }
 
             StringBuffer sb = new StringBuffer();
@@ -278,12 +296,33 @@ public class RetiroController {
                     sb.append("  ");
             }
             String str = sb.toString();
+
+            //region Cuando tienen mas de un Estudio
+            if (arrayString.length > 1) {
+                if ( aretiro.equals("CH Familia")) {
+                    this.retiroservice.updateEstudiosYcasaFamilia(codigo, str.trim());
+                }
+
+                if ( aretiro.equals("Influenza")) {
+                    this.retiroservice.procesosEnNoFlu(codigo);
+                }
+
+                if ( aretiro.equals("Dengue")) {
+                    this.retiroservice.procesosEnNoDengue(codigo);
+                }
+
+                if ( aretiro.equals("UO1")) {
+                    this.retiroservice.procesosEnNoUO1(codigo);
+                }
+
+                if ( aretiro.equals("Tcovid")) {
+                    this.retiroservice.procesosEnNoCovid(codigo);
+                }
+            }
+            //endregion
             this.retiroservice.ActualizarCampoEstudio(codigo, str.trim());
-
             this.retiroservice.allActualBaja(codigo);
-
             this.retiroservice.SaveRetiros(obj);
-
             return JsonUtil.createJsonResponse(obj);
 
         }catch (Exception e){
@@ -306,6 +345,8 @@ public class RetiroController {
             obj = this.retiroservice.getRetiroByID(idretiro);
             Integer idsupervisor = obj.getMedicosupervisor();
             test = this.retiroservice.getSupervisorById(idsupervisor);
+            Razones_Retiro motivoDetalle = this.retiroservice.getRazonRetiro(obj.getMotivo());
+            map.put("motivoDetalle", motivoDetalle.getDescripcion());
             map.put("medicosupervisor", (test != null) ? test.getNombre() : "-" );
             Personal objPersonalDocumenta = this.retiroservice.getSupervisorById(obj.getPersonadocumenta());
             map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
@@ -332,6 +373,10 @@ public class RetiroController {
             messageRelFam = messageResourceService.getMensajeByCatalogAndCatKeys(""+obj.getRelfam(),"CP_CAT_RFTUTOR");
             map.put("relFam",getDescripcionCatalogo(""+obj.getRelfam(),"CP_CAT_RFTUTOR"));
             map.put("observaciones", obj.getObservaciones());
+
+            map.put("motivo", obj.getMotivo());
+
+
             String jsonResponse;
             jsonResponse = new Gson().toJson(map);
             UnicodeEscaper escaper = UnicodeEscaper.above(127);

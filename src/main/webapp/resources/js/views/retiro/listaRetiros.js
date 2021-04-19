@@ -11,7 +11,12 @@ var ListadoRetiros = function(){
                 paging: true,
                 "oLanguage": {
                     "sUrl": parametros.dataTablesLang
-                }
+                }, "columnDefs": [
+                    {
+                        "targets": [ 4 ],
+                        "visible": false
+                    }
+                ]
             });
 
             $( '#select-participante-form' ).validate( {
@@ -38,16 +43,18 @@ var ListadoRetiros = function(){
                 },
                 submitHandler: function (form) {
                     table.clear().draw( false );
-                    searchParticipante();//llama la funcion searchCasa
+                    searchParticipante();
                 }
             });
 
             //Buscar un Participante
             function searchParticipante(){
                 $.getJSON(parametros.ListaHojaRetiroUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
+                    //console.log(data);
                     var len = data.length;
                     if(len==0){
-                        $.notify("No se encontró información", 'warning');
+                        //$.notify("No se encontró información", 'warning');
+                        toastr.warning("No se encontró información",{timeOut: 1500});
                         $('#smartwizard').smartWizard("reset");
                         $("#parametro").focus();
                     }
@@ -68,7 +75,7 @@ var ListadoRetiros = function(){
                             var nombre2 =   (data[i].participante.nombre2 === null) ? "-" : data[i].participante.nombre2;
                             var apellido2 = (data[i].participante.apellido2 == null) ? "-" : data[i].participante.apellido2;
                             var NameComplete =  data[i].participante.nombre1 +' '+ nombre2 +' '+ data[i].participante.apellido1+' '+ apellido2;
-                            var fregistro = ("0" + fReg.getDate()).slice(-2) + "/" + ("0"+(fReg.getMonth()+1)).slice(-2) + "/" + fReg.getFullYear() +" "+  fReg.getHours().toString() + ":"+ fReg.getMinutes();
+                            var fregistro = ("0" + fReg.getDate()).slice(-2) + "/" + ("0"+(fReg.getMonth()+1)).slice(-2) + "/" + fReg.getFullYear() +" "+ ('0' + fReg.getHours().toString()).slice(-2)  + ":"+  ('0' + fReg.getMinutes()).slice(-2) ;
                             table.row.add([
                                 getCode,
                                 datestring,
@@ -83,14 +90,11 @@ var ListadoRetiros = function(){
                         }
                     }
                 }).fail(function() {
-                   swal("Error","Falló el servidor!","error");
+                   //swal("Error","Falló el servidor!","error");
+                    toastr.error("Falló el servidor!",{timeout:1500});
                     $('#smartwizard').smartWizard("reset");
                 });
             }
-
-
-
         }
     }
-
 }();

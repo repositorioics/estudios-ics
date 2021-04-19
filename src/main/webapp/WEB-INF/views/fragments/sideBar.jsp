@@ -128,7 +128,7 @@
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-user-times" aria-hidden="true"></i>
-                        <spring:message code="Retirar" /></a>
+                        <spring:message code="Retiros" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item retiro">
                             <a class="nav-link" href="<spring:url value="/retiro/ListRetiro" htmlEscape="true "/>">
@@ -153,7 +153,7 @@
                     </ul>
                 </li>
             </sec:authorize>
-            -->
+
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
@@ -173,7 +173,7 @@
                     </ul>
                 </li>
             </sec:authorize>
-
+            -->
             <sec:authorize access="hasRole('ROLE_DOM')">
                 <li class="nav-item nav-dropdown Domicilio">
                     <a class="nav-link nav-dropdown-toggle" href="#">
