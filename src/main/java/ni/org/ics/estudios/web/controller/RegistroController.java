@@ -6,7 +6,9 @@ import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.DatosParticipante;
 import ni.org.ics.estudios.dto.HistorialRetiroDto;
+import ni.org.ics.estudios.dto.ParticipantesEnCasa;
 import ni.org.ics.estudios.dto.RetiroDto;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.ParticipanteService;
@@ -66,7 +68,7 @@ public class RegistroController {
 
     @RequestMapping(value = "/searchParticipant", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    org.springframework.http.ResponseEntity<String> BuscarParticipanteByID(@RequestParam(value = "parametro", required = true) Integer parametro)
+    ResponseEntity<String> BuscarParticipanteByID(@RequestParam(value = "parametro", required = true) Integer parametro)
             throws Exception {
         try {
             Map<String, String> map = new HashMap<String, String>();
@@ -167,5 +169,104 @@ public class RegistroController {
             return listRetiro = null;
         }
     }
+    //Registro/participantsByCasa
+    @RequestMapping(value = "/participantsByCasa", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<ParticipantesEnCasa> participantsByCasa(@RequestParam(value = "casaCode", required = false, defaultValue = "")Integer casaCode,
+                                                 @RequestParam(value = "codParticipante", required = false, defaultValue = "") Integer codParticipante)
+            throws Exception {
+        List<ParticipantesEnCasa> listEnCasa = new ArrayList<ParticipantesEnCasa>();
+        try{
+            List<Participante>  listParticipantes =  participanteService.getParticipanteByCodeCasa(casaCode);
+            ParticipanteProcesos procesos = participanteProcesosService.getParticipante(codParticipante);
+            for (Participante participantes : listParticipantes){
+                ParticipantesEnCasa ParticipantEnCasa = new ParticipantesEnCasa();
+                ParticipantEnCasa.setCodCasaPediatrica(participantes.getCasa().getCodigo());
+                ParticipantEnCasa.setCodCasaFamilia(procesos.getCasaCHF());
+                ParticipantEnCasa.setIdParticipante(participantes.getCodigo());
+                String nombrecompleto = participantes.getNombre1().toUpperCase();
+                if (participantes.getNombre2() != null)
+                    nombrecompleto = nombrecompleto +" "+ participantes.getNombre2().toUpperCase();
+                nombrecompleto = nombrecompleto +" "+ participantes.getApellido1().toUpperCase();
+                if (participantes.getApellido2() != null)
+                    nombrecompleto = nombrecompleto +" "+ participantes.getApellido2().toUpperCase();
+                ParticipantEnCasa.setNombreParticipante(nombrecompleto);
+                String cadena = participantes.getEdad();
+                String[] parts = cadena.split("/");
+                String part1 = parts[0]; // años
+                String part2 = parts[1]; // meses
+                String part3 = parts[2]; // dias
+                ParticipantEnCasa.setAnios(part1);
+                ParticipantEnCasa.setMeses(part2);
+                ParticipantEnCasa.setDias(part3);
+                listEnCasa.add(ParticipantEnCasa);
+           }
+            return listEnCasa;
+        }catch (Exception e){
+            return listEnCasa = null;
+        }
+    }
+
+    //Registro/allParticipants
+    @RequestMapping(value = "/allParticipants", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<DatosParticipante> allParticipants()
+            throws Exception{
+        try {
+            List<DatosParticipante> lista = participanteService.getDatosParticipantes();
+            return lista;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    /* obtener los nombres y apellidos de participante
+     *
+      * /Registro/getNombre1
+     */
+    @RequestMapping(value = "/getNombre1", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<String> getNombre1(@RequestParam(value = "nombre1", required = true) String nombre1)
+            throws Exception {
+        ArrayList<String> nombreArrayList = null;
+        try {
+            List<String> listaPart = participanteService.getNombre11(nombre1);
+
+            return listaPart;
+        }catch (Exception e){
+            return nombreArrayList = null;
+        }
+    }
+
+ @RequestMapping(value = "/getApellido1", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<String> getApellido1(@RequestParam(value = "apellido1", required = true) String apellido1)
+            throws Exception {
+        ArrayList<String> nombreArrayList = null;
+        try {
+            List<String> listaPart = participanteService.getApellido1(apellido1);
+            if (listaPart.size() == 0){
+
+            }
+            return listaPart;
+        }catch (Exception e){
+            return nombreArrayList = null;
+        }
+    }
+
+
+    @RequestMapping(value = "/getPartNombreApellido", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<Participante> getPartNombreApellido(@RequestParam(value = "nombre1", required = true) String nombre1
+            ,@RequestParam(value = "apellido1", required = true) String apellido1)
+            throws Exception {
+        try{
+            List<Participante> getNombreApellido = participanteService.getParticipanteByNomApellido(nombre1,apellido1);
+            return getNombreApellido;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
 
 }

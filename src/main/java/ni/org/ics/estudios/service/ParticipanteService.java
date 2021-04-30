@@ -160,4 +160,38 @@ public class ParticipanteService {
         query.setResultTransformer(Transformers.aliasToBean(DatosParticipante.class));
         return query.list();
     }
+
+
+    /* mis services para registroController */
+    public List<Participante>getParticipanteByCodeCasa(Integer codCasa){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Participante p where p.casa.codigo =:codCasa");
+        query.setParameter("codCasa", codCasa);
+        return query.list();
+    }
+
+    public List<String> getNombre11(String nombre1){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select distinct nombre1 from Participante where nombre1 like :nombre1");
+        query.setParameter("nombre1", '%' + nombre1 + '%');
+        return query.list();
+    }
+
+    public List<String> getApellido1(String apellido1){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select distinct apellido1 from Participante where apellido1 like :apellido1");
+        query.setParameter("apellido1", '%' + apellido1 + '%');
+        return query.list();
+    }
+
+    public List<Participante> getParticipanteByNomApellido(String nombre1, String apellido1){
+        Session session = sessionFactory.getCurrentSession();
+        Integer menor = 30000;
+        Query query = session.createQuery("from Participante p where p.nombre1 like :nombre1 or p.apellido1 like :apellido1 and p.codigo < :menor");
+        query.setParameter("nombre1", '%' + nombre1 + '%');
+        query.setParameter("apellido1", '%' + apellido1 + '%');
+        query.setParameter("menor", menor);
+        return query.list();
+    }
+
 }

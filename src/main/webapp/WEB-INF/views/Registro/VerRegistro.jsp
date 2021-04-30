@@ -13,6 +13,10 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
+
+    <spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
+    <link href="${uiCss}" rel="stylesheet" type="text/css"/>
+
     <style>
 
        input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
@@ -241,9 +245,74 @@
 
         /*fin*/
 
+       .btn-circle {
+           width: 45px;
+           height: 45px;
+           line-height: 45px;
+           text-align: center;
+           padding: 0;
+           border-radius: 50%;
+       }
+
+       .btn-circle i {
+           position: relative;
+           top: -1px;
+       }
+
+       .btn-circle-sm {
+           width: 35px;
+           height: 35px;
+           line-height: 35px;
+           font-size: 0.9rem;
+       }
+
+       .btn-circle-lg {
+           width: 55px;
+           height: 55px;
+           line-height: 55px;
+           font-size: 1.1rem;
+       }
+
+       .btn-circle-xl {
+           width: 70px;
+           height: 70px;
+           line-height: 70px;
+           font-size: 1.3rem;
+       }
+       .badge-cyan {
+           color: #fff;
+           background-color: #007bff;
+       } .btn-primary {
+             background-color: #3f51b5 !important;
+             color: #fff
+         }
+       .rounded-pill {
+           border-radius: 50rem !important;
+       }
+       .anchos{
+           width: 15px;
+       }
+       .modal-lg {
+           max-width: 1000px !important;
+       }
+        .error{
+            color: red;
+        }
+       #tblParticipantes_filter {
+           visibility: hidden;
+       }
+
+    /*
+    table.dataTable.dataTable_width_auto {
+          width: auto;
+        }
+    */
     </style>
-    <spring:url value="/resources/css/animate.css" var="anime" />
-    <link rel="stylesheet" href="${anime}" type="text/css"/>
+   <!-- <spring:url value="/resources/css/animate.css" var="anime" />
+    <link rel="stylesheet" href="${anime}" type="text/css"/> -->
+
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
 
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -268,23 +337,31 @@
                     <spring:url value="/Registro/searchParticipant" var="searchPartUrl"/>
                     <div class="card-header">
                         <h5 class="text-gray-dark" style="font-family: Roboto">
-                            <i class="fa fa-list" aria-hidden="true"></i>   <spring:message code="Datos Generales del Participante" /></h5>
+                            <i class="fa fa-list" aria-hidden="true"></i>
+                            <spring:message code="Datos Generales del Participante" /></h5>
                     </div>
                     <div class="card-body text-dark p-2 effect-1">
                         <div class="container">
+
                             <spring:url value="/Registro/searchParticipant" var="searchPartUrl"/>
-                            <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal ">
-                                <div class="row">
-                                    <div class="col-md-8 offset-md-2">
-                                        <div class="pt-3 pb-4">
-                                            <div class="input-group">
-                                                <input type="text"  id="parametro" name="parametro" class="form-control">
-                                                <div id="gendererror" class="text-danger"></div>
-                                                <div class="input-group-append">
-                                                    <button type="button" class="btn waves-effect waves-light btn-custom"><i class="fa fa-search mr-1"></i> Búscar</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <spring:url value="/Registro/participantsByCasa" var="participantsByCodeCasaUrl"/>
+                            <spring:url value="/Registro/allParticipants" var="allParticipantsUrl"/>
+                            <spring:url value="/Registro/getNombre1" var="getNombre1Url"/>
+                            <spring:url value="/Registro/getApellido1" var="getApellido1Url"/>
+                            <spring:url value="/Registro/getPartNombreApellido" var="getPartNombreApellidoUrl"/>
+
+                            <form action="#" autocomplete="off" id="select-participante-form" name="select-participante-form" class="form-horizontal">
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="input-group col-md-10">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input id="parametro" name="parametro" type="text" value="" class="form-control"/>
+                                        <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                            <spring:message code="search" />
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -305,6 +382,10 @@
                                                     <a class="nav-link" id="two-tab" data-toggle="tab" href="#two" role="tab" aria-controls="Two" aria-selected="false">
                                                         <i class="fa fa-user-times" aria-hidden="true"></i> Información del Retiro</a>
                                                 </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="three-tab" data-toggle="tab" href="#three" role="tab" aria-controls="Three" aria-selected="false">
+                                                        <i class="fa fa-search" aria-hidden="true"></i> Buscar Nombre</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="tab-content" id="myTabContent">
@@ -321,15 +402,56 @@
                                                                             <spring:url value="/resources/img/default-profile.jpg" var="userDefault" />
                                                                             <img class="rounded-circle" width="150" src="${userDefault}" alt="<spring:message code="Admin" />" />
                                                                             <div class="mt-3">
-                                                                                <h4 id="nombreComplete"></h4>
-                                                                                <p class="text-secondary mb-1" > <h3> Código Participante:<strong>  <span class="badge badge-pill text-primary" id="idParticipante"></span> </strong></h3>  </p>
-                                                                                <p class="text-secundary mb-1"> <h3>Estudios: <span class="badge badge-pill text-primary" id="estudios"></span> </h3> </p>
-                                                                                <p class="text-muted font-size-sm" >Fecha Nacimiento: <span id="fnac"></span> </p>
-                                                                                <p class="text-muted font-size-md">
-                                                                                <h5 class="pull-right"> PBMC: <span class="badge badge-pill text-white pull-rigth" style="background-color: #d562da; font-size: 20px" id="pbmc2"></span></h5>
-                                                                                <h5 class="pull-left"> PaxGene:<span class="badge badge-pill text-white" style="background-color: #00dd00; font-size: 20px" id="paxgene2"></span> </h5>
-                                                                                </p >
+                                                                                <span class="badge badge-pill text-primary" id="nombreComplete" style="font-size: 15px"></span>
+                                                                                <div class="table-responsive">
+
+                                                                                    <table class="table table-hover" style="width:100%">
+
+
+                                                                                        <tr>
+                                                                                            <td class="text-left">Código Participante:</td>
+                                                                                            <td class="text-right"><span class="badge badge-pill text-primary" id="idParticipante" style="font-size: 15px"></span> </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td class="text-left">Estudios</td>
+                                                                                            <td class="text-right"><span class="badge badge-pill text-primary" id="estudios" style="font-size: 15px"></span> </td>
+                                                                                        </tr>
+
+                                                                                        <tr>
+                                                                                            <td class="text-left">Fecha Nacimiento</td>
+                                                                                            <td class="text-right">	<span id="fnac"></span> </td>
+                                                                                        </tr>
+
+                                                                                        <tr>
+                                                                                            <td class="text-left">PBMC</td>
+                                                                                            <td class="text-right"><span class="badge badge-pill text-white pull-rigth" style="background-color: #d562da; font-size: 15px" id="pbmc2"></span></td>
+                                                                                        </tr>
+
+                                                                                        <tr>
+                                                                                            <td class="text-left">PaxGene</td>
+                                                                                            <td class="text-right"><span class="badge badge-pill text-white" style="background-color: #00dd00; font-size: 15px" id="paxgene2"></span></td>
+                                                                                        </tr>
+                                                                                            <!--
+                                                                                        <tr>
+
+                                                                                            <td><button id="btnCodeLineal" class="btn btn-primary float-left" data-toggle="tooltip" data-placement="top" title="Imprimir Lineal">
+                                                                                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                            </td>
+
+                                                                                            <td>
+                                                                                                <button id="btnCodeBidi" class="btn btn-warning float-right" data-toggle="tooltip" data-placement="bottom" title="Imprimir QRCode">
+                                                                                                    <i class="fa fa-print"></i>
+                                                                                                </button>
+                                                                                            </td>
+
+                                                                                        </tr>-->
+                                                                                    </table>
+
+                                                                                </div>
+
                                                                             </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -421,6 +543,9 @@
                                                                             </div>
                                                                             <div class="col-sm-9 text-secondary">
                                                                                 <span id="idCasa"></span>
+                                                                                <button id="VerAll" class="btn btn-info rounded-pill float-right" data-toggle="tooltip" data-placement="bottom" title="Participantes en Casa">
+                                                                                <i class="fa fa-users" aria-hidden="true"></i>
+                                                                                </button>
                                                                             </div>
                                                                         </div>
                                                                         <hr>
@@ -537,36 +662,123 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="two" role="tabpanel" aria-labelledby="two-tab">
-                                                <div class="table-responsive">
-                                                    <hr>
-                                                    <div class="container bootstrap snippets bootdey">
+                                                <hr>
                                                         <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <div class="main-box no-header clearfix">
-                                                                    <div class="main-box-body clearfix">
+                                                            <div class="col-sm-12 col-xl-12">
                                                                         <div class="table-responsive">
                                                                             <table id="tblVerRetiro" class="table table-hover table-bordered dt-responsive nowrap" style="width:100%">
                                                                                 <thead>
                                                                                 <tr>
-                                                                                    <th><span>Código</span></th>
-                                                                                    <th><span>Fecha Retiro</span></th>
-                                                                                    <th><span>Comunicado Por</span></th>
-                                                                                    <th><span>Relación</span></th>
-                                                                                    <th><span>Motivo</span></th>
-                                                                                    <th class="text-center"><span>Observación</span></th>
-                                                                                    <th><span>Estudio</span></th>
-                                                                                    <th>Fecha Fallecido</th>
+                                                                                    <th class="text-center"><spring:message code="CÓDIGO" /></th>
+                                                                                    <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
+                                                                                    <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
+                                                                                    <th class="text-center"><spring:message code="RELACIÓN" /></th>
+                                                                                    <th><spring:message code="MOTIVO" /></th>
+                                                                                    <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
+                                                                                    <th class="text-center"><spring:message code="ESTUDIO" /></th>
+                                                                                    <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody></tbody>
+                                                                                <tfoot>
+                                                                                <tr>
+                                                                                    <th class="text-center"><spring:message code="CÓDIGO" /></th>
+                                                                                    <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
+                                                                                    <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
+                                                                                    <th class="text-center"><spring:message code="RELACIÓN" /></th>
+                                                                                    <th><spring:message code="MOTIVO" /></th>
+                                                                                    <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
+                                                                                    <th class="text-center"><spring:message code="ESTUDIO" /></th>
+                                                                                    <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
+                                                                                </tr>
+                                                                                </tfoot>
                                                                             </table>
+                                                                        </div>
+                                                            </div>
+                                                        </div>
+
+                                            </div>
+                                            <div class="tab-pane fade p-3 animate__headShake" id="three" role="tabpanel" aria-labelledby="three-tab">
+
+                                                <div class="row">
+
+                                                    <div class="col-md-12">
+
+                                                        <form name="form_by_nombre" action="#" id="form_by_nombre">
+
+                                                            <div class="row">
+                                                                <div class="col-md-1"></div>
+
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label for="nombre1">Nombre</label>
+                                                                        <input type="text" class="form-control focusNext" placeholder="Primer Nombre" name="nombre1" id="nombre1" tabindex="1">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label for="apellido1">Apellido</label>
+                                                                        <input type="text" class="form-control focusNext" placeholder="Primer Apellido" name="apellido1" id="apellido1" tabindex="2">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2" style="margin-top: 10px; padding-top: 17px; padding-left: 0px; padding-bottom: 10px">
+                                                                    <button id="cargarParticipantes"  type="submit" class="btn btn-success btn-ladda btn-block" data-style="expand-right"><i class="fa fa-search"></i></button>
+                                                                </div>
+                                                                <div class="col-md-1"></div>
+
+                                                            </div>
+                                                           <!-- <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-group">
+                                                                        <label for="nombre1">Nombre</label>
+                                                                        <input type="text" class="form-control" placeholder="Primer Nombre" name="nombre1" id="nombre1">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                        <label for="nombre1">Apellido</label>
+                                                                    <div class="input-group mb-3">
+                                                                        <input type="text" class="form-control" placeholder="Primer Apellido" name="apellido1" id="apellido1" aria-describedby="basic-addon2">
+                                                                        <div class="input-group-append">
+                                                                            <button id="cargarParticipantes"  type="submit" class="btn btn-success btn-ladda" data-style="expand-right"><i class="fa fa-search"></i></button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
+                                                            </div>-->
+                                                        </form>
+                                                        <div class="table-responsive">
+                                                        <table class="table table-hover table-bordered dt-responsive nowrap" id="tblParticipantes" style="width:100%">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col"><spring:message code="code" /></th>
+                                                                <th scope="col"><spring:message code="1er.Nombre" /></th>
+                                                                <th scope="col"><spring:message code="2do.Nombre" /></th>
+                                                                <th scope="col"><spring:message code="1er Apellido" /></th>
+                                                                <th scope="col"><spring:message code="2do.Apellido" /></th>
+                                                                <th scope="col"><spring:message code="Fecha Nac." /></th>
+                                                                <th scope="col"><spring:message code="Sexo" /></th>
+                                                                <th scope="col"><spring:message code="actions" /></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                            <tfoot>
+                                                            <tr>
+                                                                <th scope="col"><spring:message code="code" /></th>
+                                                                <th scope="col"><spring:message code="1er.Nombre" /></th>
+                                                                <th scope="col"><spring:message code="2do.Nombre" /></th>
+                                                                <th scope="col"><spring:message code="1er Apellido" /></th>
+                                                                <th scope="col"><spring:message code="2do.Apellido" /></th>
+                                                                <th scope="col"><spring:message code="Fecha Nac." /></th>
+                                                                <th scope="col"><spring:message code="Sexo" /></th>
+                                                                <th scope="col"><spring:message code="actions" /></th>
+                                                            </tr>
+                                                            </tfoot>
+                                                        </table>
                                                     </div>
                                                 </div>
+
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -583,6 +795,44 @@
         </div>
         <!-- /.conainer-fluid -->
     </div>
+
+    <div id="exampleModal" class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <i class="fa fa-users"></i> Participantes.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" style="width: 100%">
+                         <table id="tblCasa_Participants" class="table table-dark table-hover dt-responsive nowrap" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>C.Pediátrica</th>
+                            <th>Casa CHF</th>
+                            <th>Código</th>
+                            <th>Nombre Completo</th>
+                            <th>Edad</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.conainer-fluid -->
+</div>
 </div>
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
@@ -597,10 +847,19 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
+<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
 <spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
 <script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script src="${jQValidationLoc}"></script>
+<spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />
+<script src="${loadingButtonsJs}" type="text/javascript"></script>
 
 <spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
 <script type="text/javascript" src="${TablesResponsive}"></script>
@@ -618,35 +877,70 @@
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
+
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
+
 
 <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
     $(document).ready(function(){
         var table  = $('#tblVerRetiro').DataTable({
-            searching: false,
-            paging: false,
+            "autoWidth": true,
+            searching: true,
+            paging: true,
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
+            },"columnDefs": [
+                {"className": "text-center",
+                 "targets": "_all"
+                },
+                { width: "10px", targets: 0 },
+                { width: "10px", targets: 0 }
+
+            ],
+            initComplete: function () {
+                this.api().columns().every( function () {
+                    var that = this;
+                    $('input', this.footer() ).on( 'keyup change clear', function () {
+                        if ( that.search() !== this.value ) {
+                            that.search( this.value ).draw();
+                        }
+                    });
+                });
             }
         });
+        $('#tblVerRetiro tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+        });
         $("#parametro").focus();
-        var parametros = {searchPartUrl: "${searchPartUrl}"};
+        var parametros = {searchPartUrl: "${searchPartUrl}",
+            participantsByCodeCasaUrl: "${participantsByCodeCasaUrl}",
+            allParticipantsUrl: "${allParticipantsUrl}",
+            getNombre1Url: "${getNombre1Url}",
+            getApellido1Url: "${getApellido1Url}",
+            getPartNombreApellido:"${getPartNombreApellidoUrl}"
+        };
         $("#select-participante-form").validate({
+            errorElement: 'span', //default input error message container
+            focusInvalid: false,
             rules:{
                 parametro: {required: true}
             },
-            errorElement: 'em',
+            //errorElement: 'em',
             errorPlacement: function ( error, element ) {
                 // Add the `help-block` class to the error element
                 error.addClass( 'form-control-feedback' );
                 if ( element.prop( 'type' ) === 'checkbox' ) {
                     error.insertAfter( element.parent( 'label' ) );
                 } else {
-                    error.insertAfter( element );
-                }
-                if (element.attr("name") == "parametro") {
-                    error.insertAfter("#gendererror");
-                } else {
-                    error.insertAfter(element);
+                    //error.insertAfter( element ); //cuando no es input-group
+                    error.insertAfter(element.parent('.input-group'));
                 }
             },
             highlight: function ( element, errorClass, validClass ) {
@@ -658,12 +952,12 @@
                 $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
             },
             submitHandler: function (form) {
-                searchParticipante();
+                var id = $('#parametro').val();
+                searchParticipante(id);
             }
         })
-        function searchParticipante(){
-            $.getJSON(parametros.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
-                //var registro = JSON.parse(data);
+        function searchParticipante(id){
+            $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
                 console.log(data);
                 var len = data.length;
                 if(len==0){
@@ -834,9 +1128,6 @@
                 $("#parametro").focus();
             });
         }
-
-
-
         function recorrerUL(){
             var cont=0;
             $("#myUL li span").each(function(indice, elemento) {
@@ -847,6 +1138,265 @@
                 $("#pendientes").text(""+cont);
             });
         }
+
+        $("#btnCodeLineal").on("click", function(){
+            var id = $("#idParticipante").text();
+            swal({
+                title: "Imprimir!",
+                text: "cuantas copias del código: "+100,
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                inputPlaceholder: "copias"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("debes ingresar algo!");
+                    return false
+                }
+                if( isNaN( inputValue ) ){
+                    return false;
+                }
+                if(id != ""){
+                    imprimir(id,inputValue)
+                    swal("Stickers!", "impresos: " + inputValue, "success");
+                }
+            });
+        });
+        $("#btnCodeBidi").on("click", function(){
+            var id = $("#idParticipante").text();
+            swal({
+                title: "Imprimir!",
+                text: "Número de copias: "+100,
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                inputPlaceholder: "copias"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("debes ingresar algo!");
+                    return false
+                }
+                if( isNaN( inputValue ) ){
+                    return false;
+                }
+                if(id != ""){
+                    imprimir(id,inputValue)
+                    swal("Stickers!", "impresos: " + inputValue, "success");
+                }
+            });
+        });
+
+        function imprimir(strBarCodes,inputValue){
+            var copia = parseInt(inputValue);
+            $.getJSON("http://localhost:13001/print", { barcodes: strBarCodes, copias: copia, ajax:'false' }, function (data) {
+                console.log(data);
+                toastr.success("etiquetas impresas");
+            }).fail(function (jqXHR) {
+                console.log(jqXHR);
+                if (jqXHR.status!=200 && jqXHR.status!=0) {
+                    toastr.error("error al imprimir etiquetas","Error",{timeOut: 0});
+                }
+            });
+        }
+
+        var tableParticipantCasa = $("#tblCasa_Participants").DataTable({
+            "oLanguage": {
+                "sUrl": "${dataTablesLang}"
+            },
+            autoWidth: true
+        });
+
+        $('#VerAll').on('click', function(){
+            const codCasa = $('#idCasa').text();
+            const idParticipante = $('#idParticipante').text();
+            if( !isNaN(codCasa) || codCasa != null ){
+                $.getJSON(parametros.participantsByCodeCasaUrl,{casaCode: codCasa, codParticipante: idParticipante, ajax:'true'}, function(data){
+                    tableParticipantCasa.clear().draw( false );
+                    $.each(data, function(i, item) {
+                        var cPediatrica = (data[i].codCasaPediatrica);
+                        var casaFam = (data[i].codCasaFamilia);
+                        var cParticipante = (data[i].idParticipante);
+                        var nombre = (data[i].nombreParticipante);
+                        var edad = data[i].anios+" años "+ data[i].meses + " meses " + data[i].dias +" dias";
+                        tableParticipantCasa.row.add([
+                            cPediatrica,
+                            casaFam,
+                            cParticipante,
+                            nombre,
+                            edad
+                        ]).draw(false);
+
+                    });
+                }).fail(function(){
+                    toastr.error("Error, Intenta de nuevo!","Error",{timeOut: 0});
+                });
+            }
+
+            $("#exampleModal").modal("show");
+        })
+
+        $('#tblParticipantes tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Búscar ' + title + ' " />' );
+        });
+
+        var tablaParticipantes = $("#tblParticipantes").DataTable({
+            searching: true,
+            lengthChange: false,
+            "oLanguage": {
+                "sUrl": "${dataTablesLang}"
+            },
+            columnDefs: [
+                {
+                    targets: -1,
+                    className: 'text-center'
+                }, {
+                targets: 5,
+                className: 'text-center'
+            }, {
+                targets: 6,
+                className: 'text-center'
+            },{
+                targets: 7,
+                className: 'text-center'
+            }
+        ],
+            initComplete: function () {
+                this.api().columns().every( function () {
+                    var that = this;
+                    $('input', this.footer() ).on( 'keyup change clear', function () {
+                        if ( that.search() !== this.value ) {
+                            that.search( this.value ).draw();
+                        }
+                    });
+                });
+            }
+        });
+
+
+        $("#cargarParticipantes").on("click", function(){
+            $("form[name='form_by_nombre']").validate({
+                rules: {
+                    nombre1: {required: true},
+                    apellido1: {required: true}
+                },messages: {
+                    nombre1: "Ingrese el Nombre.",
+                    apellido1:"Ingrese el Apellido."
+                }, errorElement: 'em',
+                errorPlacement: function ( error, element ) {
+                    error.addClass( 'form-control-feedback' );
+                    if ( element.prop( 'type' ) === 'checkbox' ) {
+                        error.insertAfter( element.parent( 'label' ) );
+                    } else {
+                        error.insertAfter( element );
+                    }
+                    if (element.attr("name") == "signo") {
+                        error.insertAfter("#gendererror");
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                    $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                    $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+                },
+                submitHandler: function (form) {
+                    getParticipantes()
+                }
+            });
+
+        });
+
+        function getParticipantes(){
+            tablaParticipantes.clear().draw( false );
+            var form1 = $('#form_by_nombre');
+            $.getJSON(parametros.getPartNombreApellido,{nombre1: $("#nombre1").val().trim(), apellido1: $("#apellido1").val().trim()}, function(data){
+                $.each(data, function(key, item){
+                    var codigo = (data[key].codigo);
+                    var nombre1 = (data[key].nombre1);
+                    var nombre2 = (data[key].nombre2);
+                    var apellido1 = (data[key].apellido1);
+                    var apellido2 = (data[key].apellido2);
+                    var d =new Date(data[key].fechaNac);
+                    var datestring =  ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
+                    var sexo = data[key].sexo;
+
+                    tablaParticipantes.row.add([
+                        codigo,
+                        nombre1,
+                        nombre2,
+                        apellido1,
+                        apellido2,
+                        datestring,
+                        sexo,
+                        valor = '<a class="btn btn-info btn-sm btnSendId" data-id="' + data[key].codigo + '"><i class="fa fa-search"></i></a>'
+                    ]).draw(false);
+                });
+            }).fail(function(){
+                toastr.error("Error, Intenta de nuevo!","Error",{timeOut: 0});
+            });
+        }
+
+        $("#tblParticipantes tbody").on("click", ".btnSendId",function(){
+            var id = $(this).data('id');
+            searchParticipante(id);
+        });
+        $( "#nombre1" ).autocomplete({
+            delay:100,
+            source: function(request, response){
+                $.getJSON(parametros.getNombre1Url, {nombre1: $('#nombre1').val().trim(), ajax: 'true'},function(data){
+                    response($.map(data, function (value, key) {
+                        return {
+                            label: value
+                        };
+                    }));
+                });
+            },minLength: 3,
+            scroll: true,
+            highlight: true
+        });
+
+        $( "#apellido1" ).autocomplete({
+            delay:100,
+            source: function(request, response){
+                $.getJSON(parametros.getApellido1Url, {apellido1: $('#apellido1').val().trim(), ajax: 'true'},function(data){
+                    response($.map(data, function (value, key) {
+                        return {
+                            label: value
+                        };
+                    }));
+                });
+            },minLength: 3,
+            scroll: true,
+            highlight: true
+        });
+
+        document.addEventListener('keypress', function(evt) {
+            // Si el evento NO es una tecla Enter
+            if (evt.key !== 'Enter') {
+                return;
+            }
+            let element = evt.target;
+            // Si el evento NO fue lanzado por un elemento con class "focusNext"
+            if (!element.classList.contains('focusNext')) {
+                return;
+            }
+            // AQUI logica para encontrar el siguiente
+            let tabIndex = element.tabIndex + 1;
+            var next = document.querySelector('[tabindex="'+tabIndex+'"]');
+            // Si encontramos un elemento
+            if (next) {
+                next.focus();
+                event.preventDefault();
+            }
+        });
+
     });
 
 </script>

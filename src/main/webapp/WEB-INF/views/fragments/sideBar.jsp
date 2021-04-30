@@ -21,7 +21,7 @@
                 </li>
             </sec:authorize>
 
-            <sec:authorize access="hasAnyRole('ROLE_ROOT')">
+            <sec:authorize access="hasAnyRole('ROLE_SUPER')">
                 <li class="nav-item nav-dropdown comparison">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-clipboard" aria-hidden="true"></i>
@@ -87,15 +87,8 @@
                 </ul>
             </li>-->
 
-            <li class="nav-item nav-dropdown reports">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-docs"></i><spring:message code="reports" /></a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item filedata">
-                        <a class="nav-link" href="<spring:url value="/reportes/pdf/fileData/" htmlEscape="true "/>"><i class="icon-doc"></i><spring:message code="report.file.data" /></a>
-                    </li>
-                </ul>
-            </li>
 
+            <sec:authorize access="hasRole('ROLE_ADMISION')">
             <li class="nav-item nav-dropdown procesos">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-retweet" aria-hidden="true"></i>
                     <spring:message code="Procesos" /></a>
@@ -107,7 +100,19 @@
                     </li>
                 </ul>
             </li>
-            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+            </sec:authorize>
+
+
+            <sec:authorize access="hasAnyRole('ROLE_DIG')">
+                <li class="nav-item nav-dropdown reports">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-docs"></i><spring:message code="reports" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item filedata">
+                            <a class="nav-link" href="<spring:url value="/reportes/pdf/fileData/" htmlEscape="true "/>"><i class="icon-doc"></i><spring:message code="report.file.data" /></a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-item nav-dropdown hemodinamica">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-sticky-note-o"  aria-hidden="true"></i>
@@ -120,9 +125,19 @@
                         </li>
                     </ul>
                 </li>
-            </sec:authorize>
 
-            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        <spring:message code="Reactivar" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/reactivacion/ListaReactivados" htmlEscape="true "/>">
+                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                <spring:message code="Reactivar" /> </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-user-times" aria-hidden="true"></i>
@@ -136,22 +151,7 @@
                     </ul>
                 </li>
             </sec:authorize>
-            <!--
-            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
-                <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-user-plus" aria-hidden="true"></i>
-                        <spring:message code="Reactivar" /></a>
-                    <ul class="nav-dropdown-items">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<spring:url value="/reactivacion/ListaReactivados" htmlEscape="true "/>">
-                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                                <spring:message code="Reactivar" /> </a>
-                        </li>
-                    </ul>
-                </li>
-            </sec:authorize>
-
+ <!--
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
@@ -172,7 +172,7 @@
                 </li>
             </sec:authorize>
             -->
-            <sec:authorize access="hasRole('ROLE_DOM')">
+            <sec:authorize access="hasRole('ROLE_ROOT')">
                 <li class="nav-item nav-dropdown Domicilio">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-home" aria-hidden="true"></i>
