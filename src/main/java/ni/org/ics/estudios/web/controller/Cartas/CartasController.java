@@ -152,8 +152,8 @@ public class CartasController {
                     map.put("CFamilia", "");
                 }
                 map.put("estudios", participantesCodigo.getEstudio());
-                map.put("tutor", procesos.getTutor());
-                map.put("relacionFam",procesos.getRelacionFam().toString());
+                map.put("tutor", participante.getTutor());
+                map.put("relacionFam",participante.getRelacionFamiliarTutor());
             }
             map.put("codigo", participante.getCodigo().toString());
             map.put("nombre", participante.getNombreCompleto());

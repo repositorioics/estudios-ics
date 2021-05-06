@@ -1157,7 +1157,7 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase(procesos.getTutor(),mia));
+        cell = new PdfPCell(new Phrase(obj.getParticipante().getTutor(),mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
@@ -1170,7 +1170,7 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase(this.getDescripcionCatalogoScan(procesos.getRelacionFam().toString().toUpperCase(),"CP_CAT_RFTUTOR"),mia));
+        cell = new PdfPCell(new Phrase(this.getDescripcionCatalogoScan(obj.getParticipante().getRelacionFamiliarTutor().toUpperCase(),"CP_CAT_RFTUTOR"),mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);

@@ -221,10 +221,10 @@ public class ReportesPdfService {
                     jefeFamilia = jefeFamilia + " " + participante.getCasa().getApellido2JefeFamilia().toUpperCase();
                 dgp.setJefeFamilia(jefeFamilia);
 
-                dgp.setTutor(procesos.getTutor());
+                dgp.setTutor(participante.getTutor());
 
-                if (procesos.getRelacionFam() != null)
-                    messageResource = this.getMensajeByCatalogAndCatKey(procesos.getRelacionFam().toString(), "CP_CAT_RFTUTOR");
+                if (participante.getRelacionFamiliarTutor() != null)
+                    messageResource = this.getMensajeByCatalogAndCatKey(participante.getRelacionFamiliarTutor(), "CP_CAT_RFTUTOR");
                 if (messageResource != null) dgp.setRelFamTutor(messageResource.getSpanish());
 
                 String madre = participante.getNombre1Madre().toUpperCase();

@@ -43,6 +43,12 @@ public class Participante extends BaseMetaData implements Auditable {
     private String apellido1Madre;
     private String apellido2Madre;
     private Casa casa;
+    //Agregar datos de tutor
+    private String nombre1Tutor;
+    private String nombre2Tutor;
+    private String apellido1Tutor;
+    private String apellido2Tutor;
+    private String relacionFamiliarTutor;
 
 	@Id
 	@Column(name = "CODIGO", nullable = false, length = 6)
@@ -191,6 +197,51 @@ public class Participante extends BaseMetaData implements Auditable {
         this.casa = casa;
     }
 
+    @Column(name = "NOMBRE1_TUTOR", length = 100)
+    public String getNombre1Tutor() {
+        return nombre1Tutor;
+    }
+
+    public void setNombre1Tutor(String nombre1Tutor) {
+        this.nombre1Tutor = nombre1Tutor;
+    }
+
+    @Column(name = "NOMBRE2_TUTOR", length = 100)
+    public String getNombre2Tutor() {
+        return nombre2Tutor;
+    }
+
+    public void setNombre2Tutor(String nombre2Tutor) {
+        this.nombre2Tutor = nombre2Tutor;
+    }
+
+    @Column(name = "APELLIDO1_TUTOR", length = 100)
+    public String getApellido1Tutor() {
+        return apellido1Tutor;
+    }
+
+    public void setApellido1Tutor(String apellido1Tutor) {
+        this.apellido1Tutor = apellido1Tutor;
+    }
+
+    @Column(name = "APELLIDO2_TUTOR", length = 100)
+    public String getApellido2Tutor() {
+        return apellido2Tutor;
+    }
+
+    public void setApellido2Tutor(String apellido2Tutor) {
+        this.apellido2Tutor = apellido2Tutor;
+    }
+
+    @Column(name = "RELACION_FAMILIAR", nullable = true, length = 10)
+    public String getRelacionFamiliarTutor() {
+        return relacionFamiliarTutor;
+    }
+
+    public void setRelacionFamiliarTutor(String relacionFamiliarTutor) {
+        this.relacionFamiliarTutor = relacionFamiliarTutor;
+    }
+
     @Transient
     @JsonIgnore
     public String getEdad(){
@@ -258,6 +309,17 @@ public class Participante extends BaseMetaData implements Auditable {
         return nombreCompleto;
     }
 
+    @Transient
+    @JsonIgnore
+    public String getTutor(){
+        String tutor = " ";
+        if (this.getNombre1Tutor()!=null) tutor = this.getNombre1Tutor();
+        if (this.getNombre2Tutor()!=null) tutor = tutor + " "+  this.getNombre2Tutor();
+        if (this.getApellido1Tutor()!=null) tutor = tutor +" "+ this.getApellido1Tutor();
+        if (this.getApellido2Tutor()!=null) tutor = tutor + " "+  this.getApellido2Tutor();
+
+        return tutor;
+    }
 
     @Override
     public boolean isFieldAuditable(String fieldname) {

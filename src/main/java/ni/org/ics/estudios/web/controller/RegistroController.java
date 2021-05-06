@@ -106,8 +106,8 @@ public class RegistroController {
             if (participante.getApellido2Madre() != null)
                 madre = madre + " " + participante.getApellido2Madre().toUpperCase();
             historialDTO.setNombreCompletoMadre(madre);
-            historialDTO.setTutor(procesos.getTutor());
-            historialDTO.setRelacionFamTutor(procesos.getRelacionFam().toString());
+            historialDTO.setTutor(participante.getTutor());
+            historialDTO.setRelacionFamTutor(participante.getRelacionFamiliarTutor());
             historialDTO.setEstudios(procesos.getEstudio());
             historialDTO.setIsPbmc(procesos.getPbmc());
             historialDTO.setIsPaxgene(procesos.getPaxgene());

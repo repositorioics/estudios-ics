@@ -90,8 +90,7 @@ public class RetiroController {
             Participante participante2 = this.retiroservice.getParticipante(parametro);
             String NombreTutor ="";
             if (participante2 != null){
-                ParticipanteProcesos procesos = participanteProcesosService.getParticipante(parametro);
-                NombreTutor = procesos.getTutor();
+                NombreTutor = participante2.getTutor();
             }
             if (participante != null) {
                 String estudio = participante.getEstudios();

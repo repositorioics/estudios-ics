@@ -50,13 +50,13 @@ public class ParticipanteProcesos implements Auditable {
 	private String datosParto;
 	private String mi;
 	private String casaCHF;
-    private Integer relacionFam;
+    //private Integer relacionFam;
     private Integer cuantasPers;
     private String posZika;
     private String enCasaChf;
     private String enCasaSa;
     private String encPartSa;
-    private String tutor;
+    //private String tutor;
     private String consSa;
     private String coordenadas; //cambio de domicilio
     private String obsequioChf;
@@ -341,7 +341,7 @@ public class ParticipanteProcesos implements Auditable {
 	public void setCasaCHF(String casaCHF) {
 		this.casaCHF = casaCHF;
 	}
-
+/*
     @Column(name = "relacion_fam", nullable = false, length = 1)
     public Integer getRelacionFam() {
         return relacionFam;
@@ -350,7 +350,7 @@ public class ParticipanteProcesos implements Auditable {
     public void setRelacionFam(Integer relacionFam) {
         this.relacionFam = relacionFam;
     }
-
+*/
     @Column(name = "cuantas_personas", nullable = false, length = 1)
     public Integer getCuantasPers() {
         return cuantasPers;
@@ -395,7 +395,7 @@ public class ParticipanteProcesos implements Auditable {
     public void setEncPartSa(String encPartSa) {
         this.encPartSa = encPartSa;
     }
-
+/*
     @Column(name = "tutor", nullable = true, length = 255)
     public String getTutor() {
         return tutor;
@@ -404,7 +404,7 @@ public class ParticipanteProcesos implements Auditable {
     public void setTutor(String tutor) {
         this.tutor = tutor;
     }
-
+*/
     @Column(name = "cons_sa", nullable = true, length = 2)
     public String getConsSa() {
         return consSa;
