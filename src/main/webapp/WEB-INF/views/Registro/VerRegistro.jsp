@@ -956,7 +956,7 @@
         })
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                //console.log(data);
+                console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
@@ -1110,13 +1110,15 @@
                                 ffallecido = '<h3> <span class="badge badge-danger"> '+ datefallecido.toUpperCase() +'</span> </h3>';
                             }
                             var datestring =  ("0" + fr.getDate()).slice(-2) + "/" + ("0"+(fr.getMonth()+1)).slice(-2) + "/" + fr.getFullYear();
+                            var comunicador = data.retiroList[i].quiencomunica == "" ? "-" : data.retiroList[i].quiencomunica;
+                            var observacion = ( data.retiroList[i].observaciones == "") ? "-":  data.retiroList[i].observaciones;
                             table.row.add([
                                 getCode,
                                 datestring,
-                                data.retiroList[i].quiencomunica,
+                                comunicador.toUpperCase(),
                                 relacion.toUpperCase(),
                                 data.retiroList[i].descripcionretiro.toUpperCase(),
-                                data.retiroList[i].observaciones,
+                               observacion.toUpperCase(),
                                 data.retiroList[i].estudioretirado.toUpperCase(),
                                 ffallecido
                             ]).draw( false );

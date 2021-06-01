@@ -138,10 +138,12 @@ public class RegistroController {
                 retirodto.setFecharetiro(auxiliar.getFecharetiro());
                 retirodto.setMedicosupervisor(auxiliar.getMedicosupervisor());
                 retirodto.setMotivo(auxiliar.getMotivo());
-                retirodto.setObservaciones(auxiliar.getObservaciones());
+                String obs = auxiliar.getObservaciones() == null ? "Ninguna" : auxiliar.getObservaciones();
+                retirodto.setObservaciones(obs);
                 retirodto.setOtrosmotivo(auxiliar.getOtrosmotivo());
                 retirodto.setPersonadocumenta(auxiliar.getPersonadocumenta());
-                retirodto.setQuiencomunica(auxiliar.getQuiencomunica());
+                String comunicador = auxiliar.getQuiencomunica() == null ? "Ninguno": auxiliar.getQuiencomunica();
+                retirodto.setQuiencomunica(comunicador);
                 retirodto.setRelfam(auxiliar.getRelfam());
                 retirodto.setCodigo_participante(auxiliar.getParticipante().getCodigo());
                 Razones_Retiro objRazon = this.retiroservice.getRazonRetiro(auxiliar.getMotivo());
