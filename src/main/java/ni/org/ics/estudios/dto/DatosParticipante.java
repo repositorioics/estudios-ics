@@ -32,6 +32,7 @@ public class DatosParticipante {
     private Integer estPart;
     private String tutor;
     private String relacionFamTutor;
+    private String cod_casaCHF;
 
     public Integer getCodigo() {
         return codigo;
@@ -223,5 +224,13 @@ public class DatosParticipante {
 
     public void setRelacionFamTutor(String relacionFamTutor) {
         this.relacionFamTutor = relacionFamTutor;
+    }
+
+    public String getCod_casaCHF() {
+        return cod_casaCHF;
+    }
+
+    public void setCod_casaCHF(String cod_casaCHF) {
+        this.cod_casaCHF = cod_casaCHF;
     }
 }

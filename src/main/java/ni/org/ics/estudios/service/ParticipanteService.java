@@ -186,11 +186,24 @@ public class ParticipanteService {
 
     public List<Participante> getParticipanteByNomApellido(String nombre1, String apellido1){
         Session session = sessionFactory.getCurrentSession();
-        Integer menor = 30000;
-        Query query = session.createQuery("from Participante p where p.nombre1 like :nombre1 or p.apellido1 like :apellido1 and p.codigo < :menor");
+        Integer a=1;
+        Integer b=20000;
+        Query query = session.createQuery("from Participante p where p.codigo >=:a and p.codigo <=:b and p.nombre1 like :nombre1 or p.apellido1 like :apellido1");
         query.setParameter("nombre1", '%' + nombre1 + '%');
         query.setParameter("apellido1", '%' + apellido1 + '%');
-        query.setParameter("menor", menor);
+        query.setInteger("a", a);
+        query.setInteger("b", b);
+        return query.list();
+    }
+    // Metodo para obtener
+    public List<DatosParticipante> getAllParticipantes(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select p.codigo as codigo, p.nombre1 as nombre1, p.nombre2 as nombre2,  p.apellido1 as apellido1, p.apellido2 as apellido2, p.sexo as sexo, p.fechaNac as fechaNac, pp.casaCHF as cod_casaCHF, " +
+                " p.nombre1Padre as nombre1Padre, p.nombre2Padre as nombre2Padre, p.apellido1Padre as apellido1Padre, p.apellido2Padre as apellido2Padre, p.nombre1Madre as nombre1Madre, p.nombre2Madre as nombre2Madre, " +
+                "p.apellido1Madre as apellido1Madre, p.apellido2Madre as apellido2Madre, c.codigo as codigoCasa, b.codigo as codigoBarrio, b.nombre as nombreBarrio, c.direccion as direccion, c.manzana as manzana, pp.estudio as estudios, pp.estPart as estPart, " +
+                "pp.tutor as tutor, coalesce((select spanish from MessageResource where catKey = cast(pp.relacionFam as string) and catRoot = 'CP_CAT_RFTUTOR'), 'Sin Relac Familiar') as relacionFamTutor " +
+                "from Participante p inner join p.casa c inner join c.barrio b, ParticipanteProcesos pp where p.codigo = pp.codigo ");
+        query.setResultTransformer(Transformers.aliasToBean(DatosParticipante.class));
         return query.list();
     }
 

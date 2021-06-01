@@ -795,7 +795,7 @@
         </div>
         <!-- /.conainer-fluid -->
     </div>
-
+    <!-- Modal -->
     <div id="exampleModal" class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -831,6 +831,8 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+
     <!-- /.conainer-fluid -->
 </div>
 </div>
@@ -895,14 +897,10 @@
             paging: true,
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
-            },"columnDefs": [
-                {"className": "text-center",
-                 "targets": "_all"
-                },
-                { width: "10px", targets: 0 },
-                { width: "10px", targets: 0 }
-
-            ],
+            },"columnDefs": [{
+                "className": "text-center",
+                "targets": "_all"
+                }],
             initComplete: function () {
                 this.api().columns().every( function () {
                     var that = this;
@@ -958,7 +956,8 @@
         })
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                console.log(data);
+                //console.log(data);
+                LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
                     swal("Error!","Código no encontrado","error");
@@ -1191,10 +1190,10 @@
         function imprimir(strBarCodes,inputValue){
             var copia = parseInt(inputValue);
             $.getJSON("http://localhost:13001/print", { barcodes: strBarCodes, copias: copia, ajax:'false' }, function (data) {
-                console.log(data);
+                //console.log(data);
                 toastr.success("etiquetas impresas");
             }).fail(function (jqXHR) {
-                console.log(jqXHR);
+                //console.log(jqXHR);
                 if (jqXHR.status!=200 && jqXHR.status!=0) {
                     toastr.error("error al imprimir etiquetas","Error",{timeOut: 0});
                 }
@@ -1208,11 +1207,13 @@
             autoWidth: true
         });
 
+        /* Metodo para vizualizar participantes por casa pediatrica*/
         $('#VerAll').on('click', function(){
             const codCasa = $('#idCasa').text();
             const idParticipante = $('#idParticipante').text();
             if( !isNaN(codCasa) || codCasa != null ){
                 $.getJSON(parametros.participantsByCodeCasaUrl,{casaCode: codCasa, codParticipante: idParticipante, ajax:'true'}, function(data){
+                    console.log(data);
                     tableParticipantCasa.clear().draw( false );
                     $.each(data, function(i, item) {
                         var cPediatrica = (data[i].codCasaPediatrica);
@@ -1346,6 +1347,11 @@
         $("#tblParticipantes tbody").on("click", ".btnSendId",function(){
             var id = $(this).data('id');
             searchParticipante(id);
+            debugger;
+            $("#one").addClass("active show");
+            $("#one-tab").addClass("active");
+            $("#three-tab").removeClass("active");
+            $("#three").removeClass("active");
         });
         $( "#nombre1" ).autocomplete({
             delay:100,
@@ -1396,6 +1402,40 @@
                 event.preventDefault();
             }
         });
+
+
+        function LimpiarCtrls(){
+            $("#idParticipante").text("");
+
+            $("#estudios").text("");
+            $("#fnac").text("");
+            $("#pbmc2").text("");
+            $("#paxgene2").text("");
+            $("#idCasa").text("");
+            $("#CodigoCasaFamilia").text("");
+            $("#sexo").text("");
+            $("#edad").text("");
+            $("#direc").text("");
+            $("#barrio").text("");
+            $("#manzana").text("");
+            $("#contador").text("");
+            $("#pyt").text("");
+            $("#lact").text("");
+            $("#enc_part").text("");
+            $("#cons_flu").text("");
+            $("#cons_Den").text("");
+            $("#vacuna").text("");
+            $("#enc_casa_cohorte").text("");
+            $("#enc_casa_sa").text("");
+            $("#jefe").text("");
+            $("#padre").text("");
+            $("#madre").text("");
+            $("#tutor").text("");
+            $("#relfam").text("");
+            $("#nombreComplete").text("");
+
+
+        }
 
     });
 

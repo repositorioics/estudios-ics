@@ -14,10 +14,11 @@ public class ParticipantesEnCasa implements Serializable {
     private String anios;
     private String meses;
     private String dias;
+    private String estado;
 
     public ParticipantesEnCasa(){}
 
-    public ParticipantesEnCasa(Integer codCasaPediatrica, String codCasaFamilia, Integer idParticipante, String nombreParticipante, String anios, String meses, String dias) {
+    public ParticipantesEnCasa(Integer codCasaPediatrica, String codCasaFamilia, Integer idParticipante, String nombreParticipante, String anios, String meses, String dias, String estado) {
         this.codCasaPediatrica = codCasaPediatrica;
         this.codCasaFamilia = codCasaFamilia;
         this.idParticipante = idParticipante;
@@ -25,6 +26,7 @@ public class ParticipantesEnCasa implements Serializable {
         this.anios = anios;
         this.meses = meses;
         this.dias = dias;
+        this.estado = estado;
     }
 
     public Integer getCodCasaPediatrica() {
@@ -81,6 +83,14 @@ public class ParticipantesEnCasa implements Serializable {
 
     public void setDias(String dias) {
         this.dias = dias;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
 

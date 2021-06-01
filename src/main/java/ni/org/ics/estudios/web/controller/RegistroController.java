@@ -178,8 +178,11 @@ public class RegistroController {
         List<ParticipantesEnCasa> listEnCasa = new ArrayList<ParticipantesEnCasa>();
         try{
             List<Participante>  listParticipantes =  participanteService.getParticipanteByCodeCasa(casaCode);
-            ParticipanteProcesos procesos = participanteProcesosService.getParticipante(codParticipante);
+            //ParticipanteProcesos procesos = participanteProcesosService.getParticipante(codParticipante);
             for (Participante participantes : listParticipantes){
+
+                ParticipanteProcesos procesos = participanteProcesosService.getParticipante(participantes.getCodigo());
+
                 ParticipantesEnCasa ParticipantEnCasa = new ParticipantesEnCasa();
                 ParticipantEnCasa.setCodCasaPediatrica(participantes.getCasa().getCodigo());
                 ParticipantEnCasa.setCodCasaFamilia(procesos.getCasaCHF());
@@ -199,6 +202,8 @@ public class RegistroController {
                 ParticipantEnCasa.setAnios(part1);
                 ParticipantEnCasa.setMeses(part2);
                 ParticipantEnCasa.setDias(part3);
+                String est = (procesos.getEstPart()== 1 ? "Activo" : "Retirado");
+                ParticipantEnCasa.setEstado(est.toUpperCase());
                 listEnCasa.add(ParticipantEnCasa);
            }
             return listEnCasa;
@@ -213,7 +218,7 @@ public class RegistroController {
     List<DatosParticipante> allParticipants()
             throws Exception{
         try {
-            List<DatosParticipante> lista = participanteService.getDatosParticipantes();
+            List<DatosParticipante> lista = participanteService.getAllParticipantes();
             return lista;
         }catch (Exception e){
             return null;
