@@ -3,6 +3,7 @@ package ni.org.ics.estudios.domain.covid19;
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
 	private String consentimiento;
     private String estActuales;
     private Date fechaIngreso;
+    private String indice; //el primero de la casa en el dia
 
 	@Id
     @Column(name = "CODIGO", length = 36, nullable = false)
@@ -112,6 +114,16 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
 
     public void setFechaIngreso(Date fechaInicio) {
         this.fechaIngreso = fechaInicio;
+    }
+
+    @Column(name = "INDICE", length = 1, nullable = false)
+    @JsonIgnore
+    public String getIndice() {
+        return indice;
+    }
+
+    public void setIndice(String indice) {
+        this.indice = indice;
     }
 
     @Override

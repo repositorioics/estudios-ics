@@ -107,10 +107,15 @@ var processCandidateCovid = function(){
 
             function processCandidate(){
                 $.post( parametros.saveUrl, form2.serialize(), function( data ){
-                        registro = JSON.parse(data);
-                        console.log(registro);
-                        if (registro.codigo === undefined) {
-                            toastr.error(data,"Error",{timeOut: 5000});
+                        //registro = JSON.parse(data);
+                        console.log(data);
+                    console.log(data.mensaje);
+                        if (data.codigo === undefined) {
+                            if (data.mensaje != undefined) {
+                                toastr.error(data.mensaje, "Error", {timeOut: 5000});
+                            } else {
+                                toastr.error(data, "Error", {timeOut: 5000});
+                            }
                         }
                         else {
                             toastr.success(parametros.successmessage);
@@ -118,9 +123,9 @@ var processCandidateCovid = function(){
                                 window.location.href = parametros.listaUrl;
                             }, 1500);
                         }
-                    },'text' )
+                    },'json' )
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        toastr.error("error:" + errorThrown);
+                            toastr.error("error:" + errorThrown);
                     });
             }
 

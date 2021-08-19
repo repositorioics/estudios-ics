@@ -63,7 +63,8 @@
                                         <th width="12%"><spring:message code="FIS" /></th>
                                         <th width="12%"><spring:message code="fif" /></th>
                                         <th width="12%"><spring:message code="consentimiento" /></th>
-                                        <th width="16%"><spring:message code="actions" /></th>
+                                        <th width="8%"><spring:message code="index" /></th>
+                                        <th width="8%"><spring:message code="actions" /></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -90,6 +91,16 @@
                                             <td><fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /></td>
                                             <td><fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /></td>
                                             <td><c:out value="${l.consentimiento}" /></td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${l.indice=='1'}">
+                                                        <spring:message code="CHF_CAT_SINO_SI" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <spring:message code="CHF_CAT_SINO_NO" />
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
                                             <td align="center">
                                                 <c:choose>
                                                     <c:when test="${l.pasive=='1'}">

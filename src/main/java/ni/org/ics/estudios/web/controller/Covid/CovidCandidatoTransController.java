@@ -96,10 +96,14 @@ public class CovidCandidatoTransController {
             , @RequestParam( value="fis", required=true, defaultValue="" ) String fis
             , @RequestParam( value = "fechaIngreso", required = true, defaultValue = "") String fechaIngreso
 
-    )throws Exception{
-        try{
+    )throws Exception {
+        try {
             CandidatoTransmisionCovid19 candidatoTransmisionCovid19 = this.covidService.getCandidatoTransmisionCovid19(codigo);
-            if (candidatoTransmisionCovid19==null) {
+            Date dFechaIngreso = DateUtil.StringToDate(fechaIngreso, "dd/MM/yyyy");
+            if (candidatoTransmisionCovid19 == null) {
+                if (this.covidService.existeCandidatoTransmisionCovid19(codigoParticipante, dFechaIngreso))
+                    return JsonUtil.createJsonResponse("Candidato ya existe registrado con ésta fecha de ingreso");
+
                 candidatoTransmisionCovid19 = new CandidatoTransmisionCovid19();
                 candidatoTransmisionCovid19.setCodigo(StringUtil.getCadenaAlfanumAleatoria(36, true));
                 candidatoTransmisionCovid19.setDeviceid("server");
@@ -109,25 +113,32 @@ public class CovidCandidatoTransController {
                 candidatoTransmisionCovid19.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 candidatoTransmisionCovid19.setCasaCHF(casaCHF);
                 candidatoTransmisionCovid19.setConsentimiento("PENDIENTE");
+                //si es el primero del dia para la casa se registra como candidato. Brenda, 18/8/2021
+                if (this.covidService.candidatoTransmisionCovid19Indice(casaCHF)) {
+                    candidatoTransmisionCovid19.setIndice("1");
+                }
             }
 
+
             ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigoParticipante);
-            if (procesos!=null)
+            if (procesos != null)
                 candidatoTransmisionCovid19.setEstActuales(procesos.getEstudio());
 
             candidatoTransmisionCovid19.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
             candidatoTransmisionCovid19.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
-            candidatoTransmisionCovid19.setFechaIngreso(DateUtil.StringToDate(fechaIngreso, "dd/MM/yyyy"));
+            candidatoTransmisionCovid19.setFechaIngreso(dFechaIngreso);
             candidatoTransmisionCovid19.setPositivoPor(positivoPor);
             Participante participante = participanteService.getParticipanteByCodigo(codigoParticipante);
             candidatoTransmisionCovid19.setParticipante(participante);
             this.covidService.saveOrUpdateCandidatoTransmisionCovid19(candidatoTransmisionCovid19);
 
             return JsonUtil.createJsonResponse(candidatoTransmisionCovid19);
-        }catch (Exception e){
+
+
+        } catch (Exception e) {
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
-            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+            return new ResponseEntity<String>(json, HttpStatus.CREATED);
         }
     }
 

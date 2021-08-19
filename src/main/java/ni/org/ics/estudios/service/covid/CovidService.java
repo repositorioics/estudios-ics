@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -163,6 +164,21 @@ public class CovidService {
         Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' and v.codigo = :codigo");
         query.setParameter("codigo", codigo);
         return (CandidatoTransmisionCovid19)query.uniqueResult();
+    }
+
+    public boolean candidatoTransmisionCovid19Indice(String casaChf){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' and v.casaCHF = :casaCHF and date(v.recordDate) = current_date");
+        query.setParameter("casaCHF", casaChf);
+        return query.list().size() <= 0;
+    }
+
+    public boolean existeCandidatoTransmisionCovid19(Integer codigoParticipante, Date fechaIngreso){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' and v.participante.codigo = :codigoParticipante and date(v.fechaIngreso) = :fechaIngreso");
+        query.setParameter("codigoParticipante", codigoParticipante);
+        query.setParameter("fechaIngreso", fechaIngreso);
+        return query.list().size() > 0;
     }
 
     public List<CandidatoTransmisionCovid19> getCandidatosTransmisionCovid19(){
