@@ -43,7 +43,6 @@ var processCandidateCovid = function(){
             function search(){
                 $.getJSON( parametros.searchUrl , form1.serialize() , function( data )   {
                         //registro = JSON.parse(data);
-                        console.log(data);
                         if (data.mensaje != undefined) {
                             toastr.error(data.mensaje,"Error",{timeOut: 5000});
                             $("#casaCHF").val("");
@@ -106,17 +105,20 @@ var processCandidateCovid = function(){
             });
 
             function processCandidate(){
-                $.post( parametros.saveUrl, form2.serialize(), function( data ){
+                $.post( parametros.saveUrl, form2.serialize(), function( data, status ){
                         registro = JSON.parse(data);
-                        console.log(registro);
-                        if (registro.codigo === undefined) {
-                            toastr.error(data,"Error",{timeOut: 5000});
-                        }
-                        else {
+                        if(registro.mensaje !=null){
+                            toastr.error(registro.mensaje,"Error",{timeOut: 6000});
+                         }else if(registro.tienemaspositivos == true) {
                             toastr.success(parametros.successmessage);
                             window.setTimeout(function () {
-                                window.location.href = parametros.listaUrl;
-                            }, 1500);
+                                window.location.href = parametros.detailsOPositivosUrl +"/"+registro.codigo;
+                            }, 1100);
+                        }else{
+                            toastr.success(parametros.successmessage);
+                            window.setTimeout(function () {
+                                window.location.href = parametros.FormUrl;
+                            }, 1100);
                         }
                     },'text' )
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {

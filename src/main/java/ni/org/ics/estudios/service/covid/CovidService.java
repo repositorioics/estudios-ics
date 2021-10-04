@@ -2,15 +2,18 @@ package ni.org.ics.estudios.service.covid;
 
 //import ni.org.ics.estudios.domain.covid19.CasaCasoCovid19;
 import ni.org.ics.estudios.domain.covid19.*;
+import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cache.QueryResultsRegion;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -167,7 +170,7 @@ public class CovidService {
 
     public List<CandidatoTransmisionCovid19> getCandidatosTransmisionCovid19(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0'");
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' order by fechaIngreso asc ");
         return query.list();
     }
 
@@ -281,6 +284,105 @@ public class CovidService {
     public void saveOrUpdateCuestionarioCovid19(CuestionarioCovid19 cuestionario){
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(cuestionario);
+    }
+
+    //Verifico q no exista un indice para la casa familia con misma fecha
+    public Integer existeIndice(String cod_casaF, Date fi, Date ff){
+        Session session = sessionFactory.getCurrentSession();
+        Character indice='1';
+        Query query = session.createQuery("select count(c.indice) from CandidatoTransmisionCovid19 c where c.fechaIngreso between :fi and :ff and  c.casaCHF=:cod_casaF and c.indice=:indice");
+        query.setParameter("fi", fi);
+        query.setParameter("ff", ff);
+        query.setParameter("cod_casaF", cod_casaF);
+        query.setParameter("indice", indice);
+        Integer result = ((Long)query.iterate().next()).intValue();
+        return result;
+    }
+
+    // Obtengo los participantes por codigo casa CHF
+    public List<ParticipanteProcesos>obtenerParticipanteByCasaCHF(String casaChf){
+        Session session = sessionFactory.getCurrentSession();
+        String vacio="";
+        Query query = session.createQuery("from ParticipanteProcesos pp where pp.casaCHF=:casaChf and pp.estudio<>:vacio");
+        query.setParameter("casaChf",casaChf);
+        query.setParameter("vacio",vacio);
+        return query.list();
+    }
+
+    //Guardar o Actualizar covid_otros_positivos
+    public void saveOrUpdateOtrosPositivos(OtrosPositivosCovid otros){
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(otros);
+    }
+
+    // Verifica si existe en la tabla covid_otros_positivos
+    public boolean verificaSiExiste(Integer idparticipante, Date inicio, Date finale){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from OtrosPositivosCovid o where o.candidatoTransmisionCovid19.fechaIngreso between :inicio and :finale and o.candidatoTransmisionCovid19.participante.codigo=:idparticipante");
+        query.setParameter("idparticipante",idparticipante);
+        query.setParameter("inicio", inicio);
+        query.setParameter("finale", finale);
+        return query.list().size() > 0;
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean verificaCasoYaExiste(String codigo, Integer idparticipante){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from OtrosPositivosCovid  o where o.candidatoTransmisionCovid19.codigo=:codigo and o.codigo_participante=:idparticipante");
+        query.setParameter("codigo",codigo);
+        query.setParameter("idparticipante", idparticipante);
+        return query.list().size()>0;
+    }
+
+    // Obtener de la tabla covid_otros_positivos
+    public List<OtrosPositivosCovid> ObtenerOtrosPositivos(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from OtrosPositivosCovid o where o.pasive = '0' order by codigo desc ");
+        return query.list();
+    }
+    // Obtener caso por id
+    public OtrosPositivosCovid getOtrosPositivoTransmisionCovid19(Long codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from OtrosPositivosCovid v where v.pasive = '0' and v.codigo =:codigo");
+        query.setParameter("codigo", codigo);
+        return (OtrosPositivosCovid)query.uniqueResult();
+    }
+
+    // Verifica si no se ha cerrado la casa de familia.
+    @SuppressWarnings("unchecked")
+    public boolean getCasoEsActivo(String casaChf){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CasoCovid19 cc where cc.casa.codigoCHF =:casaChf and cc.inactivo ='0' and cc.fechaInactivo =null ");
+        query.setParameter("casaChf", casaChf);
+        return query.list().size()>0;
+    }
+
+    public boolean VerificarSiCasoActivoPorFecha(String casaChf, Date finicio, Date ffin){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CasoCovid19 cc where cc.fechaIngreso between :finicio and :ffin and cc.casa.codigoCHF=:casaChf and cc.inactivo='0' and fechaInactivo=null ");
+        query.setParameter("casaChf",casaChf);
+        query.setParameter("finicio",finicio);
+        query.setParameter("ffin",ffin);
+        return query.list().size()>0;
+    }
+
+    // Capturar el Caso indice en la tabla covid_candidato_transmision
+    public CandidatoTransmisionCovid19 getIdCandidatoTransmisionCovid19(  Date fi, Date ff,Integer idparticipante,String casaChf){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 c where c.fechaIngreso between :fi and :ff and c.participante.codigo=:idparticipante and c.casaCHF=:casaChf");
+        query.setParameter("fi",fi);
+        query.setParameter("ff",ff);
+        query.setParameter("idparticipante",idparticipante);
+        query.setParameter("casaChf",casaChf);
+        return (CandidatoTransmisionCovid19) query.uniqueResult();
+    }
+
+
+    public CandidatoTransmisionCovid19 getByIdCasoIndice(String codigoCaso){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 c where c.codigo=:codigoCaso");
+        query.setParameter("codigoCaso", codigoCaso);
+        return (CandidatoTransmisionCovid19) query.uniqueResult();
     }
 
 }

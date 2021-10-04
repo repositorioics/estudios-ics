@@ -37,6 +37,7 @@
         <c:set var="confirmar"><spring:message code="confirm" /></c:set>
         <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
         <div class="container-fluid">
+            <div class="animated fadeIn"></div>
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-list-alt"></i> <spring:message code="covid19.positives" /> - <spring:message code="covid19.participants.list" />
@@ -73,6 +74,9 @@
                                             var="disableUrl">
                                     <spring:param name="codigo" value="${parti.codigoCasoParticipante}*${parti.participante.codigo}" />
                                 </spring:url>
+                                <spring:url value="/covid/otrosPositivosCovid/{codigoCaso}" var="addOtrosPositivosUrl">
+                                    <spring:param name="codigoCaso" value="${parti.codigoCaso.codigoCaso}*${parti.participante.codigo}" />
+                                </spring:url>
                                 <tr>
                                     <c:set var="edadParts" value="${fn:split(parti.participante.edad, '/')}" />
                                     <td>${parti.participante.codigo}</td>
@@ -96,6 +100,16 @@
                                     <td> <fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /> </td>
                                     <td> <fmt:formatDate value="${parti.fif}" pattern="dd/MM/yyyy" /> </td>
                                     <td align="center">
+                                          <c:if test="${casoCovid19 eq '0'}">
+                                        <c:choose>
+                                        <c:when test="${parti.pasive=='1' or parti.enfermo eq 'S' or parti.enfermo eq 'I'}">
+                                            <button  title="<spring:message code="disable" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-user-plus"></i></button>
+                                        </c:when>
+                                            <c:otherwise>
+                                                <a title="<spring:message code="more" /> <spring:message code="covid19.candidates" />" href="${fn:escapeXml(addOtrosPositivosUrl)}" class="btn btn-outline-warning btn-sm"><i class="fa fa-user-plus"></i></a>
+                                            </c:otherwise>
+                                        </c:choose>
+
                                         <c:choose>
                                             <c:when test="${parti.pasive=='1' or parti.enfermo eq 'S' or parti.enfermo eq 'I'}">
                                                 <button title="<spring:message code="disable" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-trash-o"></i></button>
@@ -104,6 +118,7 @@
                                                 <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-primary btn-sm desact"><i class="fa fa-trash-o"></i></a>
                                             </c:otherwise>
                                         </c:choose>
+                                          </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -113,6 +128,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+            
             <div class="modal fade" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">

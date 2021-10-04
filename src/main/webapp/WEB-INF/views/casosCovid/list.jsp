@@ -41,6 +41,7 @@
             <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
             <spring:url value="/covid/closeCase" var="closeUrl"/>
             <div class="container-fluid">
+                <div class="animated fadeIn">
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-list-alt"></i> <spring:message code="covid19.positives" />
@@ -84,6 +85,9 @@
                                                     var="participantsUrl">
                                             <spring:param name="codigo" value="${l.codigoCaso.codigoCaso}" />
                                         </spring:url>
+                                        <spring:url value="/super/covid/otrosPositivosCovid/{codigo}" var="addOtrosPositivosUrl">
+                                            <spring:param name="codigo" value="${l.codigoCaso.codigoCaso}" />
+                                        </spring:url>
                                         <tr>
                                             <td><c:out value="${l.participante.codigo}" /></td>
                                             <td><c:out value="${l.codigoCaso.casa.codigoCHF}" /></td>
@@ -116,13 +120,13 @@
                                             </td>
                                         </tr>
                                     </c:forEach>
-
                                     </tbody>
                                 </table>
 
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
              </div>
 
@@ -211,7 +215,7 @@
 </spring:url>
 <script>
     jQuery(document).ready(function() {
-        $('#lista_casos').DataTable({
+        var table = $('#lista_casos').DataTable({
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             }
@@ -281,6 +285,17 @@
 
 
         }
+
+        $('#lista_casos thead tr').clone(true).appendTo( '#lista_casos thead' );
+        $('#lista_casos thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table.column(i).search( this.value ).draw();
+                }
+            });
+        });
 
     });
 
