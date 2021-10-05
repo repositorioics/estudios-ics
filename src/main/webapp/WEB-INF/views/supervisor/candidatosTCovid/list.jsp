@@ -21,6 +21,7 @@
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
     <title></title>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../../fragments/bodyHeader.jsp" />
@@ -38,33 +39,41 @@
             <c:set var="confirmar"><spring:message code="confirm" /></c:set>
             <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
             <div class="container-fluid">
-                <div class="card">
+                <div class="animated fadeIn">
+                    <div>
+                        <div class="card">
                     <div class="card-header">
                         <i class="fa fa-list-alt"></i> <spring:message code="covid19.candidates.list" />
                     </div>
                     <div class="card-block">
+                        <div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-xs-6 col-xl-4">
                                 <a href="<spring:url value="/super/covid/saveCandidateForm" htmlEscape="true"/>" class="btn btn-success btn-lg">
                                     <i class="fa fa-plus" aria-hidden="true"></i><spring:message code="add" /> <spring:message code="candidate" /> </a>
                             </div>
+                            <div class="col-xs-6 col-xl-4"></div>
+                            <div class="col-xs-6 col-xl-4 text-right">
+                                <a href="<spring:url value="/super/covid/otherPositive" htmlEscape="true"/>" class="btn btn-info  btn-lg" style="; width:233px">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> <spring:message code="edit" /> <spring:message code="positive" /> </a>
+                            </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="">
                             <br/>
                             <hr/>
                             <div class="table-responsive">
                                 <table id="lista_candidatos" class="table table-hover table-bordered">
                                     <thead>
                                     <tr>
-                                        <th width="12%"><spring:message code="candidate" /></th>
-                                        <th width="12%"><spring:message code="chf.house" /></th>
-                                        <th width="12%"><spring:message code="logindate" /></th>
-                                        <th width="12%"><spring:message code="lbl.positive.by" /></th>
-                                        <th width="12%"><spring:message code="FIS" /></th>
-                                        <th width="12%"><spring:message code="fif" /></th>
-                                        <th width="12%"><spring:message code="consentimiento" /></th>
-                                        <th width="8%"><spring:message code="index" /></th>
-                                        <th width="8%"><spring:message code="actions" /></th>
+                                        <th hidden="hidden" class="text-center" width="12%"><spring:message code="code" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="candidate" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="chf.house" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="logindate" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="lbl.positive.by" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="FIS" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="fif" /></th>
+                                        <th class="text-center" width="12%"><spring:message code="consentimiento" /></th>
+                                        <th class="text-center" width="16%"><spring:message code="actions" /></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -77,11 +86,22 @@
                                                     var="editUrl">
                                             <spring:param name="codigo" value="${l.codigo}" />
                                         </spring:url>
+                                        <spring:url value="/super/covid/otrosPositivosCovid/{codigo}" var="addOtrosPositivosUrl">
+                                            <spring:param name="codigo" value="${l.codigo}" />
+                                        </spring:url>
                                         <tr>
-                                            <td><c:out value="${l.participante.codigo}" /></td>
-                                            <td><c:out value="${l.casaCHF}" /></td>
-                                            <td><fmt:formatDate value="${l.fechaIngreso}" pattern="dd/MM/yyyy" /></td>
-                                            <td>
+                                            <td hidden="hidden">${l.codigo}</td>
+                                            <c:choose>
+                                            <c:when test="${l.pasive=='1'}">
+                                            <td class="text-center"><span  style="text-decoration:line-through;" class="text-danger"><c:out value="${l.participante.codigo}" /></span> </td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td class="text-center"><c:out value="${l.participante.codigo}" /></td>
+                                            </c:otherwise>
+                                            </c:choose>
+                                            <td class="text-center"><c:out value="${l.casaCHF}" /></td>
+                                            <td class="text-center"><fmt:formatDate value="${l.fechaIngreso}" pattern="dd/MM/yyyy" /></td>
+                                            <td class="text-center">
                                                 <c:forEach items="${positivoPor}" var="cat">
                                                     <c:if test="${cat.catKey eq l.positivoPor}">
                                                         <c:out value="${cat.spanish}" />
@@ -90,37 +110,38 @@
                                             </td>
                                             <td><fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /></td>
                                             <td><fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /></td>
-                                            <td><c:out value="${l.consentimiento}" /></td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${l.indice=='1'}">
-                                                        <spring:message code="CHF_CAT_SINO_SI" />
+                                            <c:choose>
+                                                    <c:when test="${l.consentimiento eq 'ACEPTA'}">
+                                                            <td class="text-center"><span class="badge badge-success"><spring:message code="ACEPTA" /></span></td>
+                                                    </c:when>
+                                                    <c:when test="${l.consentimiento eq 'NO ACEPTA'}">
+                                                            <td class="text-center"><span class="badge badge-warning"><spring:message code="NO ACEPTA" /></span></td>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <spring:message code="CHF_CAT_SINO_NO" />
+                                                            <td class="text-center"><span class="badge badge-danger"><spring:message code="PENDIENTE" /></span></td>
                                                     </c:otherwise>
-                                                </c:choose>
-                                            </td>
+                                            </c:choose>
                                             <td align="center">
                                                 <c:choose>
                                                     <c:when test="${l.pasive=='1'}">
                                                         <button title="<spring:message code="edit" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-edit"></i></button>
-                                                        <button title="<spring:message code="disable" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-trash-o"></i></button>
+                                                        <button title="<spring:message code="disable" />" class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-trash-o"></i></button>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                        <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-primary btn-sm desact"><i class="fa fa-trash-o"></i></a>
+                                                        <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
                                         </tr>
                                     </c:forEach>
-
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
+                        </div>
+                    </div>
+                </div>
                     </div>
                 </div>
              </div>
@@ -160,6 +181,7 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+
         </div>
 </div>
 
@@ -184,6 +206,16 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
+<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
+<script src="${validateJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />
+<script src="${loadingButtonsJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script src="${jQValidationLoc}"></script>
+<spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
+<script src="${validateAMJs}" type="text/javascript"></script>
 
 <spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
@@ -205,16 +237,42 @@
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
 
+<spring:url value="/resources/js/libs/moment.js" var="moment" />
+<script type="text/javascript" src="${moment}"></script>
+
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 <script>
     jQuery(document).ready(function() {
-        $('#lista_candidatos').DataTable({
+        var table = $('#lista_candidatos').DataTable({
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             }
         });
+
+        $('#lista_candidatos thead tr').clone(true).appendTo( '#lista_candidatos thead' );
+        $('#lista_candidatos thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table.column(i).search( this.value ).draw();
+                }
+            });
+        });
+
+        $("#lista_candidatos tbody tr").on("click", ".btnModalOtros",function(){
+            var col0_value = [];
+            $("#lista_candidatos tbody tr").each(function(){
+                col0_value = table.row( this ).data()[0];
+            });
+           debugger;
+            $('#recipient-name').val('id: '+col0_value);
+            $('#exampleModal').modal('show');
+        });
+
+
     });
 
     if ("${deshabilitado}"){

@@ -43,7 +43,6 @@ var processCandidateCovid = function(){
             function search(){
                 $.getJSON( parametros.searchUrl , form1.serialize() , function( data )   {
                         //registro = JSON.parse(data);
-                        console.log(data);
                         if (data.mensaje != undefined) {
                             toastr.error(data.mensaje,"Error",{timeOut: 5000});
                             $("#casaCHF").val("");
@@ -106,26 +105,24 @@ var processCandidateCovid = function(){
             });
 
             function processCandidate(){
-                $.post( parametros.saveUrl, form2.serialize(), function( data ){
-                        //registro = JSON.parse(data);
-                        console.log(data);
-                    console.log(data.mensaje);
-                        if (data.codigo === undefined) {
-                            if (data.mensaje != undefined) {
-                                toastr.error(data.mensaje, "Error", {timeOut: 5000});
-                            } else {
-                                toastr.error(data, "Error", {timeOut: 5000});
-                            }
-                        }
-                        else {
+                $.post( parametros.saveUrl, form2.serialize(), function( data, status ){
+                        registro = JSON.parse(data);
+                        if(registro.mensaje !=null){
+                            toastr.error(registro.mensaje,"Error",{timeOut: 6000});
+                         }else if(registro.tienemaspositivos == true) {
                             toastr.success(parametros.successmessage);
                             window.setTimeout(function () {
-                                window.location.href = parametros.listaUrl;
-                            }, 1500);
+                                window.location.href = parametros.detailsOPositivosUrl +"/"+registro.codigo;
+                            }, 1100);
+                        }else{
+                            toastr.success(parametros.successmessage);
+                            window.setTimeout(function () {
+                                window.location.href = parametros.FormUrl;
+                            }, 1100);
                         }
-                    },'json' )
+                    },'text' )
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                            toastr.error("error:" + errorThrown);
+                        toastr.error("error:" + errorThrown);
                     });
             }
 

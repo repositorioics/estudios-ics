@@ -4,6 +4,8 @@ import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.audit.Auditable;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -30,7 +32,8 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
 	private String consentimiento;
     private String estActuales;
     private Date fechaIngreso;
-    private String indice; //el primero de la casa en el dia
+    private Character indice;
+    private boolean tienemaspositivos;
 
 	@Id
     @Column(name = "CODIGO", length = 36, nullable = false)
@@ -116,14 +119,23 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
         this.fechaIngreso = fechaInicio;
     }
 
-    @Column(name = "INDICE", length = 1, nullable = false)
-    @JsonIgnore
-    public String getIndice() {
+
+    @Column(name = "INDICE", length = 1,nullable = true)
+    public Character getIndice() {
         return indice;
     }
 
-    public void setIndice(String indice) {
+    public void setIndice(Character indice) {
         this.indice = indice;
+    }
+
+    @Transient
+    public boolean isTienemaspositivos() {
+        return tienemaspositivos;
+    }
+
+    public void setTienemaspositivos(boolean tienemaspositivos) {
+        this.tienemaspositivos = tienemaspositivos;
     }
 
     @Override

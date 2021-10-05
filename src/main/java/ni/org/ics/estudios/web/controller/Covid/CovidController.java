@@ -5,7 +5,9 @@ import ni.org.ics.estudios.domain.CartaConsentimiento;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.cohortefamilia.CasaCohorteFamilia;
 import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
+import ni.org.ics.estudios.domain.covid19.CandidatoTransmisionCovid19;
 import ni.org.ics.estudios.domain.covid19.CasoCovid19;
+import ni.org.ics.estudios.domain.covid19.OtrosPositivosCovid;
 import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
@@ -32,9 +34,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by ICS on 01/06/2020.
@@ -267,6 +273,7 @@ public class CovidController {
     public String obtenerParticipantesCaso(@PathVariable("codigo") String codigo, Model model) throws ParseException {
         logger.debug("Mostrando participantes de caso monitoreo intensivo en JSP");
         List<ParticipanteCasoCovid19> participantes = covidService.getParticipantesCasoCovid19ByCodigoCaso(codigo);
+        model.addAttribute("casoCovid19",participantes.get(0).getCodigoCaso().getInactivo());
         List<MessageResource> positivoPor = messageResourceService.getCatalogo("COVID_CAT_POSITIVO_POR");
         model.addAttribute("participantes",participantes);
         model.addAttribute("caso", participantes.get(0).getCodigoCaso());
@@ -339,6 +346,101 @@ public class CovidController {
 
         return redirecTo;
     }
+
+
+
+
+    ///covid/otrosPositivosCovid/00000000-75b3-19f8-ffff-ffff9d4bc42b*8152
+    @RequestMapping(value = "/otrosPositivosCovid/{codigoCaso}", method = RequestMethod.GET)
+    public String otrosPositivosCovid(Model model, @PathVariable("codigoCaso") String codigoCaso) throws Exception
+    {
+        try{
+           String string = codigoCaso;
+            String separador = Pattern.quote("*");
+            String[] parts = string.split(separador);
+            String part1 = parts[0]; // codigoCaso
+            String part2 = parts[1]; // codigo_participante
+            Integer codigo_participante = Integer.parseInt( part2 );
+            CasoCovid19 casoCovid19 = this.covidService.getCasoCovid19ByCodigo(part1); // aqui obtengo la fecha de ingreso de la tabla caso covid
+                String fechaIngreso = DateUtil.DateToString(casoCovid19.getFechaIngreso(), "dd/MM/yyyy");
+                Date finicio = DateUtil.StringToDate(fechaIngreso, "dd/MM/yyyy");
+                Date ffinal = DateUtil.StringToDate(fechaIngreso + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+                model.addAttribute("casoCovid19", casoCovid19);
+            ParticipanteCasoCovid19 participanteCasoCovid19 = this.covidService.getParticipanteIndiceCasoCovid19ByCodigoCaso(part1); // si es caso Indice de la tabla covid_participante_transmision
+            if (participanteCasoCovid19 != null) {
+                CandidatoTransmisionCovid19 indice = this.covidService.getIdCandidatoTransmisionCovid19(finicio,ffinal,participanteCasoCovid19.getParticipante().getCodigo(),casoCovid19.getCasa().getCodigoCHF());
+                model.addAttribute("indice", indice);
+                ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigo_participante);
+                model.addAttribute("procesos", procesos);
+                List<MessageResource> positivoPor = messageResourceService.getCatalogo("COVID_CAT_POSITIVO_POR");
+                model.addAttribute("positivoPor", positivoPor);
+                model.addAttribute("editando", false);
+                return "casosCovid/OtrosPositivosPorIndice";
+            }else{
+                return "404";
+            }
+        }
+        catch (Exception e){
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    // Guardar Otro Positivos /covid/saveOtrosPositivosTCovid
+    @RequestMapping( value="saveOtrosPositivosTCovid", method=RequestMethod.POST)
+    public ResponseEntity<String> saveOtrosPositivosTCovid(@RequestParam( value = "casoIndice",required = true ) String casoIndice
+            , @RequestParam( value = "idparticipante"       ,required = true  ) Integer idparticipante
+            , @RequestParam( value = "estudio"              ,required = true  ) String estudio
+            , @RequestParam( value = "positivoPor"          ,required = true  , defaultValue = "" ) String positivoPor
+            , @RequestParam( value = "fis"                  ,required = true  , defaultValue = "" ) String fis
+            , @RequestParam( value = "fif"                  ,required = false , defaultValue = "" ) String fif
+            , @RequestParam( value = "editando"             ,required = false , defaultValue = "" ) String editando
+            , @RequestParam( value = "casaChf"              ,required = true ) String casaChf
+            , @RequestParam( value = "fecha_ingreso"        ,required = true ) String fecha_ingreso
+    )throws Exception{
+        try{
+                Date fecha_ingreso_inicio = DateUtil.StringToDate(fecha_ingreso, "dd/MM/yyyy");
+                Date fecha_ingreso_final = DateUtil.StringToDate(fecha_ingreso + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+                // ** obtengo el caso indice **
+                CandidatoTransmisionCovid19 casitoIndice = this.covidService.getByIdCasoIndice(casoIndice);
+                if (!this.covidService.verificaSiExiste(idparticipante, fecha_ingreso_inicio, fecha_ingreso_final)){
+                    CandidatoTransmisionCovid19 candidatoTransmisionCovid19 = this.covidService.getCandidatoTransmisionCovid19(casoIndice);
+                    if (!this.covidService.verificaCasoYaExiste(casoIndice,idparticipante)) {
+                        OtrosPositivosCovid otros = new OtrosPositivosCovid();
+                        otros.setCandidatoTransmisionCovid19(candidatoTransmisionCovid19);
+                        otros.setCodigo_participante(idparticipante);
+                        otros.setEstActuales(estudio);
+                        otros.setCasaCHF(casaChf);
+                        otros.setPositivoPor(positivoPor);
+                        otros.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
+                        otros.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
+                        String nameComputer = InetAddress.getLocalHost().getHostName();
+                        otros.setDeviceid(nameComputer);
+                        otros.setEstado('1');
+                        otros.setPasive('0');
+                        otros.setRecordDate(new Date());
+                        otros.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        this.covidService.saveOrUpdateOtrosPositivos(otros);
+                        return JsonUtilcreateJsonResponse(otros);
+                    }else{
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("msj", "Registro ya existe!\n".concat("codigo del Caso Indice: ").concat(""+casitoIndice.getParticipante().getCodigo()));
+                        return JsonUtilcreateJsonResponse(map);
+                    }
+                }else{
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("msj", "Registro ya existe con Fecha de Ingreso del: ".concat(fecha_ingreso));
+                    return JsonUtilcreateJsonResponse(map);
+                }
+
+        }catch (Exception ex){
+            Gson gson = new Gson();
+            String json = gson.toJson(ex.toString());
+            return new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
     private ResponseEntity<String> JsonUtilcreateJsonResponse( Object o )
     {

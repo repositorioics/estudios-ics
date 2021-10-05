@@ -37,10 +37,14 @@
             </li>
         </ol>
         <spring:url value="/super/covid/saveCandidateTCovid" var="saveUrl"/>
+        <spring:url value="/super/covid/saveCandidateForm" var="FormUrl"/>
         <spring:url value="/super/covid/searchParticipant" var="searchUrl"/>
         <spring:url value="/super/covid/listCandidates/" var="listaUrl"/>
+        <spring:url value="/super/covid/detailsOPositivos" var="detailsOPositivosUrl"/>
+        <spring:url value="/super/covid/otrosPositivosCovid/" var="otrosPositivosUrl"/>
         <c:set var="successMessage"><spring:message code="process.success" /></c:set>
         <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
+        <spring:url value="/super/covid/otrosPositivosCovid" var="addOtrosPositivosUrl"/>
         <div class="container-fluid">
             <div class="card bg-dark">
                 <div class="card-header">
@@ -184,13 +188,43 @@
                                     </div>
                                 </div>
 
-                                <div class="form-actions fluid">
-                                    <div class="col-md-12">
-                                        <button id="guardar" type="submit" class="btn btn-primary btn-lg btn-ladda" data-style="expand-right">
-                                           <i class="fa fa-save" aria-hidden="true"></i> <spring:message code="save" /></button>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="chkCasoIndice"> </label>
+                                    <div class="col-sm-9">
+                                        <div class="form-check ml-2">
+                                            <c:choose>
+                                                <c:when test="${ind == true}">
+                                                    <input class="form-check-input" type="checkbox" id="chkCasoIndice" name="chkCasoIndice" checked="checked">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <input class="form-check-input" type="checkbox" id="chkCasoIndice" name="chkCasoIndice">
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <label class="form-check-label" for="chkCasoIndice">
+                                                <spring:message code="Es Caso Indice?" />
+                                            </label>
+                                        </div>
+                                    </div>
 
-                                        <a href="${fn:escapeXml(listaUrl)}" class="btn btn-warning btn-lg btn-ladda" data-style="expand-right">
-                                             <i class="fa fa-minus-circle" aria-hidden="true"></i><spring:message code="cancel" /></a>
+                                    <label class="form-control-label col-md-3" for="chkMasPositvo"> </label>
+                                    <div class="col-sm-9">
+                                        <div class="form-check ml-2">
+                                             <input class="form-check-input" type="checkbox" id="chkMasPositvo" name="chkMasPositvo">
+                                            <label class="form-check-label" for="chkMasPositvo">
+                                                <spring:message code="Existen otros Casos?" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label  class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-9">
+                                        <button id="guardar" type="submit" class="btn btn-primary btn-lg btn-ladda float-left" data-style="expand-right">
+                                            <i class="fa fa-save" aria-hidden="true"></i> <spring:message code="save" /></button>
+
+                                        <a href="${fn:escapeXml(listaUrl)}" class="btn btn-warning btn-lg btn-ladda float-right" data-style="expand-right">
+                                            <i class="fa fa-minus-circle" aria-hidden="true"></i> <spring:message code="cancel" /></a>
                                     </div>
                                 </div>
                             </form>
@@ -241,14 +275,20 @@
 <script>
     jQuery(document).ready(function(){
         var parameters = {
-            searchUrl : "${searchUrl}",
-            saveUrl: "${saveUrl}",
-            listaUrl: "${listaUrl}",
-            successmessage: "${successMessage}",
-            error: "${errorProcess}"
+            searchUrl               : "${searchUrl}",
+            saveUrl                 : "${saveUrl}",
+            listaUrl                : "${listaUrl}",
+            otrosPositivosUrl       : "${otrosPositivosUrl}",
+            successmessage          : "${successMessage}",
+            error                   : "${errorProcess}",
+            addOtrosPositivosUrl    : "${addOtrosPositivosUrl}",
+            detailsOPositivosUrl    : "${detailsOPositivosUrl}",
+            FormUrl                 : "${FormUrl}"
         };
         handleDatePickers("${lenguaje}");
         processCandidateCovid.init(parameters);
+
+        $("#participantCode").focus();
     })
 </script>
 </body>
