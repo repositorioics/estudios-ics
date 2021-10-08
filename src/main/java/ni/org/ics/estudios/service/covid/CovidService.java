@@ -400,4 +400,13 @@ public class CovidService {
         return (CandidatoTransmisionCovid19) query.uniqueResult();
     }
 
+    /**
+     * Obtiene todos los otros positivos asociados a los candidatos PENDIENTE para realizar tamizaje caso indice
+     * */
+    public List<OtrosPositivosCovid> getOtrosPositivosPendientesTransmisionCovid19(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select op from OtrosPositivosCovid op inner join op.candidatoTransmisionCovid19 v where op.pasive = '0' and v.pasive = '0' and v.consentimiento = 'PENDIENTE'");
+        return query.list();
+    }
+
 }

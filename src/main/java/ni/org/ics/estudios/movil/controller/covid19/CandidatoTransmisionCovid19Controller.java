@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.movil.controller.covid19;
 
 import ni.org.ics.estudios.domain.covid19.CandidatoTransmisionCovid19;
+import ni.org.ics.estudios.domain.covid19.OtrosPositivosCovid;
 import ni.org.ics.estudios.service.covid.CovidService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,5 +50,16 @@ public class CandidatoTransmisionCovid19Controller {
             }
         }
         return "Datos recibidos!";
+    }
+
+    @RequestMapping(value = "otrosPositivosCovid19", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<OtrosPositivosCovid> getOtrosPositivos(){
+        logger.info("Descargando toda la informacion de otros positivos estudio Transmision Covid19");
+        List<OtrosPositivosCovid> otrosPositivosCovidList = covidService.getOtrosPositivosPendientesTransmisionCovid19();
+        if (otrosPositivosCovidList == null){
+            logger.debug("Nulo");
+        }
+        return  otrosPositivosCovidList;
     }
 }

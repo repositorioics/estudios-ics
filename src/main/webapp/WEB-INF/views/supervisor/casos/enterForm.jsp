@@ -45,7 +45,7 @@
                         <div class="col-md-8">
                             <form action="#" autocomplete="off" id="search-participant-form" class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="form-control-label col-md-3" for="username"><spring:message code="participant.code" />
+                                    <label class="form-control-label col-md-3" for="participantCode"><spring:message code="participant.code" />
                                         <span class="required">*</span>
                                     </label>
                                     <div class="input-group col-md-9">

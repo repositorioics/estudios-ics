@@ -130,6 +130,7 @@ public class CandidatoTransmisionCovid19 extends BaseMetaData implements Auditab
     }
 
     @Transient
+    @JsonIgnore
     public boolean isTienemaspositivos() {
         return tienemaspositivos;
     }

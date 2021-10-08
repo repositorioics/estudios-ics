@@ -201,7 +201,7 @@
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
             color: #fff;
-            border-bottom: 3px solid #2cd07e;
+            border-bottom: 5px solid #eb290c;
         }
         .no-wrap td, .no-wrap th {
             white-space: nowrap;
@@ -435,7 +435,7 @@
                                 <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
                                 <tr>
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td hidden="hidden" class="text-center">
                                                 <span class="text-danger" style="text-decoration:line-through;"><c:out value="${l.codigo}" /></span>
                                             </td>
@@ -446,7 +446,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test ="${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test ="${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;"> <c:out value="${l.codigo_participante}" />  </span> </td>
                                         </c:when>
                                         <c:otherwise>
@@ -455,7 +455,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;"> <c:out value="${l.casaCHF}" />  </span> </td>
                                         </c:when>
                                         <c:otherwise>
@@ -463,7 +463,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <c:choose>
-                                        <c:when  test ="${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test ="${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;"> <fmt:formatDate value="${l.recordDate}" pattern="dd/MM/yyyy" />  </span> </td>
                                         </c:when>
                                         <c:otherwise>
@@ -472,7 +472,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;">
                                                 <c:forEach items="${positivoPor}" var="cat">
                                                     <c:if test="${cat.catKey eq l.positivoPor}">
@@ -492,7 +492,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;">
                                                 <fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /> </span>
                                             </td>
@@ -503,7 +503,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;">
                                                 <fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /> </span>
                                             </td>
@@ -514,7 +514,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when test = "${l.pasive eq '1'}">
                                             <td class="text-center"><span class="badge badge-danger"><spring:message code="SI" /></span></td>
                                         </c:when>
                                         <c:otherwise>
@@ -524,7 +524,7 @@
 
                                     <td align="center">
                                         <c:choose>
-                                            <c:when test="${l.pasive =='1'.charAt(0)}">
+                                            <c:when test="${l.pasive eq '1'}">
                                                 <button disabled="disabled" title="<spring:message code="edit" />" class="btn btn-outline-warning btn-sm" ><i class="fa fa-edit"></i></button>
                                                 <button disabled="disabled" title="<spring:message code="disable" />" class="btn btn-outline-danger btn-sm" ><i class="fa fa-trash-o"></i></button>
                                             </c:when>
