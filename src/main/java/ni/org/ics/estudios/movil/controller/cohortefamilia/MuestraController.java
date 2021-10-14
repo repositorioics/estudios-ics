@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,6 +85,7 @@ public class MuestraController {
         }else{
             List<Muestra> muestraList = Arrays.asList(muestras);
             for (Muestra muestra : muestraList){
+                muestra.setFechaRecibido(new Date());
                 muestraService.saveOrUpdate(muestra);
             }
         }

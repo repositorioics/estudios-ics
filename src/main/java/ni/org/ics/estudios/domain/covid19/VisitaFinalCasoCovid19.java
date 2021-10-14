@@ -2,6 +2,7 @@ package ni.org.ics.estudios.domain.covid19;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class VisitaFinalCasoCovid19 extends BaseMetaData implements Auditable {
 	private String estadoSalud;
 	private String faltoTrabajoEscuela;
 	private Integer diasFaltoTrabajoEscuela;
+    private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
 
     @Id
     @Column(name = "CODIGO_VISITA_FINAL", length = 36, nullable = false)
@@ -222,6 +224,16 @@ public class VisitaFinalCasoCovid19 extends BaseMetaData implements Auditable {
 	public void setDiasFaltoTrabajoEscuela(Integer diasFaltoTrabajoEscuela) {
 		this.diasFaltoTrabajoEscuela = diasFaltoTrabajoEscuela;
 	}
+
+    @JsonIgnore
+    @Column(name = "FECHA_RECIBIDO")
+    public Date getFechaRecibido() {
+        return fechaRecibido;
+    }
+
+    public void setFechaRecibido(Date fechaRecibido) {
+        this.fechaRecibido = fechaRecibido;
+    }
 
 	@Override
 	public String toString(){
