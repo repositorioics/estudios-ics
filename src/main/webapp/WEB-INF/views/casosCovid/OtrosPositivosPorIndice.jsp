@@ -291,20 +291,25 @@
                             <form name="frm_otros_positivos" id="frm_otros_positivos" class="mt-5" action="#" autocomplete="off">
 
                                 <div class="form-row" hidden="hidden">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="casoIndice"><spring:message code="cases.index" /></label>
                                         <input type="text" class="form-control" id="casoIndice" name="casoIndice" value="${indice.codigo}" readonly>
                                     </div>
 
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group col-md-2">
                                         <label for="editando"><spring:message code="editando" /></label>
                                         <input type="text" class="form-control" id="editando" name="editando" value="${editando}" readonly>
                                     </div>
 
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group col-md-2">
                                         <label for="fecha_ingreso"><spring:message code="fecha_ingreso" /></label>
                                         <input type="text" class="form-control" id="fecha_ingreso" name="fecha_ingreso"
                                                value="<fmt:formatDate value="${indice.fechaIngreso}" pattern="dd/MM/yyyy" />" readonly>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="CodigoCaso"><spring:message code="CodigoCaso" /></label>
+                                        <input type="text" class="form-control" id="CodigoCaso" name="CodigoCaso" value="${casoCovid19.codigoCaso}" readonly>
                                     </div>
 
                                 </div>

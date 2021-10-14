@@ -351,29 +351,42 @@ public class CovidController {
 
 
     ///covid/otrosPositivosCovid/00000000-75b3-19f8-ffff-ffff9d4bc42b*8152
-    @RequestMapping(value = "/otrosPositivosCovid/{codigoCaso}", method = RequestMethod.GET)
-    public String otrosPositivosCovid(Model model, @PathVariable("codigoCaso") String codigoCaso) throws Exception
+    @RequestMapping(value = "/otrosPositivosCovid/{codigoCaso}/{idparticpante}", method = RequestMethod.GET)
+    public String otrosPositivosCovid(Model model, @PathVariable("codigoCaso") String codigoCaso,
+                                      @PathVariable("idparticpante") String idparticpante) throws Exception
     {
         try{
-           String string = codigoCaso;
+           /* String string = codigoCaso;
             String separador = Pattern.quote("*");
             String[] parts = string.split(separador);
             String part1 = parts[0]; // codigoCaso
             String part2 = parts[1]; // codigo_participante
-            Integer codigo_participante = Integer.parseInt( part2 );
-            CasoCovid19 casoCovid19 = this.covidService.getCasoCovid19ByCodigo(part1); // aqui obtengo la fecha de ingreso de la tabla caso covid
-                String fechaIngreso = DateUtil.DateToString(casoCovid19.getFechaIngreso(), "dd/MM/yyyy");
+            List<ParticipanteCasoCovid19> participantes = covidService.getParticipantesCasoCovid19ByCodigoCaso(codigoCaso);            */
+            Integer codigo_participante = Integer.parseInt( idparticpante );
+
+
+            CasoCovid19 casoCovid19 = this.covidService.getCasoCovid19ByCodigo(codigoCaso); // aqui obtengo la fecha de ingreso de la tabla caso covid
+            model.addAttribute("casoCovid19",casoCovid19);
+
+            String fechaIngreso = DateUtil.DateToString(casoCovid19.getFechaIngreso(), "dd/MM/yyyy");
                 Date finicio = DateUtil.StringToDate(fechaIngreso, "dd/MM/yyyy");
                 Date ffinal = DateUtil.StringToDate(fechaIngreso + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
                 model.addAttribute("casoCovid19", casoCovid19);
-            ParticipanteCasoCovid19 participanteCasoCovid19 = this.covidService.getParticipanteIndiceCasoCovid19ByCodigoCaso(part1); // si es caso Indice de la tabla covid_participante_transmision
+            ParticipanteCasoCovid19 participanteCasoCovid19 = this.covidService.getParticipanteIndiceCasoCovid19ByCodigoCaso(codigoCaso); // si es caso Indice de la tabla covid_participante_transmision
+
             if (participanteCasoCovid19 != null) {
+
                 CandidatoTransmisionCovid19 indice = this.covidService.getIdCandidatoTransmisionCovid19(finicio,ffinal,participanteCasoCovid19.getParticipante().getCodigo(),casoCovid19.getCasa().getCodigoCHF());
                 model.addAttribute("indice", indice);
+
+
                 ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigo_participante);
                 model.addAttribute("procesos", procesos);
+
+
                 List<MessageResource> positivoPor = messageResourceService.getCatalogo("COVID_CAT_POSITIVO_POR");
                 model.addAttribute("positivoPor", positivoPor);
+
                 model.addAttribute("editando", false);
                 return "casosCovid/OtrosPositivosPorIndice";
             }else{
@@ -397,6 +410,7 @@ public class CovidController {
             , @RequestParam( value = "editando"             ,required = false , defaultValue = "" ) String editando
             , @RequestParam( value = "casaChf"              ,required = true ) String casaChf
             , @RequestParam( value = "fecha_ingreso"        ,required = true ) String fecha_ingreso
+            , @RequestParam( value = "CodigoCaso"           ,required = true ) String CodigoCaso
     )throws Exception{
         try{
                 Date fecha_ingreso_inicio = DateUtil.StringToDate(fecha_ingreso, "dd/MM/yyyy");
@@ -421,6 +435,15 @@ public class CovidController {
                         otros.setRecordDate(new Date());
                         otros.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         this.covidService.saveOrUpdateOtrosPositivos(otros);
+
+                        ParticipanteCasoCovid19 covid_participante_Caso = this.covidService.getByIdAndParticipanteId(CodigoCaso, idparticipante);//obtengo el participante no enfermo
+                        if (covid_participante_Caso != null){
+                            covid_participante_Caso.setEnfermo("S");
+                            covid_participante_Caso.setPositivoPor(positivoPor);
+                            covid_participante_Caso.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
+                            covid_participante_Caso.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
+                            this.covidService.saveOrUpdateParticipanteCasoCovid19(covid_participante_Caso);
+                        }
                         return JsonUtilcreateJsonResponse(otros);
                     }else{
                         Map<String, String> map = new HashMap<String, String>();

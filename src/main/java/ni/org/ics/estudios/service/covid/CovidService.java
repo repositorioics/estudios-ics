@@ -385,4 +385,14 @@ public class CovidService {
         return (CandidatoTransmisionCovid19) query.uniqueResult();
     }
 
+
+    //Metodo para obtener el Miembro del Hogar para luego modificarlo
+    public ParticipanteCasoCovid19 getByIdAndParticipanteId(String codigo_caso, int participanteId){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.codigoCaso.codigoCaso=:codigo_caso and p.participante.codigo=:participanteId");
+        query.setParameter("codigo_caso",codigo_caso);
+        query.setParameter("participanteId",participanteId);
+        return (ParticipanteCasoCovid19) query.uniqueResult();
+    }
+
 }

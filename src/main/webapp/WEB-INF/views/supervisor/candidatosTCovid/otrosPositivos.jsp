@@ -368,7 +368,6 @@
                                         <input name="fis" id="fis" class="form-control datepicker" type="text" data-date-end-date="+0d" required="required"
                                                value="<fmt:formatDate value="${caso.fis}" pattern="dd/MM/yyyy" />"/>
                                     </div>
-
                                 </div>
 
                                 <div class="form-group row">
@@ -435,7 +434,7 @@
                                 <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
                                 <tr>
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td hidden="hidden" class="text-center">
                                                 <span class="text-danger" style="text-decoration:line-through;"><c:out value="${l.codigo}" /></span>
                                             </td>
@@ -446,7 +445,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test ="${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test ="${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;"> <c:out value="${l.codigo_participante}" />  </span> </td>
                                         </c:when>
                                         <c:otherwise>
@@ -455,7 +454,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;"> <c:out value="${l.casaCHF}" />  </span> </td>
                                         </c:when>
                                         <c:otherwise>
@@ -463,7 +462,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <c:choose>
-                                        <c:when  test ="${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test ="${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;"> <fmt:formatDate value="${l.recordDate}" pattern="dd/MM/yyyy" />  </span> </td>
                                         </c:when>
                                         <c:otherwise>
@@ -472,7 +471,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;">
                                                 <c:forEach items="${positivoPor}" var="cat">
                                                     <c:if test="${cat.catKey eq l.positivoPor}">
@@ -492,7 +491,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;">
                                                 <fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /> </span>
                                             </td>
@@ -503,7 +502,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when  test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when  test = "${l.pasive eq '1'}">
                                             <td class="text-center"> <span class="text-danger" style="text-decoration:line-through;">
                                                 <fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /> </span>
                                             </td>
@@ -514,7 +513,7 @@
                                     </c:choose>
 
                                     <c:choose>
-                                        <c:when test = "${l.pasive =='1'.charAt(0)}">
+                                        <c:when test = "${l.pasive eq '1'}">
                                             <td class="text-center"><span class="badge badge-danger"><spring:message code="SI" /></span></td>
                                         </c:when>
                                         <c:otherwise>
@@ -524,7 +523,7 @@
 
                                     <td align="center">
                                         <c:choose>
-                                            <c:when test="${l.pasive =='1'.charAt(0)}">
+                                            <c:when test="${l.pasive eq '1'}">
                                                 <button disabled="disabled" title="<spring:message code="edit" />" class="btn btn-outline-warning btn-sm" ><i class="fa fa-edit"></i></button>
                                                 <button disabled="disabled" title="<spring:message code="disable" />" class="btn btn-outline-danger btn-sm" ><i class="fa fa-trash-o"></i></button>
                                             </c:when>
@@ -549,7 +548,6 @@
             </div>
             </div>
             </div>
-
             </div>
         </div>
         <!-- /.conainer-fluid -->
@@ -588,7 +586,6 @@
 <script src="${jQValidationLoc}"></script>
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
-
 <!-- bootstrap datepicker -->
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
 <script src="${datepickerPlugin}"></script>
@@ -630,7 +627,7 @@
         $('#otrosPositivos thead tr').clone(true).appendTo( '#otrosPositivos thead' );
         $('#otrosPositivos thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table.column(i).search( this.value ).draw();
@@ -743,8 +740,6 @@
                         }
                     });
         }
-
-
     });
 </script>
 

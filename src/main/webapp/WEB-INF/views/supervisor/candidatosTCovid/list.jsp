@@ -14,14 +14,15 @@
 <html>
 <head>
     <jsp:include page="../../fragments/headTag.jsp" />
-    <spring:url value="/resources/js/libs/data-tables/TableTools/css/dataTables.tableTools.css" var="dtttcss" />
-    <link rel="stylesheet" href="${dtttcss}"/>
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
-    <title></title>
 
+    <spring:url value="/resources/js/libs/data-tables/TableTools/css/dataTables.tableTools.css" var="dtttcss" />
+    <link rel="stylesheet" href="${dtttcss}"/>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../../fragments/bodyHeader.jsp" />
@@ -40,109 +41,99 @@
             <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
             <div class="container-fluid">
                 <div class="animated fadeIn">
-                    <div>
-                        <div class="card">
-                    <div class="card-header">
-                        <i class="fa fa-list-alt"></i> <spring:message code="covid19.candidates.list" />
-                    </div>
-                    <div class="card-block">
-                        <div>
-                        <div class="row">
-                            <div class="col-xs-6 col-xl-4">
-                                <a href="<spring:url value="/super/covid/saveCandidateForm" htmlEscape="true"/>" class="btn btn-success btn-lg">
-                                    <i class="fa fa-plus" aria-hidden="true"></i><spring:message code="add" /> <spring:message code="candidate" /> </a>
-                            </div>
-                            <div class="col-xs-6 col-xl-4"></div>
-                            <div class="col-xs-6 col-xl-4 text-right">
-                                <a href="<spring:url value="/super/covid/otherPositive" htmlEscape="true"/>" class="btn btn-info  btn-lg" style="; width:233px">
-                                    <i class="fa fa-user-plus" aria-hidden="true"></i> <spring:message code="edit" /> <spring:message code="positive" /> </a>
-                            </div>
-                        </div>
-                        <div class="">
-                            <br/>
-                            <hr/>
-                            <div class="table-responsive">
-                                <table id="lista_candidatos" class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th hidden="hidden" class="text-center" width="12%"><spring:message code="code" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="candidate" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="chf.house" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="logindate" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="lbl.positive.by" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="FIS" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="fif" /></th>
-                                        <th class="text-center" width="12%"><spring:message code="consentimiento" /></th>
-                                        <th class="text-center" width="16%"><spring:message code="actions" /></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach items="${candidatos}" var="l">
-                                        <spring:url value="/super/covid/candidate/actions/disable/{codigo}"
-                                                    var="disableUrl">
-                                            <spring:param name="codigo" value="${l.codigo}*${l.participante.codigo}" />
-                                        </spring:url>
-                                        <spring:url value="/super/covid/editCandidate/{codigo}"
-                                                    var="editUrl">
-                                            <spring:param name="codigo" value="${l.codigo}" />
-                                        </spring:url>
-                                        <spring:url value="/super/covid/otrosPositivosCovid/{codigo}" var="addOtrosPositivosUrl">
-                                            <spring:param name="codigo" value="${l.codigo}" />
-                                        </spring:url>
-                                        <tr>
-                                            <td hidden="hidden">${l.codigo}</td>
-                                            <c:choose>
-                                            <c:when test="${l.pasive=='1'}">
-                                            <td class="text-center"><span  style="text-decoration:line-through;" class="text-danger"><c:out value="${l.participante.codigo}" /></span> </td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td class="text-center"><c:out value="${l.participante.codigo}" /></td>
-                                            </c:otherwise>
-                                            </c:choose>
-                                            <td class="text-center"><c:out value="${l.casaCHF}" /></td>
-                                            <td class="text-center"><fmt:formatDate value="${l.fechaIngreso}" pattern="dd/MM/yyyy" /></td>
-                                            <td class="text-center">
-                                                <c:forEach items="${positivoPor}" var="cat">
-                                                    <c:if test="${cat.catKey eq l.positivoPor}">
-                                                        <c:out value="${cat.spanish}" />
-                                                    </c:if>
-                                                </c:forEach>
-                                            </td>
-                                            <td><fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /></td>
-                                            <td><fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /></td>
-                                            <c:choose>
-                                                    <c:when test="${l.consentimiento eq 'ACEPTA'}">
+                    <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa fa-list-alt"></i> <spring:message code="covid19.candidates.list" />
+                                    </div>
+                                    <div class="card-block">
+                                <div>
+                                    <a href="<spring:url value="/super/covid/otherPositive" htmlEscape="true"/>" class="btn btn-info  btn-lg float-right">
+                                        <i class="fa fa-user-plus" aria-hidden="true"></i> <spring:message code="edit" /> <spring:message code="positive" /> </a>
+
+                                    <a href="<spring:url value="/super/covid/saveCandidateForm" htmlEscape="true"/>" class="btn btn-success btn-lg float-left">
+                                        <i class="fa fa-plus" aria-hidden="true"></i><spring:message code="add" /> <spring:message code="candidate" /> </a>
+
+                                    <div class="table-responsive">
+                                        <table id="lista_candidatos" class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th hidden="hidden" class="text-center" width="12%"><spring:message code="code" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="candidate" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="chf.house" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="logindate" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="lbl.positive.by" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="FIS" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="fif" /></th>
+                                                <th class="text-center" width="12%"><spring:message code="consentimiento" /></th>
+                                                <th class="text-center" width="16%"><spring:message code="actions" /></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach items="${candidatos}" var="l">
+                                                <spring:url value="/super/covid/candidate/actions/disable/{codigo}"
+                                                            var="disableUrl">
+                                                    <spring:param name="codigo" value="${l.codigo}*${l.participante.codigo}" />
+                                                </spring:url>
+                                                <spring:url value="/super/covid/editCandidate/{codigo}"
+                                                            var="editUrl">
+                                                    <spring:param name="codigo" value="${l.codigo}" />
+                                                </spring:url>
+                                                <spring:url value="/super/covid/otrosPositivosCovid/{codigo}" var="addOtrosPositivosUrl">
+                                                    <spring:param name="codigo" value="${l.codigo}" />
+                                                </spring:url>
+                                                <tr>
+                                                    <td hidden="hidden">${l.codigo}</td>
+                                                    <c:choose>
+                                                        <c:when test="${l.pasive=='1'}">
+                                                            <td class="text-center"><span  style="text-decoration:line-through;" class="text-danger"><c:out value="${l.participante.codigo}" /></span> </td>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <td class="text-center"><c:out value="${l.participante.codigo}" /></td>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <td class="text-center"><c:out value="${l.casaCHF}" /></td>
+                                                    <td class="text-center"><fmt:formatDate value="${l.fechaIngreso}" pattern="dd/MM/yyyy" /></td>
+                                                    <td class="text-center">
+                                                        <c:forEach items="${positivoPor}" var="cat">
+                                                            <c:if test="${cat.catKey eq l.positivoPor}">
+                                                                <c:out value="${cat.spanish}" />
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </td>
+                                                    <td><fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /></td>
+                                                    <td><fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /></td>
+                                                    <c:choose>
+                                                        <c:when test="${l.consentimiento eq 'ACEPTA'}">
                                                             <td class="text-center"><span class="badge badge-success"><spring:message code="ACEPTA" /></span></td>
-                                                    </c:when>
-                                                    <c:when test="${l.consentimiento eq 'NO ACEPTA'}">
+                                                        </c:when>
+                                                        <c:when test="${l.consentimiento eq 'NO ACEPTA'}">
                                                             <td class="text-center"><span class="badge badge-warning"><spring:message code="NO ACEPTA" /></span></td>
-                                                    </c:when>
-                                                    <c:otherwise>
+                                                        </c:when>
+                                                        <c:otherwise>
                                                             <td class="text-center"><span class="badge badge-danger"><spring:message code="PENDIENTE" /></span></td>
-                                                    </c:otherwise>
-                                            </c:choose>
-                                            <td align="center">
-                                                <c:choose>
-                                                    <c:when test="${l.pasive=='1'}">
-                                                        <button title="<spring:message code="edit" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-edit"></i></button>
-                                                        <button title="<spring:message code="disable" />" class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-trash-o"></i></button>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                        <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <td align="center">
+                                                        <c:choose>
+                                                            <c:when test="${l.pasive=='1'}">
+                                                                <button title="<spring:message code="edit" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-edit"></i></button>
+                                                                <button title="<spring:message code="disable" />" class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-trash-o"></i></button>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                    </div>
+                                </div>
                 </div>
              </div>
 
@@ -254,7 +245,7 @@
         $('#lista_candidatos thead tr').clone(true).appendTo( '#lista_candidatos thead' );
         $('#lista_candidatos thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table.column(i).search( this.value ).draw();

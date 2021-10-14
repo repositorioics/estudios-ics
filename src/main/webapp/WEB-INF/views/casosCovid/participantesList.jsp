@@ -74,8 +74,9 @@
                                             var="disableUrl">
                                     <spring:param name="codigo" value="${parti.codigoCasoParticipante}*${parti.participante.codigo}" />
                                 </spring:url>
-                                <spring:url value="/covid/otrosPositivosCovid/{codigoCaso}" var="addOtrosPositivosUrl">
-                                    <spring:param name="codigoCaso" value="${parti.codigoCaso.codigoCaso}*${parti.participante.codigo}" />
+                                <spring:url value="/covid/otrosPositivosCovid/{codigoCaso}/{idparticpante}" var="addOtrosPositivosUrl">
+                                    <spring:param name="codigoCaso" value="${parti.codigoCaso.codigoCaso}" />
+                                    <spring:param name="idparticpante" value="${parti.participante.codigo}" />
                                 </spring:url>
                                 <tr>
                                     <c:set var="edadParts" value="${fn:split(parti.participante.edad, '/')}" />
