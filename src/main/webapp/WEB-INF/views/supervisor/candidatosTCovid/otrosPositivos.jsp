@@ -201,7 +201,7 @@
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
             color: #fff;
-            border-bottom: 3px solid #2cd07e;
+            border-bottom: 5px solid #eb290c;
         }
         .no-wrap td, .no-wrap th {
             white-space: nowrap;

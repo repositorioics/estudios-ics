@@ -1,8 +1,6 @@
 package ni.org.ics.estudios.web.controller.hemodinamica;
 
-import com.google.common.base.Verify;
 import com.google.gson.Gson;
-import javafx.beans.property.DoubleProperty;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
@@ -31,10 +29,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * Created by ICS_Inspiron3 on 22/05/2019.

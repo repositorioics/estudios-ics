@@ -84,13 +84,16 @@ public class ParticipanteCasoUO1Controller {
                 ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigo);
                 if (procesos != null && procesos.getEstPart().equals(0))
                     return JsonUtil.createJsonResponse("Participante retirado");
-                else if (procesos != null && !procesos.getEstudio().contains("UO1"))
-                    return JsonUtil.createJsonResponse("Participante aún no ha sido enrolado UO1");
+                else if (procesos != null && (!procesos.getEstudio().contains("UO1") && !procesos.getEstudio().contains("Influenza")))
+                    return JsonUtil.createJsonResponse("Participante aún no ha sido enrolado FLU (UO1, Influenza)");
 
                 ParticipanteCasoUO1 participanteUO1 = this.participanteCasoUO1Service.getCasoActivoParticipante(codigo);
                 if (participanteUO1 != null) {
-                    return JsonUtil.createJsonResponse("Participante ya fue registrado como positivo y se encuentra activo UO1");
+                    return JsonUtil.createJsonResponse("Participante ya fue registrado como positivo y se encuentra activo FLU");
                 }
+
+                if (procesos != null && procesos.getEstudio().contains("CH Familia"))
+                    return JsonUtil.createJsonResponse("Participante pertenece a Cohorte de Familia, no se puede registrar como positivo");
             }
             else
                 return JsonUtil.createJsonResponse("No se encontró participante según el código ingresado");
