@@ -326,7 +326,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="form-group row">
                                     <label for="estudio" class="col-sm-2 col-form-label"><spring:message code="study" />
                                         <span class="text-danger">*</span>

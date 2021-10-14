@@ -343,7 +343,6 @@ public class CovidController {
         else{
             return redirecTo;
         }
-
         return redirecTo;
     }
 

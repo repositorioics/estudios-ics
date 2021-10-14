@@ -380,7 +380,6 @@
                                                value="<fmt:formatDate value="${caso.fif}" pattern="dd/MM/yyyy" />"/>
                                     </div>
                                 </div>
-
                     <br/>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label"></label>
