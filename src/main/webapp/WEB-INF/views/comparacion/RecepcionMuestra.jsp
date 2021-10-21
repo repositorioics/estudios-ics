@@ -171,6 +171,10 @@
             vertical-align: baseline;
             border-radius: .25em;
         }
+        #participantCode-error{
+            margin-right:700px;
+            text-align: center !important;
+        }
     </style>
 
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
@@ -188,8 +192,7 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/comparacion/muestra/" htmlEscape="true "/>"><spring:message code="Recepción Muestra" /></a>
-
+                <a href="<spring:url value="/comparacion/muestra/" htmlEscape="true "/>"><spring:message code="Reception"/> <spring:message code="sample" /></a>
             </li>
         </ol>
         <div class="container-fluid">
@@ -197,68 +200,64 @@
             <div class="">
             <div class="row">
             <div class="col-md-12 col-lg-12">
-            <div class="card effect-1">
-            <div class="card-body bg-primary text-dark mailbox-widget pb-0">
-                <h2 class="text-dark pb-3" style="font-family: Roboto"> <i class="fa fa-tint"></i>  Recepción Muestra</h2>
+            <div class="card">
+            <div class="card-body bg-primary text-white mailbox-widget pb-0">
+                <h2 class="text-dark pb-3"style="font-family: Roboto"> <spring:message code="sample"/> </h2>
                 <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
-
                     <li class="nav-item">
-                        <a class="nav-link active" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="true">
-                            <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                            <span class="d-none d-md-block text-dark">Formulario</span>
+                        <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="true">
+                            <span class="d-block d-md-none"><i class="ti-email"></i></span>
+                            <span class="d-none d-md-block text-dark"> <spring:message code="Form"/> </span>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="false">
-                            <span class="d-block d-md-none"><i class="ti-email"></i></span>
-                            <span class="d-none d-md-block text-dark"> Lista</span>
+                        <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
+                            <span class="d-block d-md-none"><i class="ti-export"></i></span>
+                            <span class="d-none d-md-block text-dark"> <spring:message code="List"/>  </span>
                         </a>
                     </li>
 
                 </ul>
             </div>
             <div class="tab-content" id="myTabContent">
-
-            <div class="tab-pane fade active show" id="sent" aria-labelledby="sent-tab" role="tabpanel">
+            <div class="tab-pane fade active show" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
+            <div>
+                <spring:url value="/comparacion/searchParticipant" var="searchParticipantUrl"/>
                 <spring:url value="/comparacion/saveMuestra" var="saveMuestraUrl"/>
-                <spring:url value="/comparacion/searchParticipant" var="searchParticipant"/>
                 <spring:url value="/comparacion/muestra/" var="refreshPageUrl"/>
                 <c:set var="successLabel"><spring:message code="process.success" /></c:set>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <br/>
-                            <c:choose>
-                                <c:when test="${ editando eq true }">
-                                    <form action="#" autocomplete="off" id="search-participant-form" class="form-horizontal">
-
-                                    </form>
-                                </c:when>
-                                <c:otherwise>
-                                    <form action="#" autocomplete="off" id="search-participant-form" class="form-horizontal">
-                                        <div class="form-group row">
-                                            <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
-                                                <span class="required">*</span>
-                                            </label>
-                                            <div class="input-group col-md-10">
-                                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                                <input id="participantCode" name="participantCode" type="text" value="" class="form-control" />
-                                                <button id="buscar" type="submit" class="btn btn-success">
-                                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                                    <spring:message code="search" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </c:otherwise>
-                            </c:choose>
+                <form action="#" autocomplete="off" id="search-participant-form" name="search-participant-form" class="form-horizontal">
+                    <div class="form-group row">
+                        <label class="form-control-label col-md-2 text-right" for="username"> <spring:message code="participant.code" />
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-group col-md-10">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input id="participantCode" name="participantCode" type="text" value="" class="form-control"/>
+                            <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                <spring:message code="search" />
+                            </button>
                         </div>
                     </div>
-                </div>
-
-                <form class="form-horizontal" action="#" id="FormMuestra" autocomplete="off" name="FormMuestra" role="form">
-
+                </form>
+                <!-- <form action="#" autocomplete="off" id="search-participant-form" class="form-horizontal">
+                    <div class="form-group row">
+                        <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-group col-md-10">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input id="participantCode" name="participantCode" type="text" value="" class="form-control" />
+                            <button id="buscar" type="submit" class="btn btn-success">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                <spring:message code="search" />
+                            </button>
+                        </div>
+                    </div>
+                </form>-->
+                <hr/>
+                <form class="form-horizontal" action="#" id="FormMuestra"  name="FormMuestra" autocomplete="off" role="form">
                     <div class="form-row" hidden="hidden">
                         <div class="form-group col-md-6">
                             <input type="text" class="form-control" readonly name="codigoMuestra" id="codigoMuestra" value="${caso.mId.codigo}"/>
@@ -270,25 +269,24 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-2">
-                            <label for="codigoMx">Código:</label>
+                            <label for="codigoMx"><spring:message code="sample.code"/></label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control focusNext" name="codigoMx" id="codigoMx" value="${caso.mId.codigo}" tabindex="2">
                         </div>
 
-
                         <div class="form-group col-md-3">
-                            <label for="fechaMx">Fecha Muestra:</label>
+                            <label for="fechaMx"><spring:message code="lbl.date"/></label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control focusNext" tabindex="3" name="fechaMx" id="fechaMx" data-date-end-date="+0d" value="<fmt:formatDate value="${caso.mId.fechaMuestra}" pattern="dd/MM/yyyy" />">
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="fechaReg">Fecha Registro:</label>
+                            <label for="fechaReg"><spring:message code="dateCreated"/></label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control focusNext" tabindex="4" name="fechaReg" id="fechaReg" value="<fmt:formatDate value="${caso.movilInfo.today}" pattern="dd/MM/yyyy HH:mm:ss" />">
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="estudiosAct">Estudio:</label>
+                            <label for="estudiosAct"><spring:message code="userstudies"/></label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control focusNext" tabindex="5" name="estudiosAct" readonly id="estudiosAct" value="${caso.estudiosAct}">
                         </div>
@@ -332,7 +330,7 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="usernameMx">Usuario:</label>
+                            <label for="usernameMx"><spring:message code="username"/></label>
                             <span class="required text-danger"> * </span>
                             <select id="usernameMx" name="usernameMx" class="form-control focusNext" tabindex="8" required="required">
                                 <option selected value=""><spring:message code="select"/>...</option>
@@ -350,7 +348,7 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="terrenoMx">Terreno:</label>
+                            <label for="terrenoMx"><spring:message code="lbl.land"/></label>
                             <span class="required text-danger"> * </span>
                             <select id="terrenoMx" name="terrenoMx" class="form-control focusNext" tabindex="9" required="required">
                                 <span class="required text-danger"> * </span>
@@ -371,26 +369,24 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label for="txtpinchazo">Pinchazo:</label>
+                            <label for="txtpinchazo"><spring:message code="numPinchazos"/></label>
                             <input type="number" class="form-control focusNext" tabindex="10" id="txtpinchazo" name="txtpinchazo" min="1" max="4" value="${caso.pinchazos}">
                         </div>
-
                         <div class="form-group col-md-3">
-                            <label for="tubobhc">Tubo BHC:</label>
+                            <label for="tubobhc"><spring:message code="lbl.BHC"/> </label>
                             <input type="text" class="form-control focusNext" tabindex="11" id="tubobhc" name="tubobhc" min="1" max="1" value="${caso.tuboBHC}">
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="tuboleuco">Tubo Leocusep:</label>
+                            <label for="tuboleuco"><spring:message code="lbl.Leucosep"/></label>
                             <input type="text" class="form-control focusNext" tabindex="12" id="tuboleuco" name="tuboleuco" min="1" max="1" value="${caso.tuboLeu}">
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="tuborojo">Tubo Rojo:</label>
+                            <label for="tuborojo"><spring:message code="lbl.serologia"/></label>
                             <input type="text" class="form-control focusNext" tabindex="13" id="tuborojo" name="tuborojo" min="1" max="2" value="${caso.tuboRojo}">
                         </div>
                     </div>
 
                     <div class="form-group">
-
                         <div class="form-check">
                             <c:choose>
                                 <c:when test="${caso.movilInfo.estado eq '1'}">
@@ -403,145 +399,135 @@
                             <label class="form-check-label" for="chkEstado"><spring:message code="lbl.State"/></label>
                         </div>
                     </div>
-
+                    <hr/>
                     <div class="form-row">
                         <div class="col-md-4">
-                            <button type="submit" class="btn btn-lg btn-block btn-primary btn btn-raised shadow rounded-pill">
+                            <button type="submit" class="btn btn-lg btn-block btn-primary shadow">
                                 <i class="fa fa-save" aria-hidden="true"></i>
                                 <spring:message code="save" />
                             </button>
                         </div>
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
-                            <a href="${fn:escapeXml(refreshPageUrl)}" class="btn btn-warning btn-block btn-lg btn btn-raised shadow rounded-pill">
+                            <a href="${fn:escapeXml(refreshPageUrl)}" class="btn btn-warning btn-block btn-lg shadow">
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                                <spring:message code="Limpiar Formulario" />
+                                <spring:message code="cancel" />
                             </a>
                         </div>
                     </div>
                 </form>
             </div>
+            </div>
 
-            <div class="tab-pane fade" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
-                    <div>
-                        <div class="row p-4 no-gutters align-items-center">
-                            <div class="col-sm-12 col-md-6">
-                                <h3 class="font-light mb-0"><i class="ti-email mr-2"></i>Listado de Muestras</h3>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
+            <div class="tab-pane fade" id="sent" aria-labelledby="sent-tab" role="tabpanel">
+                <div class="table-responsive">
+                    <table id="tblMuestra" class="table email-table no-wrap table-hover v-middle mb-0 font-14 table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th class="text-center"><spring:message code="code" /></th>
+                            <th class="text-center"><spring:message code="dateCreated" /></th>
+                            <th class="text-center"><spring:message code="sample.date" /></th>
+                            <th class="text-center"><spring:message code="username" /></th>
+                            <th class="text-center"><spring:message code="lbl.land" /></th>
+                            <th class="text-center"><spring:message code="numPinchazos" /></th>
+                            <th class="text-center"><spring:message code="lbl.BHC" /></th>
+                            <th class="text-center"><spring:message code="Rojo" /></th>
+                            <th class="text-center"><spring:message code="Leu" /></th>
+                            <th class="text-center"><spring:message code="Pax" /></th>
+                            <th class="text-center"><spring:message code="userstudies" /></th>
+                            <th class="text-center"><spring:message code="actions" /></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${listaMx}" var="mx">
+                            <spring:url value="/comparacion/editMuestra/{id}/{fechaMx}" var="editMuestraUrl">
+                                <spring:param name="id" value="${mx.mId.codigo}" />
+                                <spring:param name="fechaMx" value="${mx.mId.fechaMuestra}" />
+                            </spring:url>
+                            <spring:url value="/comparacion/deletemuestra" var="deleteMuestraUrl"></spring:url>
+                            <tr>
+                                <td class="text-center">${mx.mId.codigo}</td>
+                                <td class="text-center"><fmt:formatDate value="${mx.movilInfo.today}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
+                                <td class="text-center"><fmt:formatDate value="${mx.mId.fechaMuestra}" pattern="dd/MM/yyyy"/></td>
+                                <td class="text-center">${mx.movilInfo.username}</td>
+                                <c:choose>
+                                    <c:when test="${mx.terreno eq 'Si'}">
+                                        <td class="text-center"><span class="text-primary badge badge-verde" style="font-size: 0.875em !important; font-weight: 600; font-family: Roboto; border-radius: 3px;"><i class="fa fa-check" aria-hidden="true"></i></span></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td class="text-center"><span class="text-danger badge badge-verde" style="font-size: 0.875em !important; font-weight: 600; font-family: Roboto; border-radius: 3px"><i class="fa fa-times" aria-hidden="true"></i></span></td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                            </div>
-                        </div>
-                        <!-- Mail list-->
-                        <div class="table-responsive">
-                            <table id="tblMuestra" class="table email-table no-wrap table-hover v-middle mb-0 font-14">
-                                <thead>
-                                <tr>
-                                    <th class="text-center"><spring:message code="Código" /></th>
-                                    <th class="text-center"><spring:message code="Fecha Registro" /></th>
-                                    <th class="text-center"><spring:message code="Fecha Muestra" /></th>
-                                    <th class="text-center"><spring:message code="username" /></th>
-                                    <th class="text-center"><spring:message code="Terreno" /></th>
-                                    <th class="text-center"><spring:message code="Pinchazo" /></th>
-                                    <th class="text-center"><spring:message code="Bhc" /></th>
-                                    <th class="text-center"><spring:message code="Rojo" /></th>
-                                    <th class="text-center"><spring:message code="Leu" /></th>
-                                    <th class="text-center"><spring:message code="Pax" /></th>
-                                    <th class="text-center"><spring:message code="Estudios" /></th>
-                                    <th class="text-center"><spring:message code="actions" /></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${listaMx}" var="mx">
-                                    <spring:url value="/comparacion/editMuestra/{id}/{fechaMx}" var="editMuestraUrl">
-                                        <spring:param name="id" value="${mx.mId.codigo}" />
-                                        <spring:param name="fechaMx" value="${mx.mId.fechaMuestra}" />
-                                    </spring:url>
-                                    <spring:url value="/comparacion/deletemuestra" var="deleteMuestraUrl"></spring:url>
-                                    <tr>
-                                        <td class="text-center">${mx.mId.codigo}</td>
-                                        <td class="text-center"><fmt:formatDate value="${mx.movilInfo.today}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
-                                        <td class="text-center"><fmt:formatDate value="${mx.mId.fechaMuestra}" pattern="dd/MM/yyyy"/></td>
-                                        <td class="text-center">${mx.movilInfo.username}</td>
-                                        <c:choose>
-                                            <c:when test="${mx.terreno eq 'Si'}">
-                                                <td class="text-center"><span class="text-primary badge badge-verde" style="font-size: 0.875em !important; font-weight: 600; font-family: Roboto; border-radius: 3px;"><i class="fa fa-check" aria-hidden="true"></i></span></td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td class="text-center"><span class="text-danger badge badge-verde" style="font-size: 0.875em !important; font-weight: 600; font-family: Roboto; border-radius: 3px"><i class="fa fa-times" aria-hidden="true"></i></span></td>
-                                            </c:otherwise>
-                                        </c:choose>
+                                <c:choose>
+                                    <c:when test="${mx.pinchazos >= 1}">
+                                        <td class="text-center"> <span class="label label-success"> ${mx.pinchazos} </span> </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td class="text-center"> <span class="label label-warning"> <i class="fa fa-times"></i> </span> </td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                        <c:choose>
-                                            <c:when test="${mx.pinchazos >= 1}">
-                                                <td class="text-center"> <span class="label label-success"> ${mx.pinchazos} </span> </td>
-                                            </c:when>
-                                        <c:otherwise>
-                                            <td class="text-center"> <span class="label label-warning"> <i class="fa fa-times"></i> </span> </td>
-                                        </c:otherwise>
-                                        </c:choose>
+                                <c:choose>
+                                    <c:when test="${mx.tuboBHC >= 1 }">
+                                        <td class="text-center"> <span class="label label-success"> ${mx.tuboBHC} </span> </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times" aria-hidden="true"></i> </span> </td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                        <c:choose>
-                                            <c:when test="${mx.tuboBHC >= 1 }">
-                                                <td class="text-center"> <span class="label label-success"> ${mx.tuboBHC} </span> </td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times" aria-hidden="true"></i> </span> </td>
-                                            </c:otherwise>
-                                        </c:choose>
+                                <c:choose>
+                                    <c:when test="${mx.tuboRojo >= 1}">
+                                        <td class="text-center"> <span class="label label-success"> ${mx.tuboRojo} </span> </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times" aria-hidden="true"></i> </span> </td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                        <c:choose>
-                                            <c:when test="${mx.tuboRojo >= 1}">
-                                                <td class="text-center"> <span class="label label-success"> ${mx.tuboRojo} </span> </td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times" aria-hidden="true"></i> </span> </td>
-                                            </c:otherwise>
-                                        </c:choose>
+                                <c:choose>
+                                    <c:when test="${mx.tuboLeu >= 1 }">
+                                        <td class="text-center"> <span class="label label-success"> ${mx.tuboLeu} </span> </td>
+                                    </c:when>
 
-                                        <c:choose>
-                                            <c:when test="${mx.tuboLeu >= 1 }">
-                                                <td class="text-center"> <span class="label label-success"> ${mx.tuboLeu} </span> </td>
-                                            </c:when>
+                                    <c:otherwise>
+                                        <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times" aria-hidden="true"></i> </span> </td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                            <c:otherwise>
-                                                <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times" aria-hidden="true"></i> </span> </td>
-                                            </c:otherwise>
-                                        </c:choose>
+                                <c:choose>
+                                    <c:when test="${mx.tuboPax >= 1}">
+                                        <td class="text-center"> <span class="label label-success"> ${mx.tuboPax} </span> </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times"></i> </span> </td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                        <c:choose>
-                                            <c:when test="${mx.tuboPax}">
-                                                <td class="text-center"> <span class="label label-success"> ${mx.tuboPax} </span> </td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td class="text-center"> <span class="label label-danger"> <i class="fa fa-times"></i> </span> </td>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        <td class="text-center"> <span class="label label-default"> ${mx.estudiosAct} </span> </td>
-                                        <td class="text-center">
-                                           <!-- <a href="${fn:escapeXml(editMuestraUrl)}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm">
+                                <td class="text-center"> <span class="label label-default"> ${mx.estudiosAct} </span> </td>
+                                <td class="text-center">
+                                    <!-- <a href="${fn:escapeXml(editMuestraUrl)}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm">
                                                 <i class="fa fa-edit"></i>
-                                            </a> -->
+                                         </a> -->
+                                    <button id="btndelete" title="<spring:message code="delete" />" data-id="${mx.mId.codigo}" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm btndelete">
+                                        <i class="fa fa-trash text-white" aria-hidden="true"></i>
+                                    </button>
 
-                                            <button id="btndelete" title="<spring:message code="Eliminar" />" data-id="${mx.mId.codigo}" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm btndelete">
-                                                <i class="fa fa-trash text-white" aria-hidden="true"></i>
-                                            </button>
-
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
             </div>
             </div>
             </div>
             </div>
             </div>
+
             </div>
         </div>
         <!-- /.conainer-fluid -->
@@ -552,29 +538,6 @@
 <!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
-<spring:url value="/resources/js/views/handleDatePickers.js" var="handleDatePickers" />
-<script src="${handleDatePickers}"></script>
-<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
-<script src="${dataTableJs}" type="text/javascript"></script>
-
-<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
-<script type="text/javascript" src="${dataTablesBS}"></script>
-
-<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
-<script type="text/javascript" src="${dataTablesTT}"></script>
-
-<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
-<script src="${validateJs}" type="text/javascript"></script>
-
-<spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
-<script src="${validateAMJs}" type="text/javascript"></script>
-
-<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin"/>
-<script src="${datepickerPlugin}"></script>
-
-<spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs"/>
-<script type="text/javascript" src="${selectJs}"></script>
-
 <c:choose>
     <c:when test="${cookie.eIcsLang.value == null}">
         <c:set var="lenguaje" value="es"/>
@@ -586,6 +549,31 @@
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
+<spring:url value="/resources/js/views/handleDatePickers.js" var="handleDatePickers" />
+<script src="${handleDatePickers}"></script>
+
+<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
+<script src="${dataTableJs}" type="text/javascript"></script>
+
+<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
+<script type="text/javascript" src="${dataTablesBS}"></script>
+
+<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
+<script type="text/javascript" src="${dataTablesTT}"></script>
+<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs"/>
+<script src="${validateJs}" type="text/javascript"></script>
+
+<spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs"/>
+<script src="${validateAMJs}" type="text/javascript"></script>
+
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}"/>
+</spring:url>
+<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin"/>
+<script src="${datepickerPlugin}"></script>
+
+<spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs"/>
+<script type="text/javascript" src="${selectJs}"></script>
 
 <spring:url value="/resources/js/libs/jquery.maskedinput.js" var="maskJs" />
 <script type="text/javascript" src="${maskJs}"></script>
@@ -621,19 +609,16 @@
             saveMuestraUrl: "${saveMuestraUrl}",
             refreshPageUrl: "${refreshPageUrl}",
             editMuestraUrl: "${editMuestraUrl}",
-            searchParticipant:"${searchParticipant}",
+            searchParticipantUrl: "${searchParticipantUrl}",
             deleteMuestraUrl: "${deleteMuestraUrl}"
         };
         handleDatePickers("${lenguaje}");
-        BuscarEstudios.init(parametro);
-
+        proccessMuestra.init(parametro);
         $("#tblMuestra").DataTable({
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             }
         });
-
-
 
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter
@@ -654,7 +639,6 @@
                 event.preventDefault();
             }
         });
-
         $("#participantCode").focus();
     });
 </script>

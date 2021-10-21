@@ -391,7 +391,6 @@ public class ComparacionController {
             MovilInfo movil = new MovilInfo();
             String ComputerName = InetAddress.getLocalHost().getHostName();
             movil.setIdInstancia(Integer.valueOf(148));
-
             movil.setInstancePath(ComputerName);
             String estado;
             if(chkEstado.equals("on")){

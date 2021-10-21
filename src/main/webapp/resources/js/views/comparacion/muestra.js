@@ -1,34 +1,27 @@
 /**
  * Created by ICS on 18/01/2021.
  */
-var BuscarEstudios = function(){
+var proccessMuestra = function(){
 
     return {
-        init: function(parametro){
-            $("#search-participant-form").validate({
+        init: function(parametros){
+            var form1 = $('#search-participant-form');
+            form1.validate({
                 rules:{
                     participantCode: {
                         required: true,
-                        pattern: /^\+?[0-9]*\.?[0-9]+$/,
-                        required: true,
                         maxlength: 5
                     }
-                },
-                errorElement: 'em',
-                errorPlacement: function ( error, element ) {
-                    // Add the `help-block` class to the error element
-                    error.addClass( 'form-control-feedback' );
-                    if ( element.prop( 'type' ) === 'checkbox' ) {
-                        error.insertAfter( element.parent( 'label' ) );
-                    } else {
-                        error.insertAfter( element );
-                    }
-                    if (element.attr("name") == "parametro") {
-                        error.insertAfter("#gendererror");
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
+                },errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( 'form-control-feedback' );
+                if ( element.prop( 'type' ) === 'checkbox' ) {
+                    error.insertAfter( element.parent( 'label' ) );
+                } else {
+                    //error.insertAfter( element ); //cuando no es input-group
+                    error.insertAfter(element.parent('.input-group'));
+                }
+            },
                 highlight: function ( element, errorClass, validClass ) {
                     $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
                     $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
@@ -43,7 +36,8 @@ var BuscarEstudios = function(){
             });
 
             function searchParticipante(){
-                $.getJSON(parametro.searchParticipant, { participantCode : $('#participantCode').val(),   ajax : 'true'  }, function(resp) {
+                debugger;
+                $.getJSON(parametros.searchParticipantUrl,  form1.serialize(), function(resp) {
                     if(resp.mensaje != null){
                         swal("Advertencia!",resp.mensaje,"warning");
                         $("#estudiosAct").val("");
@@ -69,13 +63,15 @@ var BuscarEstudios = function(){
                 this.value = (this.value + '').replace(/[^0-9]/g, '');
             });
 
+
             $("#tblMuestra tbody").on("click",'.btndelete', function(){
                 var id = $(this).data('id');
                 var currentRow = $(this).closest("tr");
                 var col0 = currentRow.find("td:eq(0)").text();
                 var col1 = currentRow.find("td:eq(1)").text();
                 eliminarMx(id,col1);
-            })
+            });
+
             function eliminarMx(id, col1){
                 swal({
                         title: "Eliminar? ",
@@ -91,7 +87,7 @@ var BuscarEstudios = function(){
                     function(isConfirm) {
                         if (isConfirm) {
 
-                            $.post(parametro.deleteMuestraUrl,{codigoMuestra : id, fechamuestra: col1,ajax : 'true'}, function(data){
+                            $.post(parametros.deleteMuestraUrl,{codigoMuestra : id, fechamuestra: col1,ajax : 'true'}, function(data){
                                 swal("Eliminado!", "Con éxito!.", "success");
                                 setTimeout(function () {
                                     location.reload();
@@ -105,39 +101,7 @@ var BuscarEstudios = function(){
                             swal("Cancelado", "Registro está seguro! :)", "error");
                         }
                     });
-
-               /* swal({
-                    title: "Eliminar? ",
-                    text: "Código: " + id + " con Fecha: " + col1,
-                    icon: "warning",
-                    buttons: [
-                        'No, cancélalo!',
-                        'Si, Eliminar!'
-                    ],
-                    dangerMode: true
-                }).then(function(isConfirm) {
-                    if (isConfirm) {
-                        swal({
-                            title: 'Eliminado!',
-                            text: 'Registro eliminado éxitosamente!',
-                            icon: 'success'
-                        }).then(function() {
-                            $.post(parametro.deleteMuestraUrl,{codigoMuestra : id, fechamuestra: col1,ajax : 'true'}, function(data){
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 1300);
-                            }).fail(function() {
-                                setTimeout(function () {
-                                    swal("Error!","Servidor no respode!","error");
-                                }, 1500);
-                            });
-                        });
-                    } else {
-                        swal("Cancelado!", "Registro seguro. :)", "error");
-                    }
-                });*/
             }
-
 
             var formMuestra = $('#FormMuestra');
             formMuestra.validate({
@@ -182,14 +146,14 @@ var BuscarEstudios = function(){
                     processVersion();
                 }
             });
+
             function processVersion(){
                 if($("#tubobhc").val().trim() == "" && $("#tuboleuco").val().trim() == "" && $("#tuborojo").val().trim() == ""){
                     swal("Error!","Debes ingresar algún tubo", "warning");
                     $("#tubobhc").focus();
                     return;
                 }
-
-                $.post( parametro.saveMuestraUrl, formMuestra.serialize(), function( data ){
+                $.post( parametros.saveMuestraUrl, formMuestra.serialize(), function( data ){
                     registro = JSON.parse(data);
                     console.log(registro);
                     if (registro.mId.codigo === undefined) {
@@ -198,33 +162,13 @@ var BuscarEstudios = function(){
                     else {
                         swal("Buen Trabajo!","Guardado éxitosamente!","success");
                         window.setTimeout(function () {
-                            window.location.href = parametro.refreshPageUrl;
+                            window.location.href = parametros.refreshPageUrl;
                         }, 1500);
                     }
                 },'text' ).fail(function() {
-                     swal("Error!","Servidor no responde!","error");
+                    swal("Error!","Servidor no responde!","error");
                 });
             }
-
-            document.addEventListener('keypress', function(evt) {
-                // Si el evento NO es una tecla Enter
-                if (evt.key !== 'Enter') {
-                    return;
-                }
-                let element = evt.target;
-                // Si el evento NO fue lanzado por un elemento con class "focusNext"
-                if (!element.classList.contains('focusNext')) {
-                    return;
-                }
-                // AQUI logica para encontrar el siguiente
-                let tabIndex = element.tabIndex + 1;
-                var next = document.querySelector('[tabindex="'+tabIndex+'"]');
-                // Si encontramos un elemento
-                if (next) {
-                    next.focus();
-                    event.preventDefault();
-                }
-            });
         }//fin init
-    }
+    }// fin return
 }();

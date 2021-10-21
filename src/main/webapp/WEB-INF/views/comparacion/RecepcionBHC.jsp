@@ -557,67 +557,68 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="inbox" aria-labelledby="inbox-tab" role="tabpanel"><div>
-                <div class="row p-4 no-gutters align-items-center"></div>
-                <spring:url value="/comparacion/deletebhc" var="deletebhcUrl"/>
-                <spring:url value="/comparacion/editBhc" var="editBhcUrl"/>
-                <!-- Mail list-->
-                <div class="table-responsive">
-                    <table id="tblbhc" class="table email-table no-wrap table-hover v-middle mb-0 font-14">
-                        <thead>
-                        <th width="11%"><spring:message code="code" /></th>
-                        <th><spring:message code="dateAdded" /> </th>
-                        <th><spring:message code="lbl.State" /> </th>
-                        <th><spring:message code="logindate" /> </th>
-                        <th><spring:message code="lbl.Place" /> </th>
-                        <th> <spring:message code="observacion" /></th>
-                        <th><spring:message code="lbl.Paxgene" /></th>
-                        <th><spring:message code="username" /></th>
-                        <th> <spring:message code="volumen" /> </th>
-                        <th width="5%"><spring:message code="actions" /></th>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${listaBhc}" var="c">
-                                <spring:url value="/comparacion/editBhc/{id}/{fechaRecBHC}" var="editbhcUrl">
-                                    <spring:param name="id" value="${c.recBhcId.codigo}" />
-                                    <spring:param name="fechaRecBHC" value="${c.recBhcId.fechaRecBHC}"  />
-                                </spring:url>
-                            <tr>
-                                <td><c:out value="${c.recBhcId.codigo}" /></td>
-                                <td><fmt:formatDate value="${c.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" /></td>
-                                <c:choose>
-                                    <c:when test="${c.estado eq '1' }">
-                                        <td><span class="badge badge-cyan" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><spring:message code="CHF_CAT_SINO_SI" /></span></td>
+            <div class="tab-pane fade" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
+                <div>
+                    <div class="row p-4 no-gutters align-items-center"></div>
+                    <spring:url value="/comparacion/deletebhc" var="deletebhcUrl"/>
+                    <spring:url value="/comparacion/editBhc" var="editBhcUrl"/>
+                    <!-- Mail list-->
+                    <div class="table-responsive">
+                        <table id="tblbhc" class="table email-table no-wrap table-hover v-middle mb-0 font-14">
+                            <thead>
+                            <th width="11%"><spring:message code="code" /></th>
+                            <th><spring:message code="dateAdded" /> </th>
+                            <th><spring:message code="lbl.State" /> </th>
+                            <th><spring:message code="logindate" /> </th>
+                            <th><spring:message code="lbl.Place" /> </th>
+                            <th> <spring:message code="observacion" /></th>
+                            <th><spring:message code="lbl.Paxgene" /></th>
+                            <th><spring:message code="username" /></th>
+                            <th> <spring:message code="volumen" /> </th>
+                            <th width="5%"><spring:message code="actions" /></th>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${listaBhc}" var="c">
+                                    <spring:url value="/comparacion/editBhc/{id}/{fechaRecBHC}" var="editbhcUrl">
+                                        <spring:param name="id" value="${c.recBhcId.codigo}" />
+                                        <spring:param name="fechaRecBHC" value="${c.recBhcId.fechaRecBHC}"  />
+                                    </spring:url>
+                                <tr>
+                                    <td><c:out value="${c.recBhcId.codigo}" /></td>
+                                    <td><fmt:formatDate value="${c.recBhcId.fechaRecBHC}" pattern="dd/MM/yyyy" /></td>
+                                    <c:choose>
+                                        <c:when test="${c.estado eq '1' }">
+                                            <td><span class="badge badge-cyan" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><spring:message code="CHF_CAT_SINO_SI" /></span></td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td><span class="badge badge-danger" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <td><fmt:formatDate value="${c.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
+                                    <td><c:out value="${c.lugar}" /></td>
+                                    <td><c:out value="${c.observacion}" /></td>
+                                    <c:choose>
+                                      <c:when test="${c.paxgene eq true}">
+                                          <td><span class="badge badge-verde" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px;"><i class="fa fa-check" aria-hidden="true"></i></span></td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><span class="badge badge-danger" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
+                                        <td><span class="badge badge-red" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><i class="fa fa-times" aria-hidden="true"></i></span></td>
                                     </c:otherwise>
-                                </c:choose>
-                                <td><fmt:formatDate value="${c.fecreg}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
-                                <td><c:out value="${c.lugar}" /></td>
-                                <td><c:out value="${c.observacion}" /></td>
-                                <c:choose>
-                                  <c:when test="${c.paxgene eq true}">
-                                      <td><span class="badge badge-verde" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px;"><i class="fa fa-check" aria-hidden="true"></i></span></td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td><span class="badge badge-red" style="font-size: 15px !important; font-family: Roboto; border-radius: 10px"><i class="fa fa-times" aria-hidden="true"></i></span></td>
-                                </c:otherwise>
-                                </c:choose>
-                                <td><c:out value="${c.username}" /></td>
-                                <td><c:out value="${c.volumen}" /></td>
-                                <td>
-                                    <button id="swalDelete" title="<spring:message code="Eliminar" />" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm salida">
-                                        <i class="fa fa-trash text-white" aria-hidden="true"></i></button>
-                                    <a href="${fn:escapeXml(editbhcUrl)}"  data-toggle="tooltip" data-placement="bottom" title="<spring:message code="edit" />" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
-                                </td>
-                            </tr>
+                                    </c:choose>
+                                    <td><c:out value="${c.username}" /></td>
+                                    <td><c:out value="${c.volumen}" /></td>
+                                    <td>
+                                        <button id="swalDelete" title="<spring:message code="Eliminar" />" data-toggle="tooltip" data-placement="bottom" class="btn btn-danger btn-sm salida">
+                                            <i class="fa fa-trash text-white" aria-hidden="true"></i></button>
+                                        <a href="${fn:escapeXml(editbhcUrl)}"  data-toggle="tooltip" data-placement="bottom" title="<spring:message code="edit" />" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                    </td>
+                                </tr>
 
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
             </div>
             </div>
             </div>
