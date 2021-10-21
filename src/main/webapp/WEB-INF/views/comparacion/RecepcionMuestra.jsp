@@ -241,21 +241,6 @@
                         </div>
                     </div>
                 </form>
-                <!-- <form action="#" autocomplete="off" id="search-participant-form" class="form-horizontal">
-                    <div class="form-group row">
-                        <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
-                            <span class="required">*</span>
-                        </label>
-                        <div class="input-group col-md-10">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                            <input id="participantCode" name="participantCode" type="text" value="" class="form-control" />
-                            <button id="buscar" type="submit" class="btn btn-success">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                                <spring:message code="search" />
-                            </button>
-                        </div>
-                    </div>
-                </form>-->
                 <hr/>
                 <form class="form-horizontal" action="#" id="FormMuestra"  name="FormMuestra" autocomplete="off" role="form">
                     <div class="form-row" hidden="hidden">

@@ -313,12 +313,7 @@
         .modal-content {
             background: transparent !important
         }
-        /*.form-control:disabled, .form-control[readonly] {
-            background-color: #fff;
-            opacity: 1;
-            border-block-color: none;
-            border: 0;
-        }*/
+
         .badge-verde {
             color: #fff;
             background-color: #1BA407 !important;

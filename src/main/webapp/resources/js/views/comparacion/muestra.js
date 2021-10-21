@@ -169,6 +169,8 @@ var proccessMuestra = function(){
                     swal("Error!","Servidor no responde!","error");
                 });
             }
+
+
         }//fin init
     }// fin return
 }();
