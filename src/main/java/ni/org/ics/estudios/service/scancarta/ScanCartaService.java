@@ -722,6 +722,15 @@ public class ScanCartaService {
         return (ExtensionesTmp) query.uniqueResult();
     }
 
+    //Obtengo partes aceptadas
+    public List<DetalleParteTmp>getDetalleParteTmpByAccept(int id)throws Exception{
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from DetalleParteTmp tm where participantecartatmp.id=:id and tm.acepta=true");
+        query.setParameter("id",id);
+        return query.list();
+    }
+
+
     public boolean Borrar_Participante_Carta_Extension(Integer idParticipanteCartatmp){
         try{
             Session session= sessionFactory.getCurrentSession();
