@@ -1,9 +1,11 @@
-target/
+/target/
 *.class
 *.jar
 *.war
 *.ear
 *.logs
 *.iml
-.idea/
+/.idea/
 .eclipse
+.idea/artifacts/estudios_war_exploded.xml
+

@@ -218,7 +218,8 @@
         var table = $('#lista_casos').DataTable({
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
-            }
+            },
+            "order" : [[6, 'asc'], [0, 'asc']]
         });
 
         $("#fechaSalida").datepicker({

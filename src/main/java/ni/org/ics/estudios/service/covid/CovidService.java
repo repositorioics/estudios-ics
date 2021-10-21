@@ -1,13 +1,11 @@
 package ni.org.ics.estudios.service.covid;
 
-//import ni.org.ics.estudios.domain.covid19.CasaCasoCovid19;
 import ni.org.ics.estudios.domain.covid19.*;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cache.QueryResultsRegion;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,9 +111,14 @@ public class CovidService {
     //  Metodo para obtener listado casos positivos / no positivos Codvid
     @SuppressWarnings("unchecked")
     public List<ParticipanteCasoCovid19> getParticipanteCasosPositivosCovid(){
+
+        List<ParticipanteCasoCovid19> participanteCasoCovid19s;
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.enfermo <> 'N' and p.codigoCaso.pasive = '0'");
-        return query.list();
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.enfermo = 'I' and p.codigoCaso.casa is not null and p.codigoCaso.pasive = '0'");
+        participanteCasoCovid19s = query.list();
+        query = session.createQuery("from ParticipanteCasoCovid19 p where p.pasive = '0' and p.enfermo = 'S' and p.codigoCaso.casa is null and p.codigoCaso.pasive = '0'");
+        participanteCasoCovid19s.addAll(query.list());
+        return participanteCasoCovid19s;
     }
 
     @SuppressWarnings("unchecked")
