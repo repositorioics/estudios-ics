@@ -3,6 +3,7 @@ package ni.org.ics.estudios.domain.covid19;
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -145,6 +146,8 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     /*27. ¿Usted estuvo empleado como trabajador de la salud desde el 1 de febrero de 2020?*/
     private String trabajadorSalud;
     private String periodoSintomas;//Almacena desde que perido se estan preguntando los sintomas de la pregunta 1
+
+    private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
 
     @Id
     @Column(name = "CODIGO", length = 36, nullable = false)
@@ -1056,6 +1059,16 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
 
     public void setPeriodoSintomas(String periodoSintomas) {
         this.periodoSintomas = periodoSintomas;
+    }
+
+    @JsonIgnore
+    @Column(name = "FECHA_RECIBIDO")
+    public Date getFechaRecibido() {
+        return fechaRecibido;
+    }
+
+    public void setFechaRecibido(Date fechaRecibido) {
+        this.fechaRecibido = fechaRecibido;
     }
 
     @Override

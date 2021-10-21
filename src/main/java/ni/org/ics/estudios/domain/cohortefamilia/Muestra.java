@@ -3,10 +3,12 @@ package ni.org.ics.estudios.domain.cohortefamilia;
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Miguel Salinas on 5/17/2017.
@@ -36,6 +38,7 @@ public class Muestra extends BaseMetaData implements Auditable, Serializable {
     private String realizaPaxgene;
     private String horaInicioPax;
     private String horaFinPax;
+    private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
 
     @Id
     @Column(name = "CODIGO", length = 50, nullable = false)
@@ -202,6 +205,17 @@ public class Muestra extends BaseMetaData implements Auditable, Serializable {
     public void setParticipante(Participante participanteCHF) {
         this.participante = participanteCHF;
     }
+
+    @JsonIgnore
+    @Column(name = "FECHA_RECIBIDO")
+    public Date getFechaRecibido() {
+        return fechaRecibido;
+    }
+
+    public void setFechaRecibido(Date fechaRecibido) {
+        this.fechaRecibido = fechaRecibido;
+    }
+
 
     @Override
     public boolean isFieldAuditable(String fieldname) {

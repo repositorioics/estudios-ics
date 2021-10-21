@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +47,7 @@ public class CuestionarioCovid19Controller {
         }else{
             List<CuestionarioCovid19> cuestionarioCovid19List = Arrays.asList(objetos);
             for(CuestionarioCovid19 cuestionarioCovid19 : cuestionarioCovid19List) {
+                cuestionarioCovid19.setFechaRecibido(new Date());
                 covidService.saveOrUpdateCuestionarioCovid19(cuestionarioCovid19);
             }
         }
