@@ -37,6 +37,7 @@ public class CatalogoCartaController {
     private ScanCartaService scanCartaService;
 
 
+    //Metodo para crear una Nueva Carta  /CatalogoCarta/CrearNuevaCarta
     @RequestMapping(value = "/CrearNuevaCarta", method = RequestMethod.GET)
     public ModelAndView CrearNuevaCarta(Model model)throws Exception{
         ModelAndView modelAndView = new ModelAndView();

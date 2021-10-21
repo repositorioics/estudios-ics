@@ -155,7 +155,7 @@ public class RetiroService {
     @SuppressWarnings("unchecked")
     public List<Personal_Cargo> getSupervisorAndDigitador()throws Exception {
         Session session = sessionFactory.getCurrentSession();
-        Integer  cargoId [] = { 4, 7, 14 };
+        Integer  cargoId [] = { 1, 4, 7, 14 };
         boolean verdad = true;
         Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo in (:cargoId) and pc.estado= :verdad");
         query.setParameterList("cargoId",cargoId);

@@ -48,10 +48,7 @@ var SaveHemo = function(){
             }
             });
             function processHemo(){
-                alert("procesos hemo");
-               /* $("#btnSave").click(function(){
-                    $("#result").text($("formhemo").serialize());
-                });*/
+                //alert("procesos hemo");
             }
         }
     }

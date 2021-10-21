@@ -1144,7 +1144,44 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT_01', '1', 'CAT_TIPO_ASENT', NULL, '0', 1, '0', 'Verbal');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT_02', '2', 'CAT_TIPO_ASENT', NULL, '0', 2, '0', 'Escrito');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_TIPO_ASENT_03', '0', 'CAT_TIPO_ASENT', NULL, '0', 3, '0', 'No da asentimiento');
+/* CATALOGO PROYECTO SCANCARTA */
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para el tipo de Proyecto ScanCarta');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_UO1',   '1',  'CAT_SCAN_PROYECTO', NULL, '0', 1, '0', 'UO1');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_CIERS', '2',  'CAT_SCAN_PROYECTO', NULL, '0', 2, '0', 'CIERS');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_DENGUE', '3', 'CAT_SCAN_PROYECTO', NULL, '0', 3, '0', 'DENGUE');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_OTRO',   '4', 'CAT_SCAN_PROYECTO', NULL, '0', 4, '0', 'OTROS');
 
+/* CATALOGO PARA MODULO REACTIVACION MOTIVO NO ACUDIO AL CENTRO EN MUESTREO*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_REACT_MOTIVNOACUDCENTRO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo Motivo no Acudió al Centro para Muestreo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_REACT_MOTIVNOACUDCENTRO_DESC', '1', 'CAT_REACT_MOTIVNOACUDCENTRO', NULL, '0', 1, '0', 'Desconocia fecha Muestreo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_REACT_MOTIVNOACUDCENTRO_VIVIO', '2', 'CAT_REACT_MOTIVNOACUDCENTRO', NULL, '0', 2, '0', 'Vivio fuera del domicilio por un tiempo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_REACT_MOTIVNOACUDCENTRO_OTRA', '3','CAT_REACT_MOTIVNOACUDCENTRO', NULL, '0', 3, '0', 'Otra razón');
+
+
+/* CATALOGO CASA PEDIATRICA */
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo numero de manzana');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_01', '1', 'CAT_NUM_MANZANA', NULL, '0', 1, '0', '1');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_02', '2', 'CAT_NUM_MANZANA', NULL, '0', 2, '0', '2');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_03', '3', 'CAT_NUM_MANZANA', NULL, '0', 3, '0', '3');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_04', '4', 'CAT_NUM_MANZANA', NULL, '0', 4, '0', '4');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_05', '5', 'CAT_NUM_MANZANA', NULL, '0', 5, '0', '5');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_06', '6', 'CAT_NUM_MANZANA', NULL, '0', 6, '0', '6');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_07', '7', 'CAT_NUM_MANZANA', NULL, '0', 7, '0', '7');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_08', '8', 'CAT_NUM_MANZANA', NULL, '0', 8, '0', '8');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_09', '9', 'CAT_NUM_MANZANA', NULL, '0', 9, '0', '9');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_10', '10', 'CAT_NUM_MANZANA', NULL, '0',10, '0', '10');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_11', '11', 'CAT_NUM_MANZANA', NULL, '0', 11, '0', '11');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_12', '12', 'CAT_NUM_MANZANA', NULL, '0', 12, '0', '12');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_13', '13', 'CAT_NUM_MANZANA', NULL, '0', 13, '0', '13');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_14', '14', 'CAT_NUM_MANZANA', NULL, '0', 14, '0', '14');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_15', '15', 'CAT_NUM_MANZANA', NULL, '0', 15, '0', '15');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_16', '16', 'CAT_NUM_MANZANA', NULL, '0', 16, '0', '16');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_17', '17', 'CAT_NUM_MANZANA', NULL, '0', 17, '0', '17');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_18', '18', 'CAT_NUM_MANZANA', NULL, '0', 18, '0', '18');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_19', '19', 'CAT_NUM_MANZANA', NULL, '0', 19, '0', '19');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_NUM_MANZANA_20', '20', 'CAT_NUM_MANZANA', NULL, '0', 20, '0', '20');
+
+/*Mis Label*/
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.State', 'Estado','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.Place', 'Lugar','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.BHC', 'BHC','0','0',0);

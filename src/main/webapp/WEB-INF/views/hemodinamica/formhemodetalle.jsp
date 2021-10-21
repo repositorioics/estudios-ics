@@ -11,7 +11,10 @@
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
-    <!-- END DATE PICKER -->
+    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
+    <link href="${boot}" rel="stylesheet" type="text/css"/>
+
+
     <style>
         input[type="text"]:read-only:not([read-only="false"]) {
             color: #000000; background-color: #ffffff;
@@ -19,9 +22,166 @@
         }
         input[type="text"]{color: #000000; font-family: Roboto}
         input[type="select"]{color: #000000; font-family: Roboto}
+        /*ini*/
+        .toast-title {
+            font-weight: bold;
+        }
+        .toast-message {
+            -ms-word-wrap: break-word;
+            word-wrap: break-word;
+        }
+        .toast-message a,
+        .toast-message label {
+            color: #ffffff;
+        }
+        .toast-message a:hover {
+            color: #cccccc;
+            text-decoration: none;
+        }
+
+        .toast-close-button {
+            position: relative;
+            right: -0.3em;
+            top: -0.3em;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            -webkit-text-shadow: 0 1px 0 #ffffff;
+            text-shadow: 0 1px 0 #ffffff;
+            opacity: 0.8;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            filter: alpha(opacity=80);
+        }
+        .toast-close-button:hover,
+        .toast-close-button:focus {
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.4;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+            filter: alpha(opacity=40);
+        }
+        button.toast-close-button {
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+        }
+        .toast-top-full-width {
+            top: 0;
+            right: 0;
+            width: 100%;
+        }
+        .toast-bottom-full-width {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+        }
+        .toast-top-left {
+            top: 12px;
+            left: 12px;
+        }
+        .toast-top-right {
+            top: 12px;
+            right: 12px;
+        }
+        .toast-bottom-right {
+            right: 12px;
+            bottom: 12px;
+        }
+        .toast-bottom-left {
+            bottom: 12px;
+            left: 12px;
+        }
+        #toast-container {
+            position: fixed;
+            z-index: 999999;
+            /*overrides*/
+
+        }
+        #toast-container * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        #toast-container > div {
+            margin: 0 0 6px;
+            padding: 15px 15px 15px 50px;
+            width: 300px;
+            -moz-border-radius: 3px 3px 3px 3px;
+            -webkit-border-radius: 3px 3px 3px 3px;
+            border-radius: 3px 3px 3px 3px;
+            background-position: 15px center;
+            background-repeat: no-repeat;
+            -moz-box-shadow: 0 0 12px #999999;
+            -webkit-box-shadow: 0 0 12px #999999;
+            box-shadow: 0 0 12px #999999;
+            color: #ffffff;
+            opacity: 0.8;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            filter: alpha(opacity=80);
+        }
+        #toast-container > :hover {
+            -moz-box-shadow: 0 0 12px #000000;
+            -webkit-box-shadow: 0 0 12px #000000;
+            box-shadow: 0 0 12px #000000;
+            opacity: 1;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+            filter: alpha(opacity=100);
+            cursor: pointer;
+        }
+
+        #toast-container.toast-top-full-width > div,
+        #toast-container.toast-bottom-full-width > div {
+            width: 96%;
+            margin: auto;
+        }
+        .toast {
+            background-color: #030303;
+        }
+        .toast-success {
+            background-color: #51a351;
+        }
+        .toast-error {
+            background-color: #bd362f;
+        }
+        .toast-info {
+            background-color: #2f96b4;
+        }
+        .toast-warning {
+            background-color: #f89406;
+        }
+        /**/
+        @media all and (max-width: 240px) {
+            #toast-container > div {
+                padding: 8px 8px 8px 50px;
+                width: 11em;
+            }
+            #toast-container .toast-close-button {
+                right: -0.2em;
+                top: -0.2em;
+            }
+        }
+        @media all and (min-width: 241px) and (max-width: 480px) {
+            #toast-container > div {
+                padding: 8px 8px 8px 50px;
+                width: 18em;
+            }
+            #toast-container .toast-close-button {
+                right: -0.2em;
+                top: -0.2em;
+            }
+        }
+        @media all and (min-width: 481px) and (max-width: 768px) {
+            #toast-container > div {
+                padding: 15px 15px 15px 50px;
+                width: 25em;
+            }
+        }
     </style>
-    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
-    <link href="${boot}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -41,8 +201,8 @@
         </ol>
         <spring:url value="/hemo/addHemoDetalle" var="addDetalleHemoUrl"/>
         <spring:url value="/hemo/listado2" var="ListadoHemoUrl"/>
-        <c:set var="successmessage"><spring:message code="process.success" /></c:set>
-        <c:set var="errormessage"><spring:message code="process.errors" /></c:set>
+        <c:set var="successMessage"><spring:message code="process.success" /></c:set>
+        <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
         <spring:url value="/hemo/listDetailsHemo/{idDatoHemo}" var="listDetailsHemoUrl">
             <spring:param name="idDatoHemo" value="${idDatoHemo}" />
         </spring:url>
@@ -309,7 +469,7 @@
         if($("#numParams").val() === $("#contParams").val()){
             window.setTimeout(function () {
                 var p = $("#contParams").val();
-                swal("Finalizado!","Total de Parámetros: " +p,"success");
+                toastr.info("Total de Parámetros: " +p,"Finalizado", {timeOut:6000});
                 $("#btnGuardar").prop( "disabled", true );
             }, 1500);
         }else{
@@ -370,13 +530,11 @@
                     max:180
                 },
                 sa: {
-
                     number: true,
                     min:70,
                     max:100
                 },
                 tc: {
-
                     number: true,
                     min:36,
                     max:41
@@ -413,8 +571,10 @@
             }
         })
         function SaveDetailHemo(){
-            var url = {addDetalleHemoUrl:"${addDetalleHemoUrl}",
-                       listDetailsHemoUrl:"${listDetailsHemoUrl}"
+            var url = {
+                addDetalleHemoUrl:"${addDetalleHemoUrl}",
+                listDetailsHemoUrl:"${listDetailsHemoUrl}",
+                successmessage      : "${successMessage}"
             };
             if( isNaN($('#pp').val()) || isNaN($('#pam').val()) || $('#pp').val()=== '0' || $('#pam').val() === '0' ){
                 $('#pa').css('border-color','#FF0000');
@@ -423,15 +583,15 @@
             }else{
                 $.post(url.addDetalleHemoUrl, form1.serialize(), function (data) {
                     if (data.msj != null) {
-                        swal("Error!", data.msj, "error");
+                        toastr.error( data.msj, "ERROR",{timeOut:6000});
                     } else {
-                        swal("Éxito", 'Información guardada.', "success");
+                        toastr.success(url.successmessage, "success",{timeOut:6000});
                         window.setTimeout(function () {
                             location.reload();
                         }, 1500);
                     }
                 }).fail(function () {
-                    swal("Error!", "intente de nuevo!", "error");
+                    toastr.error("Error Interno del Servidor!", "ERROR",{timeOut:6000});
                 })
             }
         }

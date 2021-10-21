@@ -50,4 +50,18 @@ public class CasaCohorteFamiliaService {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(casa);
     }
+
+    //region Verificar si existe el codigo de la casa
+    public boolean getCasaFamById(String codigoCHF){
+        try{
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CasaCohorteFamilia c where c.codigoCHF =:codigoCHF");
+        query.setParameter("codigoCHF",codigoCHF);
+        return query.list().size()>0;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    //endregion
 }

@@ -15,7 +15,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "participantecarta", catalog = "estudios_ics", uniqueConstraints = { @UniqueConstraint(columnNames = "idparticipantecarta") })
+@Table(name = "scan_participante_carta", catalog = "estudios_ics", uniqueConstraints = { @UniqueConstraint(columnNames = "idparticipantecarta") })
 public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     private static final long serialVersionUID = 1L;
@@ -26,20 +26,32 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     private Personal personal;
     private Date fechacarta;
     private String asentimiento;
-    private String recurso;
     private Integer relfam;
     private String quienfirma;
     private String nombre2Firma;
     private String apellido1Firma;
     private String apellido2Firma;
     private String proyecto;
-    private char contactoFuturo;
-    private char retirado = '0';
+    private boolean contactoFuturo;
     private String observacion;
     private Integer tipoasentimiento;
 
+    private boolean testigopresent;
+    private String nombre1testigo;
+    private String nombre2testigo;
+    private String apellido1testigo;
+    private String apellido2testigo;
+
+    private Integer edadyears;
+    private Integer edadmeses;
+    private Integer edaddias;
+
+    private boolean anulada;
+    private String pq_anulada;
+    private String estudios;
+
     @Id
-    @Column(name = "idparticipantecarta", nullable = false, length = 6)
+    @Column(name = "IDPARTICIPANTECARTA", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdparticipantecarta() {
         return idparticipantecarta;
@@ -50,7 +62,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idparticipante", nullable = false)
+    @JoinColumn(name = "CODIGO_PARTICIPANTE", nullable = false)
     @ForeignKey(name = "FK_IDPARTICIPANTE")
     public Participante getParticipante() {
         return participante;
@@ -61,7 +73,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idversion", nullable = false)
+    @JoinColumn(name = "IDVERSION", nullable = false)
     @ForeignKey(name = "FK_VERSION")
     public Version getVersion() {
         return version;
@@ -72,7 +84,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     }
 
 
-    @Column(name = "fechacarta", nullable = false)
+    @Column(name = "FECHA_CARTA", nullable = false)
     public Date getFechacarta() {
         return fechacarta;
     }
@@ -82,7 +94,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     }
 
 
-    @Column(name = "asentimiento", nullable = true, length = 6)
+    @Column(name = "ASENTIMIENTO", nullable = true)
     public String getAsentimiento() {
         return asentimiento;
     }
@@ -91,17 +103,8 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.asentimiento = asentimiento;
     }
 
-    @Column(name = "recurso", nullable = true)
-    public String getRecurso() {
-        return recurso;
-    }
-
-    public void setRecurso(String recurso) {
-        this.recurso = recurso;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "idPersona", nullable = false)
+    @JoinColumn(name = "IDPERSONA", nullable = false)
     @ForeignKey(name = "FK_IDPERSONA")
     public Personal getPersonal() {
         return personal;
@@ -111,7 +114,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.personal = personal;
     }
 
-    @Column(name = "relfam", nullable = false)
+    @Column(name = "RELACION_FAMILIAR", nullable = false)
     public Integer getRelfam() {
         return relfam;
     }
@@ -121,7 +124,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     }
 
 
-    @Column(name = "quienfirma", nullable = false)
+    @Column(name = "NOMBRE1TUTOR", nullable = false)
     public String getQuienfirma() {
         return quienfirma;
     }
@@ -130,7 +133,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.quienfirma = quienfirma;
     }
 
-    @Column(name = "nombre2firma", nullable = false)
+    @Column(name = "NOMBRE2TUTOR", nullable = false)
     public String getNombre2Firma() {
         return nombre2Firma;
     }
@@ -138,7 +141,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     public void setNombre2Firma(String nombre2Firma) {
         this.nombre2Firma = nombre2Firma;
     }
-    @Column(name = "apellido1firma", nullable = false)
+    @Column(name = "APELLIDO1TUTOR", nullable = false)
     public String getApellido1Firma() {
         return apellido1Firma;
     }
@@ -146,7 +149,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     public void setApellido1Firma(String apellido1Firma) {
         this.apellido1Firma = apellido1Firma;
     }
-    @Column(name = "apellido2firma", nullable = false)
+    @Column(name = "APELLIDO2TUTOR", nullable = false)
     public String getApellido2Firma() {
         return apellido2Firma;
     }
@@ -155,7 +158,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.apellido2Firma = apellido2Firma;
     }
 
-    @Column(name = "proyecto", nullable = false)
+    @Column(name = "PROYECTO", nullable = false)
     public String getProyecto() {
         return proyecto;
     }
@@ -163,16 +166,16 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     public void setProyecto(String proyecto) {
         this.proyecto = proyecto;
     }
-    @Column(name = "contactofuturo", nullable = true)
-    public char getContactoFuturo() {
+    @Column(name = "CONTACTO_FUTURO", nullable = true)
+    public boolean getContactoFuturo() {
         return contactoFuturo;
     }
 
-    public void setContactoFuturo(char contactoFuturo) {
+    public void setContactoFuturo(boolean contactoFuturo) {
         this.contactoFuturo = contactoFuturo;
     }
 
-    @Column(name = "tipoasentimiento", nullable = true)
+    @Column(name = "TIPO_ASENTIMIENTO", nullable = true)
     public Integer getTipoasentimiento() {
         return tipoasentimiento;
     }
@@ -181,16 +184,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.tipoasentimiento = tipoasentimiento;
     }
 
-    @Column(name="retirado", nullable = false, length = 1)
-    public char getRetirado() {
-        return retirado;
-    }
-
-    public void setRetirado(char retirado) {
-        this.retirado = retirado;
-    }
-
-    @Column(name="observacion", nullable = true, length = 255)
+    @Column(name="OBSERVACION", nullable = true, length = 255)
     public String getObservacion() {
         return observacion;
     }
@@ -205,12 +199,101 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     }
 
     @Transient
-     public boolean isEsRetirado() {
-        return this.retirado == '1';
+    public boolean isEsContacto() {
+        return this.contactoFuturo == true;
     }
 
-    @Transient
-    public boolean isEsContacto() {
-        return this.contactoFuturo == '1';
+    @Column(name="TESTIGO_PRESENT")
+    public boolean isTestigopresent() {
+        return testigopresent;
+    }
+
+    public void setTestigopresent(boolean testigopresent) {
+        this.testigopresent = testigopresent;
+    }
+    @Column(name="NOMBRE1TESTIGO", nullable = true, length = 50)
+    public String getNombre1testigo() {
+        return nombre1testigo;
+    }
+
+    public void setNombre1testigo(String nombre1testigo) {
+        this.nombre1testigo = nombre1testigo;
+    }
+    @Column(name="NOMBRE2TESTIGO", nullable = true, length = 50)
+    public String getNombre2testigo() {
+        return nombre2testigo;
+    }
+
+    public void setNombre2testigo(String nombre2testigo) {
+        this.nombre2testigo = nombre2testigo;
+    }
+    @Column(name="APELLIDO1TESTIGO", nullable = true, length = 50)
+    public String getApellido1testigo() {
+        return apellido1testigo;
+    }
+
+    public void setApellido1testigo(String apellido1testigo) {
+        this.apellido1testigo = apellido1testigo;
+    }
+    @Column(name="APELLIDO2TESTIGO", nullable = true, length = 50)
+    public String getApellido2testigo() {
+        return apellido2testigo;
+    }
+
+    public void setApellido2testigo(String apellido2testigo) {
+        this.apellido2testigo = apellido2testigo;
+    }
+
+    @Column(name="EDAD_YEAR")
+    public Integer getEdadyears() {
+        return edadyears;
+    }
+
+    public void setEdadyears(Integer edadyears) {
+        this.edadyears = edadyears;
+    }
+    @Column(name="EDAD_MESES")
+    public Integer getEdadmeses() {
+        return edadmeses;
+    }
+
+    public void setEdadmeses(Integer edadmeses) {
+        this.edadmeses = edadmeses;
+    }
+
+    @Column(name="EDAD_DIAS")
+    public Integer getEdaddias() {
+        return edaddias;
+    }
+
+    public void setEdaddias(Integer edaddias) {
+        this.edaddias = edaddias;
+    }
+
+    @Column(name = "ANULADA")
+    public boolean isAnulada() {
+        return anulada;
+    }
+
+    public void setAnulada(boolean anulada) {
+        this.anulada = anulada;
+    }
+
+    @Column(name = "PQ_ANULADA", nullable = true, length = 255)
+    public String getPq_anulada() {
+        return pq_anulada;
+    }
+
+    public void setPq_anulada(String pq_anulada) {
+        this.pq_anulada = pq_anulada;
+    }
+
+    @Column(name = "ESTUDIO", nullable = false, length = 255)
+    public String getEstudios() {
+        return estudios;
+    }
+
+    public void setEstudios(String estudios) {
+        this.estudios = estudios;
     }
 }

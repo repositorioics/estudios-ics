@@ -65,10 +65,11 @@
                             <thead>
                             <tr>
                                 <th width="12%"><spring:message code="house" /></th>
-                                <th width="20%"><spring:message code="logindate" /></th>
+                                <th width="15%"><spring:message code="logindate" /></th>
                                 <th width="12%"><spring:message code="positive" /></th>
-                                <th width="20%"><spring:message code="fif" /></th>
-                                <th width="20%"><spring:message code="logoutdate" /></th>
+                                <th width="15%"><spring:message code="fif" /></th>
+                                <th width="15%"><spring:message code="FIS" /></th>
+                                <th width="15%"><spring:message code="logoutdate" /></th>
                                 <th width="16%"><spring:message code="actions" /></th>
                             </tr>
                             </thead>
@@ -90,6 +91,7 @@
                                     <td><fmt:formatDate value="${parti.codigoCaso.fechaInicio}" pattern="dd/MM/yyyy" /></td>
                                     <td><c:out value="${parti.participante.participante.codigo}" /></td>
                                     <td><fmt:formatDate value="${parti.fechaEnfermedad}" pattern="dd/MM/yyyy" /></td>
+                                    <td><fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.codigoCaso.fechaInactiva}" pattern="dd/MM/yyyy" /></td>
                                     <td>
                                         <c:choose>
@@ -114,25 +116,9 @@
                     <br>
                     <br>
                     <br>
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="col-md-12">
                             <form action="#" autocomplete="off" id="print-form" class="form-horizontal">
-                                <!--<div class="form-group row">
-                                    <label class="form-control-label col-md-4" for="visita"><spring:message code="visit" />
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="input-group col-md-6">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar-check-o"></i>
-                                    </span>
-                                        <select class="form-control select2-single" id="visita" name="visita">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${visitas}" var="visita">
-                                                <option value="${visita.messageKey}">${visita.spanish}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                </div>-->
                                 <div class="form-group row">
                                     <label class="form-control-label col-md-4" for="etiquetas"><spring:message code="label.types" />
                                         <span class="required">*</span>
@@ -161,7 +147,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="modal fade" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-aria-hidden="true">
@@ -279,12 +265,12 @@
                         {
                             "sExtends": "csv",
                             "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4 ]
+                            "mColumns": [ 0, 1, 2, 3, 4, 5 ]
                         },
                         {
                             "sExtends": "pdf",
                             "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4 ],
+                            "mColumns": [ 0, 1, 2, 3, 4, 5 ],
                             "sPdfOrientation": "landscape"
                         }
                     ]

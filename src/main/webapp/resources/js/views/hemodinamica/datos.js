@@ -58,18 +58,20 @@ var datosHemo = function(){
                 $.getJSON(Urls.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
                     var len = data.length;
                     if(len==0){
-                        swal("Error!","Código no encontrado","error");
+                        toastr.error("Código no encontrado!","ERROR",{timeOut:6000});
                         $("input[name=chkRange2]").attr("checked", false);
                         $("#parametro").focus();
                     }
                     else{
                         if(data.estado == "0"){
-                            swal("Advertencia!", "Participante está retirado!", "warning");
+                            toastr.warning("Participante está retirado!", "warning", {timeOut:6000});
                             $("#nombre").val("");
                             $("#fconsulta").val("");
                             $("#idParticipante").val("");
                             $("#edad").val("");
                             $("#direccion").val("");
+                            $("#fecha").val("");
+                            $("#expediente").val("");
                             $("#sector").val("").change();
                             $("#anios").val("");
                             $("#mes").val("");
@@ -100,7 +102,7 @@ var datosHemo = function(){
                         }
                     }
                 }).fail(function() {
-                    swal("Error!","Código no existe!", "error");
+                    toastr.error("Error Interno del Servidor!", "ERROR",{timeOut:6000});
                     $("input[name=chkRange2]").attr("checked", false);
                     $("#parametro").val("");
                     $("#parametro").focus();
@@ -123,12 +125,63 @@ var datosHemo = function(){
                 // Navigate next
                 if ($("#idParticipante").val().trim() == null || $("#idParticipante").val().trim() == "" || $("#nombre").val().trim()=="" || $("#fecha").val().trim()=="") {
                     $('#smartwizard').smartWizard("goToStep", 0);
-                    $.notify("Campos Requerido!",'error');
+                    //toastr.error("Campos Requerido!",'ERROR',{timeOut:6000});
                     $("#parametro").focus();
                 }else{
                     $('#smartwizard').smartWizard("next");
                 }
                 return true;
+            });
+            // Demo Button Events
+            $("#got_to_step").on("change", function() {
+                // Go to step
+                var step_index = $(this).val() - 1;
+                $('#smartwizard').smartWizard("goToStep", step_index);
+                return true;
+            });
+            // Step show event
+            $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+                $("#prev-btn").removeClass('disabled');
+                $("#next-btn").removeClass('disabled');
+                if(stepPosition === 'first') {
+                    $("#prev-btn").addClass('disabled');
+                } else if(stepPosition === 'last') {
+                    $("#next-btn").addClass('disabled');
+                } else {
+                    $("#prev-btn").removeClass('disabled');
+                    $("#next-btn").removeClass('disabled');
+                }
+            });
+
+            $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+                debugger;
+                if ( $("#nombre").val() =="") {
+                    $("#smartwizard").smartWizard("goToStep", 0);
+                    toastr.error("Ingresa código del Participante!",{timeOut:5000});
+                    $("#parametro").focus();
+                    return false;
+                }
+                if($("#nombre").val()== "" || $("#fecha").val()== "" || $("#expediente").val()== "" || $("#sector").select2().val() =="" ){
+                    $("#smartwizard").smartWizard("goToStep", 0);
+                    toastr.error("Informacion pendiente por ingresar!","ERROR",{timeOut:6000});
+                    $("#parametro").focus();
+                    return false;
+                }
+                if(stepNumber == 1 && stepDirection=="forward" ){
+                    if( $("#nombre").val() == "") {
+                        toastr.error("Nombre es requerido!", {timeOut: 5000});
+                        return false;
+                    } if( $("#sector").val().trim() == "") {
+                        toastr.error("Seleccione el sector!", {timeOut: 5000});
+                        return false;
+                    }if( $("#direccion").val().trim() == "") {
+                        toastr.error("Direccion es requerida!", {timeOut: 5000});
+                        return false;
+                    }if(  $("#expediente").val()=="" ) {
+                        toastr.error("Seleccione el Recurso!", {timeOut: 5000});
+                        return false;
+                    }
+                }
             });
             $("#btnObtenerRango").on("click", function(){
                 GetRange();
@@ -210,9 +263,9 @@ var GuardarDinamica = function(){
                         }
                     },
                     expediente:{required: true},
-                    telefono:{
+                    telefono :{
+                        pattern: /^\+?[0-9]*\.?[0-9]+$/,
                         maxlength: 8,
-                        minlength: 8,
                         digits: true},
                     edad:{required: true},
                     peso:{required:true,
@@ -256,6 +309,14 @@ var GuardarDinamica = function(){
                     return false;
                 }
 
+                if($("#telefono").val() != ""){
+                    if($("#telefono").val().length > 8 || $("#telefono").val().length < 8)
+                    $.notify("Teléfono acepta 8 digitos", 'error');
+                    isValidData = false;
+                    $("#telefono").focus();
+                    return false;
+                }
+
                 if ($("#talla").val().trim() == null || $("#talla").val().trim() == "" || $("#talla").val().trim() === 'NaN') {
                     $.notify("Talla es requerido", 'error');
                     isValidData = false;
@@ -289,7 +350,7 @@ var GuardarDinamica = function(){
                 }
                 if (!validarFecha($("#fie").val())) {
                     isValidData = false;
-                    $.notify("Fecha Inicio Enfermedad Incorrecto!", 'error');
+                    $.notify("Fecha Inicio Enfermedad Incorrecto!", 'ERROR',{timeOut:6000});
                     return false;
                 }
                 if (!$('input[name=chkpositivo]:checked').val()){
@@ -300,15 +361,14 @@ var GuardarDinamica = function(){
                 //fin valid
                 if (isValidData) {
                     $.post(dir.saveHemoUrl, form1.serialize(), function (data) {
-                     swal("Éxito!", "Información guardada!", "success")
+                        toastr.success(dir.successmessage, "success",{timeOut:6000});
                      window.setTimeout(function () {
                      window.location.href = dir.ListadoUrl;
                      }, 1400);
                      }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                     swal("Error", "Problemas al Guardar!", "error");
+                     toastr.error("Interno del Servidor!","ERROR", {timeOut: 6000});
                      });
-                }else{$.notify("Datos Incorrectos!","error")}
-
+                }else{toastr.error("Datos Incorrectos!","ERROR",{timeOut:6000})}
 
             }
         }

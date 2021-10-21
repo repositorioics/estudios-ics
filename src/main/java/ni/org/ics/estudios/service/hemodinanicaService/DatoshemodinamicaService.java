@@ -2,6 +2,7 @@ package ni.org.ics.estudios.service.hemodinanicaService;
 
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
+import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.dto.RangosFrecuenciasCardiacas;
@@ -99,7 +100,6 @@ public class DatoshemodinamicaService {
             throw e;
         }
     }
-
     /* --  Verificar si Existe una hoja con identica  -- */
     public boolean SiExisteHemo(String idDatoHemo, Date fecha, String horas) throws Exception {
         try {

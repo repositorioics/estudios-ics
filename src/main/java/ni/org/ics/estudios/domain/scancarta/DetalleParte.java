@@ -12,7 +12,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "detalleparte", catalog = "estudios_ics", uniqueConstraints = { @UniqueConstraint(columnNames = "iddetalle") })
+@Table(name = "scan_detalle_parte", catalog = "estudios_ics", uniqueConstraints = { @UniqueConstraint(columnNames = "IDDETALLE") })
 public class  DetalleParte extends BaseMetaData implements Auditable {
 
     private static final long serialVersionUID = 1L;
@@ -20,10 +20,13 @@ public class  DetalleParte extends BaseMetaData implements Auditable {
     private Integer iddetalle;
     ParticipanteCarta participantecarta;
     Parte parte;
-    private Boolean acepta;
+    private boolean acepta;
+    private boolean anulada;
+
+    public DetalleParte(){}
 
     @Id
-    @Column(name = "iddetalle", nullable = false, length = 6)
+    @Column(name = "IDDETALLE", nullable = false, length = 6)
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIddetalle() {
         return iddetalle;
@@ -33,9 +36,8 @@ public class  DetalleParte extends BaseMetaData implements Auditable {
         this.iddetalle = iddetalle;
     }
 
-
     @ManyToOne
-    @JoinColumn(name = "idparticipantecarta", nullable = false)
+    @JoinColumn(name = "IDPARTICIPANTECARTA", nullable = false)
     @ForeignKey(name = "FK_IDPARTICIPANTECARTA")
     public ParticipanteCarta getParticipantecarta() {
         return participantecarta;
@@ -46,7 +48,7 @@ public class  DetalleParte extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idparte", nullable = false)
+    @JoinColumn(name = "IDPARTE", nullable = false)
     @ForeignKey(name = "FK_IDPARTE")
     public Parte getParte() {
         return parte;
@@ -55,13 +57,22 @@ public class  DetalleParte extends BaseMetaData implements Auditable {
     public void setParte(Parte parte) {
         this.parte = parte;
     }
-    @Column(name = "acepta")
+    @Column(name = "ACEPTA")
     public Boolean getAcepta() {
         return acepta;
     }
 
     public void setAcepta(Boolean acepta) {
         this.acepta = acepta;
+    }
+
+    @Column(name = "ANULADA")
+    public boolean isAnulada() {
+        return anulada;
+    }
+
+    public void setAnulada(boolean anulada) {
+        this.anulada = anulada;
     }
 
     @Override

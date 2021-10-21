@@ -148,6 +148,16 @@
                                 <th width="10%"><spring:message code="house" /> CHF</th>
                             </tr>
                             </thead>
+                            <tbody>
+                            <tr>
+                                <td>            <spring:message code="100" />                           </td>
+                                <td>            <spring:message code="101" />                           </td>
+                                <td>            <spring:message code="02/02/2021" />                           </td>
+                                <td>            <spring:message code="01/02/2021" />                           </td>
+                                <td>            <spring:message code="2" />                           </td>
+                                <td>            <spring:message code="3" />                           </td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                     <br>

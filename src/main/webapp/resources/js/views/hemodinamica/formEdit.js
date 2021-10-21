@@ -108,14 +108,14 @@ var editDatos=function(){
                 }
                 if (isValidData) {
                 $.post(dir.updateHemoUrl, form2.serialize(), function(data){
-                    swal("Éxito!", "Información actualizada!", "success");
+                    toastr.success(dir.successmessage, "success",{timeOut:6000});
                     window.setTimeout(function(){
                         window.location.href = dir.Listado2Url;
                     }, 1400);
                 }).fail(function(XMLHttpRequest, textStatus, errorThrown){
-                    swal("Error!","intente nuevamente!", "error");
+                    toastr.error("Error Interno del Servidor!","ERROR!",{timeOut:6000});
                 });
-                }else{$.notify("Datos Incorrectos!","error")}
+                }else{toastr.error("Existen datos incorrectos!","ERROR",{timeOut: 6000})}
 
             }
         }

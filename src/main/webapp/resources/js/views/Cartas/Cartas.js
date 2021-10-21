@@ -3,19 +3,19 @@ var scanCarta = function(){
     return{
         init : function(parametroII){
             direct = parametroII;
+            clearInput();
             $("#select-participante-form").validate({
                 rules: {
                     parametro: 'required',
-                    number: true
-                },
-                errorElement: 'em',
-                errorPlacement: function ( error, element ) {
+                    digits: true
+                },errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
                     error.addClass( 'form-control-feedback' );
                     if ( element.prop( 'type' ) === 'checkbox' ) {
                         error.insertAfter( element.parent( 'label' ) );
                     } else {
-                        error.insertAfter( element );
+                        //error.insertAfter( element ); //cuando no es input-group
+                        error.insertAfter(element.parent('.input-group'));
                     }
                 },
                 highlight: function ( element, errorClass, validClass ) {
@@ -30,8 +30,10 @@ var scanCarta = function(){
                     searchParticipante();
                 }
             });
+
             function clearInput(){
                 $("#txtNombreCompleto").val("");
+                $("#principal").val("");
                 $("#edad").val("");
                 $("#idParticipante").val("");
                 $("#estudios").val("");
@@ -40,10 +42,23 @@ var scanCarta = function(){
                 $("#relacionFam").val("");
                 $("#tutor").val("");
                 $("#codigo").val("");
+                $("#fechacarta").val('');
+                $('#carta').val('').trigger('change.select2');
+                $('#version').val('').trigger('change.select2');
+                $("#version").select2("val", "");
+                $('#partes').val('').trigger('change.select2');
+                $('#partes').val(null).trigger('change');
+                $('#person').val('').trigger('change.select2');
+                $('#proyecto').val('').trigger('change.select2');
+                $("#edadyear").val("");
+                $("#edadmeses").val("");
+                $("#edaddias").val("");
                 $("#parametro").val("");
             }
             function searchParticipante(){
+                //debugger; clearInput();
                 $.getJSON(parametroII.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
+                    console.warn(data);
                     var len = data.length;
                     if(len==0){
                         swal("Error!","Código no encontrado","error");
@@ -52,27 +67,44 @@ var scanCarta = function(){
                     }
                     else{
                         if(data.estado == "0"){
-                            swal("Advertencia!", "Participante está retirado!", "warning");
+                            toastr.warning("Participante Retirado!",{timeOut: 5000});
                             clearInput();
                             $("#parametro").focus();
                         }else{
-                            var elemento = data.edad;
-                            var fecha = elemento.split('/');
-                            var datestring = ( fecha[0] + " Años " + fecha[1] + " Meses " + fecha[2] + " Dias");
-                            $("#anios").val(fecha[0]);
-                            $("#mes").val(fecha[1]);
-                            $("#dias").val(fecha[2]);
-                            $("#codigo").val(data.codigo);
-                            $("#tutor").val(data.tutor);
-                            $("#txtNombreCompleto").val(data.nombre);
-                            $("#fecha").val(data.fecha);
-                            $("#idParticipante").val(data.codigo);
-                            $("#edad").val(datestring);
+                            clearInput();
+                            $("#codigo").val(data.codigoParticipante);
+                            $("#tutor").val(data.nombreTutor);
+                            $("#txtNombreCompleto").val(data.nombreCompleto);
+                            $("#edadyear").val(data.edadAnios);
+                            $("#edadmeses").val(data.edadMes);
+                            $("#edaddias").val(data.edadDia);
                             $("#estudios").val(data.estudios);
-                            $("#padre").val(data.padre);
-                            $("#madre").val(data.madre);
+                            $("#padre").val(data.nombrePadre);
+                            $("#madre").val(data.nombreMadre);
+                            $("#nombfirma").val(data.name1Tutor);
+                            $("#nombre2Firma").val(data.name2Tutor);
+                            $("#apellido1Firma").val(data.surname1Tutor);
+                            $("#apellido2Firma").val(data.surname2Tutor);
+                            var relfamiliar = parseInt(data.realFam);
+                            $("#relfam").val(relfamiliar).trigger('change.select2');
+                            if(data.menorEdad == true){
+                                debugger;
+                                $("#divAsentimiento").fadeIn("slow");
+                                $("#asentimiento").prop('required', true);
+                                $("#asentimiento").val(1).trigger('change.select2');
+                                $("#divTipoAsentimiento").fadeIn("slow");
+                                $("#tipoasentimiento").prop('required', true);
+                            }else{
+                                $("#divAsentimiento").fadeOut("slow");
+                                $("#asentimiento").val('').trigger('change.select2');
+                                $("#asentimiento").prop('required', false);
+                                $("#divTipoAsentimiento").fadeOut("slow");
+                                $("#tipoasentimiento").val('').trigger('change.select2');
+                                $("#tipoasentimiento").prop('required', false);
+                                $("#relfam").val(8).trigger('change.select2');
+                            }
                             var text = "";
-                            switch (data.relacionFam){
+                            switch (data.realFam){
                                 case "1":
                                     text = "Madre";
                                     break;
@@ -95,27 +127,110 @@ var scanCarta = function(){
                                     text = "Participante";
                             }
                             $("#relacionFam").val(text);
+                            var $carta = $('#carta');
+                            $carta.empty();
+                            $carta.append('<option selected value="">'+ "Seleccione..." +'</option>');
+                            $.each(data.listEstudios, function (i, val) {
+                                $carta.append($('<option></option>').val(val.prioridad).html(val.prioridad +" - "+val.nombreEstudio));
+                            });
                             $("#peso").focus();
                         }
                     }
                 }).fail(function() {
-                    swal("Error!","Código no existe!", "error");
+                    toastr.error("Código no Existe!",{timeOut: 5000});
                     $("#parametro").focus();
                 });
             }
+
+
+            /*
+            var _arrEstudio = [
+                { id: 1, estudio: "CH Familia"},
+                { id: 2, estudio: "Arbovirus"},
+                { id: 3, estudio: "Dengue" },
+                { id: 4, estudio: "Influenza" },
+                { id: 5, estudio: "UO1" },
+                { id: 6, estudio: "Tcovid" }
+            ];
+
+           function getEstudiosProcesos(estudios){
+                debugger;
+               var task_names = [];
+                var est = $("#estudios").val();
+                var textoseparado = est.split('  ');
+                const valueToRemove = "";
+                const filteredItems = textoseparado.filter(item => item !== valueToRemove);
+                $.each(filteredItems, function(i, value){
+                    for (var i = 0; i < _arrEstudio.length; i++) {
+                        if (_arrEstudio[i].estudio === value){
+                            task_names.push(_arrEstudio[i]);
+                            break;
+                        }
+                    }
+                });
+                var $carta = $('#carta');
+                $carta.empty();
+                $carta.append($('<option></option>').val('').html('Selecciona..'));
+                $.each(task_names, function (i, val) {
+                    $carta.append($('<option></option>').val(val.id).html(val.id +" - "+val.estudio));
+                });
+                //console.log(JSON.stringify(task_names));
+
+            }*/
+
+            $("#asentimiento").on("change", function(){
+               var valor = $(this).val();
+                if(valor == "2" || valor == "0"){
+                    $("#tipoasentimiento").val("0").trigger('change.select2');
+                }
+            });
+
             $("#carta").on("change", function(){
+                $('#version').val("").trigger('change.select2');
+                $('#version').select2().empty();
                 if ($('#version').prop("disabled") == false) {}
                 if ($("#carta").val() == null  || $("#carta").val() == "") {
                     $('#version').empty();
                     $('#version').append($('<option></option>').val('').html('Seleccion Versión'));
                     $("#version").prop('disabled',true);
+                    $('#proyecto').val('').trigger('change.select2');
                     return;
                 }
-                //$("#partes").prop('disabled',false);
+                if ($(this).val() == 3) {
+                    $('#proyecto').val(3).trigger('change.select2');
+                } else if ($(this).val() == 5) {
+                    $('#proyecto').val(5).trigger('change.select2');
+                } else if ($(this).val() == 4) {
+                    $('#proyecto').val(2).trigger('change.select2');
+                } else {
+                    $('#proyecto').val(4).trigger('change.select2');
+                }
+                $("#partes").prop('disabled',false);
                 $("#version").prop('disabled',false);
                 ObtenerVersion(parametroII);
-            });//fin Select carta $("#version").val() > 0 ||
+            });
+            function ObtenerVersion(parametros){
+                var idcarta = document.getElementById('carta').value;
+                var $version = $('#version');
+                $.getJSON(parametros.VersionCartatUrl, { idcarta : idcarta,   ajax : 'true'  }, function(data) {
+                    $version.empty();
+                    var len = data.objV.length;
+                    if(len == 0){
+
+                    }else{
+                        var d = data.objV;
+                        $version.append($('<option></option>').val('').html('Selecciona la Versión'));
+                        $.each(d, function (i, val) {
+                        $version.append($('<option></option>').val(val.idversion).html(val.version));
+                        });
+                    }
+                });
+            }
+
             $("#version").on("change", function(){
+                //debugger;
+                $("#partes").select2("val", "");
+                $("#partes").empty();
                 if($("#version").val() == "") {
                     $("#DivPartes").hide(1000);
                     $("#DivPartes").empty();
@@ -129,7 +244,6 @@ var scanCarta = function(){
                 }
             });//fin
             var bandera = false;
-
             $("#partes").change(function (e) {
                 if (e.added != null){
                     seleccionar(e.added.id);
@@ -138,72 +252,76 @@ var scanCarta = function(){
                     deseleccionar(e.removed.id);
                 }
             });
+
+            $("#partes").on("select2-removing", function(e) {
+             debugger;
+                var p = $("#principal").val();
+                if (e.choice.text === p) {
+                    e.preventDefault();
+                    $(this).select2("close");
+                }
+             });
+
+            function seleccionar(id){
+                var cod = parseInt(id);
+                for (var i = 0; i < elementos.length; i++) {
+                    if (elementos[i].idparte === cod){
+                        elementos[i].acepta = true;
+                        break;
+                    }
+                }
+            }
+
+            function deseleccionar(id) {
+                var cod = parseInt(id);
+                for (var i = 0; i < elementos.length; i++) {
+                    if (elementos[i].idparte === cod) {
+                        elementos[i].acepta = false;
+                        break;
+                    }
+                }
+            }
+
             var elementos = [];
             function ObtenerParte(parametros){
                 var idversion = document.getElementById('version').value;
                 var $ele = $("#partes");
                 $.getJSON(parametros.ParteVersionUrl,{idversion : idversion, ajax:'true'}, function(data){
-                    elementos = [];
+                    console.log(data);
+                     elementos = [];
                     for(var i=0; i < data.parte.length; i++){
                         var obj = {};
                         obj.idparte = parseInt(data.parte[i].idparte);
                         obj.acepta =  (data.parte[i].acepta == "true") ? true : false;
+                        obj.locked =   data.parte[i].principal;
                         elementos.push(obj);
                     }
                     if(data.parte.length > 0){
                         bandera=true;
+                        $("#principal").val('');
                         $.each(data.parte, function (i, val) {
-                           $ele.append($('<option/>').val(val.idparte).text(val.parte));
-                        })
+                            debugger;
+                            var option = new Option(val.parte, val.idparte, false, val.principal );
+                            $ele.append(option).trigger('change');
+                            if(val.principal){
+                                seleccionar(val.idparte);
+                            }
+                            //$ele.append($('<option></option>').val(val.idparte).html(val.parte));
+                        });
+                        $("#principal").val($("#partes").find('option:selected').text());
+
                     }else{
                         $ele.empty();
                     }
                 })
             }
-
-            function ObtenerVersion(parametros){
-                var idcarta = document.getElementById('carta').value;
-                var $version = $('#version');
-                $version.empty();
-                $.getJSON(parametros.VersionCartatUrl, { idcarta : idcarta,   ajax : 'true'  }, function(data) {
-                    var len = data.objV.length;
-                    if(len == 0){
-                        //swal("Advertencia!", "Carta no tiene Versión!", "warning");
-                    }else{
-                        var d = data.objV;
-                        $version.append($('<option></option>').val('').html('Selecciona la Versión'));
-                        $.each(d, function (i, val) {
-                            $version.append($('<option></option>').val(val.idversion).html(val.version));
-                        });
-                    }
-                });
-            }
-
             //Validar las cajas de texto...
-            $('#nombfirma').keypress(function (e) {
-                var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
-                return !((tecla > 47 && tecla < 58) || tecla == 46);
-            });
-            //Validar las cajas de texto...
-            $('#nombre2Firma').keypress(function (e) {
-                var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
-                return !((tecla > 47 && tecla < 58) || tecla == 46);
-            });
-            $('#apellido1Firma').keypress(function (e) {
-                var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
-                return !((tecla > 47 && tecla < 58) || tecla == 46);
-            });
-            $('#apellido1Firma').keypress(function (e) {
-                var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
-                return !((tecla > 47 && tecla < 58) || tecla == 46);
-            });
-            $('#apellido2Firma').keypress(function (e) {
+            $('.onlytext').keypress(function (e) {
                 var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
                 return !((tecla > 47 && tecla < 58) || tecla == 46);
             });
 
             $("#btnCancel").on("click", function(e){
-                debugger;
                 var num= $("#partes").select2().val();
                 if($.isEmptyObject(num)){
                     alert("Selecciona al menos una opción");
@@ -213,15 +331,31 @@ var scanCarta = function(){
                 }
             });
 
-            $("#btnSave").on("click", function(e){
-                e.preventDefault();
-                var isValidItem = true;
+            //$("#btnSave").on("click", function(e){
+                //e.preventDefault();
+               /* var isValidItem = true;
                 $('#error').empty();
                 var data = {};
+                if($("#codigo").val() == "" || $("#codigo").val()== null){
+                    $('#codigo').siblings('span.error').css('visibility', 'visible');
+                    $('#codigo').parents('.form-group').addClass('has-danger');
+                    toastr.error("Seleccione participante!",{timeOut: 6000});
+                    $("#parametro").focus();
+                    isAllValid = false;
+                    return false;
+                }
+                else{
+                    $('#fechacarta').siblings('span.error').css('visibility', 'hidden');
+                    $('#fechacarta').parents('.form-group').removeClass('has-danger');
+                }
+
                 if($("#fechacarta").val() == "" || $("#fechacarta").val()== null){
                     $('#fechacarta').siblings('span.error').css('visibility', 'visible');
                     $('#fechacarta').parents('.form-group').addClass('has-danger');
+                    toastr.error("Seleccione la Fecha!",{timeOut: 6000});
+                    $("#fechacarta").focus();
                     isAllValid = false;
+                    return false;
                 }
                 else{
                     $('#fechacarta').siblings('span.error').css('visibility', 'hidden');
@@ -231,7 +365,9 @@ var scanCarta = function(){
                 if ($('#nombfirma').val().trim() == "" || $("#nombfirma").val().trim() == null) {
                     $('#nombfirma').siblings('span.error').css('visibility', 'visible');
                     $('#nombfirma').parents('.form-group').addClass('has-danger');
+                    toastr.error("1er. Nombre tutor es requerido!",{timeOut: 6000});
                     isAllValid = false;
+                    return;
                 }
                 else {
                     $('#nombfirma').siblings('span.error').css('visibility', 'hidden');
@@ -242,6 +378,8 @@ var scanCarta = function(){
                    $('#apellido1Firma').siblings('span.error').css('visibility', 'visible');
                    $('#apellido1Firma').parents('.form-group').addClass('has-danger');
                     isValidItem = false;
+                    toastr.error("1er. Apellido tutor es requerido!",{timeOut: 6000});
+                    return;
                 }else{
                     $('#apellido1Firma').siblings('span.error').css('visibility', 'hidden');
                     $("#apellido1Firma").parents('.form-group').removeClass('has-danger');
@@ -251,6 +389,8 @@ var scanCarta = function(){
                     $('#relfam').siblings('span.error').css('visibility', 'visible');
                     $('#relfam').parents('.form-group').addClass('has-danger');
                     isAllValid = false;
+                    toastr.error("Seleccione relación familiar!",{timeOut: 6000});
+                    return;
                 }
                 else {
                     $('#relfam').siblings('span.error').css('visibility', 'hidden');
@@ -269,15 +409,20 @@ var scanCarta = function(){
                 if($("#carta").val().trim() == "" || $("#carta").val().trim() == null){
                     isValidItem = false;
                     $('#carta').siblings('span.error').css('visibility', 'visible');
+                    toastr.error("Seleccione la Carta!",{timeOut: 6000});
+                    return;
                 }
                 else{
                     $('#carta').siblings('span.error').css('visibility', 'hidden');
                 }
 
-                if($("#version").val().trim() == "" || $("#version").val().trim() == null){
+                if($("#version").val() == null || $("#version").val() == ""){
+
                     isValidItem = false;
                     $('#version').siblings('span.error').css('visibility', 'visible');
                     $('#version').parents('.form-group').addClass('has-danger');
+                    toastr.error("Seleccione la Versión!",{timeOut: 6000});
+                    return;
                 }
                 else{
                     $('#version').siblings('span.error').css('visibility', 'hidden');
@@ -287,53 +432,100 @@ var scanCarta = function(){
                     isValidItem = false;
                     $('#person').siblings('span.error').css('visibility', 'visible');
                     $('#person').parents('.form-group').addClass('has-danger');
+                    toastr.error("Seleccione el recurso!",{timeOut: 6000});
+                    return;
                 }
                 else{
                     $('#person').siblings('span.error').css('visibility', 'hidden');
                 }
-
-                if($("#asentimiento").val() == "" || $("#asentimiento").val() == null){
-                    isValidItem = false;
-                    $('#asentimiento').siblings('span.error').css('visibility', 'visible');
-                    $('#asentimiento').parents('.form-group').addClass('has-danger');
-                }else{
-                    $('#asentimiento').siblings('span.error').css('visibility', 'hidden');
-                }
-
                 if($("#proyecto").val()=="" || $("#proyecto").val()== null){
                     $('#proyecto').siblings('span.error').css('visibility', 'visible');
                     $('#proyecto').parents('.form-group').addClass('has-danger');
                     isValidItem = false;
+                    toastr.error("Seleccione el proyecto!",{timeOut: 6000});
+                    return;
                 }else{
                     $('#proyecto').siblings('span.error').css('visibility', 'hidden');
                 }
 
-                if($("#tipoasentimiento").val()=="" || $("#tipoasentimiento").val()== null){
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
-                    isValidItem = false;
-                }else{
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'hidden');
-                }
                 var num = $("#partes").select2().val();
                 if($.isEmptyObject(num)){
                     $('#partes').siblings('span.error').css('visibility', 'visible');
                     $('#partes').parents('.form-group').addClass('has-danger');
                     isValidItem = false;
+                    toastr.error("Seleccione partes principales!",{timeOut: 6000});
+                    return;
                 }else{
                     $('#partes').siblings('span.error').css('visibility', 'hidden');
                 }
+                debugger;
+                if( $("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == ""){
+                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
+                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
+                    toastr.error("Verifica el tipo de asentimiento!",{timeOut: 5000});
+                    $("#tipoasentimiento").select2("open");
+                    isValidItem = false;
+                    return;
+                }else if($("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == "0" || $("#tipoasentimiento").val() == ""){
+                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
+                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
+                    toastr.error("Tipo de asentimiento requerido!",{timeOut: 5000});
+                    $("#tipoasentimiento").select2("open");
+                    isValidItem = false;
+                    return;
+                }
+                else{
+                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'hidden');
+                    $('#tipoasentimiento').parents('.form-group').removeClass('has-danger');
+                    $('#tipoasentimiento').parents('.form-group').addClass('has-success');
+                }
+                var status = ($("#chktestigo").is(':checked')) ? 'checked' : 'unchecked';
+                if(status == 'checked'){
+                    if($("#nombre1Testigo").val() == "" || $("#nombre1Testigo").val() == null){
+                        $('#nombre1Testigo').siblings('span.error').css('visibility', 'visible');
+                        $('#nombre1Testigo').parents('.form-group').addClass('has-danger');
+                        toastr.error("1er. Nombre del testigo es requerido,",{timeOut: 5000});
+                        isValidItem = false;
+                        return;
+                    }
+                    else{
+                        $('#nombre1Testigo').siblings('span.error').css('visibility', 'hidden');
+                        $('#nombre1Testigo').parents('.form-group').removeClass('has-danger');
+                        $('#nombre1Testigo').parents('.form-group').addClass('has-success');
+                    }
+
+                    if($('#apellido1Testigo').val() == "" || $('#apellido1Testigo')==null){
+                        $('#apellido1Testigo').siblings('span.error').css('visibility', 'visible');
+                        $('#apellido1Testigo').parents('.form-group').addClass('has-danger');
+                        toastr.error("1er. Apellido del testigo es requerido,",{timeOut: 5000});
+                        isValidItem = false;
+                        return;
+                    }else{
+                        $('#apellido1Testigo').siblings('span.error').css('visibility', 'hidden');
+                        $('#apellido1Testigo').parents('.form-group').removeClass('has-danger');
+                        $('#apellido1Testigo').parents('.form-group').addClass('has-success');
+                    }
+                }
+
                 if(isValidItem){
-                    //if(bandera){}
+                    debugger;
                     if (typeof elementos !== 'undefined' && elementos.length > 0) {
-                        console.log('MyArrayPartes is not empty.');
+                        console.log('MyArrayPartes is not empty.');*/
+                        /*var x = document.getElementById('partes');
+                        for(var i = 0; i < x.options.length; i++){
+                            console.log("options"+[i]+" opciones: "+x.options);
+                            var obj = {};
+                            obj.idparte = parseInt(x.options[i].value);
+                            obj.acepta =  (x.options[i].acepta == "true") ? true : false;
+                            elementos.push(obj);
+                        }
                     }else{
                         console.log('MyArrayPartes is empty.');
+                        //toastr.error("Seleccione parte de la Carta!",{timeOut: 5000});
                     }
                     var text = $("#person option:selected").html();
-                    var separador ="-";
+                    var separador = "-";
                     var textoseparado = text.split(separador);
-
                     data = {
                         codigo: parseInt($("#codigo").val().trim()),
                         version: parseInt($("#version").val().trim()),
@@ -347,65 +539,268 @@ var scanCarta = function(){
                         fechacarta: $("#fechacarta").val(),
                         proyecto: $("#proyecto").val(),
                         contactoFuturo: ($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
-                        retiro:   ($('input:checkbox[name=retiro]').prop('checked') == true) ? '1' : '0',
+                        testigopresente: ($('input:checkbox[name=chktestigo]').prop('checked') == true) ? '1' : '0',
+                        nombre1testigo: $("#nombre1Testigo").val().trim(),
+                        nombre2testigo: $("#nombre2Testigo").val().trim(),
+                        apellido1testigo: $("#apellido1Testigo").val().trim(),
+                        apellido2testigo: $("#apellido2Testigo").val().trim(),
                         observacion :$("#observacion").val().trim(),
+                        edadyears: parseInt( $("#edadyear").val().trim()),
+                        edadmeses: parseInt( $("#edadmeses").val().trim()),
+                        edaddias: parseInt( $("#edaddias").val().trim()),
                         recurso: textoseparado[0],
                         tipoasentimiento: $("#tipoasentimiento").val().trim(),
                         parte: elementos
                     };
                     GuardarScan(data);
+                }*/
+            //});
+
+
+            $('#form-scan').submit(function(e){
+                e.preventDefault();
+                var isOK = ValidateForm();
+                if (isOK) {
+                    var text = $("#person option:selected").html();
+                    var separador = "-";
+                    var textoseparado = text.split(separador);
+                    data = {
+                        codigo: parseInt($("#codigo").val().trim()),
+                        version: parseInt($("#version").val().trim()),
+                        asentimiento: $("#asentimiento").val().trim(),
+                        relfam: parseInt($("#relfam").val().trim()),
+                        nombfirma: $("#nombfirma").val().trim(),
+                        nombre2Firma: $("#nombre2Firma").val().trim(),
+                        apellido1Firma: $("#apellido1Firma").val().trim(),
+                        apellido2Firma: $("#apellido2Firma").val().trim(),
+                        person: parseInt($("#person").val().trim()),
+                        fechacarta: $("#fechacarta").val(),
+                        proyecto: $("#proyecto").val(),
+                        contactoFuturo: ($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
+                        testigopresente: ($('input:checkbox[name=chktestigo]').prop('checked') == true) ? '1' : '0',
+                        nombre1testigo: $("#nombre1Testigo").val().trim(),
+                        nombre2testigo: $("#nombre2Testigo").val().trim(),
+                        apellido1testigo: $("#apellido1Testigo").val().trim(),
+                        apellido2testigo: $("#apellido2Testigo").val().trim(),
+                        observacion :$("#observacion").val().trim(),
+                        edadyears: parseInt( $("#edadyear").val().trim()),
+                        edadmeses: parseInt( $("#edadmeses").val().trim()),
+                        edaddias: parseInt( $("#edaddias").val().trim()),
+                        recurso: textoseparado[0],
+                        tipoasentimiento: $("#tipoasentimiento").val().trim(),
+                        parte: elementos,
+                        estudios_actuales: $("#estudios").val()
+                    };
+                    GuardarScan(data);
                 }
-            })
+            });
+            function ValidateForm() {
+                var isAllValid = true;
+                $('.form-group').removeClass('is-invalid');
+                if( isNaN( $("#codigo").val() )){
+                    isAllValid = false;
+                    $("#codigo").addClass('is-invalid');
+                }else{
+                    $("#idparticipante").removeClass('is-invalid');
+                }
+                if($("#carta").val().trim() == "" || $("#carta").val().trim() == null){
+                    isAllValid = false;
+                    $('#carta').addClass('is-invalid');
+                }
+                else{
+                    $('#carta').removeClass('is-invalid');
+                }
+
+                if($("#version").val() == null || $("#version").val() == ""){
+                    isAllValid = false;
+                    $('#version').addClass('is-invalid');
+                }
+                else{
+                    $('#version').removeClass('is-invalid');
+                }
+
+                var num = $("#partes").select2().val();
+                if($.isEmptyObject(num)){
+                    $('#partes').addClass('is-invalid');
+                    isAllValid = false;
+                }else{
+                    $('#partes').removeClass('is-invalid');
+                }
+
+                if ($('#relfam').val() == null || $('#relfam').val() == "") {
+                    $('#relfam').addClass('is-invalid');
+                    isAllValid = false;
+                }
+                else {
+                    $('#relfam').removeClass('is-invalid');
+                }
+
+                if($("#proyecto").val()=="" || $("#proyecto").val()== null){
+                    $('#proyecto').addClass('is-invalid');
+                    isAllValid = false;
+                }else{
+                    $('#proyecto').removeClass('is-invalid');
+
+                }
+                if($("#person").val()=="" || $("#person").val()== null){
+                    isAllValid = false;
+                    $('#person').addClass('is-invalid');
+                }
+                else{
+                    $('#person').removeClass('is-invalid');
+                }
+
+               /* if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
+                    isAllValid = false;
+                    $('#tipoasentimiento').addClass('is-invalid');
+                }else{
+                    $('#tipoasentimiento').removeClass('is-invalid');
+                }
+
+                debugger;
+                if( $("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == ""){
+                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
+                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
+                    toastr.error("Verifica el tipo de asentimiento!",{timeOut: 5000});
+                    $("#tipoasentimiento").select2("open");
+                    isValidItem = false;
+                    return;
+                }else if($("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == "0" || $("#tipoasentimiento").val() == ""){
+                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
+                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
+                    toastr.error("Tipo de asentimiento requerido!",{timeOut: 5000});
+                    $("#tipoasentimiento").select2("open");
+                    isValidItem = false;
+                    return;
+                }
+                else{
+                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'hidden');
+                    $('#tipoasentimiento').parents('.form-group').removeClass('has-danger');
+                    $('#tipoasentimiento').parents('.form-group').addClass('has-success');
+                }*/
+
+
+                return isAllValid;
+            }
+
 
             function GuardarScan(obj){
-                console.log(obj);
                 $.ajax({
-                    url: '/estudios_ics/cartas/saveScanCarta/',
+                    url: direct.saveScanCartaUrl,
                     type: "POST",
                     data: JSON.stringify(obj),
                     dataType: "JSON",
-                    contentType: "application/json",
-                    success: function(d){
-                        clearInput();
-                        swal("Éxito!", "Información guardada!", "success")
-                        window.setTimeout(function(){
-                            window.location.href = direct.Lista2ScanCartaUrl;
-                        }, 1500);
+                    contentType:'application/json;charset=utf-8',
+                    success: function(response){
+                        console.log(response);
+                        if(response.msj != null){
+                            toastr.warning(response.msj,{timeOut: 5000});
+                        }else{
+                            clearInput();
+                            toastr.success(direct.successmessage);
+                            window.setTimeout(function(){
+                                window.location.href = direct.cartaSaveEditUrl+"/"+response.idparticipantecarta;
+                            }, 1500);
+                        }
                     },error: function(jqXHR, textStatus,e){
-                        var myAlert="";
-                        myAlert += "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
-                        myAlert += "<strong>Error!</strong> al enviar la información.";
-                        myAlert += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-                        myAlert += "<span aria-hidden='true'>&times;</span>";
-                        myAlert += "</button>";
-                        myAlert += "</div>";
-                        $('#error').html(myAlert).show();
+                        toastr.error(textStatus,"ERROR",{timeOut:6000});
                     }
                 });
             }
 
-            function seleccionar(id){
-                var cod = parseInt(id);
-                for (var i = 0; i < elementos.length; i++) {
-                    if (elementos[i].idparte === cod){
-                        elementos[i].acepta = true;
-                        break;
+            lc_switch('#asentimiento',{
+                on_txt: 'Si',
+                off_txt: 'No'
+            });
+
+            $("#chkTestigo").on("click", function(){
+                var status = $(this).prop("checked");
+                if(status == true){
+                    $("#selectt").fadeIn("slow");
+                    $("#nombre1Testigo").prop('required',true);
+                    $("#apellido1Testigo").prop('required',true);
+                }else{
+                    $("#selectt").fadeOut("slow");
+                    $("#nombre1Testigo").prop('required', false);
+                    $("#apellido1Testigo").prop('required', false);
+                }
+            });
+
+            /*$('body').delegate('.chktestigo', 'lcs-statuschange', function() {
+                var status = ($(this).is(':checked')) ? 'checked' : 'unchecked';
+                if(status == 'checked'){
+                    $("#selectt").fadeIn("slow");
+                    $("#nombre1Testigo").attr("required", "required");
+                    $("#nombre1Testigo").attr("required", "true");
+                    $("#apellido1Testigo").attr("required", "true");
+                }else {
+                    $("#selectt").fadeOut("slow");
+                    $("#nombre1Testigo").val("").attr("required", "false");
+                    $("#apellido1Testigo").val("").attr("required", "false");
+                }
+                $("#nombre1Testigo").focus();
+            });*/
+
+
+            // Step show event
+            $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+                $("#prev-btn").removeClass('disabled');
+                $("#next-btn").removeClass('disabled');
+                if(stepPosition === 'first') {
+                    $("#prev-btn").addClass('disabled');
+                } else if(stepPosition === 'last') {
+                    $("#next-btn").addClass('disabled');
+                } else {
+                    $("#prev-btn").removeClass('disabled');
+                    $("#next-btn").removeClass('disabled');
+                }
+            });
+
+            // Initialize the leaveStep event
+            $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+                debugger;
+                if ( $("#codigo").val() =="") {
+                    $("#smartwizard").smartWizard("goToStep", 0);
+                    toastr.info("Ingresa código del Participante!",{timeOut:5000});
+                    $("#parametro").focus();
+                    return false;
+                }
+                if($("#txtNombreCompleto").val()== "" || $("#txtNombreCompleto").val()== "" || $("#madre").val()== "" || $("#padre").val() =="" ){
+                    $("#smartwizard").smartWizard("goToStep", 0);
+                    $("#parametro").focus();
+                    return false;
+                }
+                if(stepNumber == 1 && stepDirection=="forward" ){
+                    if( $("#fechacarta").val() == "") {
+                        toastr.error("seleccione la fecha!", {timeOut: 5000});
+                        return false;
+                    } if( $("#carta").val().trim() == "") {
+                        toastr.error("Seleccione la carta!", {timeOut: 5000});
+                        return false;
+                    }if( $("#version").val().trim() == "") {
+                        toastr.error("Seleccione la Versión!", {timeOut: 5000});
+                        return false;
+                    }if(  $("#person").val()=="" ) {
+                        toastr.error("Seleccione el Recurso!", {timeOut: 5000});
+                        return false;
                     }
                 }
-            }
-            function deseleccionar(id){
-                var cod = parseInt(id);
-                for (var i = 0; i < elementos.length; i++) {
-                    if (elementos[i].idparte === cod){
-                        elementos[i].acepta = false;
-                        break;
-                    }
-                }
-            }
+            });
+
+            // Demo Button Events
+            $("#got_to_step").on("change", function() {
+                debugger;
+                // Go to step
+                var step_index = $(this).val() - 1;
+                $('#smartwizard').smartWizard("goToStep", step_index);
+                return true;
+            });
+
 
        }
     }
 }();
+
 
 
 

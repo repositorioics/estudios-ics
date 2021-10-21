@@ -150,6 +150,7 @@
 <script>
     $(document).ready(function(){
         $("#tableHemo tbody").on("click", ".btnReporte",function(){
+            debugger;
             var id = $(this).data('id');
             SendId(id);
         });

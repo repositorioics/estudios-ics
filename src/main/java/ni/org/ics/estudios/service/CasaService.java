@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.service;
 
 import ni.org.ics.estudios.domain.Casa;
+import ni.org.ics.estudios.domain.Participante;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

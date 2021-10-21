@@ -1,4 +1,4 @@
-package ni.org.ics.estudios.dto;
+//package ni.org.ics.estudios.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import java.util.Date;
 /**
  * Created by ICS_Inspiron3 on 25/07/2019.
  */
+/*
 @Entity
 @Table(name = "pdvi_cambio_domicilio_data", catalog = "estudios_ics")
 public class DomicilioPdviDto implements Serializable {
@@ -139,3 +140,4 @@ public class DomicilioPdviDto implements Serializable {
 
 
 }
+*/

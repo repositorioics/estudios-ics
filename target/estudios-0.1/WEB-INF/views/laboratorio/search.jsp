@@ -33,7 +33,6 @@
         <c:set var="seleccioneMuestra"><spring:message code="select.sample" /></c:set>
         <spring:url value="/lab/muestras/searchSamples" var="searchUrl"/>
         <spring:url value="/lab/muestras/searchLabel" var="searchLabelUrl"/>
-        <spring:url value="/super/particaso/getParticipantsCasos" var="getCodesUrl"/>
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
@@ -149,6 +148,16 @@
                                 <th width="10%"><spring:message code="house" /> CHF</th>
                             </tr>
                             </thead>
+                            <tbody>
+                            <tr>
+                                <td>            <spring:message code="100" />                           </td>
+                                <td>            <spring:message code="101" />                           </td>
+                                <td>            <spring:message code="02/02/2021" />                           </td>
+                                <td>            <spring:message code="01/02/2021" />                           </td>
+                                <td>            <spring:message code="2" />                           </td>
+                                <td>            <spring:message code="3" />                           </td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                     <br>

@@ -23,8 +23,11 @@
     <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
     <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
 
-    <spring:url value="/resources/css/animate.css" var="anime" />
-    <link rel="stylesheet" href="${anime}" type="text/css"/>
+    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
+    <link href="${boot}" rel="stylesheet" type="text/css"/>
+
+<%-- <spring:url value="/resources/css/animate.css" var="anime" />
+    <link rel="stylesheet" href="${anime}" type="text/css"/> --%>
 
     <style>
          input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
@@ -37,10 +40,166 @@
              color:red;
              font-size:90%;
          }
+         /*ini*/
+         .toast-title {
+             font-weight: bold;
+         }
+         .toast-message {
+             -ms-word-wrap: break-word;
+             word-wrap: break-word;
+         }
+         .toast-message a,
+         .toast-message label {
+             color: #ffffff;
+         }
+         .toast-message a:hover {
+             color: #cccccc;
+             text-decoration: none;
+         }
+
+         .toast-close-button {
+             position: relative;
+             right: -0.3em;
+             top: -0.3em;
+             float: right;
+             font-size: 20px;
+             font-weight: bold;
+             color: #ffffff;
+             -webkit-text-shadow: 0 1px 0 #ffffff;
+             text-shadow: 0 1px 0 #ffffff;
+             opacity: 0.8;
+             -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+             filter: alpha(opacity=80);
+         }
+         .toast-close-button:hover,
+         .toast-close-button:focus {
+             color: #000000;
+             text-decoration: none;
+             cursor: pointer;
+             opacity: 0.4;
+             -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+             filter: alpha(opacity=40);
+         }
+         button.toast-close-button {
+             padding: 0;
+             cursor: pointer;
+             background: transparent;
+             border: 0;
+             -webkit-appearance: none;
+         }
+         .toast-top-full-width {
+             top: 0;
+             right: 0;
+             width: 100%;
+         }
+         .toast-bottom-full-width {
+             bottom: 0;
+             right: 0;
+             width: 100%;
+         }
+         .toast-top-left {
+             top: 12px;
+             left: 12px;
+         }
+         .toast-top-right {
+             top: 12px;
+             right: 12px;
+         }
+         .toast-bottom-right {
+             right: 12px;
+             bottom: 12px;
+         }
+         .toast-bottom-left {
+             bottom: 12px;
+             left: 12px;
+         }
+         #toast-container {
+             position: fixed;
+             z-index: 999999;
+             /*overrides*/
+
+         }
+         #toast-container * {
+             -moz-box-sizing: border-box;
+             -webkit-box-sizing: border-box;
+             box-sizing: border-box;
+         }
+         #toast-container > div {
+             margin: 0 0 6px;
+             padding: 15px 15px 15px 50px;
+             width: 300px;
+             -moz-border-radius: 3px 3px 3px 3px;
+             -webkit-border-radius: 3px 3px 3px 3px;
+             border-radius: 3px 3px 3px 3px;
+             background-position: 15px center;
+             background-repeat: no-repeat;
+             -moz-box-shadow: 0 0 12px #999999;
+             -webkit-box-shadow: 0 0 12px #999999;
+             box-shadow: 0 0 12px #999999;
+             color: #ffffff;
+             opacity: 0.8;
+             -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+             filter: alpha(opacity=80);
+         }
+         #toast-container > :hover {
+             -moz-box-shadow: 0 0 12px #000000;
+             -webkit-box-shadow: 0 0 12px #000000;
+             box-shadow: 0 0 12px #000000;
+             opacity: 1;
+             -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+             filter: alpha(opacity=100);
+             cursor: pointer;
+         }
+
+         #toast-container.toast-top-full-width > div,
+         #toast-container.toast-bottom-full-width > div {
+             width: 96%;
+             margin: auto;
+         }
+         .toast {
+             background-color: #030303;
+         }
+         .toast-success {
+             background-color: #51a351;
+         }
+         .toast-error {
+             background-color: #bd362f;
+         }
+         .toast-info {
+             background-color: #2f96b4;
+         }
+         .toast-warning {
+             background-color: #f89406;
+         }
+         /**/
+         @media all and (max-width: 240px) {
+             #toast-container > div {
+                 padding: 8px 8px 8px 50px;
+                 width: 11em;
+             }
+             #toast-container .toast-close-button {
+                 right: -0.2em;
+                 top: -0.2em;
+             }
+         }
+         @media all and (min-width: 241px) and (max-width: 480px) {
+             #toast-container > div {
+                 padding: 8px 8px 8px 50px;
+                 width: 18em;
+             }
+             #toast-container .toast-close-button {
+                 right: -0.2em;
+                 top: -0.2em;
+             }
+         }
+         @media all and (min-width: 481px) and (max-width: 768px) {
+             #toast-container > div {
+                 padding: 15px 15px 15px 50px;
+                 width: 25em;
+             }
+         }
     </style>
     <jsp:include page="../fragments/headTag.jsp" />
-    <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
-    <link href="${boot}" rel="stylesheet" type="text/css"/>
 
     <spring:url value="/resources/css/smartWizardCss/smarthWizardCss.css" var="smw" />
     <link href="${smw}" rel="stylesheet" type="text/css"/>
@@ -58,7 +217,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
-                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/hemo/listado2/" htmlEscape="true "/>">LISTADO</a>
+                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/hemo/listado2/" htmlEscape="true "/>"><spring:message code="List" /></a>
                 <i class="fa fa-angle-right"></i><a href="<spring:url value="/hemo/create/" htmlEscape="true "/>">
                     <spring:message code="Hemodinámica" />
                 </a>
@@ -67,8 +226,8 @@
         <spring:url value="/hemo/addHemodinamica" var="saveHemoUrl"/>
         <spring:url value="/hemo/listado2" var="ListadoUrl"/>
         <spring:url value="/hemo/GetRange" var="GetRangeUrl"/>
-        <c:set var="successmessage"><spring:message code="process.success" /></c:set>
-        <c:set var="errormessage"><spring:message code="process.errors" /></c:set>
+        <c:set var="successMessage"><spring:message code="process.success" /></c:set>
+        <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
         <div class="container-fluid">
                 <div class="animated fadeIn">
                     <div class="card text-black-50 animate__animated animate__zoomIn">
@@ -77,7 +236,7 @@
                                 <i class="fa fa-search" aria-hidden="true"></i>   <spring:message code="Búscar Participante" /></h5>
                         </div>
                         <div class="card-block">
-                        <div class="container">
+                        <div class="container col-sm-12 col-md-12 col-lg-12">
                         <!-- SmartWizard html -->
                         <div id="smartwizard">
 
@@ -99,7 +258,7 @@
                                 <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                                     <br/>
                                     <br/>
-                                    <div class="container">
+                                    <div class="container  col-sm-12 col-md-12 col-lg-12">
                                         <spring:url value="/hemo/searchParticipant" var="searchPartUrl"/>
                                         <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal">
                                             <div class="row">
@@ -152,13 +311,13 @@
                                             </div>
 
                                             <div id="bar" class="form-group col-sm-12" style="display: none">
-                                                <label for="barrioF">Barrio :</label>
+                                                <label for="barrioF">Barrio:</label>
                                                 <input type="text" class="form-control" id="barrioF" name="barrioF" style="text-transform:uppercase" />
                                             </div>
 
                                             <div class="form-group col-sm-12">
                                                 <label for="telefono">Teléfono:</label>
-                                                <input type="text" class="form-control focusNext" id="telefono" name="telefono" placeholder="Número de telefono" tabindex="1">
+                                                <input type="text" class="form-control num focusNext" id="telefono" name="telefono" placeholder="Número de telefono" tabindex="1">
                                             </div>
 
                                         </div>
@@ -166,8 +325,9 @@
                                 </div>
                                 <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                                 <br/>
-                                    <div class="container">
-                                    <div class="row">
+                                    <div class="container  col-sm-12 col-md-12 col-lg-12">
+
+                                           <div class="row">
 
                                     <div class="col-sm-12">
                                         <h4 class="text-capitalize" style="font-family: Roboto">Cálculos</h4>
@@ -176,19 +336,19 @@
                                     <div class="form-group col-md-6">
                                         <label for="peso">Peso(kg):</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
+                                        <input type="text" class="form-control num focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="talla">Talla(cm):</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
+                                        <input type="text" class="form-control num focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
                                     </div>
 
                                     <div class="form-group col-sm-4">
                                         <label for="numParametro">Parametros:</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext pos-params" name="numParametro"  id="numParametro" placeholder="Cantidad de Parámetros" tabindex="4">
+                                        <input type="text" class="form-control num focusNext pos-params" name="numParametro"  id="numParametro" placeholder="Cantidad de Parámetros" tabindex="4">
                                     </div>
 
                                     <div class="form-group col-md-4">
@@ -478,7 +638,8 @@
             ListadoUrl:"${ListadoUrl}",
             GetRangeUrl:"${GetRangeUrl}",
             searchPartUrl: "${searchPartUrl}",
-            notFound: "${notFound}"
+            notFound: "${notFound}",
+            successmessage      : "${successMessage}"
         };
         datosHemo.init(endPoint);
         GuardarDinamica.init(endPoint);
@@ -510,7 +671,7 @@
 
         $("#fie").prop("disabled", true);
 
-        $('#numParametro').keyup(function (){
+        $('.num').keyup(function (){
             this.value = (this.value + '').replace(/[^0-9]/g, '');
         });
 
@@ -560,6 +721,7 @@
             }
             return dias + 1;
         }
+
 
          document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter

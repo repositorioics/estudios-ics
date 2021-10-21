@@ -5,10 +5,12 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 import com.lowagie.text.pdf.draw.LineSeparator;
 //import com.sun.javafx.font.*;
+
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
@@ -16,6 +18,7 @@ import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
+import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -24,11 +27,8 @@ import sun.font.FontFamily;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.text.*;
+
 import java.awt.*;
-import java.awt.Image;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -53,8 +53,9 @@ public class PdfView extends AbstractPdfView {
     List<MessageResource> messagediuresis = new ArrayList<MessageResource>();
     /*ReporteCarta
     List<MessageResource> messagerelFam = new ArrayList<MessageResource>();
-    List<MessageResource>messageproyecto = new ArrayList<MessageResource>();
+
     List<MessageResource>messagescancarta = new ArrayList<MessageResource>();*/
+    List<MessageResource> messageproyecto = new ArrayList<MessageResource>();
     @Override
     protected void buildPdfDocument(
             Map<String, Object> model,
@@ -1063,6 +1064,7 @@ public class PdfView extends AbstractPdfView {
         ParticipanteCarta obj= (ParticipanteCarta) model.get("obj");
         ParticipanteProcesos procesos = (ParticipanteProcesos) model.get("procesos");
         List<DetalleParte> ListDetailPart = (List<DetalleParte>) model.get("dp");
+        List<ParticipanteExtension> ListDetailExtension = (List<ParticipanteExtension>) model.get("getListParticipanteExtension");
         messagerelFam = (java.util.List<MessageResource>) model.get("relFam");
         document.newPage();
         document.open();
@@ -1078,17 +1080,16 @@ public class PdfView extends AbstractPdfView {
         Font timesRomanBoldItalic12 = new Font(Font.COURIER, 12, Font.BOLD);
         Font timesRomanNormal12 = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
 
-
         Date objDate = new Date();
         DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
         DateFormat hourFormat = new SimpleDateFormat("HH:mm");
-        Paragraph fecha = new Paragraph(dateformat.format(objDate) + " " + hourFormat.format(objDate), mia);
+        Paragraph fecha = new Paragraph(DateUtil.DateToString(obj.getFechacarta(),"dd/MM/yyyy"));
         fecha.setAlignment(Element.ALIGN_RIGHT);
         document.add(fecha);
         Paragraph encabezado = new Paragraph("INSTITUTO DE CIENCIAS SOSTENIBLES.",FontFactory.getFont("COURIER", 20, java.awt.Font.BOLD, Color.black));
         encabezado.setAlignment(Element.ALIGN_CENTER);
         document.add(encabezado);
-        Paragraph encabezado2 = new Paragraph("REPORTE PARTICIPANTE CARTA.", FontFactory.getFont("COURIER",16, java.awt.Font.ITALIC));
+        Paragraph encabezado2 = new Paragraph("CARTA DE CONSENTIMIENTO.", FontFactory.getFont("COURIER",16, java.awt.Font.ITALIC));
         encabezado2.setAlignment(Element.ALIGN_CENTER);
         document.add(encabezado2);
 
@@ -1096,6 +1097,12 @@ public class PdfView extends AbstractPdfView {
         ls1.setLineWidth(0.5f);
         document.add(new Chunk(ls1));
 
+        /*String imageFile = "C:\\Users\\ICS\\Documents\\GitHub\\estudios-ics\\estudios-ics\\src\\main\\webapp\\resources\\img\\logo-login.png";
+        Image image1 = Image.getInstance(imageFile);
+        image1.setWidthPercentage(30);
+        image1.setAlignment(0);
+        image1.setCompressionLevel(5);
+        document.add(image1);*/
 
         PdfPTable table = new PdfPTable(new float[]{18,18});
         table.setWidthPercentage(96f);
@@ -1126,15 +1133,15 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        String Madre = obj.getParticipante().getNombre1Madre()+" "+obj.getParticipante().getNombre2Madre()+" "+obj.getParticipante().getApellido1Madre()+" "+obj.getParticipante().getApellido2Madre();
+
+        String nom2Madre  = (obj.getParticipante().getNombre2Madre()   == "") ? "" : obj.getParticipante().getNombre2Madre();
+        String ape21madre = (obj.getParticipante().getApellido2Madre() == "") ? "" : obj.getParticipante().getApellido2Madre();
+        String Madre = obj.getParticipante().getNombre1Madre()+" "+ nom2Madre+" "+obj.getParticipante().getApellido1Madre()+" "+ape21madre;
         cell = new PdfPCell(new Phrase(Madre,mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         document.add(table);
-
-
-
 
         table = new PdfPTable(new float[]{38,58});
         table.setWidthPercentage(96f);
@@ -1142,15 +1149,14 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        String Padre = obj.getParticipante().getNombre1Padre()+" "+ obj.getParticipante().getApellido2Padre() + " "+ obj.getParticipante().getApellido1Padre() +" "+ obj.getParticipante().getApellido2Padre();
+        String apePadre1  = (obj.getParticipante().getApellido2Padre() == "") ? "" :obj.getParticipante().getApellido2Padre();
+        String nomb2Padre = (obj.getParticipante().getNombre2Padre()   == "") ? "" :obj.getParticipante().getNombre2Padre();
+        String Padre = obj.getParticipante().getNombre1Padre()+" "+ nomb2Padre + " "+ obj.getParticipante().getApellido1Padre() +" "+ apePadre1;
         cell = new PdfPCell(new Phrase(Padre,mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         document.add(table);
-
-
-
         table = new PdfPTable(new float[]{38,58});
         table.setWidthPercentage(96f);
         cell = new PdfPCell(new Phrase("Nombre del Tutor :",miaNormal));
@@ -1163,25 +1169,50 @@ public class PdfView extends AbstractPdfView {
         table.addCell(cell);
         document.add(table);
 
+        table = new PdfPTable(new float[]{40,60});
+        table.setWidthPercentage(96f);
+        cell = new PdfPCell(new Phrase("Hubo Testigo?", miaNormal));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+
+        String huboTestigo = (obj.isTestigopresent() == true)?"Si": "No";
+        cell = new PdfPCell(new Phrase(huboTestigo, mia));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{40,60});
+        table.setWidthPercentage(96f);
+        cell = new PdfPCell(new Phrase("Nombre Testigo:", miaNormal));
+        cell.setBorder(1);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+
+        String nom2Testigo = (obj.getNombre2testigo() == "") ? "" : obj.getNombre2testigo();
+        String ape2Testigo = (obj.getApellido2testigo() == "") ? "": obj.getApellido2testigo();
+        cell = new PdfPCell(new Phrase(obj.getNombre1testigo()+" "+ nom2Testigo +" "+ obj.getApellido1testigo()+" "+ ape2Testigo , mia));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        document.add(table);
 
         table = new PdfPTable(new float[]{56,40});
         table.setWidthPercentage(96f);
         cell = new PdfPCell(new Phrase("Relación del tutor con el participante: ",miaNormal));
         cell.setBorder(0);
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         cell = new PdfPCell(new Phrase(this.getDescripcionCatalogoScan(obj.getParticipante().getRelacionFamiliarTutor().toUpperCase(),"CP_CAT_RFTUTOR"),mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         document.add(table);
-
         table = new PdfPTable(new float[]{48});
         table.setWidthPercentage(96f);
         table.addCell(createCellUnderline("Datos del Participante.", timesRomanBoldItalic12, Rectangle.NO_BORDER, 2));
         document.add(table);
-
-
         table = new PdfPTable(new float[]{38,58});
         table.setWidthPercentage(96f);
         cell = new PdfPCell(new Phrase("Nombres y Apellidos: ",miaNormal));
@@ -1194,13 +1225,23 @@ public class PdfView extends AbstractPdfView {
         table.addCell(cell);
         document.add(table);
 
-        table = new PdfPTable(new float[]{38,58});
+        table = new PdfPTable(new float[]{20,20,20,40});
         table.setWidthPercentage(96f);
         cell = new PdfPCell(new Phrase("Sexo: ",miaNormal));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         cell = new PdfPCell(new Phrase(obj.getParticipante().getSexo().toString(),mia));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Edad: ",miaNormal));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(obj.getEdadyears().toString().concat(" años ").concat(obj.getEdadmeses().toString().concat(" meses ").concat(obj.getEdaddias().toString().concat(" dias."))),mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
@@ -1218,33 +1259,24 @@ public class PdfView extends AbstractPdfView {
         table.addCell(cell);
         document.add(table);
 
-
-        // text watermark
-        Font f = new Font(Font.HELVETICA, 50, Font.BOLD, new GrayColor(0.85f));
-        table = new PdfPTable(1);
-        table.setWidthPercentage(100f);
-        String estado = (obj.getRetirado() == '0') ? "ACTIVO" : "RETIRADO";
-        Phrase p = new Phrase(estado, f);
-        cell = new PdfPCell(new Phrase(p));
-        cell.setBorder(0);
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        //cell.setRotation(90);
-        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        table.addCell(cell);
-        document.add(table);
-
 //endregion
 
         table = new PdfPTable(new float[]{48});
         table.setWidthPercentage(96f);
         table.addCell(createCellUnderline("Carta, Versión, Partes aceptadas y no aceptadas.", timesRomanBoldItalic12, Rectangle.NO_BORDER, 2));
         document.add(table);
-        document.add(new Phrase("\n"));
+
+        // text watermark 337, 500, 45
+        String isAnulada = (obj.isAnulada() == true)? "Anulada" : "";
+        PdfContentByte canvas = writer.getDirectContentUnder();
+        Phrase watermark = new Phrase(isAnulada, new Font(Font.ITALIC, 180, Font.NORMAL, Color.LIGHT_GRAY));
+        ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER, watermark, 330, 425, 45);
+
 
 //region foreach
         if (ListDetailPart.size() > 0){
             table = new PdfPTable(new float[]{18,18,18});
-            cell = new PdfPCell(new Phrase(obj.getVersion().getCarta().getCarta(), mia));
+            cell = new PdfPCell(new Phrase(obj.getVersion().getEstudio().getNombre(), mia));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             Integer numRowSpan = ListDetailPart.size()+2;
             cell.setRowspan(numRowSpan);
@@ -1272,6 +1304,57 @@ public class PdfView extends AbstractPdfView {
             }
             document.add(table);
         }
+        //document.add(new Phrase("\n"));
+        table = new PdfPTable(new float[]{48});
+        table.setWidthPercentage(96f);
+
+
+        if (ListDetailExtension.size()>0) {
+            table.addCell(createCellUnderline("Extesiones, "+obj.getVersion().getEstudio().getNombre()+", "+obj.getVersion().getVersion(), timesRomanBoldItalic12, Rectangle.NO_BORDER, 2));
+            document.add(table);
+            table = new PdfPTable(new float[]{25,15,30,30});
+            cell = new PdfPCell(new Phrase("EXTENSION",miaNormal));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("FECHA",miaNormal));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("TUTOR",miaNormal));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("TESTIGO",miaNormal));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            for (ParticipanteExtension pex : ListDetailExtension) {
+                cell = new PdfPCell(new Phrase(pex.getExtensiones().getExtension(), mia));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                cell = new PdfPCell(new Phrase(DateUtil.DateToString(pex.getFechaExtension(), "dd/MM/yyyy"), mia));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                String nombres = pex.getNombre1Tutor().toUpperCase();
+                nombres += (pex.getNombre2Tutor() != null) ? " "+pex.getNombre2Tutor().toUpperCase() : "";
+
+                String apellidos = pex.getApellido1Tutor().toUpperCase();
+                apellidos += (pex.getApellido2Tutor() != null) ? pex.getApellido2Tutor().toUpperCase() : "";
+
+                cell = new PdfPCell(new Phrase(nombres + " " + apellidos, mia));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                String nombresTestigo = pex.getNombre1Testigo().toUpperCase();
+                nombresTestigo += (pex.getNombre2Testigo() != null) ? " " + pex.getNombre2Testigo().toUpperCase() : "";
+
+                String apellidosTestigo = pex.getApellido1Testigo().toUpperCase();
+                apellidosTestigo += (pex.getApellido2Testigo() != null) ? " " + pex.getApellido2Testigo().toUpperCase() : "";
+
+                cell = new PdfPCell(new Phrase(nombresTestigo + " " + apellidosTestigo, mia));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+            }
+        }
+        document.add(table);
         document.add(new Phrase("\n"));
         table = new PdfPTable(new float[]{38,58});
         table.setWidthPercentage(96f);
@@ -1285,7 +1368,6 @@ public class PdfView extends AbstractPdfView {
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         document.add(table);
-
         table = new PdfPTable(new float[]{38,58});
         table.setWidthPercentage(96f);
         cell = new PdfPCell(new Phrase("Relación familiar: ",miaNormal));
@@ -1306,7 +1388,7 @@ public class PdfView extends AbstractPdfView {
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         //AQUI VALIDAR QUE NO VAYA VACIO
-        String pro = (this.getDescripcionCatalogoScan(obj.getProyecto().toString(),"PROYECTO") == "")?"No Aplica":this.getDescripcionCatalogoScan(obj.getProyecto().toString(),"PROYECTO");
+        String pro =  (this.getDescripcionCatalogoScan(obj.getProyecto().toString(),"CAT_SCAN_PROYECTO") == "")?"No Aplica" : this.getDescripcionCatalogoScan(obj.getProyecto().toString(),"CAT_SCAN_PROYECTO");//getDescripcionCatalogoScan(obj.getProyecto().toString(),"CAT_SCAN_PROYECTO");
         cell = new PdfPCell(new Phrase(pro,mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1319,8 +1401,8 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-
-        cell = new PdfPCell(new Phrase(this.getDescripcionCatalogoScan(obj.getAsentimiento().toString(),"SCANCARTA"),mia));
+        String dioAsentimiento = this.getDescripcionCatalogoScan(obj.getAsentimiento().toString(),"SCANCARTA");
+        cell = new PdfPCell(new Phrase(dioAsentimiento,mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
@@ -1333,14 +1415,9 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        String tAsentimiento;
-        if (this.getDescripcionCatalogoScan(obj.getTipoasentimiento().toString(), "TIPOASENTIMIENTO") == null){
-            tAsentimiento = "No Aplica";
-        }
-        else {
-            tAsentimiento = this.getDescripcionCatalogoScan(obj.getTipoasentimiento().toString(), "TIPOASENTIMIENTO");
-        }
-        cell = new PdfPCell(new Phrase(tAsentimiento, mia));
+        String tAsentimiento= obj.getTipoasentimiento().toString();
+        String result = this.getDescripcionCatalogoScan(tAsentimiento,"CAT_TIPO_ASENT");
+        cell = new PdfPCell(new Phrase(result, mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
@@ -1352,42 +1429,100 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        Character contact = obj.getContactoFuturo();
-        Character c1 = new Character('1');
-        Character c2 = new Character(obj.getContactoFuturo());
-        boolean res = c1.equals(c2);
-        if (res){
-            cell = new PdfPCell(new Phrase("Acepto",mia));
+        boolean contact = obj.getContactoFuturo();
+
+        if (contact){
+            cell = new PdfPCell(new Phrase("Aceptó",mia));
             cell.setBorder(0);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             table.addCell(cell);
-            document.add(table);
         }else {
-            cell = new PdfPCell(new Phrase("No Acepto",mia));
+            cell = new PdfPCell(new Phrase("No Aceptó",mia));
             cell.setBorder(0);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             table.addCell(cell);
-            document.add(table);
         }
+        document.add(table);
+
         table = new PdfPTable(new float[]{38,58});
         table.setWidthPercentage(96f);
         cell = new PdfPCell(new Phrase("Observación: ",miaNormal));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        String observa = obj.getObservacion().toString();
-        if (observa==null || observa == ""){observa = "Ninguna";}
+
+        String observa = (obj.getObservacion().equals("")) ? "Ninguna" : obj.getObservacion();
         cell = new PdfPCell(new Phrase(observa,mia));
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
         document.add(table);
+
+
+        /*** Razón anulada ***/
+        if(obj.isAnulada() == true) {
+            table.setWidthPercentage(96f);
+            cell = new PdfPCell(new Phrase("Anulada por: ", miaNormal));
+            cell.setBorder(0);
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(obj.getPq_anulada(), mia));
+            cell.setBorder(0);
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cell);
+            document.add(table);
+        }
+
+        document.add(new Phrase("\n"));
+        Font font = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL, Color.BLACK);
+        /*table = new PdfPTable(new float[]{70,15,15});
+        cell = new PdfPCell();
+        cell.setBorder(0);
+        table.addCell(cell);
+        table.setWidthPercentage(96f);
+        cell = new PdfPCell(new Phrase("N° página :",font));
+        cell.setBorder(0);
+        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase(""+writer.getCurrentPageNumber(),font));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);*/
+
+        /***************************************************/
+        Date fechaNow = new Date();
+        DateFormat dformat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat hFormat = new SimpleDateFormat("HH:mm");
+        table = new PdfPTable(new float[]{5,5,5,10,5,5,5});
+        table.setWidthPercentage(96);
+        table.addCell(createCell("Creado por: ", font, Rectangle.NO_BORDER));
+        table.addCell(createCell(obj.getRecordUser(), font, Rectangle.NO_BORDER));
+        table.addCell(createCell("Impreso : ", font, Rectangle.NO_BORDER));
+        table.addCell(createCell(dateformat.format(objDate) + " " + hourFormat.format(objDate), font, Rectangle.NO_BORDER));
+        table.addCell(createCell("Página: "+ writer.getCurrentPageNumber(), font, Rectangle.NO_BORDER));
+        table.addCell(createCell("Version: ", font, Rectangle.NO_BORDER));
+        table.addCell(createCell(obj.getVersion().getFecha_format(), font, Rectangle.NO_BORDER));
+        document.add(table);
+        document.getPageNumber();
         document.close();
 
     }// fin del reporte carta Scam
 
     private String getDescripcionCatalogo(String codigo,String catroot){
         for(MessageResource rnv : messageExtremidades){
+            if (rnv.getCatKey().equals(codigo)) {
+                if (catroot != "" && rnv.getCatRoot().equals(catroot))
+                    return rnv.getSpanish();
+            }
+        }
+        return "-";
+    }
+
+    private String getDescripcionCatalogoProyect(String codigo,String catroot){
+        for(MessageResource rnv : messageproyecto){
             if (rnv.getCatKey().equals(codigo)) {
                 if (catroot != "" && rnv.getCatRoot().equals(catroot))
                     return rnv.getSpanish();
@@ -1627,12 +1762,7 @@ public class PdfView extends AbstractPdfView {
  //endregion
 
 
-
-
-
-
     private String getDescripcionCatalogoScan(String codigo,String catroot){
-
         for (MessageResource rnv : messagerelFam){
             if (rnv.getCatKey().equals(codigo)) {
                 if (catroot != "" && rnv.getCatRoot().equals(catroot))
@@ -1641,9 +1771,9 @@ public class PdfView extends AbstractPdfView {
         }
         return "-";
     }
-
-
 }
+
+
 
 class MyFooter extends PdfPageEventHelper {
     Font ffont = new Font(Font.COURIER, 8, Font.ITALIC);

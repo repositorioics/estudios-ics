@@ -41,7 +41,7 @@ var SearchHemoParticipant = function () {
                 $.getJSON(parametros.ListaHoja, {parametro : $('#parametro').val(), ajax : 'true' },function(data){
                     var len = data.length;
                     if(len==0){
-                        swal("Advertencia!", "Datos no encontrados!", "warning");
+                        toastr.info("No se encontró Información", "INFORMACION!",{timeOut:6000});
                         $("#parametro").val("");
                         $("#parametro").focus();
                     }else{
@@ -71,7 +71,7 @@ var SearchHemoParticipant = function () {
                         }
                     }
                 }).fail(function() {
-                    swal("Error!","Código no existe!", "error");
+                    toastr.error("Error Interno del Servidor","Error!", {timeOut:6000});
                     $("#parametro").focus();
                 });
 

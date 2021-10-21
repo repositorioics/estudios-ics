@@ -1,423 +1,538 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <jsp:include page="../fragments/headTag.jsp" />
-    <!-- <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
-    <link href="${boot}" rel="stylesheet" type="text/css"/>-->
-    <spring:url value="/resources/css/bootstrap.css" var="bootwatch" />
-    <link rel="stylesheet" href="${bootwatch}" type="text/css"/>
+<jsp:include page="../fragments/headTag.jsp"/>
+<spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
+<link href="${boot}" rel="stylesheet" type="text/css"/>
+<!-- DATE PICKER -->
+<spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
+<link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
 
-    <style>
-        span.error {
-            display:block;
-            visibility:hidden;
-            color:red;
-            font-size:90%;
-        }
-        #error {
-            color:red;
-            display:none;
-        }
-        /*Inicio Preload*/
+<style>
+    span.error {
+        display:block;
+        visibility:hidden;
+        color:red;
+        font-size:90%;
+    }
+    #error {
+        color:red;
+        display:none;
+    }
+    /*ini*/
+    .toast-title {
+        font-weight: bold;
+    }
+    .toast-message {
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+    }
+    .toast-message a,
+    .toast-message label {
+        color: #ffffff;
+    }
+    .toast-message a:hover {
+        color: #cccccc;
+        text-decoration: none;
+    }
 
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: #FFF none repeat scroll 0% 0%;
-            z-index: 99999;
-        }
+    .toast-close-button {
+        position: relative;
+        right: -0.3em;
+        top: -0.3em;
+        float: right;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffffff;
+        -webkit-text-shadow: 0 1px 0 #ffffff;
+        text-shadow: 0 1px 0 #ffffff;
+        opacity: 0.8;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+        filter: alpha(opacity=80);
+    }
+    .toast-close-button:hover,
+    .toast-close-button:focus {
+        color: #000000;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: 0.4;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+        filter: alpha(opacity=40);
+    }
+    button.toast-close-button {
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        -webkit-appearance: none;
+    }
+    .toast-top-full-width {
+        top: 0;
+        right: 0;
+        width: 100%;
+    }
+    .toast-bottom-full-width {
+        bottom: 0;
+        right: 0;
+        width: 100%;
+    }
+    .toast-top-left {
+        top: 12px;
+        left: 12px;
+    }
+    .toast-top-right {
+        top: 12px;
+        right: 12px;
+    }
+    .toast-bottom-right {
+        right: 12px;
+        bottom: 12px;
+    }
+    .toast-bottom-left {
+        bottom: 12px;
+        left: 12px;
+    }
+    #toast-container {
+        position: fixed;
+        z-index: 999999;
+        /*overrides*/
 
-        #page-loader .preloader-interior {
-            display: block;
-            position: relative;
-            left: 50%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #3498db;
+    }
+    #toast-container * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #toast-container > div {
+        margin: 0 0 6px;
+        padding: 15px 15px 15px 50px;
+        width: 300px;
+        -moz-border-radius: 3px 3px 3px 3px;
+        -webkit-border-radius: 3px 3px 3px 3px;
+        border-radius: 3px 3px 3px 3px;
+        background-position: 15px center;
+        background-repeat: no-repeat;
+        -moz-box-shadow: 0 0 12px #999999;
+        -webkit-box-shadow: 0 0 12px #999999;
+        box-shadow: 0 0 12px #999999;
+        color: #ffffff;
+        opacity: 0.8;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+        filter: alpha(opacity=80);
+    }
+    #toast-container > :hover {
+        -moz-box-shadow: 0 0 12px #000000;
+        -webkit-box-shadow: 0 0 12px #000000;
+        box-shadow: 0 0 12px #000000;
+        opacity: 1;
+        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+        filter: alpha(opacity=100);
+        cursor: pointer;
+    }
 
-            -webkit-animation: spin 2s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 2s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
+    #toast-container.toast-top-full-width > div,
+    #toast-container.toast-bottom-full-width > div {
+        width: 96%;
+        margin: auto;
+    }
+    .toast {
+        background-color: #030303;
+    }
+    .toast-success {
+        background-color: #51a351;
+    }
+    .toast-error {
+        background-color: #bd362f;
+    }
+    .toast-info {
+        background-color: #2f96b4;
+    }
+    .toast-warning {
+        background-color: #f89406;
+    }
+    .accordion .card {
+        border: none;
+        margin-bottom: 2px;
+        border-radius: 0;
+        box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    }
+    .accordion .card .card-header {
+        /*background: #6245dd;*/
+        background: #5cc0de;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        border-radius: 0;
+    }
+    .accordion .card-header h2 {
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 500;
+        font-family: "Roboto", sans-serif;
+    }
+    .accordion img {
+        width: 150px;
+    }
+    .accordion .card-header h2 span {
+        float: left;
+        margin-top: 10px;
+    }
+    .accordion .card-header .btn {
+        font-weight: 500;
+    }
+    .accordion .card-header i {
+        color: #fff;
+        font-size: 1.3rem;
+        margin: 0 6px 0 -10px;
+        font-weight: bold;
+        position: relative;
+        top: 5px;
+    }
+    .accordion .card-header button:hover {
+        color: #23384e;
+    }
+    .accordion .card-body {
+        color: #666;
+    }
+    #parametro-error {
+        margin-right: 759px;
+    }
 
-        #page-loader .preloader-interior:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #e74c3c;
+    .form-control:disabled, .daterangepicker .input-mini:disabled, .input-group > .ui-select-bootstrap > input.ui-select-search.form-control:disabled, .form-control[readonly], .daterangepicker [readonly].input-mini, .input-group > .ui-select-bootstrap > input[readonly].ui-select-search.form-control {
+        background-color: #e9ebec00;
+        opacity: 1;
+        font-stretch: semi-condensed;
 
-            -webkit-animation: spin 3s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 3s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
+    }
+    #parametro-error {
+        margin-right: 759px;
+    }
+</style>
 
-        #page-loader .preloader-interior:after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #f9c922;
-
-            -webkit-animation: spin 1.5s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 1.5s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        } /*Fin preload*/
-    </style>
-    <!-- DATE PICKER -->
-    <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
-    <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
-
-    <spring:url value="/resources/css/smartWizardCss/smarthWizardCss.css" var="smw" />
-    <link href="${smw}" rel="stylesheet" type="text/css"/>
-    <spring:url value="/resources/css/smartWizardCss/smart_wizard_theme_arrows.min.css" var="smwtheme" />
-    <link href="${smwtheme}" rel="stylesheet" type="text/css"/>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
-<jsp:include page="../fragments/bodyHeader.jsp" />
+<jsp:include page="../fragments/bodyHeader.jsp"/>
 <div class="app-body">
-    <jsp:include page="../fragments/sideBar.jsp" />
-    <!-- Main content -->
-    <div class="main">
-        <!-- Breadcrumb -->
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
-                <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/cartas/ListadoCartaParticipant/" htmlEscape="true "/>">LISTADO</a>
-                <i class="fa fa-angle-right">
-                </i> <a href="<spring:url value="/cartas/Crear" htmlEscape="true"/>">CARTAS</a>
-            </li>
-        </ol>
-        <div class="container-fluid">
-            <div class="animated fadeIn">
-            <div id="page-loader">
-                <span class="preloader-interior"></span>
-            </div>
-                    <!-- inicio smart wizard  class="needs-validation" novalidate-->
-                    <div class="card shadow-lg p-3 mb-5 bg-white">
-                        <div id="error" class="alert alert-default alert-dismissible fade show" role="alert" id="message-box">
-                         <h1 class="text-danger" id="msj"><strong>Error!</strong> revisa todos campos. </h1>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+<jsp:include page="../fragments/sideBar.jsp"/>
+<!-- Main content -->
+<div class="main">
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home"/></a>
+        <i class="fa fa-angle-right"></i>
+        <a href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
+            <spring:message code="List"/>
+        </a>
+        <i class="fa fa-angle-right"></i>
+        <a href="<spring:url value="/cartas/Crear" htmlEscape="true "/>">
+            <spring:message code="Form"/></a>
+    </li>
+</ol>
+<div class="container-fluid">
+<div class="animated fadeIn">
 
-                    <div class="card-header">
-                        <h3 class="text-gray-dark" style="font-family: Roboto">
-                            <i class="fa fa-file-text" aria-hidden="true"></i>
-                            <spring:message code="Cartas del Participante "  />
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                    <spring:url value="/cartas/searchParticipant" var="searchPartUrl"/>
-                    <spring:url value="/cartas/VersionCarta" var="VersionCartatUrl"/>
-                    <spring:url value="/cartas/ParteVersion" var="ParteVersionUrl"/>
-                    <spring:url value="/cartas/saveScanCarta" var="saveScanCartaUrl"/>
-                    <spring:url value="/cartas/ListadoCartaParticipant" var="Lista2ScanCartaUrl"/>
-                    <!-- SmartWizard html -->
-                    <div id="smartwizard">
-                    <ul>
-                        <li><a href="#step-1">1 - Búscar<br /><small>Datos del Participante.</small></a></li>
-                        <li><a href="#step-2">2 - Tipo<br /><small>Carta.</small></a></li>
-                       <!--  <li><a href="#step-3">3 - Otros<br /><small>Datos.</small></a></li> -->
-                        <li><a href="#step-3">3 - Información<br /><small>de Tutor.</small></a></li>
-                    </ul>
-                    <div>
-                    <div id="step-1">
-                        <h3 class="border-bottom border-gray pb-2" style="font-family: Roboto">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                            Búscar Participante
-                        </h3>
-                        <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal">
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-md-6 col-lg-12">
-                                    <label>Código Participante :</label>
-                                    <input type="text" class="form-control" placeholder="Ingrese el código" id="parametro" name="parametro">
-                                    <div id="gendererror" class="text-danger"></div>
+<div class="container col-sm-12 col-lg-12">
+<div class="">
+<div class="card">
+<div class="card-header">
+    <h5 style="font-family: Roboto">
+        <i class="fa fa-users"></i> <spring:message code="lbl.To.assign"/> <spring:message code="letters"/>
+    </h5>
+</div>
+<c:set var="userEnabledLabel"><spring:message code="login.userEnabled"/></c:set>
+<c:set var="userDisabledLabel"><spring:message code="login.userDisabled"/></c:set>
+<spring:url value="/cartas/searchParticipant" var="searchPartUrl"/>
+<spring:url value="/cartas/VersionCarta" var="VersionCartatUrl"/>
+<spring:url value="/cartas/ParteVersion" var="ParteVersionUrl"/>
+<spring:url value="/cartas/saveScanCarta" var="saveScanCartaUrl"/>
+<spring:url value="/cartas/ListadoCartaParticipant" var="Lista2ScanCartaUrl"/>
+<spring:url value="/cartas/cartaSaveEdit" var="cartaSaveEditUrl"/>
+<c:set var="successMessage"><spring:message code="process.success" /></c:set>
+<c:set var="errorProcess"><spring:message code="process.error" /></c:set>
+<div class="card-body">
+<div class="row">
+    <div class="col-sm-12">
+        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom"
+           title="Volvel al Listado"
+           href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            <spring:message code="List"/>
+        </a>
+    </div>
+</div>
+<br/>
+
+<div class="container-lg">
+<div class="row">
+<div class="col-lg-12 mx-auto">
+<div class="accordion mt-2" id="accordionExample">
+<div class="card">
+    <div class="card-header" id="headingOne">
+        <h2 class="clearfix mb-0">
+            <a id="one" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <i class="fa fa-plus-circle"></i> <spring:message code="Information"/> <spring:message code="participants"/></a>
+        </h2>
+    </div>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+            <div class="media">
+                <div class="media-body">
+                    <div class="container">
+                        <form action="#" autocomplete="off" id="select-participante-form" name="select-participante-form" class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="form-control-label col-md-2 text-right" for="username"><spring:message code="participant.code" />
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="input-group col-md-10">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input id="parametro" name="parametro" type="text" value="" class="form-control"/>
+                                    <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                        <spring:message code="search" />
+                                    </button>
                                 </div>
                             </div>
                         </form>
+                    </div>
+                    <hr/>
 
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label>Código :</label>
-                                <input type="text" class="form-control" name="codigo" id="codigo" disabled/>
-                                <span class="error">Código es requerido</span>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="form-group">
-                                    <label for="txtNombreCompleto">Participante :</label>
-                                    <input type="text" class="form-control" id="txtNombreCompleto" name="txtNombreCompleto" disabled>
-                                </div>
-                            </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label> <spring:message code="code" />:</label>
+                            <input type="text" class="form-control form-control-sm" name="codigo" id="codigo" disabled/>
+                            <span class="error"><spring:message code="code" /> <spring:message code="lbl.required" /></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtNombreCompleto"><spring:message code="participant" /> :</label>
+                            <input type="text" class="form-control form-control-sm" id="txtNombreCompleto" name="txtNombreCompleto" disabled>
+                        </div>
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="edad">Edad :</label>
-                                    <input type="text" class="form-control" id="edad" name="edad" disabled>
-                                </div>
-                            </div>
+                        <div class="form-group col-md-1">
+                            <label for="edadyear"><spring:message code="age"/> <spring:message code="lbl.years"/></label>
+                            <input type="text" class="form-control form-control-sm" id="edadyear" name="edadyear" disabled>
+                        </div>
 
+                        <div class="form-group col-md-1">
+                            <label for="edadmeses"><spring:message code="age"/> <spring:message code="lbl.mounths"/></label>
+                            <input type="text" class="form-control form-control-sm" id="edadmeses" name="edadmeses" disabled>
+                        </div>
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="estudios">Estudios :</label>
-                                    <input type="text" class="form-control" id="estudios" name="estudios" disabled>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="padre">Padre :</label>
-                                    <input type="text" class="form-control" id="padre" name="padre" disabled>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="madre">Madre :</label>
-                                    <input type="text" class="form-control" id="madre" name="madre" disabled>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="relacionFam">Relación del tutor con el niño :</label>
-                                    <input type="text" class="form-control" id="relacionFam" name="relacionFam" disabled>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="tutor">Tutor :</label>
-                                    <input type="text" class="form-control" id="tutor" name="tutor" disabled>
-                                </div>
-                            </div>
-                        </div><!-- row -->
-                    </div><!-- fin step 01  -->
-
-                    <div id="step-2">
-                        <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
-                            <h3 class="border-bottom border-gray pb-2" style="font-family: Roboto">
-                                <i class="fa fa-file-text-o" aria-hidden="true"></i> Tipo Carta</h3>
-                            <div class="row">
-                                <div class="col-md-12"></div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="fechacarta">Fecha :</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control" required="required" name="fechacarta" id="fechacarta" data-date-end-date="+0d"/>
-                                        <span class="error">Seleccione la fecha.</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="carta">Carta :</label>
-                                        <span class="required text-danger"> * </span>
-                                        <select name="carta" id="carta" name="carta" class="form-control" required="required">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${carta}" var="c">
-                                                <option value="${c.idcarta}">${c.carta} </option>
-                                            </c:forEach>
-                                        </select>
-                                        <span class="error">Seleccione la carta.</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="version">Versión:</label>
-                                        <span class="required text-danger"> * </span>
-                                        <select name="version" id="version" class="form-control" required="required">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                        </select>
-                                        <span class="error">Seleccione la versión.</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="partes">Partes :</label>
-                                        <span class="required text-danger"> * </span>
-                                        <select class="form-control select2-multiple" multiple id="partes" name="partes" required="required">
-                                        </select>
-                                        <span class="error">Seleccione al menos una opción.</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="person">Recurso:</label>
-                                        <span class="required text-danger"> * </span>
-                                        <select name="person" id="person" class="form-control" required="required">
-                                            <option selected value=""><spring:message code="select"/>...</option>
-                                            <c:forEach items="${person}" var="p">
-                                                <option value="${p.codigo}">${p.idPersona} - ${p.nombre}</option>
-                                            </c:forEach>
-                                        </select>
-                                        <span class="error">Seleccione el recurso.</span>
-                                    </div>
-                                </div>
-
-                            </div><!-- fin row -->
-
-                            <div class="row">
-                                <div class="col-md-12"></div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="asentimiento">Asentimiento: </label>
-                                        <span class="required text-danger"> * </span>
-                                        <select name="asentimiento" id="asentimiento" class="form-control" required="required">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${SiNoNA}" var="s">
-                                                <option value="${s.catKey}"><spring:message code="${s.spanish}" /></option>
-                                            </c:forEach>
-                                        </select>
-                                        <span class="error">Seleccione tipo asentimiento.</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div id="DivtipoAsent">
-                                        <div class="form-group">
-                                            <label for="tipoasentimiento">Tipo Asentimiento: </label>
-                                            <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
-                                                <option selected value=""><spring:message code="select" />...</option>
-                                                <c:forEach items="${tpoasent}" var="ta">
-                                                    <option value="${ta.catKey}"><spring:message code="${ta.spanish}" /></option>
-                                                </c:forEach>
-                                            </select>
-                                            <span class="error">Seleccione tipo asentimiento.</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="proyecto">Proyecto: </label>
-                                        <select name="proyecto" id="proyecto" class="form-control">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${proyecto}" var="p">
-                                                <option value="${p.catKey}"><spring:message code="${p.spanish}" /></option>
-                                            </c:forEach>
-                                        </select>
-                                        <span class="error">Seleccione el proyecto.</span>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
+                        <div class="form-group col-md-1">
+                            <label for="edaddias"><spring:message code="age"/> <spring:message code="lbl.days"/></label>
+                            <input type="text" class="form-control form-control-sm" id="edaddias" name="edaddias" disabled>
+                        </div>
 
                     </div>
 
-                    <!-- <div id="step-3"></div> -->
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="estudios"><spring:message code="userstudies"/> :</label>
+                            <input type="text" class="form-control form-control-sm" id="estudios" name="estudios" disabled>
+                        </div>
 
-                    <div id="step-3">
+                        <div class="form-group col-md-4">
+                            <label for="padre"><spring:message code="lbl.father"/></label>
+                            <input type="text" class="form-control form-control-sm" id="padre" name="padre" disabled>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="madre"><spring:message code="lbl.mother"/> </label>
+                            <input type="text" class="form-control form-control-sm" id="madre" name="madre" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="relacionFam"><spring:message code="lbl.family.relationship"/></label>
+                            <input type="text" class="form-control form-control-sm" id="relacionFam" name="relacionFam" disabled>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="tutor"><spring:message code="lbl.tutor"/></label>
+                            <input type="text" class="form-control form-control-sm" id="tutor" name="tutor" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header" id="headingTwo">
+        <h2 class="mb-0" style="font-family: Roboto, sans-serif">
+            <a id="two" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <i class="fa fa-plus-circle"></i>
+                <spring:message code="Information" /> <spring:message code="consent" /></a>
+        </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+            <div class="media">
+                <div class="media-body">
+                    <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
                         <div class="row">
-                            <div class="col-md-12">
-                                <h3 class="border-bottom border-gray pb-2" style="font-family: Roboto">
-                                    <i class="fa fa-id-card" aria-hidden="true"></i> Información del Tutor.</h3>
+                            <div class="col-md-6" >
+                                <div class="form-group" hidden="hidden">
+                                    <label for="principal">principal</label>
+                                    <input type="text" class="form-control" disabled="disabled" id="principal"/>
+                                </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12"></div>
+
+                            <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="nombfirma">1er. Nombre : </label>
+                                    <label for="fechacarta"><spring:message code="lbl.date" /></label>
                                     <span class="required text-danger"> * </span>
-                                    <input type="text" class="form-control" id="nombfirma" name="nombfirma" placeholder="Nombre 1" required/>
-                                    <span class="error">1er. Nombre es requerido.</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="nombre2Firma">2do. Nombre :</label>
-                                    <input type="text" class="form-control" id="nombre2Firma" name="nombre2Firma" placeholder="Nombre 2">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="apellido1Firma">1er. Apellido :</label>
-                                    <span class="required text-danger"> * </span>
-                                    <input type="text" class="form-control" id="apellido1Firma" required name="apellido1Firma" placeholder="Apellido 1">
-                                    <span class="error">1er. Apellido es requerido.</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="nombre2Firma">2do. Apellido :</label>
-                                    <input type="text" class="form-control" id="apellido2Firma" name="apellido2Firma" placeholder="Apellido 2">
+                                    <input type="text" class="form-control" required="required" name="fechacarta" id="fechacarta" data-date-end-date="+0d"/>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="lbl.date" /> <spring:message code="lbl.required" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
-                                <div class="form-group has-danger">
-                                    <label for="relfam">Relación Familiar: </label>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="carta"><spring:message code="letters" />:</label>
+                                    <span class="required text-danger"> * </span>
+                                    <select name="carta" id="carta" name="carta" class="form-control" required="required">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="letters" /> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="version"><spring:message code="versionLetters" />:</label>
+                                    <span class="required text-danger"> * </span>
+                                    <select name="version" id="version" class="form-control" required="required">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="versionLetters" /> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="partes"><spring:message code="Letter.Parts" />:</label>
+                                    <span class="required text-danger"> * </span>
+                                    <select class="form-control select2-multiple" multiple id="partes" name="partes" required="required">
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="person"><spring:message code="lbl.resource"/></label>
+                                    <span class="required text-danger"> * </span>
+                                    <select name="person" id="person" class="form-control" required="required">
+                                        <option selected value=""><spring:message code="select"/>...</option>
+                                        <c:forEach items="${person}" var="p">
+                                            <option value="${p.personal.codigo}">${p.personal.codigo} - ${p.personal.nombre}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="lbl.resource"/> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="proyecto"><spring:message code="lbl.project" /> </label>
+                                    <select name="proyecto" id="proyecto" class="form-control">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                        <c:forEach items="${proyecto}" var="p">
+                                            <option value="${p.catKey}"><spring:message code="${p.spanish}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="lbl.project" /> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6"  id="divAsentimiento" style="display: none">
+                                <div class="form-group">
+                                    <label for="asentimiento"><spring:message code="lbl.assent" /> </label>
+                                    <select name="asentimiento" id="asentimiento" class="form-control">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                        <c:forEach items="${SiNoNA}" var="s">
+                                            <option value="${s.catKey}"><spring:message code="${s.spanish}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" id="divTipoAsentimiento" style="display: none">
+                                <div id="DivtipoAsent">
+                                    <div class="form-group">
+                                        <label for="tipoasentimiento"><spring:message code="type.assent" /> </label>
+                                        <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
+                                            <option selected value=""><spring:message code="select" />...</option>
+                                            <c:forEach items="${tpoasent}" var="ta">
+                                                <option value="${ta.catKey}"><spring:message code="${ta.spanish}" /></option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- fin row -->
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nombfirma"><spring:message code="first.name" /> <spring:message code="lbl.tutor" /> </label>
+                                    <span class="required text-danger"> * </span>
+                                    <input type="text" class="form-control onlytext" id="nombfirma" name="nombfirma" placeholder="1er. Nombre tutor" required value="${obj.name1Tutor}"/>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="first.name" /> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nombre2Firma"><spring:message code="second.name" /> <spring:message code="lbl.tutor" /></label>
+                                    <input type="text" class="form-control onlytext" id="nombre2Firma" name="nombre2Firma" placeholder="2do. Nombre tutor"  value="${obj.name2Tutor}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="apellido1Firma"><spring:message code="first.surname" /> <spring:message code="lbl.tutor" /></label>
+                                    <span class="required text-danger"> * </span>
+                                    <input type="text" class="form-control onlytext" id="apellido1Firma" required name="apellido1Firma" placeholder="1er. Apellido tutor" value="${obj.surname1Tutor}">
+                                    <div class="invalid-feedback">
+                                        <spring:message code="first.surname" /> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nombre2Firma"><spring:message code="second.surname" /> <spring:message code="lbl.tutor" /></label>
+                                    <input type="text" class="form-control onlytext" id="apellido2Firma" name="apellido2Firma" placeholder="2do. Apellido tutor" value="${obj.surname2Tutor}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="relfam"><spring:message code="family.relationship" /> </label>
                                     <span class="required text-danger"> * </span>
                                     <select name="relfam" id="relfam" class="form-control" required>
                                         <option selected value=""><spring:message code="select" />...</option>
@@ -425,70 +540,121 @@
                                             <option value="${rel.catKey}">${rel.spanish}</option>
                                         </c:forEach>
                                     </select>
-                                    <span class="error">Selecciona el tipo de relación</span>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="family.relationship" /> <spring:message code="lbl.required" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="observacion">Observación:</label>
-                                    <input type="text" class="form-control" id="observacion" name="observacion" placeholder="observacion">
+                                    <div class="form-check mt-4 text-center">
+                                        <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo">
+                                        <label class="form-check-label" for="contactoFuturo">
+                                            <spring:message code="lbl.Accept.future.contact" />
+                                        </label>
+                                    </div>
                                 </div>
+                               <%-- <p> <h5 class="text-primary" style="font-family: Roboto"><spring:message code="lbl.Accept.future.contact" /></h5> </p>
+                                <p><input type="checkbox" name="contactoFuturo" id="contactoFuturo"  class="lcs_check" autocomplete="off" /></p>--%>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" name="contactoFuturo" id="contactoFuturo">
-                                    <label class="custom-control-label" for="contactoFuturo">Contacto Futuro</label>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="form-check mt-4 text-center">
+                                        <input class="form-check-input chktestigo" type="checkbox" id="chkTestigo" name="chkTestigo">
+                                        <label class="form-check-label" for="chkTestigo">
+                                            <spring:message code="lbl.witness.present" />
+                                        </label>
+                                    </div>
                                 </div>
+                               <%-- <p> <h5 class="text-primary" style="font-family: Roboto"><spring:message code="lbl.witness.present" /></h5> </p>
+                                <p><input type="checkbox" id="chktestigo" name="chktestigo"  class="lcs_check chktestigo" autocomplete="off" /></p>--%>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="retiro" name="retiro">
-                                    <label class="custom-control-label" for="retiro">Retirado</label>
-                                </div>
-                            </div>
-                            <br/>
                             <br/>
                             <input type="text" name="aptoCovid" id="aptoCovid" hidden="hidden" disabled/>
-                            <hr/>
-                            <div class="col-md-4">
+                        </div>
+
+                        <div id="selectt" style="display: none">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="nombre1Testigo"><spring:message code="first.name" /> <spring:message code="lbl.witness" /> </label>
+                                        <span class="required text-danger"> * </span>
+                                        <input type="text" class="form-control onlytext focusNext" tabindex="5" id="nombre1Testigo" name="nombre1Testigo" />
+                                        <span class="error"><spring:message code="first.name" /> <spring:message code="lbl.required" />.</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="nombre2Testigo"><spring:message code="second.name" /> <spring:message code="lbl.witness" /></label>
+                                        <input type="text" class="form-control onlytext focusNext" tabindex="6" id="nombre2Testigo" name="nombre2Testigo">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="apellido1Testigo"><spring:message code="first.surname" /> <spring:message code="lbl.witness" /></label>
+                                        <span class="required text-danger"> * </span>
+                                        <input type="text" class="form-control onlytext focusNext" tabindex="7" id="apellido1Testigo" name="apellido1Testigo">
+                                        <span class="error"><spring:message code="first.surname" /> <spring:message code="lbl.required" />.</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="apellido2Testigo"><spring:message code="second.surname" /> <spring:message code="lbl.witness" /></label>
+                                        <input type="text" class="form-control onlytext focusNext" tabindex="8" id="apellido2Testigo" name="apellido2Testigo">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="observacion"><spring:message code="observacion" /></label>
+                                    <textarea class="form-control"  id="observacion" name="observacion" placeholder="observacion" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
                                 <button type="submit" id="btnSave" class="btn btn-primary btn-block btn-lg">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                                    Guardar
+                                    <spring:message code="save" />
                                 </button>
                             </div>
-                            <div class="col-md-4">
-                            </div>
-                            <div class="col-md-4">
-                               <button type="button" id="btnCancel" class="btn btn-warning btn-block btn-lg">
-                                    <i class="fa fa-refresh" aria-hidden="true"></i>
-                                    Cancelar
-                                </button>
-
-                                <!--     <a class="btn btn-warning btn-block btn-lg" href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <a class="btn btn-warning btn-block btn-lg" href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
                                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-                                    <spring:message code="Cancelar" /></a>
-
-                                -->
+                                    <spring:message code="cancel" /></a>
                             </div>
-
                         </div>
-                    </div>
+                        <br/><br/>
 
                     </form>
-                    </div>
-                    </div>
-                    <!-- smart Wizard  -->
-                    </div> <!-- card-body  -->
-                    </div><!-- fin card  -->
-                    <!-- inicio smart wizard  -->
-                </div><!-- animated  -->
-            </div><!-- container   -->
-        </div><!-- main  -->
-    </div><!-- </div> app-boddy -->
-<jsp:include page="../fragments/bodyFooter.jsp" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- FIN COLLAPSE -->
+</div>
+<div class="card-footer text-muted"></div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<!-- /.conainer-fluid -->
+</div>
+</div><jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/app.js" var="App" />
@@ -510,47 +676,95 @@
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 <script src="${jQValidationLoc}"></script>
-
-
+<spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />
+<script src="${loadingButtonsJs}" type="text/javascript"></script>
 <!-- bootstrap datepicker -->
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
 <script src="${datepickerPlugin}"></script>
-
-
 
 <spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 <script src="${jQValidationLoc}"></script>
-
-<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
-<script type="text/javascript" src="${sw}"></script>
-
 <!-- Custom scripts required by this view -->
 <spring:url value="/resources/js/views/Cartas/Cartas.js" var="cartaScript" />
 <script src="${cartaScript}" type="text/javascript"></script>
 <c:set var="notFound"><spring:message code="noResults" /></c:set>
 
+<spring:url value="/resources/js/libs/moment.js" var="moment" />
+<script type="text/javascript" src="${moment}"></script>
+
 <spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
 
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
 
 <spring:url value="/resources/js/libs/smartWizard/jquery.smartWizard.js" var="jqsw"/>
 <script type="application/javascript" src="${jqsw}"></script>
 
+<spring:url value="/resources/js/libs/lc_switch.js" var="lc" />
+<script type="text/javascript" src="${lc}"></script>
+
 <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+<script type="text/javascript">
     $(document).ready(function(){
-        setTimeout(function () {
-            $('#page-loader').fadeOut('slow');
-        }, 1500);
-        $('#smartwizard').smartWizard({
-            selected: 0,
-            theme: 'arrows',
-            lang: {  // Language variables
-                next: 'Sig',
-                previous: 'Prev'
-            }
+        $(".collapse.show").each(function(){
+            $(this).siblings(".card-header").find(".btn i").addClass("fa-minus-circle").removeClass("fa-plus-circle");
         });
+        $(".collapse").on('show.bs.collapse', function(){
+            $(this).parent().find(".card-header .btn i").removeClass("fa-plus-circle").addClass("fa-minus-circle");
+        }).on('hide.bs.collapse', function(){
+            $(this).parent().find(".card-header .btn i").removeClass("fa-minus-circle").addClass("fa-plus-circle");
+        });
+        /* $('.collapse').on('show.bs.collapse', function () {
+         // do something…
+         debugger;
+         });
+         $('.collapse').on('shown.bs.collapse', function (e) {
+         console.log(e.target.id);
+         });
+         $('.collapse').on('hidden.bs.collapse', function (e) {
+         console.log(e.target.id);
+         });
+
+         $("#two").on("click", function(e){
+         debugger;
+         if($("#codigo").val() == null || $("#codigo").val() == ""){
+         console.error(e.target.id);
+         return false;
+         }else {
+         return true;
+         }
+         });
+
+        lc_switch('#contactoFuturo',{
+            on_txt: 'Si',
+            off_txt: 'No'
+        }); lc_switch('#chktestigo',{
+            on_txt: 'Si',
+            off_txt: 'No'
+        }); */
         $("#carta").select2();
         $("#version").select2();
         $("#person").select2();
@@ -560,26 +774,18 @@
         $("#tipoasentimiento").select2();
 
         var parametros = {
-            searchPartUrl: "${searchPartUrl}",
-            Lista2ScanCartaUrl :"${Lista2ScanCartaUrl}",
-            VersionCartatUrl: "${VersionCartatUrl}",
-            ParteVersionUrl:"${ParteVersionUrl}",
-            saveScanCartaUrl:"${saveScanCartaUrl}",
-            notFound: "${notFound}"};
+            searchPartUrl       : "${searchPartUrl}",
+            Lista2ScanCartaUrl  : "${Lista2ScanCartaUrl}",
+            VersionCartatUrl    : "${VersionCartatUrl}",
+            ParteVersionUrl     : "${ParteVersionUrl}",
+            saveScanCartaUrl    : "${saveScanCartaUrl}",
+            UpdateRetiroUrl     : "${UpdateRetiroUrl}",
+            notFound            : "${notFound}",
+            cartaSaveEditUrl    : "${cartaSaveEditUrl}",
+            successmessage      : "${successMessage}"
+        };
         scanCarta.init(parametros);
         var elementos = [];
-        $("#btnCancel").click(function(){
-            /*var selected=[];
-            var sel ={};
-            $('#partes').select2().each(function(){
-                selected[$(this).val()]=$(this).val();
-                sel = {"id": $(this).val(),
-                       "text": $(this).text()
-                }
-            });
-            var ar=$("#partes").find(':selected');
-            console.log(ar);*/
-        })
         $("#version").prop('disabled',true);
         $("#partes").prop('disabled',true);
         $("#partes").select2({placeholder: "Selección parte"});
@@ -588,17 +794,7 @@
             format: "dd/mm/yyyy",
             todayBtn:true
         });
-/*
-        $("#asentimiento").on("change", function(){
-            if(this.value == 1 ){
-                $("#DivtipoAsent").fadeIn("slow");
-                $("#tipoasentimiento").attr("required", "true");
-            }else{
-                $("#DivtipoAsent").fadeOut("slow");
-                $("#tipoasentimiento").val("").attr("required", "false");
-            }
-        });
-*/
+
         $("#parametro").focus();
     });
 </script>

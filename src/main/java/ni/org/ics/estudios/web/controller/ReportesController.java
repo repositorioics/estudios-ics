@@ -1,14 +1,18 @@
 package ni.org.ics.estudios.web.controller;
 
+import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
+import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
+import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
+import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
@@ -59,6 +63,9 @@ public class ReportesController {
     /* Instancia de mi Servicio ScanCarta */
     @Resource(name = "scanCartaService")
     private ScanCartaService scanCartaService;
+
+    @Resource(name = "SerologiaService")
+    private SerologiaOct2020Service serologiaservice;
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -116,6 +123,31 @@ public class ReportesController {
         return excelView;
     }
 
+//region Reorte Serologia
+    @RequestMapping(value = "/downloadFileEnviosSerologia", method = RequestMethod.GET)
+    public ModelAndView downloadFileEnviosSerologia(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+            @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+            @RequestParam(value="fechaFin", required=false ) String fechaFin)
+        throws Exception{
+        ModelAndView ReporteEnvio = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+        List<SerologiaEnvio> SerologiasEnviadas =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvio.addObject("nEnvios",nEnvios);
+        ReporteEnvio.addObject("fechaInicio",fechaInicio);
+        ReporteEnvio.addObject("fechaFin",fechaFin);
+        ReporteEnvio.addObject("SerologiasEnviadas",SerologiasEnviadas);
+        ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTE);
+        return ReporteEnvio;
+    }
+//endregion
+
+
     /*Este controlador devuelve archivo Hemodinámica  /ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f    */
     @RequestMapping(value = "/ReporteHemodinamica", method = RequestMethod.GET)
     public ModelAndView ReporteHemodinamica(@RequestParam(value = "idDatoHemo", required = true) String idDatoHemo)
@@ -150,9 +182,13 @@ public class ReportesController {
         }
         List<DetalleParte> dp = scanCartaService.getDetalleParteList(idparticipantecarta);
         ReporteCarta.addObject("dp",dp);
+
+        List<ParticipanteExtension> getListParticipanteExtension = this.scanCartaService.getAllPartExt(idparticipantecarta);
+        ReporteCarta.addObject("getListParticipanteExtension", getListParticipanteExtension);
         List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
-        relFam.addAll(messageResourceService.getCatalogo("PROYECTO"));
+        relFam.addAll(messageResourceService.getCatalogo("CAT_SCAN_PROYECTO"));
         relFam.addAll(messageResourceService.getCatalogo("SCANCARTA"));
+        relFam.addAll(messageResourceService.getCatalogo("CAT_TIPO_ASENT"));
         relFam.addAll(messageResourceService.getCatalogo("TIPOASENTIMIENTO"));
         ReporteCarta.addObject("relFam",relFam);
         ReporteCarta.addObject("TipoReporte", Constants.TPR_REPORTECARTA);
