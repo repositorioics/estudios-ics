@@ -5,14 +5,12 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
-import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 import com.lowagie.text.pdf.draw.LineSeparator;
 //import com.sun.javafx.font.*;
 
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
-import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
@@ -21,22 +19,16 @@ import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.web.utils.DateUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
-import sun.font.FontFamily;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.awt.*;
-import java.io.Writer;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.io.FileOutputStream;
-import java.io.File;
 
 /**
  * Created by Miguel Salinas on 19/10/2018.
@@ -1538,17 +1530,16 @@ public class PdfView extends AbstractPdfView {
             String f1 = (String) model.get("fechaInicio");
             String f2 = (String) model.get("fechaFin");
 
+            document.newPage();
+            document.open();
             Date fecha_inicio = DateUtil.StringToDate(f1,"dd/MM/yyyy");
-            Date fecha_fin = DateUtil.StringToDate(f2,"dd/MM/yyyy");
-
             Calendar calendar2 = Calendar.getInstance();
             calendar2.setTime(fecha_inicio);
             int yearsNow  = calendar2.get(Calendar.YEAR);
 
-            document.newPage();
-            document.open();
-
-            HeaderFooter objHeaderFooter;
+            //se inicializa y setea el manejador de evento para el encabezado y pie de pagina
+            HeaderFooterReporteEnvio footer = new HeaderFooterReporteEnvio(f1, f2, numeroEnvios, yearsNow);
+            writer.setPageEvent(footer);
 
             Font miaNormal = new Font(Font.COURIER,12, Font.NORMAL);
             Font mia = new Font(Font.COURIER,12, Font.BOLDITALIC);
@@ -1559,54 +1550,16 @@ public class PdfView extends AbstractPdfView {
             Paragraph fecha = new Paragraph(dateformat.format(objDate) + " " + hourFormat.format(objDate));
             fecha.setAlignment(Element.ALIGN_RIGHT);
 
-            PdfPTable table = new PdfPTable(new float[]{10,10,10,10,20});
+            float y = 650f; //posicion coordenada y en la pagina.. mientras mas disminuye mas se acerca al fin (botton) de la pagina
+            PdfPTable table = new PdfPTable(new float[]{5,10,10,10,10,10,18});
+            table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+
             PdfPCell cell;
-
-            Paragraph encabezado = new Paragraph("CENTRO DE SALUD SÓCRATES FLORES VIVAS.",FontFactory.getFont("COURIER", 20, java.awt.Font.BOLD, Color.black));
-            encabezado.setAlignment(Element.ALIGN_CENTER);
-            document.add(encabezado);
-
-            Paragraph encabezado2 = new Paragraph("RECEPCIÓN DE MUESTRAS TUBOS ROJOS.", FontFactory.getFont("COURIER",16, java.awt.Font.ITALIC));
-            encabezado2.setAlignment(Element.ALIGN_CENTER);
-            document.add(encabezado2);
-
-            table = new PdfPTable(new float[]{80,20});
-            cell = new PdfPCell(new Phrase("MUESTREO ANUAL COHORTE FAMILIA " + yearsNow,FontFactory.getFont("COURIER", 14, java.awt.Font.ITALIC)));
-            cell.setBorder(0);
-            cell.setHorizontalAlignment(Element.ALIGN_BOTTOM);
-            table.addCell(cell);
-            cell = new PdfPCell(new Phrase("Viaje: "+numeroEnvios +" \n ",FontFactory.getFont("COURIER", 14, java.awt.Font.ITALIC, Color.black)));
-            //cell = new PdfPCell(new Phrase( "\n" + "Fecha:" + dateformat.format(objDate)+"\n" + "Viaje: "+numeroEnvios +" \n ",FontFactory.getFont("COURIER", 14, java.awt.Font.BOLD, Color.black)));
-            cell.setBorder(0);
-            table.addCell(cell);
-
-            document.add(table);
-            Paragraph paragraph0 = new Paragraph();
-            addEmptyLine(paragraph0, 1);
-            document.add(paragraph0);
-
-            table = new PdfPTable(new float[]{50,50});
-            cell = new PdfPCell(new Phrase("Fecha Inicio: "+f1,miaEstudio));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setBorder(0);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Fecha Fin: "+f2,miaEstudio));
-            cell.setBorder(0);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
-            document.add(table);
-
-            LineSeparator ls1 = new LineSeparator();
-            ls1.setLineWidth(0.5f);
-            document.add(new Chunk(ls1));
-
 
             Paragraph paragraph1 = new Paragraph();
             addEmptyLine(paragraph1, 1);
             document.add(paragraph1);
 
-            table = new PdfPTable(new float[]{5,10,10,10,10,10,18});
             table.setWidthPercentage(98f);
             table.setHeaderRows(1);
 
@@ -1638,15 +1591,15 @@ public class PdfView extends AbstractPdfView {
             cell = new PdfPCell(new Phrase("OBSERVACIONES",mia));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-            document.add(table);
 
             if (SerologiasEnviadas.size()==0){
                 table = new PdfPTable(1);
+                table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
                 cell = new PdfPCell(new Phrase("No hay información!",mia));
                 cell.setBorder(1);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
-                //document.add(table);
+                table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
             }
             int cont=0;
             for (SerologiaEnvio obj : SerologiasEnviadas) {
@@ -1683,49 +1636,63 @@ public class PdfView extends AbstractPdfView {
                     cell = new PdfPCell(new Phrase(obj.getSerologia().getObservacion(), miaNormal));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
+                    if (table.getTotalHeight() > 580) {
+                        table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+                        document.newPage();
+                        y = 650f;
+                        table = new PdfPTable(new float[]{5,10,10,10,10,10,18});
+                        table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+                    }
                 }else {// participante existe en BD
                     //codigo
-                        cell = new PdfPCell(new Phrase(obj.getSerologia().getParticipante().getCodigo().toString(), miaNormal));
-                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        table.addCell(cell);
+                    cell = new PdfPCell(new Phrase(obj.getSerologia().getParticipante().getCodigo().toString(), miaNormal));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
                     //volumen
                     cell = new PdfPCell(new Phrase("" + obj.getSerologia().getVolumen(), miaNormal));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
                     //edad
-                        String s = obj.getSerologia().getParticipante().getEdad().toString();
-                        String[] result = s.split("/", 3);
-                        cell = new PdfPCell(new Phrase(result[0], miaNormal));
-                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        table.addCell(cell);
-                        cell = new PdfPCell(new Phrase(result[1], miaNormal));
-                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        table.addCell(cell);
+                    String s = obj.getSerologia().getParticipante().getEdad();
+                    String[] result = s.split("/", 3);
+                    cell = new PdfPCell(new Phrase(result[0], miaNormal));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    cell = new PdfPCell(new Phrase(result[1], miaNormal));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
                     //estudios
-                        cell = new PdfPCell(new Phrase(obj.getSerologia().getEstudio(), miaEstudio));
-                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        table.addCell(cell);
+                    cell = new PdfPCell(new Phrase(obj.getSerologia().getEstudio(), miaEstudio));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
                     //observacion
                     cell = new PdfPCell(new Phrase(obj.getSerologia().getObservacion(), miaNormal));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
-
+                    if (table.getTotalHeight() > 580) {
+                        table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+                        document.newPage();
+                        y = 650f;
+                        table = new PdfPTable(new float[]{5, 10, 10, 10, 10, 10, 18});
+                        table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+                    }
                 }
             }
-            document.add(table);
+
+            table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+            y = y - table.getTotalHeight() - 10;
 
             table = new PdfPTable(new float[]{100});
+            table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
             cell = new PdfPCell(new Phrase("Total: "+SerologiasEnviadas.size(),miaEstudio));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            cell.setBorder(1);
+            cell.setBorder(0);
             table.addCell(cell);
-            document.add(table);
-
-            Paragraph paragraph2 = new Paragraph();
-            addEmptyLine(paragraph2, 2);
-            document.add(paragraph2);
+            table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+            y = y - table.getTotalHeight() - 45;
 
             table = new PdfPTable(new float[]{40,20,40});
+            table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
             cell = new PdfPCell(new Phrase("Entregado Por: ",miaEstudio));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(1);
@@ -1739,12 +1706,8 @@ public class PdfView extends AbstractPdfView {
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(1);
             table.addCell(cell);
-            document.add(table);
 
-
-            table = new PdfPTable(1);
-            table.addCell(createCell("Página: "+ writer.getCurrentPageNumber(), miaNormal, Rectangle.NO_BORDER));
-            document.add(table);
+            table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
             document.close();
         }
 
@@ -1777,6 +1740,7 @@ class MyFooter extends PdfPageEventHelper {
 
     public void onEndPage(PdfWriter writer, Document document) {
         PdfContentByte cb = writer.getDirectContent();
+        numberPage = writer.getCurrentPageNumber();
         int posicion = 5;
         for(String mensaje : mensajes) {
             Phrase footer = new Phrase("* "+mensaje, ffont);
@@ -1831,4 +1795,122 @@ class MyFooter extends PdfPageEventHelper {
     }
 
 
+}
+
+/***
+ * Clase para manejar el encabezado y pie de pagina del reporte de envios serologia
+ */
+class HeaderFooterReporteEnvio extends PdfPageEventHelper {
+    Font ffont = new Font(Font.COURIER, 12, Font.NORMAL);
+    Font miaEstudio = new Font(Font.COURIER,9);
+    private String fechaInicio;
+    private String fechaFin;
+    private Integer numeroEnvios;
+    private Integer anioActual;
+
+    HeaderFooterReporteEnvio() {
+    }
+
+    HeaderFooterReporteEnvio(String fechaInicio, String fechaFin, Integer numeroEnvios, Integer anioActual) {
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.numeroEnvios = numeroEnvios;
+        this.anioActual = anioActual;
+    }
+
+    public void onEndPage(PdfWriter writer, Document document) {
+        PdfContentByte cb = writer.getDirectContent();
+
+        /*ENCABEZADO**/
+        Paragraph encabezado = new Paragraph("CENTRO DE SALUD SÓCRATES FLORES VIVAS.",FontFactory.getFont("COURIER", 20, java.awt.Font.BOLD, Color.black));
+        encabezado.setAlignment(Element.ALIGN_CENTER);
+        Paragraph encabezado2 = new Paragraph("RECEPCIÓN DE MUESTRAS TUBOS ROJOS.", FontFactory.getFont("COURIER",16, java.awt.Font.ITALIC));
+        encabezado2.setAlignment(Element.ALIGN_CENTER);
+
+        float y = document.getPageSize().getHeight() - 60;
+
+        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, encabezado, 300, y, 0);
+        y = y - 20;
+        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, encabezado2, 300, y, 0);
+        y = y - 15;
+        PdfPTable table = new PdfPTable(new float[]{80,20});
+        table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+        PdfPCell cell = new PdfPCell(new Phrase("MUESTREO ANUAL COHORTE FAMILIA " + anioActual,FontFactory.getFont("COURIER", 14, java.awt.Font.ITALIC)));
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setHorizontalAlignment(Element.ALIGN_BOTTOM);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Viaje: "+ this.getNumeroEnvios() +" \n ",FontFactory.getFont("COURIER", 14, java.awt.Font.ITALIC, Color.black)));
+        cell.setBorder(PdfPCell.NO_BORDER);
+        table.addCell(cell);
+        ///writeSelectedRows(filaInicial, filaFinal, X, y, canvas).
+        //0 = primera fila, -1 = todas las filas, 42 = margen izquierdo, y = valor dinamico segun lo que se va agregando a la pagina, canvas= el documento
+        table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+        y = y - 45;
+
+        table = new PdfPTable(new float[]{50,50});
+        table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+        cell = new PdfPCell(new Phrase("Fecha Inicio: "+ this.getFechaInicio(),miaEstudio));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Fecha Fin: "+ this.getFechaFin(),miaEstudio));
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+        y = y - 15;
+
+        table = new PdfPTable(1);
+        table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+        cell = new PdfPCell(new Phrase(" ",miaEstudio));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(PdfPCell.BOTTOM);
+        cell.setBorderWidth(1.5f);
+        table.addCell(cell);
+        table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+
+        /*PIE**/
+        int numberPage = writer.getCurrentPageNumber();
+        int posicion = 5;
+        if (numberPage > 0) {
+            Phrase footer = new Phrase("Página: " + String.valueOf(numberPage), ffont);
+            ColumnText.showTextAligned(cb, Element.ALIGN_LEFT,
+                    footer,
+                    (document.left()) / 2 + document.leftMargin(),
+                    document.bottom() - posicion, 0);
+        }
+    }
+
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public Integer getNumeroEnvios() {
+        return numeroEnvios;
+    }
+
+    public void setNumeroEnvios(Integer numeroEnvios) {
+        this.numeroEnvios = numeroEnvios;
+    }
+
+    public Integer getAnioActual() {
+        return anioActual;
+    }
+
+    public void setAnioActual(Integer anioActual) {
+        this.anioActual = anioActual;
+    }
 }
