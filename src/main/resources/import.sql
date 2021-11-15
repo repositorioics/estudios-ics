@@ -1017,7 +1017,7 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 /*Sintomas Covid19*/
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC', NULL, NULL, NULL, '1', 0, '0', 'Catalogo medicamentos que toma para Covid19');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_01', '1', 'COVID_MEDICAMENTO_SVC', NULL, '0', 1, '0', 'Cloroquina');
-INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_02', '2', 'COVID_MEDICAMENTO_SVC', NULL, '0', 2, '0', 'Hidoxicloroquina');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_02', '2', 'COVID_MEDICAMENTO_SVC', NULL, '0', 2, '0', 'Hidroxicloroquina');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_03', '3', 'COVID_MEDICAMENTO_SVC', NULL, '0', 3, '0', 'Azitromicina');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_04', '4', 'COVID_MEDICAMENTO_SVC', NULL, '0', 4, '0', 'Nitazoxanida');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_05', '5', 'COVID_MEDICAMENTO_SVC', NULL, '0', 5, '0', 'Ivermectina');
@@ -1028,13 +1028,20 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_10', '10', 'COVID_MEDICAMENTO_SVC', NULL, '0', 10, '0', 'Melatonina');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_11', '11', 'COVID_MEDICAMENTO_SVC', NULL, '0', 11, '0', 'Colchicina');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_12', '12', 'COVID_MEDICAMENTO_SVC', NULL, '0', 12, '0', 'Vitamina C');
-INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_13', '13', 'COVID_MEDICAMENTO_SVC', NULL, '0', 13, '0', 'Enoxiparina');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_13', '13', 'COVID_MEDICAMENTO_SVC', NULL, '0', 13, '0', 'Enoxaparina');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_14', '14', 'COVID_MEDICAMENTO_SVC', NULL, '0', 14, '0', 'Zinc');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_15', '15', 'COVID_MEDICAMENTO_SVC', NULL, '0', 15, '0', 'Oxigeno');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_16', '16', 'COVID_MEDICAMENTO_SVC', NULL, '0', 16, '0', 'Antigripales');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_17', '17', 'COVID_MEDICAMENTO_SVC', NULL, '0', 17, '0', 'Prednisona');
-INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_18', '18', 'COVID_MEDICAMENTO_SVC', NULL, '0', 18, '0', 'Ibuprofen');
-INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_998', '998', 'COVID_MEDICAMENTO_SVC', NULL, '0', 19, '0', 'Otro');
+--sintomas nuevos para cuestionario covid19 octubre2021
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_19', '19', 'COVID_MEDICAMENTO_SVC', NULL, '0', 12, '0', 'Vitamina D');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_20', '20', 'COVID_MEDICAMENTO_SVC', NULL, '0', 18, '0', 'Dexametasona');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_21', '21', 'COVID_MEDICAMENTO_SVC', NULL, '0', 19, '0', 'Metilprednisolona');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_22', '22', 'COVID_MEDICAMENTO_SVC', NULL, '0', 20, '0', 'Rosuvastatina');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_23', '23', 'COVID_MEDICAMENTO_SVC', NULL, '0', 21, '0', 'Fenofibrato');
+--fin sintomas nuevos para cuestionario covid19 octubre2021
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_18', '18', 'COVID_MEDICAMENTO_SVC', NULL, '0', 22, '0', 'Ibuprofen');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_MEDICAMENTO_SVC_998', '998', 'COVID_MEDICAMENTO_SVC', NULL, '0', 23, '0', 'Otro');
 
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_FACTOR_RI_SVC', NULL, NULL, NULL, '1', 0, '0', 'Catalogo factor riesgo Covid19');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_FACTOR_RI_SVC_01', '1', 'COVID_FACTOR_RI_SVC', NULL, '0', 1, '0', 'HTA');
@@ -1193,3 +1200,34 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_03', '3', 'COVID_CAT_FINAL_EMB', NULL, '0', 3, '0', 'Nacimiento vivo');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_04', '4', 'COVID_CAT_FINAL_EMB', NULL, '0', 4, '0', 'Aún embarazada');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_FINAL_EMB_998', '998', 'COVID_CAT_FINAL_EMB', NULL, '0', 5, '0', 'Otro');
+
+--Cuestionario covid19 octubre 2021
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VECES_ENF', NULL, NULL, NULL, '1', 0, '0', 'Catalogo cuantas veces enfermo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VECES_ENF_01', '1', 'COVID_CAT_VECES_ENF', NULL, '0', 1, '0', 'Una vez');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VECES_ENF_02', '2', 'COVID_CAT_VECES_ENF', NULL, '0', 2, '0', '2 veces');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VECES_ENF_03', '3', 'COVID_CAT_VECES_ENF', NULL, '0', 3, '0', '3 veces');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_OXI', NULL, NULL, NULL, '1', 0, '0', 'Catalogo Por cuanto tiempo le administraron oxígeno en su domicilio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_OXI_01', '1', 'COVID_CAT_TIEMPO_OXI', NULL, '0', 1, '0', 'Menos de dos días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_OXI_02', '2', 'COVID_CAT_TIEMPO_OXI', NULL, '0', 2, '0', 'Entre 2 a 7 días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_OXI_03', '3', 'COVID_CAT_TIEMPO_OXI', NULL, '0', 3, '0', 'Mas de 1 semana');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_OXI_997', '997', 'COVID_CAT_TIEMPO_OXI', NULL, '0', 5, '0', 'No contestó');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_TIEMPO_OXI_999', '999', 'COVID_CAT_TIEMPO_OXI', NULL, '0', 4, '0', 'No Sabe/No esta Seguro(a)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo nombres de vacunas contra la Covid19');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_01', '1', 'COVID_CAT_VACUNA', NULL, '0', 1, '0', 'CovidShield');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_02', '2', 'COVID_CAT_VACUNA', NULL, '0', 2, '0', 'Sputnik V');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_03', '3', 'COVID_CAT_VACUNA', NULL, '0', 3, '0', 'Sputnik Ligth');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_04', '4', 'COVID_CAT_VACUNA', NULL, '0', 4, '0', 'AztraZeneca');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_05', '5', 'COVID_CAT_VACUNA', NULL, '0', 5, '0', 'Pfizer');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_06', '6', 'COVID_CAT_VACUNA', NULL, '0', 6, '0', 'SinoPharm');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_07', '7', 'COVID_CAT_VACUNA', NULL, '0', 7, '0', 'Moderna');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_08', '8', 'COVID_CAT_VACUNA', NULL, '0', 8, '0', 'Soberana Plus');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_09', '9', 'COVID_CAT_VACUNA', NULL, '0', 9, '0', 'Soberana 02');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_10', '10', 'COVID_CAT_VACUNA', NULL, '0', 10, '0', 'Abdala');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_VACUNA_998', '998', 'COVID_CAT_VACUNA', NULL, '0', 11, '0', 'Otra Vacuna');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS', NULL, NULL, NULL, '1', 0, '0', 'Catalogo cuantas dosis vacuna');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS_01', '1', 'COVID_CAT_DOSIS', NULL, '0', 1, '0', 'Una');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS_02', '2', 'COVID_CAT_DOSIS', NULL, '0', 2, '0', 'Dos');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS_03', '3', 'COVID_CAT_DOSIS', NULL, '0', 3, '0', 'Tres');
