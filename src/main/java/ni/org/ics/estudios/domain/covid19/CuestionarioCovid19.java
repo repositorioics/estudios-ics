@@ -58,7 +58,7 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String e1Sarpullido;
     private String e1Desmayo;
     private String e1QuedoCama;
-    /*2.	[Si uno o mas de los síntomas en la sección] Que fecha exacta o aproximada empezaron estos síntomas*/
+    /*3.	[Si uno o mas de los síntomas en la sección] Que fecha exacta o aproximada empezaron estos síntomas*/
     private String e1SabeFIS;
     private Date e1Fis;
     private String e1MesInicioSintoma;
@@ -80,7 +80,7 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String e1TmpDespuesBuscoAyuda;
     /*8.	[Si P5==”Si”] Paso al menos una noche en el hospital por COVID-19?*/
     private String e1UnaNocheHospital;
-    /*Si P7==”Si”] A que hospital acudió?  */
+    /*9. Si P7==”Si”] A que hospital acudió?  */
     private String e1QueHospital;
     /*10.	[Si P7 == “Si”] Cuantas noches estuvo en el hospital? */
     private String e1SabeCuantasNoches;
@@ -153,12 +153,11 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String e2Sarpullido;
     private String e2Desmayo;
     private String e2QuedoCama;
-    /*2.	[Si uno o mas de los síntomas en la sección] Que fecha exacta o aproximada empezaron estos síntomas*/
+    /*3.	[Si uno o mas de los síntomas en la sección] Que fecha exacta o aproximada empezaron estos síntomas*/
     private String e2SabeFIS;
     private Date e2Fis;
     private String e2MesInicioSintoma;
     private String e2AnioInicioSintoma;
-    /*3.	¿Usted cree que en el año 2020 que usted o su niño/a pudo haber padecido de COVID-19 o su medico le informo que padeció de COVID-19?*/
     /*4.	¿Conoce en donde usted o su niño/a estuvieron expuestos a COVID-19?*/
     private String e2ConoceLugarExposicion;
     private String e2LugarExposicion;
@@ -174,7 +173,7 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String e2TmpDespuesBuscoAyuda;
     /*8.	[Si P5==”Si”] Paso al menos una noche en el hospital por COVID-19?*/
     private String e2UnaNocheHospital;
-    /*Si P7==”Si”] A que hospital acudió?  */
+    /*9. Si P7==”Si”] A que hospital acudió?  */
     private String e2QueHospital;
     /*10.	[Si P7 == “Si”] Cuantas noches estuvo en el hospital? */
     private String e2SabeCuantasNoches;
@@ -247,12 +246,11 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String e3Sarpullido;
     private String e3Desmayo;
     private String e3QuedoCama;
-    /*2.	[Si uno o mas de los síntomas en la sección] Que fecha exacta o aproximada empezaron estos síntomas*/
+    /*3.	[Si uno o mas de los síntomas en la sección] Que fecha exacta o aproximada empezaron estos síntomas*/
     private String e3SabeFIS;
     private Date e3Fis;
     private String e3MesInicioSintoma;
     private String e3AnioInicioSintoma;
-    /*3.	¿Usted cree que en el año 2020 que usted o su niño/a pudo haber padecido de COVID-19 o su medico le informo que padeció de COVID-19?*/
     /*4.	¿Conoce en donde usted o su niño/a estuvieron expuestos a COVID-19?*/
     private String e3ConoceLugarExposicion;
     private String e3LugarExposicion;
@@ -268,7 +266,7 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String e3TmpDespuesBuscoAyuda;
     /*8.	[Si P5==”Si”] Paso al menos una noche en el hospital por COVID-19?*/
     private String e3UnaNocheHospital;
-    /*Si P7==”Si”] A que hospital acudió?  */
+    /*9. Si P7==”Si”] A que hospital acudió?  */
     private String e3QueHospital;
     /*10.	[Si P7 == “Si”] Cuantas noches estuvo en el hospital? */
     private String e3SabeCuantasNoches;
@@ -469,7 +467,9 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
 
     //32. ¿Ud. o su niño presentaron síntomas que sospecharon enfermedad por Covid-19 Posterior a haber recibido la vacuna de Covid-19?
     private String covid19PosteriorVacuna;
+    //Fecha presentó sintomas. Corrección Dr. Ojeda
     private String fechaEventoEnfermoPostVac;
+    //Ya no se usa, solo en los primeros cuestionarios del lunes 15 hasta medio dia.Corrección Dr. Ojeda
     private String sabeFechaEnfPostVac;
     private Date fechaEnfPostVac;
     private String anioEnfPostVac;
