@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "chf_envios", catalog = "estudios_ics")
+@Table(name = "serologia_numero_de_envios", catalog = "estudios_ics")
 public class Envio extends BaseMetaData implements Auditable {
 
     private static final long serialVersionUID = 1L;
@@ -40,12 +40,10 @@ public class Envio extends BaseMetaData implements Auditable {
         this.numeroEnvio = numeroEnvio;
     }
 
-
     @Override
     public int hashCode() {
         return idenvio.hashCode();
     }
-
 
     @Override
     public boolean isFieldAuditable(String fieldname) {

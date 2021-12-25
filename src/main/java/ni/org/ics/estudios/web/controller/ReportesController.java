@@ -136,7 +136,6 @@ public class ReportesController {
         Date dFechaFin = null;
         if (fechaFin!=null && !fechaFin.isEmpty())
             dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
-
         List<SerologiaEnvio> SerologiasEnviadas =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin);
         ReporteEnvio.addObject("nEnvios",nEnvios);
         ReporteEnvio.addObject("fechaInicio",fechaInicio);

@@ -199,7 +199,7 @@
                     </ul>
                 </li>
             </sec:authorize>
-       <!-- <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+        <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-ambulance"  aria-hidden="true"></i>
@@ -217,7 +217,7 @@
                         </li>
                     </ul>
                 </li>
-            </sec:authorize> -->
+        </sec:authorize>
             <sec:authorize access="hasRole('ROLE_ROOT')">
                 <li class="nav-item nav-dropdown Domicilio">
                     <a class="nav-link nav-dropdown-toggle" href="#">

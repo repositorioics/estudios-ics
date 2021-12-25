@@ -15,8 +15,8 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "chf_serologia_recepcion_lab", catalog = "estudios_ics")
-public class Serologia extends BaseMetaData  {
+@Table(name = "serologia_recepcion_lab", catalog = "estudios_ics")
+public class Serologia extends BaseMetaData implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class Serologia extends BaseMetaData  {
         this.idSerologia = idSerologia;
     }
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name="CODIGO_PARTICIPANTE", updatable = false)
     @ForeignKey(name = "FK_IDPARTICIPANTE")
     public Participante getParticipante() {

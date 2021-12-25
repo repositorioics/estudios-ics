@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by ICS on 17/10/2020.
  */
 @Entity
-@Table(name = "chf_serologia_envios", catalog = "estudios_ics")
+@Table(name = "serologia_envios", catalog = "estudios_ics")
 public class SerologiaEnvio extends BaseMetaData implements Auditable {
 
     private static final long serialVersionUID = 1L;
@@ -48,8 +48,6 @@ public class SerologiaEnvio extends BaseMetaData implements Auditable {
     public void setSerologia(Serologia serologia) {
         this.serologia = serologia;
     }
-
-
 
     @Column(name = "IDENVIO", nullable = false)
     public Integer getIdenvio() {
