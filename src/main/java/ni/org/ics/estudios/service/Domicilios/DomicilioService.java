@@ -69,13 +69,13 @@ public class DomicilioService {
         }
     }
     /*poblar el Select Usuario*/
-    public List<Personal_Cargo>ListPersonal()throws Exception{
+    public List<Personal> ListPersonal()throws Exception{
         try{
+            //2022-01-07. Se solicita aparezcan todos los cargos. Jairo Carey
             Session session = sessionFactory.getCurrentSession();
            // Query query = session.createQuery("from Personal order by Nombre");
-            Integer cods  [] ={ 1, 5, 6, 7 };
-            Query query  = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo in (:cods)" );
-            query.setParameterList("cods", cods);
+            Query query  = session.createQuery("select distinct pc.personal from Personal_Cargo pc order by pc.personal.idPersona" );
+
             return query.list();
         }catch (Exception e)
         { throw e;}

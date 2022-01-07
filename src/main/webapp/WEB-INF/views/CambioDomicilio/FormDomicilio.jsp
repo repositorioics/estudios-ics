@@ -146,7 +146,7 @@
                                        <select name="recurso1" id="recurso1" class="form-control" required="required">
                                            <option selected value=""> Seleccione...</option>
                                            <c:forEach items="${person}" var="person">
-                                               <option value="${person.personal.idPersona}">${person.personal.idPersona} - ${person.personal.nombre}</option>
+                                               <option value="${person.idPersona}">${person.idPersona} - ${person.nombre}</option>
                                            </c:forEach>
                                        </select>
                                    </div>

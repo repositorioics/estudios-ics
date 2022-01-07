@@ -6,7 +6,7 @@ import ni.org.ics.estudios.domain.SerologiaOct2020.RangoGradilla;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
-import ni.org.ics.estudios.dto.GradillaDto;
+//import ni.org.ics.estudios.dto.GradillaDto;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import ni.org.ics.estudios.dto.ParticipanteSeroDto;
 import ni.org.ics.estudios.dto.SerologiaDto;
@@ -222,7 +222,7 @@ public class SerologiaOct2020Service {
         query.setResultTransformer(Transformers.aliasToBean(ParticipanteSeroDto.class));
         return (ParticipanteSeroDto)query.uniqueResult();
     }
-
+/*
     public GradillaDto getUtlGradillaByDates(Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select max(s.idSerologia) as maxidserologia, s.gradilla as ngradilla from Serologia s where fecha between :fechaInicio and :fechaFin");
@@ -230,7 +230,7 @@ public class SerologiaOct2020Service {
         query.setParameter("fechaFin", fechaFin);
         query.setResultTransformer(Transformers.aliasToBean(GradillaDto.class));
         return (GradillaDto)query.uniqueResult();
-    }
+    }*/
  //10401 = 8 no 12
 
 

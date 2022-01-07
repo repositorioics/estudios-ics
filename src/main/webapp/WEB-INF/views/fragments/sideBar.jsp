@@ -16,6 +16,7 @@
                                 <i class="icon-people">
                                 </i><spring:message code="users" /></a>
                         </li>
+                        <!--
                         <li class="nav-item casas">
                             <a class="nav-link" href="<spring:url value="/casas/obtenerCasas/" htmlEscape="true "/>">
                                 <i class="fa fa-home" ></i>
@@ -25,7 +26,7 @@
                         <a class="nav-link" href="<spring:url value="/casasfamilia/getCasasFamilia/" htmlEscape="true "/>">
                             <i class="fa fa-university" aria-hidden="true"></i>
                             <spring:message code="ecasa.Family" /></a>
-                    </li>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/CatalogoVersion/CrearNuevaVersion" htmlEscape="true "/>">
@@ -42,7 +43,7 @@
                             <a class="nav-link" href="<spring:url value="/CatalogoVersion/extension/" htmlEscape="true "/>">
                                 <i class="fa fa-eur" aria-hidden="true"></i>
                                 <spring:message code="cat.extension" /></a>
-                        </li>
+                        </li>-->
                     </ul>
                 </li>
             </sec:authorize>
@@ -71,6 +72,7 @@
                     </ul>
                 </li>
             </sec:authorize>
+            <!--
             <sec:authorize access="hasAnyRole('ROLE_DIG')">
                 <li class="nav-item nav-dropdown consentimiento">
                     <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="letters" /></a>
@@ -89,7 +91,7 @@
                         </li>
                     </ul>
                 </li>
-            </sec:authorize>
+            </sec:authorize>-->
             <sec:authorize access="hasAnyRole('ROLE_SUPER')">
                 <li class="nav-item nav-dropdown chfcasos">
                     <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="chfcasos" /></a>

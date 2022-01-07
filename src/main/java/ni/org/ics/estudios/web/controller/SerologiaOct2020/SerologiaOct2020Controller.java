@@ -369,8 +369,8 @@ public class SerologiaOct2020Controller {
         Date dFechaFin =  DateUtil.StringToDate(fechaInicio, "dd-MM-yyyy");
         if (dFechaFin!=null)
             dFechaFin = DateUtil.StringToDate(fechaInicio+ " 23:59:59", "dd-MM-yyyy HH:mm:ss");
-        GradillaDto ultGradilla = this.serologiaService.getUtlGradillaByDates(dFechaInicio,dFechaFin);
-        return JsonUtil.createJsonResponse(ultGradilla);
+        //GradillaDto ultGradilla = this.serologiaService.getUtlGradillaByDates(dFechaInicio,dFechaFin);
+        return null;// JsonUtil.createJsonResponse(ultGradilla);
     }
 //endregion
 

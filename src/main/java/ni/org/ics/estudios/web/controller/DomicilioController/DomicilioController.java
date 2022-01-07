@@ -151,7 +151,7 @@ public class DomicilioController {
         modelView.addObject("barrios", barrios);
         List<MessageResource> NoGeo = messageResourceService.getCatalogo("CP_CAT_NOGEO");
         modelView.addObject("NoGeo", NoGeo);
-        List<Personal_Cargo> person = DomicilioService.ListPersonal();
+        List<Personal> person = DomicilioService.ListPersonal();
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/FormDomicilio");
         return modelView;
@@ -324,7 +324,7 @@ public class DomicilioController {
         modelView.addObject("barrios", barrios);
         List<MessageResource> NoGeo = messageResourceService.getCatalogo("CP_CAT_NOGEO");
         modelView.addObject("NoGeo", NoGeo);
-        List<Personal_Cargo> person = DomicilioService.ListPersonal();
+        List<Personal> person = DomicilioService.ListPersonal();
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/CambioDomPorCasa");
         return modelView;
