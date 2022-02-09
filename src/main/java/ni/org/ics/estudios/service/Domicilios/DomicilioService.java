@@ -1,15 +1,9 @@
 package ni.org.ics.estudios.service.Domicilios;
 
-import ni.org.ics.estudios.domain.Casa;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
-
 import ni.org.ics.estudios.domain.Participante;
-import ni.org.ics.estudios.domain.catalogs.Barrio;
-import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
-import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
-
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -19,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,13 +61,11 @@ public class DomicilioService {
         }
     }
     /*poblar el Select Usuario*/
-    public List<Personal_Cargo>ListPersonal()throws Exception{
+    public List<Personal_Cargo>ListPersonal(List<Integer> ids)throws Exception{
         try{
             Session session = sessionFactory.getCurrentSession();
-           // Query query = session.createQuery("from Personal order by Nombre");
-            Integer cods  [] ={ 1, 5, 6, 7 };
-            Query query  = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo in (:cods)" );
-            query.setParameterList("cods", cods);
+            Query query  = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:ids) order by pc.personal.nombreApellido asc");
+            query.setParameterList("ids", ids);
             return query.list();
         }catch (Exception e)
         { throw e;}

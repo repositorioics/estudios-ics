@@ -1,43 +1,38 @@
 package ni.org.ics.estudios.domain.SerologiaOct2020;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
-import ni.org.ics.estudios.domain.Participante;
-import ni.org.ics.estudios.domain.audit.Auditable;
-import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ICS on 14/10/2020.
  */
 
 @Entity
-@Table(name = "serologia_recepcion_lab", catalog = "estudios_ics")
+@Table(name = "serologia_recepcion", catalog = "estudios_ics")
 public class Serologia extends BaseMetaData implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 
     private Integer idSerologia;
-    private Participante participante;
+    private Integer participante;
     private Date fecha;
     private double volumen;
     private String observacion;
-    private Integer precepciona;
-    private int gradilla;
-    private char cerrado = '0';
+    private String descripcion;
+    private char enviado = '0';
     private String estudio;
     private String casaCHF;
+    private Integer casaPDCS;
     private Integer edadMeses;
-    private Integer codigonuevoparticipante;
-
+    private Integer codigoPbmc;
 
     //getter and setter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "IDSEROLOGIA", nullable = false)
+    @Column(name = "ID_SEROLOGIA", nullable = false)
     public Integer getIdSerologia() {
         return idSerologia;
     }
@@ -46,14 +41,13 @@ public class Serologia extends BaseMetaData implements Serializable  {
         this.idSerologia = idSerologia;
     }
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name="CODIGO_PARTICIPANTE", updatable = false)
-    @ForeignKey(name = "FK_IDPARTICIPANTE")
-    public Participante getParticipante() {
+
+    @Column(name = "CODIGO_PARTICIPANTE", nullable = false)
+    public Integer getParticipante() {
         return participante;
     }
 
-    public void setParticipante(Participante participante) {
+    public void setParticipante(Integer participante) {
         this.participante = participante;
     }
 
@@ -85,32 +79,13 @@ public class Serologia extends BaseMetaData implements Serializable  {
         this.observacion = observacion;
     }
 
-
-    @Column(name = "PRECEPCIONA", nullable = true)
-    public Integer getPrecepciona() {
-        return precepciona;
+    @Column(name = "ENVIADO", nullable = true)
+    public char getEnviado() {
+        return enviado;
     }
 
-    public void setPrecepciona(Integer precepciona) {
-        this.precepciona = precepciona;
-    }
-
-    @Column(name = "GRADILLA", nullable = true)
-    public int getGradilla() {
-        return gradilla;
-    }
-
-    public void setGradilla(int gradilla) {
-        this.gradilla = gradilla;
-    }
-
-    @Column(name = "CERRADO", nullable = true)
-    public char getCerrado() {
-        return cerrado;
-    }
-
-    public void setCerrado(char cerrado) {
-        this.cerrado = cerrado;
+    public void setEnviado(char enviado) {
+        this.enviado = enviado;
     }
 
     @Column(name = "ESTUDIO", nullable = true)
@@ -132,7 +107,7 @@ public class Serologia extends BaseMetaData implements Serializable  {
     }
 
 
-    @Column(name = "EDADMESES", nullable = true)
+    @Column(name = "EDAD_MESES", nullable = true)
     public Integer getEdadMeses() {
         return edadMeses;
     }
@@ -141,22 +116,35 @@ public class Serologia extends BaseMetaData implements Serializable  {
         this.edadMeses = edadMeses;
     }
 
-    @Column(name = "CODIGO_NUEVO_PARTICIPANTE", nullable = true)
-    public Integer getCodigonuevoparticipante() {
-        return codigonuevoparticipante;
+    @Column(name = "CASA_PDCS", nullable = true)
+    public Integer getCasaPDCS() {
+        return casaPDCS;
     }
 
-    public void setCodigonuevoparticipante(Integer codigonuevoparticipante) {
-        this.codigonuevoparticipante = codigonuevoparticipante;
+    public void setCasaPDCS(Integer casaPDCS) {
+        this.casaPDCS = casaPDCS;
     }
 
-//fin setter
-
-
-
-    @Transient
-    public boolean isEsCerrado() {
-        return this.cerrado == '1';
+    @Column(name = "DESCRIPCION", nullable = true, length = 100)
+    public String getDescripcion() {
+        return descripcion;
     }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+
+    @Column(name = "ID_PBMC", nullable = true)
+    public Integer getCodigoPbmc() {
+        return codigoPbmc;
+    }
+
+    public void setCodigoPbmc(Integer codigoPbmc) {
+        this.codigoPbmc = codigoPbmc;
+    }
+
+
+    //fin setter
 
 }

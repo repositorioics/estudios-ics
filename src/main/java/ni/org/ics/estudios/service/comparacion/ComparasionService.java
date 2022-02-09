@@ -144,6 +144,13 @@ public class ComparasionService {
         return query.list();
     }
 
+    public List<String> getNombreUsuario(String username){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select distinct u.username from UserSistema u where u.username like :username and u.enabled=true ");
+        query.setParameter("username", '%' + username + '%');
+        return query.list();
+    }
+
     public ParticipanteBusquedaDto getDatosParticipanteByCodigo(Integer codigo){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select p.codigo as codigo, p.casa.codigo as casaPediatrica, pp.casaCHF as casaFamilia, pp.estudio as estudios, pp.subEstudios as subEstudios, pp.estPart as estado " +
@@ -283,9 +290,9 @@ public class ComparasionService {
 
     public List<Personal_Cargo> getRecursos()throws Exception{
         Session session = sessionFactory.getCurrentSession();
-        Integer cargoId = 4;
-        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo=:cargoId order by pc.personal.nombre asc ");
-        query.setParameter("cargoId", cargoId);
+        Integer cargoId[] ={2,3,4};
+        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:cargoId) order by pc.personal.nombreApellido asc ");
+        query.setParameterList("cargoId", cargoId);
         return query.list();
     }
 

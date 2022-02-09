@@ -17,119 +17,13 @@
     <jsp:include page="../fragments/headTag.jsp" />
     <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
     <link href="${boot}" rel="stylesheet" type="text/css"/>
-    <spring:url value="/resources/css/dtresponsive/twitter-bootstrap.css" var="boot1"/>
-    <link href="${boot1}" rel="stylesheet" type="text/css"/>
+
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
-    <!-- END DATE PICKER -->
-    <spring:url value="/resources/css/bootstrapdt.css" var="bdt"/>
-    <link rel="stylesheet" href="${bdt}" type="text/css"/>
 
     <style>
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: #FFF none repeat scroll 0% 0%;
-            z-index: 99999;
-        }
 
-        #page-loader .preloader-interior {
-            display: block;
-            position: relative;
-            left: 50%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #3498db;
-
-            -webkit-animation: spin 2s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 2s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #e74c3c;
-
-            -webkit-animation: spin 3s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 3s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #f9c922;
-
-            -webkit-animation: spin 1.5s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 1.5s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-        /**/
 
         .card {
             position: relative;
@@ -150,7 +44,7 @@
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
             color: #fff;
-            border-bottom: 3px solid #2cd07e;
+            border-bottom: 5px solid #ffffff;
         }
         .no-wrap td, .no-wrap th {
             white-space: nowrap;
@@ -164,11 +58,11 @@
             font-weight: 300;
         }
         .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-            background-color: #007bff;
+            background-color: #008cba;
         }
         .nav-tabs .nav-link, .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:hover, .nav-tabs .nav-link.disabled:focus {
             border-color: rgba(0, 0, 0, 0.1);
-            background-color: #007bff;
+            background-color: #008cba;
         }
         /**/
     </style>
@@ -194,11 +88,7 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-               <%-- <div id="page-loader">
-                    <span class="preloader-interior"></span>
-                </div>--%>
-
-                <div class="">
+              <div class="">
                 <div class="row">
                 <div class="col-md-12 col-lg-12">
                 <div class="card">
@@ -208,13 +98,13 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="true">
                                 <span class="d-block d-md-none"><i class="ti-email"></i></span>
-                                <span class="d-none d-md-block"> <spring:message code="Formulario"/></span>
+                                <span class="d-none d-md-block"> <spring:message code="Form"/></span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
                                 <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                                <span class="d-none d-md-block"><spring:message code="Listado"/></span>
+                                <span class="d-none d-md-block"><spring:message code="List"/></span>
                             </a>
                         </li>
 
@@ -223,14 +113,17 @@
                 <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
                 <div>
-                    <spring:url value="/CatalogoParte/saveParte" var="saveParteUrl"/>
-                    <spring:url value="/CatalogoParte/CrearNuevaParte" var="crearNuevaParteUrl"/>
-                    <spring:url value="/CatalogoParte/GetVersion" var="GetVersionUrl"/>
-                    <spring:url value="/CatalogoParte/delete" var="deleteUrl"/>
-                    <spring:url value="/CatalogoParte/activar" var="activarUrl"/>
+
                     <div class="container col-md-12 col-xl-12">
                         <br>
-                        <form autocomplete="off" id="frmParte" name="frmParte" class="form-horizontal">
+                        <form action="#" autocomplete="off" id="form-partes" name="form-partes" class="form-horizontal">
+                            <spring:url value="/super/particaso/searchParticipant" var="searchUrl"/>
+                            <spring:url value="/CatalogoParte/CrearNuevaParte" var="crearNuevaParteUrl"/>
+                            <spring:url value="/CatalogoParte/GetVersion" var="GetVersionUrl"/>
+                            <spring:url value="/CatalogoParte/delete" var="deleteUrl"/>
+                            <spring:url value="/CatalogoParte/activar" var="activarUrl"/>
+                            <spring:url value="/CatalogoParte/saveParte" var="saveParteUrl"/>
+
                             <div hidden="hidden">
                                 <div  class="form-group col-md-6">
                                     <label for="idparte">idparte:</label>
@@ -283,42 +176,51 @@
                             <div class="form-group row">
                                 <label for="parte" class="col-sm-2 col-form-label text-right"><spring:message code="Parte" /></label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" placeholder="Nomrbre de la Parte" id="parte" name="parte" required="required" value="${caso.parte}"/>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroupPrepend1">
+                                               <i class="fa fa-pinterest-p text-info"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control"  id="parte" name="parte" required="required" value="${caso.parte}"/>
+                                    </div> </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <div class="form-check">
+                                        <c:choose>
+                                            <c:when test="${caso.activo eq true }">
+                                                <input type="checkbox"  class="form-check-input" checked="checked" id="activo" name="activo">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="checkbox"  class="form-check-input" id="activo" name="activo">
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <label class="form-check-label" for="activo">
+                                            <spring:message code="Activar?" />
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="parte" class="col-sm-2 col-form-label text-right"><spring:message code="Fecha" /> <spring:message code="Parte" /></label>
+                                <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control date-picker years" required="required" value="${caso.fecha_parte}" name="fecha_parte" id="fecha_parte" data-date-end-date="+0d"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="activo" class="col-sm-2 col-form-label text-right"><spring:message code="Activar?" /></label>
-                                <div class="col-sm-8">
-                                    <c:choose>
-                                        <c:when test="${caso.activo eq true }">
-                                            <p><input type="checkbox" class="custom-control-input" checked="checked" id="activo" name="activo"></p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <p><input type="checkbox" class="custom-control-input" id="activo" name="activo"></p>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="activo" class="col-sm-2 col-form-label text-right"><spring:message code="Principal?" /></label>
-                                <div class="col-sm-8">
-                                    <c:choose>
-                                        <c:when test="${caso.principal eq true }">
-                                            <p><input type="checkbox" class="custom-control-input" checked="checked" id="principal" name="principal"></p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <p><input type="checkbox" class="custom-control-input" id="principal" name="principal"></p>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <div class="form-check">
+                                        <c:choose>
+                                            <c:when test="${caso.principal eq true }">
+                                                <input type="checkbox" class="form-check-input" checked="checked" id="principal" name="principal">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="checkbox"  class="form-check-input" id="principal" name="principal">
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <label class="col-sm-2 form-check-label" for="principal">
+                                            <spring:message code="Principal?" />
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -327,7 +229,7 @@
                                 <div class="col-md-8">
                                     <div class="d-flex justify-content-between">
                                         <div class="p-2 bd-highlight">
-                                            <button type="submit" id="btnSave" class="btn btn-info btn-block btn-lg btn-ladda" data-style="expand-right">
+                                            <button type="submit" class="btn btn-info btn-block btn-lg btn-ladda" data-style="expand-right">
                                             <i class="fa fa-save"></i> <spring:message code="save" /></button>
                                         </div>
                                         <div class="p-2 bd-highlight"></div>
@@ -353,16 +255,16 @@
                                 <table id="tableParte" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th data-class="expand" class="text-center"><spring:message code="Código" /></th>
-                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Creado"/></th>
-                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Carta"/></th>
-                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Versión" /></th>
-                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Parte" /></th>
+                                        <th data-class="expand" class="text-center"><spring:message code="code" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="dateAdded"/></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="letters"/></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="versionLetters" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Letter.Parts" /></th>
                                         <th data-hide="phone,tablet" class="text-center"><spring:message code="Principal" /></th>
-                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Activo" /></th>
-                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Editar" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="active" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="edit" /></th>
                                         <sec:authorize access="hasRole('ROLE_WEB')">
-                                            <th data-hide="phone,tablet" class="text-center"><spring:message code="Opcion" /></th>
+                                            <th data-hide="phone,tablet" class="text-center"><spring:message code="disable" /></th>
                                         </sec:authorize>
                                     </tr>
                                     </thead>
@@ -427,6 +329,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 </div>
                 </div>
                 </div>
@@ -437,27 +341,12 @@
         <!-- /.conainer-fluid -->
     </div>
 </div>
+
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
-<spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />
-<script src="${loadingButtonsJs}" type="text/javascript"></script>
-<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
-<script src="${validateJs}" type="text/javascript"></script>
-<spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
-<script src="${validateAMJs}" type="text/javascript"></script>
-
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
-<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
-<script src="${dataTableJs}" type="text/javascript"></script>
-
-<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
-<script type="text/javascript" src="${dataTablesBS}"></script>
-
-<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
-<script type="text/javascript" src="${dataTablesTT}"></script>
-
 <c:choose>
     <c:when test="${cookie.eIcsLang.value == null}">
         <c:set var="lenguaje" value="es"/>
@@ -466,38 +355,65 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
-<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
-    <spring:param name="language" value="${lenguaje}" />
-</spring:url>
+<spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />
+<script src="${loadingButtonsJs}" type="text/javascript"></script>
+
+<!-- bootstrap datepicker -->
+<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
+<script src="${datepickerPlugin}"></script>
+
+<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
+<script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 <script src="${jQValidationLoc}"></script>
+<!-- GenesisUI main scripts -->
+<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
+<script src="${dataTableJs}" type="text/javascript"></script>
+
+<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
+<script type="text/javascript" src="${dataTablesBS}"></script>
+
+<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
+<script type="text/javascript" src="${dataTablesTT}"></script>
+<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
 
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
 
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
+
 <spring:url value="/resources/js/libs/sweetalert.js" var="sweet"/>
 <script type="text/javascript" src="${sweet}"></script>
-<!-- bootstrap datepicker -->
-<spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
-<script src="${datepickerPlugin}"></script>
-<spring:url value="/resources/js/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{languagedt}.js" var="datePickerLoc">
-    <spring:param name="languagedt" value="${lenguaje}" /></spring:url>
-<script src="${datePickerLoc}"></script>
-<spring:url value="/resources/js/libs/lc_switch.js" var="lc"/>
-<script type="text/javascript" src="${lc}"></script>
-
 <script type="text/javascript">
     <sec:authorize access="hasAnyRole('ROLE_WEB')" var="isAuthorizeAny"></sec:authorize>
     <sec:authorize access="hasRole('ADMINISTRADOR')" var="haRoleAdmin"></sec:authorize>
 
     $(document).ready(function(){
-        /*setTimeout(function () {
-            $('#page-loader').fadeOut('slow');
-        }, 1000);*/
+
+        $("#idcarta").select2();
+        $("#idversion").select2();
+        selectVersion();
+        function selectVersion() {
+            var accione = $("#editando").val();
+            if (accione===('true')) {
+                $("#idversion").select2('enable');
+            } else {
+                $("#idversion").select2('disable');
+            }
+        }
+        var parametros = {
+            saveParteUrl       : "${saveParteUrl}",
+            crearNuevaParteUrl : "${crearNuevaParteUrl}",
+            GetVersionUrl      : "${GetVersionUrl}",
+            dataTablesLang     : "${dataTablesLang}",
+            deleteUrl          : "${deleteUrl}",
+            activarUrl         : "${activarUrl}"
+        };
 
         $(".years").datepicker({
             changeMonth: true,
@@ -507,32 +423,59 @@
             minViewMode: "months",
             autoclose: true
         });
-        debugger;
-        if('${isAuthorizeAny}' == 'true'){
-            console.log('hi ROLE_WEB');
+
+
+        var form = $('#form-partes');
+        form.validate({
+            errorElement: 'span', //default input error message container
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                idcarta :{required: true}
+
+            },
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( 'form-control-feedback' );
+                if ( element.prop( 'type' ) === 'checkbox' ) {
+                    error.insertAfter( element.parent( 'label' ) );
+                } else {
+                    //error.insertAfter( element ); //cuando no es input-group
+                    error.insertAfter(element.parent('.input-group'));
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+            },
+            submitHandler: function (form) {
+                debugger;
+                SaveParte(parametros);
+            }
+        });
+
+
+        function SaveParte(dir){
+            console.log(form.serialize())
+            $.post(dir.saveParteUrl, form.serialize(), function(data){
+                console.log(data);
+                if (data.msj != null) {
+                    swal("Error!", data.msj, "error");
+                }else{
+                    swal("Éxito!", "Información guardada!", "success");
+                    window.setTimeout(function(){
+                        window.location.href = parametros.crearNuevaParteUrl;
+                    }, 1500);
+                }
+            }).fail(function(XMLHttpRequest, textStatus, errorThrown){
+                swal("Error","Interno del Servidor.","error");
+            });
         }
 
-        if('${haRoleAdmin}' == true){
-            console.log('hei ROLE_ADMIN');
-        }
 
-        var parametros = {
-            saveParteUrl       : "${saveParteUrl}",
-            crearNuevaParteUrl : "${crearNuevaParteUrl}",
-            GetVersionUrl      : "${GetVersionUrl}",
-            dataTablesLang     : "${dataTablesLang}",
-            deleteUrl          : "${deleteUrl}",
-            activarUrl         : "${activarUrl}"
-
-        };
-        lc_switch('#activo', {
-            on_txt: 'Si',
-            off_txt: 'No'
-        });
-        lc_switch('#principal', {
-            on_txt: 'Si',
-            off_txt: 'No'
-        });
         var table = $("#tableParte").DataTable({
             "columnDefs": [{
                 "targets": [0],
@@ -542,11 +485,11 @@
                 "sUrl": parametros.dataTablesLang
             }
         });
-        $("#idcarta").select2();
-        $("#idversion").select2();
+
         $("#idcarta").on("change", function(){
             $("#idversion option").remove();
-            $("#idversion").select2('val', '');
+            $("#idversion").select2('enable');
+            $("#idversion").select2('val', '').change();
             ObtenerVersion(parametros);
         });
         function ObtenerVersion(parametros){
@@ -562,57 +505,11 @@
                     var d = data.version;
                     $version.append($('<option></option>').val('').html('Selecciona la Versión'));
                     $.each(d, function (i, val) {
-                        console.log("cod: "+val.idversion + "  version" +val.version)
                         $version.append($('<option></option>').val(val.idversion).html(val.version));
                     });
                 }
             });
         }
-        var formP = $("#frmParte");
-        formP.validate({
-            rules:{
-                idcarta :{required: true},
-                idversion :{required: true},
-                parte :{required: true}
-            },
-            errorElement: 'em',
-            errorPlacement: function ( error, element ) {
-                error.addClass( 'form-control-feedback' );
-                if ( element.prop( 'type' ) === 'checkbox' ) {
-                    error.insertAfter( element.parent( 'label' ) );
-                } else {
-                    error.insertAfter( element );
-                }
-            },
-            highlight: function ( element, errorClass, validClass ) {
-                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
-                $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
-                $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
-            },
-            submitHandler: function (form) {
-                SaveParte(parametros);
-            }
-        });
-        function SaveParte(dir){
-            $.post(dir.saveParteUrl, formP.serialize(), function(data){
-                if (data.msj != null) {
-                    swal("Error!", data.msj, "error");
-                }else{
-                    swal("Éxito!", "Información guardada!", "success");
-                    window.setTimeout(function(){
-                        window.location.href = parametros.crearNuevaParteUrl;
-                    }, 1500);
-                }
-            }).fail(function(XMLHttpRequest, textStatus, errorThrown){
-                swal("Error","Interno del Servidor.","error");
-            });
-        }
-
-
-
 
         $("#tableParte tbody").on("click", ".desact", function(){
             var currentRow = $(this).closest("tr");
@@ -655,6 +552,7 @@
             });
 
         });
+
         $("#tableParte tbody").on("click", ".activar", function(){
             var currentRow = $(this).closest("tr");
             var column01 = table.row(currentRow).data()[0];
@@ -673,7 +571,6 @@
                 closeOnCancel: false
             },function (isConfirm) {
                 if (isConfirm) {
-                    //row.remove();
                     $.post(parametros.activarUrl, { idparte: column01, ajax: 'true' }).done(function (data) {
                         swal("Registro!", "activo!", "success");
                         window.setTimeout(function () {
@@ -695,7 +592,7 @@
                 }
             });
         })
-    })
+    });
 </script>
 </body>
 </html>

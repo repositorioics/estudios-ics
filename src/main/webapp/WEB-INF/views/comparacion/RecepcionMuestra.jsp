@@ -17,6 +17,9 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
+    <spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
+    <link href="${uiCss}" rel="stylesheet" type="text/css"/>
+
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss"/>
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
@@ -171,6 +174,167 @@
             vertical-align: baseline;
             border-radius: .25em;
         }
+
+        /*ini*/
+        .toast-title {
+            font-weight: bold;
+        }
+        .toast-message {
+            -ms-word-wrap: break-word;
+            word-wrap: break-word;
+        }
+        .toast-message a,
+        .toast-message label {
+            color: #ffffff;
+        }
+        .toast-message a:hover {
+            color: #cccccc;
+            text-decoration: none;
+        }
+
+        .toast-close-button {
+            position: relative;
+            right: -0.3em;
+            top: -0.3em;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            -webkit-text-shadow: 0 1px 0 #ffffff;
+            text-shadow: 0 1px 0 #ffffff;
+            opacity: 0.8;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            filter: alpha(opacity=80);
+        }
+        .toast-close-button:hover,
+        .toast-close-button:focus {
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.4;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+            filter: alpha(opacity=40);
+        }
+        button.toast-close-button {
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+        }
+        .toast-top-full-width {
+            top: 0;
+            right: 0;
+            width: 100%;
+        }
+        .toast-bottom-full-width {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+        }
+        .toast-top-left {
+            top: 12px;
+            left: 12px;
+        }
+        .toast-top-right {
+            top: 12px;
+            right: 12px;
+        }
+        .toast-bottom-right {
+            right: 12px;
+            bottom: 12px;
+        }
+        .toast-bottom-left {
+            bottom: 12px;
+            left: 12px;
+        }
+        #toast-container {
+            position: fixed;
+            z-index: 999999;
+            /*overrides*/
+
+        }
+        #toast-container * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        #toast-container > div {
+            margin: 0 0 6px;
+            padding: 15px 15px 15px 50px;
+            width: 300px;
+            -moz-border-radius: 3px 3px 3px 3px;
+            -webkit-border-radius: 3px 3px 3px 3px;
+            border-radius: 3px 3px 3px 3px;
+            background-position: 15px center;
+            background-repeat: no-repeat;
+            -moz-box-shadow: 0 0 12px #999999;
+            -webkit-box-shadow: 0 0 12px #999999;
+            box-shadow: 0 0 12px #999999;
+            color: #ffffff;
+            opacity: 0.8;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            filter: alpha(opacity=80);
+        }
+        #toast-container > :hover {
+            -moz-box-shadow: 0 0 12px #000000;
+            -webkit-box-shadow: 0 0 12px #000000;
+            box-shadow: 0 0 12px #000000;
+            opacity: 1;
+            -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+            filter: alpha(opacity=100);
+            cursor: pointer;
+        }
+
+        #toast-container.toast-top-full-width > div,
+        #toast-container.toast-bottom-full-width > div {
+            width: 96%;
+            margin: auto;
+        }
+        .toast {
+            background-color: #030303;
+        }
+        .toast-success {
+            background-color: #51a351;
+        }
+        .toast-error {
+            background-color: #bd362f;
+        }
+        .toast-info {
+            background-color: #2f96b4;
+        }
+        .toast-warning {
+            background-color: #f89406;
+        }
+        /**/
+        @media all and (max-width: 240px) {
+            #toast-container > div {
+                padding: 8px 8px 8px 50px;
+                width: 11em;
+            }
+            #toast-container .toast-close-button {
+                right: -0.2em;
+                top: -0.2em;
+            }
+        }
+        @media all and (min-width: 241px) and (max-width: 480px) {
+            #toast-container > div {
+                padding: 8px 8px 8px 50px;
+                width: 18em;
+            }
+            #toast-container .toast-close-button {
+                right: -0.2em;
+                top: -0.2em;
+            }
+        }
+        @media all and (min-width: 481px) and (max-width: 768px) {
+            #toast-container > div {
+                padding: 15px 15px 15px 50px;
+                width: 25em;
+            }
+        }
+        /*fin*/
+
         #participantCode-error{
             margin-right:700px;
             text-align: center !important;
@@ -225,10 +389,11 @@
                 <spring:url value="/comparacion/searchParticipant" var="searchParticipantUrl"/>
                 <spring:url value="/comparacion/saveMuestra" var="saveMuestraUrl"/>
                 <spring:url value="/comparacion/muestra/" var="refreshPageUrl"/>
-                <c:set var="successLabel"><spring:message code="process.success" /></c:set>
+                <spring:url value="/comparacion/getUserName" var="getUserNameUrl"/>
+                <c:set var="successMessage"><spring:message code="process.success" /></c:set>
                 <form action="#" autocomplete="off" id="search-participant-form" name="search-participant-form" class="form-horizontal">
                     <div class="form-group row">
-                        <label class="form-control-label col-md-2 text-right" for="username"> <spring:message code="participant.code" />
+                        <label class="form-control-label col-md-2 text-right" for="<spring:message code="participant.code" />"> <spring:message code="participant.code" />
                             <span class="required">*</span>
                         </label>
                         <div class="input-group col-md-10">
@@ -285,11 +450,11 @@
                                 <option selected value=""><spring:message code="select"/>...</option>
                                 <c:forEach items="${recurso}" var="r">
                                     <c:choose>
-                                        <c:when test="${r.personal.codigo eq caso.movilInfo.recurso1}">
-                                            <option selected="selected" value="${r.personal.idPersona}">${r.personal.idPersona} - ${r.personal.nombre}</option>
+                                        <c:when test="${r.personal.idpersonal eq caso.movilInfo.recurso1}">
+                                            <option selected="selected" value="${r.personal.idpersonal}">${r.personal.idpersonal} - ${r.personal.nombreApellido}</option>
                                         </c:when>
                                         <c:otherwise>
-                                            <option value="${r.personal.idPersona}">${r.personal.idPersona} - ${r.personal.nombre}</option>
+                                            <option value="${r.personal.idpersonal}">${r.personal.idpersonal} - ${r.personal.nombreApellido}</option>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
@@ -303,11 +468,11 @@
                                 <option selected value=""><spring:message code="select"/>...</option>
                                 <c:forEach items="${recurso}" var="r2">
                                     <c:choose>
-                                        <c:when test="${r2.personal.codigo eq caso.movilInfo.recurso2}">
-                                            <option selected="selected" value="${r2.personal.idPersona}">${r2.personal.idPersona} - ${r2.personal.nombre}</option>
+                                        <c:when test="${r2.personal.idpersonal eq caso.movilInfo.recurso2}">
+                                            <option selected="selected" value="${r2.personal.idpersonal}">${r2.personal.idpersonal} - ${r2.personal.nombreApellido}</option>
                                         </c:when>
                                         <c:otherwise>
-                                            <option value="${r2.personal.idPersona}">${r2.personal.idPersona} - ${r2.personal.nombre}</option>
+                                            <option value="${r2.personal.idpersonal}">${r2.personal.idpersonal} - ${r2.personal.nombreApellido}</option>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
@@ -315,21 +480,9 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="usernameMx"><spring:message code="username"/></label>
+                            <label for="username"><spring:message code="username"/></label>
                             <span class="required text-danger"> * </span>
-                            <select id="usernameMx" name="usernameMx" class="form-control focusNext" tabindex="8" required="required">
-                                <option selected value=""><spring:message code="select"/>...</option>
-                                <c:forEach items="${usuarios}" var="u">
-                                    <c:choose>
-                                        <c:when test="${u.username eq caso.movilInfo.username}">
-                                            <option selected="selected" value="${u.username}">${caso.movilInfo.username}</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${u.username}">${u.username}</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                            </select>
+                            <input type="text" class="form-control focusNext" id="username" name="username" required="required" tabindex="8"/>
                         </div>
 
                         <div class="form-group col-md-3">
@@ -520,6 +673,10 @@
 </div>
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
+
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
+
 <!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
@@ -537,6 +694,10 @@
 <spring:url value="/resources/js/views/handleDatePickers.js" var="handleDatePickers" />
 <script src="${handleDatePickers}"></script>
 
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}"/>
+</spring:url>
+
 <spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
 <script src="${dataTableJs}" type="text/javascript"></script>
 
@@ -551,9 +712,6 @@
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs"/>
 <script src="${validateAMJs}" type="text/javascript"></script>
 
-<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
-    <spring:param name="language" value="${lenguaje}"/>
-</spring:url>
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin"/>
 <script src="${datepickerPlugin}"></script>
 
@@ -580,7 +738,7 @@
         $("#fechaReg").mask("99/99/9999 99:99:99");
         $("#recurso1").select2();
         $("#recurso2").select2();
-        $("#usernameMx").select2();
+        //$("#usernameMx").select2();
         $("#terrenoMx").select2();
         $("#fechaMx").datepicker({
             format: "dd/mm/yyyy",
@@ -595,7 +753,9 @@
             refreshPageUrl: "${refreshPageUrl}",
             editMuestraUrl: "${editMuestraUrl}",
             searchParticipantUrl: "${searchParticipantUrl}",
-            deleteMuestraUrl: "${deleteMuestraUrl}"
+            getUserNameUrl   : "${getUserNameUrl}",
+            deleteMuestraUrl: "${deleteMuestraUrl}",
+            successMessage:"${successMessage}"
         };
         handleDatePickers("${lenguaje}");
         proccessMuestra.init(parametro);
@@ -603,6 +763,22 @@
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             }
+        });
+
+
+        $( "#username" ).autocomplete({
+            delay:100,
+            source: function(request, response){
+                $.getJSON(parametro.getUserNameUrl, {username: $('#username').val().trim(), ajax: 'true'},function(data){
+                    response($.map(data, function (value, key) {
+                        return {
+                            label: value
+                        };
+                    }));
+                });
+            },minLength: 3,
+            scroll: true,
+            highlight: true
         });
 
         document.addEventListener('keypress', function(evt) {

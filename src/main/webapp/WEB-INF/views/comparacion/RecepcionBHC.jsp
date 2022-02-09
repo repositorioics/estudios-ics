@@ -7,6 +7,10 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp"/>
+
+    <spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
+    <link href="${uiCss}" rel="stylesheet" type="text/css"/>
+
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss"/>
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
@@ -335,13 +339,8 @@
         }
     </style>
 
-
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
     <link href="${swalcss}" rel="stylesheet" type="text/css"/>
-
-
-    <spring:url value="/resources/css/ClockPicker.css" var="clockcss" />
-    <link href="${clockcss}" rel="stylesheet" type="text/css"/>
 
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -470,7 +469,8 @@
                                 <div class="form-group col-md-6">
                                     <label for="username">Usuario:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select id="username" name="username" class="form-control focusNext" required="required" tabindex="6">
+                                    <input type="text" class="form-control" id="username" name="username" required="required" tabindex="6"/>
+                                    <%--<select id="username" name="username" class="form-control focusNext" required="required" tabindex="6">
                                         <option selected value=""><spring:message code="select"/>...</option>
                                         <c:forEach items="${usuarios}" var="u">
                                             <c:choose>
@@ -482,7 +482,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:forEach>
-                                    </select>
+                                    </select>--%>
                                 </div>
                             </div>
                         </div>
@@ -557,6 +557,7 @@
                     <div class="row p-4 no-gutters align-items-center"></div>
                     <spring:url value="/comparacion/deletebhc" var="deletebhcUrl"/>
                     <spring:url value="/comparacion/editBhc" var="editBhcUrl"/>
+                    <spring:url value="/comparacion/getUserName" var="getUserNameUrl"/>
                     <!-- Mail list-->
                     <div class="table-responsive">
                         <table id="tblbhc" class="table email-table no-wrap table-hover v-middle mb-0 font-14">
@@ -669,6 +670,9 @@
 <jsp:include page="../fragments/bodyFooter.jsp"/>
 <jsp:include page="../fragments/corePlugins.jsp"/>
 
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
+
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin"/>
 <script src="${datepickerPlugin}"></script>
 <!-- GenesisUI main scripts -->
@@ -682,6 +686,7 @@
 
 <spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
 <script type="text/javascript" src="${dataTablesTT}"></script>
+
 
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs"/>
 <script type="text/javascript" src="${selectJs}"></script>
@@ -739,7 +744,7 @@
         });
         $("#fechaRegistBhc").mask("99/99/9999 99:99:99");
         $("#lugar").select2();
-        $("#username").select2();
+        //$("#username").select2();
         $('#volumen').on('change', function () {
             if (isNaN(this.value)) {
                 this.value = "";
@@ -748,13 +753,14 @@
             }
         });
         var direciones = {
-            saveBHCUrl: "${saveBHCUrl}",
-            searchPartUrl: "${searchPartUrl}",
-            editbhcUrl:"${editbhcUrl}",
-            deletebhcUrl:"${deletebhcUrl}",
-            bhcUrl: "${bhcUrl}",
-            dataTablesLang:"${dataTablesLang}",
-            successmessage: "${successMessage}",
+            saveBHCUrl      : "${saveBHCUrl}",
+            searchPartUrl   : "${searchPartUrl}",
+            editbhcUrl      :"${editbhcUrl}",
+            deletebhcUrl    :"${deletebhcUrl}",
+            bhcUrl          : "${bhcUrl}",
+            getUserNameUrl   : "${getUserNameUrl}",
+            dataTablesLang  :"${dataTablesLang}",
+            successmessage  : "${successMessage}",
             error: "${errorProcess}"
         };
         GuardarBhc.init(direciones);

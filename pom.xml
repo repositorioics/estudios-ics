@@ -216,6 +216,7 @@
         </dependency>
 
 
+
 		<!-- JBoss -->
 		<dependency>
 			<groupId>jboss</groupId>
@@ -325,6 +326,14 @@
                 <artifactId>spring-security-taglibs</artifactId>
                 <version>${org.springframework.security-version}</version>
             </dependency>
+
+        <!-- POI -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.15</version>
+        </dependency>
+
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->

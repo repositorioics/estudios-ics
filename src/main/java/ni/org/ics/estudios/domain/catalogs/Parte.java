@@ -20,7 +20,6 @@ public class Parte extends BaseMetaData implements Auditable {
     private Integer idparte;
     private Version version;
     private String parte;
-    private String fecha_parte;
     private String acepta;
     private boolean activo;
     private boolean principal;
@@ -54,15 +53,6 @@ public class Parte extends BaseMetaData implements Auditable {
 
     public void setParte(String parte) {
         this.parte = parte;
-    }
-
-    @Column(name = "FECHA_PARTE", nullable = false)
-    public String getFecha_parte() {
-        return fecha_parte;
-    }
-
-    public void setFecha_parte(String fecha_parte) {
-        this.fecha_parte = fecha_parte;
     }
 
     @Column(name = "ACEPTA", nullable = false)

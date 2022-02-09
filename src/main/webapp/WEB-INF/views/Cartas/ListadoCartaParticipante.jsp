@@ -8,114 +8,15 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
+    <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
+    <link href="${boot}" rel="stylesheet" type="text/css"/>
+
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
 
     <style>
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: #FFF none repeat scroll 0% 0%;
-            z-index: 99999;
-        }
-
-        #page-loader .preloader-interior {
-            display: block;
-            position: relative;
-            left: 50%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #3498db;
-
-            -webkit-animation: spin 2s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 2s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #e74c3c;
-
-            -webkit-animation: spin 3s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 3s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #f9c922;
-
-            -webkit-animation: spin 1.5s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 1.5s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
         .dropdown-item2 {
             display: block;
             cursor: pointer;
@@ -327,14 +228,23 @@
                                 <h5>  <i class="fa fa-clipboard" aria-hidden="true"></i>  <spring:message code="letters" /> <spring:message code="participant" /></h5>
                             </div>
                             <div class="card-body">
-                                <spring:url value="/Domicilio/searchParticipant" var="searchPartUrl"/>
-                                <br/>
-                                <div class="col-md-12">
-                                    <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom" title="Asignar Carta" href="<spring:url value="/cartas/Crear" htmlEscape="true "/>">
-                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                        <spring:message code="lbl.To.assign" /> <spring:message code="letters" />
-                                    </a>
+                                <div class="d-flex justify-content-between">
+                                    <div class="p-2 bd-highlight">
+                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom" title="Asignar Carta" href="<spring:url value="/cartas/Crear" htmlEscape="true "/>">
+                                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                            <spring:message code="lbl.To.assign" /> <spring:message code="letters" />
+                                        </a>
+                                    </div>
+                                    <div class="p-2 bd-highlight"></div>
+                                    <div class="p-2 bd-highlight">
+                                        <a class="btn btn-success btn-lg" data-toggle="tooltip" data-placement="bottom" title="Extensiones" href="<spring:url value="/cartas/ListExtension" htmlEscape="true "/>">
+                                            <i class="fa fa-list-ol" aria-hidden="true"></i>
+                                            <spring:message code="List" /> <spring:message code="Extension" />
+                                        </a>
+                                    </div>
+
                                 </div>
+                                <spring:url value="/Domicilio/searchParticipant" var="searchPartUrl"/>
                                 <br/>
                                 <div class="row">
                                     <div class="col-sm-2 col-md-2 col-lg-2"></div>

@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
@@ -632,11 +633,11 @@
                                                                     <option selected value=""><spring:message code="select"/>...</option>
                                                                     <c:forEach items="${person}" var="p">
                                                                         <c:choose>
-                                                                            <c:when test="${p.personal.codigo eq obj.personal.codigo}">
-                                                                                <option selected value="${p.personal.codigo}">${p.personal.codigo} - ${p.personal.nombre}</option>
+                                                                            <c:when test="${p.personal.idpersonal eq obj.personal.idpersonal}">
+                                                                                <option selected value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <option value="${p.personal.codigo}">${p.personal.codigo} - ${p.personal.nombre}</option>
+                                                                                <option value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </c:forEach>
@@ -840,7 +841,7 @@
                                                                                 <input type="checkbox" id="chktestigo" name="chktestigo"  class="lcs_check chktestigo" value="1" class="chktestigo" autocomplete="off" />
                                                                             </c:otherwise>
                                                                         </c:choose>
-                                                                        <label class="form-check-label" for="chkTestigo">
+                                                                        <label class="form-check-label" for="chktestigo">
                                                                             <spring:message code="lbl.witness.present" />
                                                                         </label>
                                                                     </div>

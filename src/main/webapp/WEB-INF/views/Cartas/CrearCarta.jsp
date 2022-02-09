@@ -8,6 +8,10 @@
 <html>
 <head>
 <jsp:include page="../fragments/headTag.jsp"/>
+
+<spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
+<link href="${uiCss}" rel="stylesheet" type="text/css"/>
+
 <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
 <link href="${boot}" rel="stylesheet" type="text/css"/>
 <!-- DATE PICKER -->
@@ -253,15 +257,20 @@
 <spring:url value="/cartas/saveScanCarta" var="saveScanCartaUrl"/>
 <spring:url value="/cartas/ListadoCartaParticipant" var="Lista2ScanCartaUrl"/>
 <spring:url value="/cartas/cartaSaveEdit" var="cartaSaveEditUrl"/>
+<spring:url value="/cartas/listExtensiones" var="listExtensionesUrl"/>
+<spring:url value="/cartas/getNombre1" var="getNombre1Url"/>
+<spring:url value="/cartas/getNombre2" var="getNombre2Url"/>
+<spring:url value="/cartas/getApellido1" var="getApellido1Url"/>
+<spring:url value="/cartas/getApellido2" var="getApellido2Url"/>
 <c:set var="successMessage"><spring:message code="process.success" /></c:set>
 <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
 <div class="card-body">
 <div class="row">
     <div class="col-sm-12">
         <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom"
-           title="Volvel al Listado"
+           title="<spring:message code="back.list"/>"
            href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            <i class="fa fa-list-ul" aria-hidden="true"></i>
             <spring:message code="List"/>
         </a>
     </div>
@@ -441,7 +450,7 @@
                                     <select name="person" id="person" class="form-control" required="required">
                                         <option selected value=""><spring:message code="select"/>...</option>
                                         <c:forEach items="${person}" var="p">
-                                            <option value="${p.personal.codigo}">${p.personal.codigo} - ${p.personal.nombre}</option>
+                                            <option value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
                                         </c:forEach>
                                     </select>
                                     <div class="invalid-feedback">
@@ -464,9 +473,11 @@
                                     </div>
                                 </div>
                             </div>
+                        </div><!-- fin row -->
 
+                        <div class="row" id="divAsentimiento" style="display: none">
 
-                            <div class="col-md-6"  id="divAsentimiento" style="display: none">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="asentimiento"><spring:message code="lbl.assent" /> </label>
                                     <select name="asentimiento" id="asentimiento" class="form-control">
@@ -478,20 +489,20 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6" id="divTipoAsentimiento" style="display: none">
-                                <div id="DivtipoAsent">
-                                    <div class="form-group">
-                                        <label for="tipoasentimiento"><spring:message code="type.assent" /> </label>
-                                        <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
-                                            <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${tpoasent}" var="ta">
-                                                <option value="${ta.catKey}"><spring:message code="${ta.spanish}" /></option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tipoasentimiento"><spring:message code="type.assent" /> </label>
+                                    <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                        <c:forEach items="${tpoasent}" var="ta">
+                                            <option value="${ta.catKey}"><spring:message code="${ta.spanish}" /></option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
                             </div>
-                        </div><!-- fin row -->
+
+                        </div>
 
                         <div class="row">
                             <div class="col-md-3">
@@ -525,7 +536,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="nombre2Firma"><spring:message code="second.surname" /> <spring:message code="lbl.tutor" /></label>
+                                    <label for="apellido2Firma"><spring:message code="second.surname" /> <spring:message code="lbl.tutor" /></label>
                                     <input type="text" class="form-control onlytext" id="apellido2Firma" name="apellido2Firma" placeholder="2do. Apellido tutor" value="${obj.surname2Tutor}">
                                 </div>
                             </div>
@@ -669,8 +680,12 @@
 </c:choose>
 <spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
 <script src="${validateJs}" type="text/javascript"></script>
+
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
+
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
 
 <spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
     <spring:param name="language" value="${lenguaje}" />
@@ -702,13 +717,14 @@
 
 <spring:url value="/resources/js/libs/smartWizard/jquery.smartWizard.js" var="jqsw"/>
 <script type="application/javascript" src="${jqsw}"></script>
-
+<%--
 <spring:url value="/resources/js/libs/lc_switch.js" var="lc" />
-<script type="text/javascript" src="${lc}"></script>
+<script type="text/javascript" src="${lc}"></script>--%>
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {
+        $('[data-toggle="tooltip"]').tooltip()
         'use strict';
         window.addEventListener('load', function() {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -728,6 +744,9 @@
 </script>
 
 <script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
     $(document).ready(function(){
         $(".collapse.show").each(function(){
             $(this).siblings(".card-header").find(".btn i").addClass("fa-minus-circle").removeClass("fa-plus-circle");
@@ -757,14 +776,7 @@
          return true;
          }
          });
-
-        lc_switch('#contactoFuturo',{
-            on_txt: 'Si',
-            off_txt: 'No'
-        }); lc_switch('#chktestigo',{
-            on_txt: 'Si',
-            off_txt: 'No'
-        }); */
+ */
         $("#carta").select2();
         $("#version").select2();
         $("#person").select2();
@@ -782,7 +794,12 @@
             UpdateRetiroUrl     : "${UpdateRetiroUrl}",
             notFound            : "${notFound}",
             cartaSaveEditUrl    : "${cartaSaveEditUrl}",
-            successmessage      : "${successMessage}"
+            successmessage      : "${successMessage}",
+            listExtensionesUrl  : "${listExtensionesUrl}",
+            getNombre1Url           : "${getNombre1Url}",
+            getNombre2Url           : "${getNombre2Url}",
+            getApellido1Url         : "${getApellido1Url}",
+            getApellido2Url         : "${getApellido2Url}"
         };
         scanCarta.init(parametros);
         var elementos = [];

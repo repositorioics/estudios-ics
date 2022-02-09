@@ -129,6 +129,23 @@ var GuardarBhc = function(){
                     event.preventDefault();
                 }
             });
+
+
+            $( "#username" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(params.getUserNameUrl, {username: $('#username').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
         }//fin function init
     }//fin return
 }();

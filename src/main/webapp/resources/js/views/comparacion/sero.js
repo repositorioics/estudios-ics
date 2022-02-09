@@ -127,42 +127,22 @@ var GuardarSero = function(){
                             swal("Cancelado", "registro está seguro :)", "error");
                         }
                     });
-
-
-             /*   swal({
-                    title: "Eliminar? ",
-                    text: "Registro: " + col1 + "Fecha: " + col2,
-                    icon: "warning",
-                    buttons: [
-                        'No, cancélalo!',
-                        'Si, Eliminar!'
-                    ],
-                    dangerMode: true
-                }).then(function(isConfirm) {
-                    if (isConfirm) {
-                        swal({
-                            title: 'Eliminado!',
-                            text: 'Registro eliminado éxitosamente!',
-                            icon: 'success'
-                        }).then(function() {
-                            $.post(param.deleteseroUrl,{id : id, ajax : 'true'}, function(data){
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 1000);
-                            }).fail(function() {
-                                setTimeout(function () {
-                                    swal("Error!","Servidor no respode!","error");
-                                }, 1500);
-                            });
-                        });
-                    } else {
-                        swal("Cancelado!", "Registro seguro. :)", "error");
-                    }
-                });
-                */
             }
 
-
+            $( "#username" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(param.getUserNameUrl, {username: $('#username').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
 
             document.addEventListener('keypress', function(evt) {
                 // Si el evento NO es una tecla Enter

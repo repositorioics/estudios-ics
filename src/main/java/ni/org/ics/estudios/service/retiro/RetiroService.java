@@ -29,9 +29,10 @@ public class RetiroService {
     @Resource(name="sessionFactory")
     private SessionFactory sessionFactory;
 
-    public List<Personal> getPersonalRecibeRetiro()throws Exception{
+    public List<Personal_Cargo> getPersonalRecibeRetiro()throws Exception{
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Personal order by nombre asc ");
+
+        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in() order by nombre asc ");
         return query.list();
     }
 
@@ -140,26 +141,22 @@ public class RetiroService {
 
     //Obtener Supervisor y Directora.
     @SuppressWarnings("unchecked")
-    public List<Personal_Cargo> getSupervisor()throws Exception {
+    public List<Personal_Cargo> getSupervisor(List<Integer> ids)throws Exception {
         Session session = sessionFactory.getCurrentSession();
-        Integer  cargoId [] = { 4, 14, 6, 15 };
-        boolean verdad = true;
-        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo in (:cargoId) and pc.estado= :verdad");
-        query.setParameterList("cargoId",cargoId);
-        query.setParameter("verdad",verdad);
+        //List<Integer> cargoId  = ids;
+        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:ids) and pc.pasive='0' ");
+        query.setParameterList("ids",ids);
         return query.list();
     }
 
 
     //OBTENER SUPERVISOR Y PERSONAL DE MUESTREO
     @SuppressWarnings("unchecked")
-    public List<Personal_Cargo> getSupervisorAndDigitador()throws Exception {
+    public List<Personal_Cargo> getSupervisorAndDigitador(List<Integer> ids)throws Exception {
         Session session = sessionFactory.getCurrentSession();
-        Integer  cargoId [] = { 1, 4, 7, 14 };
-        boolean verdad = true;
-        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.codigo in (:cargoId) and pc.estado= :verdad");
-        query.setParameterList("cargoId",cargoId);
-        query.setParameter("verdad",verdad);
+        //Integer  cargoId [] = { 2, 3, 6, 7 };
+        Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:ids) and pc.pasive='0' ");
+        query.setParameterList("ids",ids);
         return query.list();
     }
 

@@ -13,13 +13,16 @@
 <html>
 <head>
 <jsp:include page="../fragments/headTag.jsp"/>
+
+<spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
+<link href="${uiCss}" rel="stylesheet" type="text/css"/>
+
 <!-- DATE PICKER -->
 <spring:url value="/resources/css/datepicker.css" var="datepickerCss"/>
 <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
 
 <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
 <link href="${boot}" rel="stylesheet" type="text/css"/>
-
 
     <style>
         .bg-primary {
@@ -484,7 +487,8 @@
                                 <div class="form-group col-md-6">
                                     <label for="username">Usuario:</label>
                                     <span class="required text-danger"> * </span>
-                                    <select id="username" name="username" class="form-control focusNext" tabindex="4" required="required">
+                                    <input type="text" class="form-control focusNext" id="username" name="username" required="required" tabindex="4"/>
+                                   <%-- <select id="username" name="username" class="form-control focusNext" tabindex="4" required="required">
                                         <option selected value=""><spring:message code="select"/>...</option>
                                         <c:forEach items="${usuarios}" var="u">
                                             <c:choose>
@@ -496,7 +500,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:forEach>
-                                    </select>
+                                    </select>--%>
                                 </div>
                             </div>
                         </div>
@@ -556,6 +560,7 @@
                 <spring:url value="/comparacion/deletesero" var="deleteseroUrl"/>
                 <spring:url value="/comparacion/serologia" var="serologiaUrl"/>
                 <spring:url value="/comparacion/editBhc" var="editBhcUrl"/>
+                <spring:url value="/comparacion/getUserName" var="getUserNameUrl"/>
                 <!-- Mail list-->
                 <div class="table-responsive">
                     <table id="tblSero" class="table email-table no-wrap table-hover v-middle mb-0 font-14" style="width: 100%;">
@@ -618,6 +623,9 @@
 </div>
 <jsp:include page="../fragments/bodyFooter.jsp"/>
 <jsp:include page="../fragments/corePlugins.jsp"/>
+
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
 
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin"/>
 <script src="${datepickerPlugin}"></script>
@@ -689,6 +697,7 @@
             saveSeroUrl:"${saveSeroUrl}",
             deleteseroUrl:"${deleteseroUrl}",
             successmessage: "${successMessage}",
+            getUserNameUrl   : "${getUserNameUrl}",
             error: "${errorProcess}"
         };
         GuardarSero.init(parameter);
@@ -707,7 +716,6 @@
             }
         });
         $("#lugar").select2();
-        $("#username").select2();
         $("#fechaReg").mask("99/99/9999 99:99:99");
         $("#codigoparticipante").focus();
     });

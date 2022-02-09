@@ -48,7 +48,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     private boolean anulada;
     private String pq_anulada;
-    private String estudios;
+    //private String estudios;
 
     @Id
     @Column(name = "IDPARTICIPANTECARTA", nullable = false)
@@ -288,12 +288,12 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.pq_anulada = pq_anulada;
     }
 
-    @Column(name = "ESTUDIO", nullable = false, length = 255)
+    /*@Column(name = "ESTUDIO", nullable = false, length = 255)
     public String getEstudios() {
         return estudios;
     }
 
     public void setEstudios(String estudios) {
         this.estudios = estudios;
-    }
+    }*/
 }

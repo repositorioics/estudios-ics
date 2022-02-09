@@ -49,9 +49,9 @@ public class ParteController {
         }
     }
 
-    /* Crear una nueva Parte */
+    /* Crear una nueva Parte /CatalogoParte/CrearNuevaParte */
     @RequestMapping(value = "/CrearNuevaParte", method = RequestMethod.GET)
-    public String CrearNuevaCarta(Model model)throws Exception{
+    public String CrearNuevaParte(Model model)throws Exception{
         try {
             List<Estudio> estudios = scanCartaService.getAllEstudios();
             model.addAttribute("estudios", estudios);
@@ -59,15 +59,6 @@ public class ParteController {
             model.addAttribute("parte", parte);
             List<Version> version = scanCartaService.getVersionActiva();
             model.addAttribute("version", version);
-            /*for (Version v:version){
-                List<Parte> parteByVersionId = scanCartaService.getParteByVersionId(v.getIdversion());
-                StringBuffer sb = new StringBuffer();
-                for (Parte p:parteByVersionId){
-                    sb.append(p.getParte());
-                    sb.append(", ");
-                    System.out.println("version: "+v.getVersion() +" ** partes:  "+ p.getParte());
-                }
-            }*/
             model.addAttribute("caso", new Parte());
             model.addAttribute("agregando", true);
             model.addAttribute("editando", false);
@@ -75,12 +66,12 @@ public class ParteController {
         }catch (Exception e){
                 System.err.println(e.getMessage());
                 return "404";
-            }
+        }
     }
 
     //Obtener por Id Parte para Editar CatalogoParte/CrearNuevaParte
     @RequestMapping(value = "/editParte/{idparte}", method = RequestMethod.GET)
-    public String editSero(Model model, @PathVariable("idparte") String idparte)throws Exception {
+    public String editParte(Model model, @PathVariable("idparte") String idparte)throws Exception {
         try{
             int cod = Integer.parseInt(idparte);
             Parte caso = this.scanCartaService.getParteById(cod);
@@ -138,7 +129,6 @@ public class ParteController {
             , @RequestParam( value = "activo"     ,  required = false, defaultValue = "" ) String activo
             , @RequestParam( value = "editando"   ,  required = true ) String editando
             , @RequestParam( value = "idparte"    ,  required = true ) Integer idparte
-            , @RequestParam( value = "fecha_parte",  required = true ) String fecha_parte
             , @RequestParam( value = "principal"  ,  required = false, defaultValue = "") String principal
     )throws Exception{
         try {
@@ -169,7 +159,6 @@ public class ParteController {
                 p.setPrincipal(princi);
                 v.setIdversion(idversion);
                 p.setVersion(v);
-                p.setFecha_parte(fecha_parte);
                 p.setAcepta("false");
                 String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
                 p.setDeviceid(nameComputer);
@@ -198,7 +187,6 @@ public class ParteController {
                     p.setPrincipal(princi);
                     v.setIdversion(idversion);
                     p.setVersion(v);
-                    p.setFecha_parte(fecha_parte);
                     p.setAcepta("false");
                     String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
                     p.setDeviceid(nameComputer);
@@ -252,7 +240,6 @@ public class ParteController {
                 princi = true;
             }
             p.setPrincipal(princi);
-            p.setFecha_parte(fecha_parte);
             p.setAcepta("false");
             String nameComputer = InetAddress.getLocalHost().getHostName();
             p.setDeviceid(nameComputer);

@@ -56,19 +56,37 @@ var scanCarta = function(){
                 $("#parametro").val("");
             }
             function searchParticipante(){
-                //debugger; clearInput();
+                debugger; //clearInput();
+                $("#carta").select2().empty();
+                $("#carta").select2().val("").change();
+                $("#version").select2().empty();
+                $("#version").select2().val("").change();
+                $("#partes").select2().empty();
+                $("#partes").select2().val("").change();
                 $.getJSON(parametroII.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
-                    console.warn(data);
+                    //console.warn(data);
                     var len = data.length;
                     if(len==0){
                         swal("Error!","Código no encontrado","error");
                         clearInput();
+                        $("#carta").select2().empty();
+                        $("#carta").select2().val("").change();
+                        $("#version").select2().empty();
+                        $("#version").select2().val("").change();
+                        $("#partes").select2().empty();
+                        $("#partes").select2().val("").change();
                         $("#parametro").focus();
                     }
                     else{
                         if(data.estado == "0"){
                             toastr.warning("Participante Retirado!",{timeOut: 5000});
                             clearInput();
+                            $("#carta").select2().empty();
+                            $("#carta").select2().val("").change();
+                            $("#version").select2().empty();
+                            $("#version").select2().val("").change();
+                            $("#partes").select2().empty();
+                            $("#partes").select2().val("").change();
                             $("#parametro").focus();
                         }else{
                             clearInput();
@@ -90,15 +108,16 @@ var scanCarta = function(){
                             if(data.menorEdad == true){
                                 debugger;
                                 $("#divAsentimiento").fadeIn("slow");
-                                $("#asentimiento").prop('required', true);
-                                $("#asentimiento").val(1).trigger('change.select2');
-                                $("#divTipoAsentimiento").fadeIn("slow");
+                                $("#asentimiento").select2().val(1).trigger('change.select2');
+
+                                $("#asentimiento").select2().prop('required', true);
+
                                 $("#tipoasentimiento").prop('required', true);
                             }else{
                                 $("#divAsentimiento").fadeOut("slow");
                                 $("#asentimiento").val('').trigger('change.select2');
                                 $("#asentimiento").prop('required', false);
-                                $("#divTipoAsentimiento").fadeOut("slow");
+
                                 $("#tipoasentimiento").val('').trigger('change.select2');
                                 $("#tipoasentimiento").prop('required', false);
                                 $("#relfam").val(8).trigger('change.select2');
@@ -137,46 +156,16 @@ var scanCarta = function(){
                         }
                     }
                 }).fail(function() {
-                    toastr.error("Código no Existe!",{timeOut: 5000});
+                    toastr.error("Error Interno en el Servidor!",{timeOut: 5000});
+                    $("#carta").select2().empty();
+                    $("#carta").select2().val("").change();
+                    $("#version").select2().empty();
+                    $("#version").select2().val("").change();
+                    $("#partes").select2().empty();
+                    $("#partes").select2().val("").change();
                     $("#parametro").focus();
                 });
             }
-
-
-            /*
-            var _arrEstudio = [
-                { id: 1, estudio: "CH Familia"},
-                { id: 2, estudio: "Arbovirus"},
-                { id: 3, estudio: "Dengue" },
-                { id: 4, estudio: "Influenza" },
-                { id: 5, estudio: "UO1" },
-                { id: 6, estudio: "Tcovid" }
-            ];
-
-           function getEstudiosProcesos(estudios){
-                debugger;
-               var task_names = [];
-                var est = $("#estudios").val();
-                var textoseparado = est.split('  ');
-                const valueToRemove = "";
-                const filteredItems = textoseparado.filter(item => item !== valueToRemove);
-                $.each(filteredItems, function(i, value){
-                    for (var i = 0; i < _arrEstudio.length; i++) {
-                        if (_arrEstudio[i].estudio === value){
-                            task_names.push(_arrEstudio[i]);
-                            break;
-                        }
-                    }
-                });
-                var $carta = $('#carta');
-                $carta.empty();
-                $carta.append($('<option></option>').val('').html('Selecciona..'));
-                $.each(task_names, function (i, val) {
-                    $carta.append($('<option></option>').val(val.id).html(val.id +" - "+val.estudio));
-                });
-                //console.log(JSON.stringify(task_names));
-
-            }*/
 
             $("#asentimiento").on("change", function(){
                var valor = $(this).val();
@@ -287,7 +276,6 @@ var scanCarta = function(){
                 var idversion = document.getElementById('version').value;
                 var $ele = $("#partes");
                 $.getJSON(parametros.ParteVersionUrl,{idversion : idversion, ajax:'true'}, function(data){
-                    console.log(data);
                      elementos = [];
                     for(var i=0; i < data.parte.length; i++){
                         var obj = {};
@@ -300,13 +288,11 @@ var scanCarta = function(){
                         bandera=true;
                         $("#principal").val('');
                         $.each(data.parte, function (i, val) {
-                            debugger;
                             var option = new Option(val.parte, val.idparte, false, val.principal );
                             $ele.append(option).trigger('change');
                             if(val.principal){
                                 seleccionar(val.idparte);
                             }
-                            //$ele.append($('<option></option>').val(val.idparte).html(val.parte));
                         });
                         $("#principal").val($("#partes").find('option:selected').text());
 
@@ -708,11 +694,6 @@ var scanCarta = function(){
                 });
             }
 
-            lc_switch('#asentimiento',{
-                on_txt: 'Si',
-                off_txt: 'No'
-            });
-
             $("#chkTestigo").on("click", function(){
                 var status = $(this).prop("checked");
                 if(status == true){
@@ -726,78 +707,137 @@ var scanCarta = function(){
                 }
             });
 
-            /*$('body').delegate('.chktestigo', 'lcs-statuschange', function() {
-                var status = ($(this).is(':checked')) ? 'checked' : 'unchecked';
-                if(status == 'checked'){
-                    $("#selectt").fadeIn("slow");
-                    $("#nombre1Testigo").attr("required", "required");
-                    $("#nombre1Testigo").attr("required", "true");
-                    $("#apellido1Testigo").attr("required", "true");
-                }else {
-                    $("#selectt").fadeOut("slow");
-                    $("#nombre1Testigo").val("").attr("required", "false");
-                    $("#apellido1Testigo").val("").attr("required", "false");
-                }
-                $("#nombre1Testigo").focus();
-            });*/
 
 
-            // Step show event
-            $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
-                $("#prev-btn").removeClass('disabled');
-                $("#next-btn").removeClass('disabled');
-                if(stepPosition === 'first') {
-                    $("#prev-btn").addClass('disabled');
-                } else if(stepPosition === 'last') {
-                    $("#next-btn").addClass('disabled');
-                } else {
-                    $("#prev-btn").removeClass('disabled');
-                    $("#next-btn").removeClass('disabled');
-                }
+            $( "#nombfirma" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getNombre1Url, {nombre1: $('#nombfirma').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
             });
 
-            // Initialize the leaveStep event
-            $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
-                debugger;
-                if ( $("#codigo").val() =="") {
-                    $("#smartwizard").smartWizard("goToStep", 0);
-                    toastr.info("Ingresa código del Participante!",{timeOut:5000});
-                    $("#parametro").focus();
-                    return false;
-                }
-                if($("#txtNombreCompleto").val()== "" || $("#txtNombreCompleto").val()== "" || $("#madre").val()== "" || $("#padre").val() =="" ){
-                    $("#smartwizard").smartWizard("goToStep", 0);
-                    $("#parametro").focus();
-                    return false;
-                }
-                if(stepNumber == 1 && stepDirection=="forward" ){
-                    if( $("#fechacarta").val() == "") {
-                        toastr.error("seleccione la fecha!", {timeOut: 5000});
-                        return false;
-                    } if( $("#carta").val().trim() == "") {
-                        toastr.error("Seleccione la carta!", {timeOut: 5000});
-                        return false;
-                    }if( $("#version").val().trim() == "") {
-                        toastr.error("Seleccione la Versión!", {timeOut: 5000});
-                        return false;
-                    }if(  $("#person").val()=="" ) {
-                        toastr.error("Seleccione el Recurso!", {timeOut: 5000});
-                        return false;
-                    }
-                }
+            $( "#nombre2Firma" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getNombre2Url, {nombre2: $('#nombre2Firma').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
             });
 
-            // Demo Button Events
-            $("#got_to_step").on("change", function() {
-                debugger;
-                // Go to step
-                var step_index = $(this).val() - 1;
-                $('#smartwizard').smartWizard("goToStep", step_index);
-                return true;
+            $( "#apellido1Firma" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getApellido1Url, {apellido1: $('#apellido1Firma').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+            $( "#apellido2Firma" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getApellido2Url, {apellido2: $('#apellido2Firma').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+            //testigo
+
+            $( "#nombre1Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getNombre1Url, {nombre1: $('#nombre1Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
             });
 
 
-       }
+            $( "#nombre2Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getNombre2Url, {nombre2: $('#nombre2Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+
+            $( "#apellido1Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getApellido1Url, {apellido1: $('#apellido1Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+            $( "#apellido2Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(direct.getApellido2Url, {apellido2: $('#apellido2Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+
+
+
+
+        }
     }
 }();
 

@@ -84,8 +84,6 @@
             width: 100px
         }
 
-
-
         .bg-white .fill {
             fill: #448bff
         }
@@ -104,110 +102,6 @@
             background-color: blue;
             color: #fff
         }
-
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: #FFF none repeat scroll 0% 0%;
-            z-index: 99999;
-        }
-
-        #page-loader .preloader-interior {
-            display: block;
-            position: relative;
-            left: 50%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #3498db;
-
-            -webkit-animation: spin 2s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 2s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #e74c3c;
-
-            -webkit-animation: spin 3s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 3s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #f9c922;
-
-            -webkit-animation: spin 1.5s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 1.5s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
         /*ini*/
         .toast-title {
             font-weight: bold;
@@ -529,7 +423,7 @@
                                         <select name="recibidaPor" id="recibidaPor" required class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
                                             <c:forEach items="${supervisor}" var="rp">
-                                                <option value="${rp.personal.idPersona}"> <spring:message code="${rp.personal.idPersona} - ${rp.personal.nombre}" /></option>
+                                                <option value="${rp.personal.idpersonal}"> <spring:message code="${rp.personal.idpersonal} - ${rp.personal.nombreApellido}" /></option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -544,7 +438,7 @@
                                         <select name="medicosupervisor" id="medicosupervisor" required class="form-control">
                                             <option selected value=""><spring:message code="select" />...</option>
                                             <c:forEach items="${supervisorYdigitador}" var="s">
-                                                <option value="${s.personal.idPersona}">${s.personal.idPersona} - ${s.personal.nombre}</option>
+                                                <option value="${s.personal.idpersonal}">${s.personal.idpersonal} - ${s.personal.nombreApellido}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -689,9 +583,6 @@
     });
 
     $(document).ready(function(){
-        setTimeout(function () {
-            $('#page-loader').fadeOut('slow');
-        }, 1400);
         var hoy = moment().format('DD/MM/YYYY');
         $("#parentesco").select2().prop('disabled', true).trigger('change');
         $("#relFam").select2();

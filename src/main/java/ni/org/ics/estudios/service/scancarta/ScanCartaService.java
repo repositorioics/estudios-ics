@@ -8,6 +8,7 @@ import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,10 +69,12 @@ public class ScanCartaService {
         return query.list();
     }
 
-    //Obtengo la lista de la tabla extensionesTmp
+    //Obtengo la lista de la tabla extensionesTmp pasive='0'
     public List<ExtensionesTmp> getListExtensionTmp(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ExtensionesTmp e where e.pasive='0' order by e.fechaExtension desc ");
+        String nameUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Query query = session.createQuery("from ExtensionesTmp e where e.pasive='0' and e.recordUser=:nameUser order by e.fechaExtension desc ");
+        query.setParameter("nameUser",nameUser);
         return query.list();
     }
     public List<Carta> getCartaActiva(){
@@ -211,10 +214,10 @@ public class ScanCartaService {
         query.setParameter("idversion",idversion);
         return query.list().size() > 0;
     }
-
+    //Llenar Select Partes en Catalogo Parte
     public List<Parte>getListParte(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Parte order by parte desc");
+        Query query = session.createQuery("from Parte p where p.activo=true order by p.parte asc");
         return query.list();
     }
 
@@ -306,13 +309,20 @@ public class ScanCartaService {
 
     public List<Personal_Cargo>getPersonal(){
         Session session = sessionFactory.getCurrentSession();
-        Integer cod []= {4,5};
-        boolean v = true;
-        Query query = session.createQuery("from Personal_Cargo p where p.cargo.codigo in (:cod) and p.estado =:v");
+        Integer cod []= {1, 2, 3, 6, 7};
+        Query query = session.createQuery("from Personal_Cargo p where p.cargo.idcargo in (:cod) and p.pasive ='0' ");
         query.setParameterList("cod",cod);
-        query.setParameter("v",v);
         return query.list();
     }
+
+
+    public Personal getPersonalById(Integer idPersonal){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Personal p where p.idpersonal=:idPersonal and p.pasive ='0' ");
+        query.setParameter("idPersonal", idPersonal);
+        return (Personal) query.uniqueResult();
+    }
+
 
     public List<ParticipanteCarta> getScanCartasByParticipante(Integer parametro){
         Session session = sessionFactory.getCurrentSession();
@@ -351,10 +361,30 @@ public class ScanCartaService {
 
     public List<DetalleParte>getDetalleParteList(Integer idParticipanteCarta){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from DetalleParte where participantecarta.idparticipantecarta = :idParticipanteCarta");
+        Query query = session.createQuery("from DetalleParte where participantecarta.idparticipantecarta =:idParticipanteCarta");
         query.setParameter("idParticipanteCarta",idParticipanteCarta);
         return  query.list();
     }
+
+
+    // Obtener todas las extensiones ListadoExtensionParticipante.
+    public List<ParticipanteExtension>getAllPartipantExtension(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from ParticipanteExtension pe where pe.anulada=false  order by pe.fechaExtension desc ");
+        return query.list();
+    }
+
+
+    // Metodo participante extension by id_participante_carta
+    public ParticipanteExtension getParticipanteExtensionById(int idparticipanteExtension){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from ParticipanteExtension pe where pe.idParticipantExtension=:idparticipanteExtension  ");
+        query.setParameter("idparticipanteExtension",idparticipanteExtension);
+        return (ParticipanteExtension) query.uniqueResult();
+    }
+
+
+
     //OBTENER Extension por idParticipantExtension para editar
     public ParticipanteExtension getByIDDetalleParte(Integer idParticipantExtension){
         Session session = sessionFactory.getCurrentSession();
@@ -483,6 +513,14 @@ public class ScanCartaService {
         return (Extensiones)query.uniqueResult();
     }
 
+    // Obtengo la lista de Extension Temporal by idParticipanteCartatmp para pasarla a las tabla Oficial
+    public List<ExtensionesTmp>getListExtensionTmpByParticipanteCartaId(int idParticipanteCartatmp){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from ExtensionesTmp et where et.participantecartatmp.id=:idParticipanteCartatmp and et.pasive='0'");
+        query.setParameter("idParticipanteCartatmp",idParticipanteCartatmp);
+        return query.list();
+    }
+
     public boolean ActualizarAcepta(Integer idDetalle, boolean newacepta)throws Exception{
         try{
             Session session = sessionFactory.getCurrentSession();
@@ -552,7 +590,9 @@ public class ScanCartaService {
     //Metodo para obtener el listado de la tabla Temporal
     public List<ParticipanteCartaTmp>getAllParticipanteCartaTmp()throws Exception{
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCartaTmp tm order by tm.id asc ");
+        String nameUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Query query = session.createQuery("from ParticipanteCartaTmp tm where tm.pasive='0' and tm.recordUser=:nameUser order by tm.id asc ");
+        query.setParameter("nameUser",nameUser);
         return query.list();
     }
 
@@ -742,6 +782,8 @@ public class ScanCartaService {
             return false;
         }
     }
+
+
     // Elimina los registros de la tabla DetalleParteTmp por idParticipanteCartatmp
     public boolean Borrar_Detalle_Partes_tmp(Integer idParticipanteCartatmp)throws Exception{
         try {
@@ -768,5 +810,33 @@ public class ScanCartaService {
     }
 
 
+    // Desact ExtensionesTmp by IdCartaTmp
+    public int disableExtnsionTmpByIdCartaTmp(int participantecartatmp){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("update ExtensionesTmp e set e.pasive='1' where e.participantecartatmp.id=:participantecartatmp ");
+        query.setParameter("participantecartatmp",participantecartatmp);
+        int response =  query.executeUpdate();
+        return response;
+    }
+    // Dessact Detalles_Partes_Temp participantecartatmp.id
+    public int disableDetailPartesTmpByIdCartaTmp(int participantecartatmp){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("update DetalleParteTmp p set p.pasive='1' where p.participantecartatmp.id=:participantecartatmp ");
+        query.setParameter("participantecartatmp",participantecartatmp);
+        int response =  query.executeUpdate();
+        return response;
+    }
+    // Dessact ParticipanteCartaTmp participantecartatmp.id
+    public int disableParticipanteCartaTmpById(int participantecartatmp){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("update ParticipanteCartaTmp p set p.pasive='1' where p.id=:participantecartatmp ");
+        query.setParameter("participantecartatmp",participantecartatmp);
+        int response =  query.executeUpdate();
+        return response;
+    }
+
+
     //endregion
+
+
 }

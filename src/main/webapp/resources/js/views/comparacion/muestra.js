@@ -155,12 +155,12 @@ var proccessMuestra = function(){
                 }
                 $.post( parametros.saveMuestraUrl, formMuestra.serialize(), function( data ){
                     registro = JSON.parse(data);
-                    console.log(registro);
+                    //console.log(registro);
                     if (registro.mId.codigo === undefined) {
                         swal("Error!",data,"error");
                     }
                     else {
-                        swal("Buen Trabajo!","Guardado éxitosamente!","success");
+                        toastr.success(parametros.successMessage, "ÉXITO!",{timeout:6000});
                         window.setTimeout(function () {
                             window.location.href = parametros.refreshPageUrl;
                         }, 1500);
@@ -169,7 +169,6 @@ var proccessMuestra = function(){
                     swal("Error!","Servidor no responde!","error");
                 });
             }
-
 
         }//fin init
     }// fin return

@@ -99,6 +99,7 @@ var SearchCartaParticipant = function () {
         }*/
 
         function Buscarcp(dir){
+            debugger;
             $.getJSON(dir.GetCartasParticipanteUrl,{parametro : $('#parametro').val(), ajax : 'true' },function(data){
                 console.log(data);
                 var len = data.length;
@@ -118,7 +119,7 @@ var SearchCartaParticipant = function () {
                         var carta =        (data[i].anulada == true)  ? '<span  style="text-decoration:line-through;" class="text-danger">' + data[i].nmobreEstudio  + '</span>' : data[i].nmobreEstudio;
                         var version =      (data[i].anulada == true)  ? '<span  style="text-decoration:line-through;" class="text-danger">' + data[i].nombreVersion  + '</span>' : data[i].nombreVersion;
                         var datestring =   (data[i].anulada == true)  ? '<span  style="text-decoration:line-through;" class="text-danger">' + data[i].fechaCarta     + '</span>' : data[i].fechaCarta ;
-                        var anulada =      (data[i].anulada == false) ? '<span class="badge badge-success" style="width:30px; height:20px;">No</span>' : '<span style="width:30px; height:20px;" class="badge badge-danger">Si</span>';
+                        var anulada =      (data[i].anulada == false) ? '<span class="badge badge-success">No</span>' : '<span class="badge badge-danger">Si</span>';
                         var extension =     data[i].tieneExtesion == true ? '<a class="dropdown-item2 btnExtension" href="'+ partsUrl +'"><i class="fa fa-plus-square" aria-hidden="true"></i> Extensión <span class="badge badge-primary" style="border-radius: 5px"> '+ data[i].cantidadExtension +' </span> </a>':'';
                         var pqAnulada =     data[i].pqAnulada; //(data[i].estado == "1" ) ? "<span class='badge badge-success'>No</span>" : "<span class='badge badge-danger'>Si</span>";
                         var permisoEditParte = (parametros.isAuthorizeAny == 'true') ? '<a class="dropdown-item2 btnViewParte" style="cursor: pointer"  data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-refresh text-warning" aria-hidden="true"></i> Modificar Partes</a> <div class="dropdown-divider"></div>': '<a hidden="hidden" class="dropdown-item2"><i class="fa fa-refresh text-warning" aria-hidden="true" ></i> Modificar Partes</a>';
@@ -128,13 +129,13 @@ var SearchCartaParticipant = function () {
                             '<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Acción</button>'+
                             '<div class="dropdown-menu dropdown-menu-right">'+
                             '<a class="dropdown-item2 btnEditar" href='+ editarUrl +' data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-pencil text-warning" aria-hidden="true"></i>  Editar Carta</a>' +
-                            '<div class="dropdown-divider"></div>'+   permisoEditParte +
-                            '<a class="dropdown-item2 btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book text-info" aria-hidden="true"></i>  Reporte</a>' +
+                             '<div class="dropdown-divider"></div>'+  /* permisoEditParte +*/
+                            '<a class="dropdown-item2 btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book text-warning" aria-hidden="true"></i>  Reporte</a>' +
                             divider  +  permisoDeleteAll + extension + '</div> ' + '</div>' :
                             '<div class="btn-group">'+
                             '<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Acción</button>'+
                             '<div class="dropdown-menu dropdown-menu-right">'+
-                            '<a class="dropdown-item2 btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book" aria-hidden="true"></i>  Reporte</a>' +
+                            '<a class="dropdown-item2 btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book text-warning" aria-hidden="true"></i>  Reporte</a>' +
                             '</div> ' + '</div>';
                         table.row.add([
                             id,
@@ -164,8 +165,10 @@ var SearchCartaParticipant = function () {
             VerPartes(id);
         });
         function VerPartes(id){
+            debugger;
+
             $.getJSON(urls.searchPartesUrl, { idparticipantecarta : id,   ajax : 'true'  }, function(data){
-                //console.log(data);
+                console.log(data);
                 table2.clear().draw( false );
                 var len = data.length;
                         for(var i=0; i < len; i++){

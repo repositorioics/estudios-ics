@@ -2,42 +2,47 @@ package ni.org.ics.estudios.domain.catalogs;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ICS_Inspiron3 on 23/07/2019.
  */
 @Entity
-@Table(name = "personal", catalog = "estudios_ics")
-public class Personal extends BaseMetaData implements Auditable {
+@Table(name = "cat_personal", catalog = "estudios_ics")
+public class Personal extends BaseMetaData implements Auditable, Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    private Integer codigo;
+    private Integer idpersonal;
+    private String nombreApellido;
 
-    private Integer idPersona;
 
-    private String nombre;
-
-    private Cargo cargo;
-
-    private String activochf;
     @Id
-    @Column(name = "CODIGO", nullable = false, length = 4)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getCodigo() {
-        return codigo;
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "PERSONA_ID")
+    public Integer getIdpersonal() {
+        return idpersonal;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public void setIdpersonal(Integer idpersonal) {
+        this.idpersonal = idpersonal;
     }
 
+    @Column(name = "NOMBRE_APELLIDO", length = 50, nullable = false)
+    public String getNombreApellido() {
+        return nombreApellido;
+    }
 
-    @Override
-    public String toString(){
-        return "'" + codigo + "'";
+    public void setNombreApellido(String nombreApellido) {
+        this.nombreApellido = nombreApellido;
     }
 
     @Override
@@ -45,55 +50,4 @@ public class Personal extends BaseMetaData implements Auditable {
         return true;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Personal)) return false;
-
-        Personal personal = (Personal) o;
-
-        return (codigo.equals(personal.codigo));
-    }
-
-    @Override
-    public int hashCode() {
-        return codigo.hashCode();
-    }
-    @ManyToOne
-    @JoinColumn(name="idCargo", updatable = false)
-    @ForeignKey(name = "FK_idCargo")
-    public Cargo getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
-    }
-
-
-    @Column(name = "idPersona", nullable = false, length = 4)
-    public Integer getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Integer idPersona) {
-        this.idPersona = idPersona;
-    }
-    @Column(name = "nombre", nullable = false)
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    @Column(name = "activochf", nullable = true)
-    public String getActivochf() {
-        return activochf;
-    }
-
-    public void setActivochf(String activochf) {
-        this.activochf = activochf;
-    }
 }

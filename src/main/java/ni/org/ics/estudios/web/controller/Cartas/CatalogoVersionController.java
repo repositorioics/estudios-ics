@@ -1,7 +1,6 @@
 package ni.org.ics.estudios.web.controller.Cartas;
 
 import com.google.gson.Gson;
-import javafx.geometry.Pos;
 import ni.org.ics.estudios.domain.catalogs.*;
 import ni.org.ics.estudios.domain.scancarta.Extensiones;
 import ni.org.ics.estudios.dto.ParteDto;
@@ -345,7 +344,6 @@ public class CatalogoVersionController {
                     p.setActivo(true);
                     v.setIdversion(version2);
                     p.setVersion(v);
-                    p.setFecha_parte(fecha);
                     p.setAcepta("false");
                     String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
                     p.setDeviceid(nameComputer);

@@ -2,7 +2,6 @@ package ni.org.ics.estudios.domain.SerologiaOct2020;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.audit.Auditable;
-import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,25 +10,20 @@ import java.util.Date;
  * Created by ICS on 17/10/2020.
  */
 @Entity
-@Table(name = "serologia_envios", catalog = "estudios_ics")
+@Table(name = "envio_muestras", catalog = "estudios_ics")
 public class SerologiaEnvio extends BaseMetaData implements Auditable {
 
     private static final long serialVersionUID = 1L;
 
-
     private Integer idserologiaenvio;
-
-    private Serologia serologia;
-
     private Integer idenvio;
-
     private Date fecha;
-
     private String hora;
+    private double temperatura;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "IDSEROLOGIAENVIO", nullable = false)
+    @Column(name = "ENVIO_MUESTRA_ID", nullable = false)
     public Integer getIdserologiaenvio() {
         return idserologiaenvio;
     }
@@ -38,18 +32,7 @@ public class SerologiaEnvio extends BaseMetaData implements Auditable {
         this.idserologiaenvio = idserologiaenvio;
     }
 
-    @ManyToOne
-    @JoinColumn(name="IDSEROLOGIA", updatable = false)
-    @ForeignKey(name = "FK_IDSEROLOGIA")
-    public Serologia getSerologia() {
-        return serologia;
-    }
-
-    public void setSerologia(Serologia serologia) {
-        this.serologia = serologia;
-    }
-
-    @Column(name = "IDENVIO", nullable = false)
+    @Column(name = "NUMERO_ENVIO", nullable = false)
     public Integer getIdenvio() {
         return idenvio;
     }
@@ -73,6 +56,15 @@ public class SerologiaEnvio extends BaseMetaData implements Auditable {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    @Column(name = "TEMPERATURA", nullable = false)
+    public double getTemperatura() {
+        return temperatura;
+    }
+
+    public void setTemperatura(double temperatura) {
+        this.temperatura = temperatura;
     }
 
     @Override

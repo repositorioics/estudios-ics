@@ -1,9 +1,17 @@
 package ni.org.ics.estudios.domain.catalogs;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ICS_Inspiron3 on 23/07/2019.
@@ -11,47 +19,38 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "cargo", catalog = "estudios_ics")
-public class Cargo extends BaseMetaData {
+public class Cargo extends BaseMetaData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer codigo;
-    private String nombre;
-    private Character activo;
-
+    private Integer idcargo;
+    private String nombreCargo;
     private AreaTrabajo areatrabajo;
 
     @Id
-    @Column(name = "CargoId", nullable = false, length = 4)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getCodigo() {
-        return codigo;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CARGO_ID")
+    public Integer getIdcargo() {
+        return idcargo;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public void setIdcargo(Integer idcargo) {
+        this.idcargo = idcargo;
     }
 
-    @Column(name = "NOMBRECARGO", nullable = false, length = 50)
-    public String getNombre() {
-        return nombre;
+    @Column(name = "NOMBRE_CARGO")
+    public String getNombreCargo() {
+        return nombreCargo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    @Column(name = "ACTIVO", nullable = false, length = 1)
-    public Character getActivo() {
-        return activo;
+    public void setNombreCargo(String nombreCargo) {
+        this.nombreCargo = nombreCargo;
     }
 
-    public void setActivo(Character activo) {
-        this.activo = activo;
-    }
 
     @ManyToOne
-    @JoinColumn(name="idAreaTrabajo", updatable = false)
-    @ForeignKey(name = "FK_idAreaTrabajo")
+    @JoinColumn(name="CODIGO_AREATRABAJO", updatable = false)
+    @ForeignKey(name = "FK_CODIGO_AREATRABAJO")
     public AreaTrabajo getAreatrabajo() {
         return areatrabajo;
     }
@@ -59,4 +58,5 @@ public class Cargo extends BaseMetaData {
     public void setAreatrabajo(AreaTrabajo areatrabajo) {
         this.areatrabajo = areatrabajo;
     }
+
 }

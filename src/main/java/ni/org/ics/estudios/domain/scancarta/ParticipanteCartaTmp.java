@@ -38,7 +38,6 @@ public class ParticipanteCartaTmp extends BaseMetaData implements Auditable {
     private String nombre2testigo;
     private String apellido1testigo;
     private String apellido2testigo;
-    private String estudios;
 
 
     public  ParticipanteCartaTmp(){}
@@ -222,15 +221,6 @@ public class ParticipanteCartaTmp extends BaseMetaData implements Auditable {
 
     public void setApellido2testigo(String apellido2testigo) {
         this.apellido2testigo = apellido2testigo;
-    }
-
-    @Column(name = "ESTUDIO", nullable = false, length = 255)
-    public String getEstudios() {
-        return estudios;
-    }
-
-    public void setEstudios(String estudios) {
-        this.estudios = estudios;
     }
 
     @Override

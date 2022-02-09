@@ -16,6 +16,11 @@
                                 <i class="icon-people">
                                 </i><spring:message code="users" /></a>
                         </li>
+                        <li class="nav-item users">
+                            <a class="nav-link" href="<spring:url value="/admin/personal/list" htmlEscape="true "/>">
+                                <i class="icon-people">
+                                </i><spring:message code="Personal" /></a>
+                        </li>
                         <li class="nav-item casas">
                             <a class="nav-link" href="<spring:url value="/casas/obtenerCasas/" htmlEscape="true "/>">
                                 <i class="fa fa-home" ></i>
@@ -218,6 +223,27 @@
                     </ul>
                 </li>
         </sec:authorize>
+
+            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+                <li class="nav-item nav-dropdown Pbmc">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-flask" aria-hidden="true"></i>
+                        <spring:message code="Pbmc" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/Pbmc/listEnviosPbmc" htmlEscape="true "/>">
+                                <i class="fa fa-send"></i>
+                                <spring:message code="Envios" /> <spring:message code="Pbmc" /></a>
+                        </li>
+                       <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/Pbmc/listPbmc" htmlEscape="true "/>">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                                <spring:message code="List" /> <spring:message code="Pbmc" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
+
             <sec:authorize access="hasRole('ROLE_ROOT')">
                 <li class="nav-item nav-dropdown Domicilio">
                     <a class="nav-link nav-dropdown-toggle" href="#">

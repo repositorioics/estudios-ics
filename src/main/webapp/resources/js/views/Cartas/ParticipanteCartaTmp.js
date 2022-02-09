@@ -67,6 +67,14 @@ var saveCartaTMP = function(){
                     $('#person').removeClass('is-invalid');
                 }
 
+
+                if($("#asentimiento").val() == "" || $("#asentimiento").val() == null){
+                    isAllValid = false;
+                    $('#asentimiento').addClass('is-invalid');
+                }else{
+                    $('#asentimiento').removeClass('is-invalid');
+                }
+
                 if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
                     isAllValid = false;
                     $('#tipoasentimiento').addClass('is-invalid');
@@ -157,12 +165,17 @@ var saveCartaTMP = function(){
                 jQuery(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
             });
 
-            var parts = [];
+            //var parts = [];
             function guardarCartaTmp(dir){
-                debugger; var parts = [];
+                debugger;
+                var parts = [];
+                $("#parte option").each(function(){
+                    console.info('value: '+$(this).prop('value') +' selected: '+ $(this).prop('selected'));
+                });
                 var x = document.getElementById('parte');
-                 for(var i = 0; i < x.options.length; i++){
-                 console.log("options"+[i]+" selected: "+ x.options[i].acepta);
+                console.warn(x.options);
+                for(var i = 0; i < x.options.length; i++){
+                 console.log("options"+[i]+" selected: "+ x.options[i].selected);
                  var obj = {};
                  obj.idparte = parseInt(x.options[i].value);
                  obj.acepta =  (x.options[i].selected == true) ? true : false;
@@ -173,7 +186,7 @@ var saveCartaTMP = function(){
                         codigo              : parseInt($("#id_participante_carta_tmp").val()),
                         idparticipante      : parseInt($("#idparticipante").val().trim()),
                         version             : parseInt($("#version").val().trim()),
-                        asentimiento        : ($('input:checkbox[name=asentimiento]').prop('checked') == true) ? '1' : '0',
+                        asentimiento        : $("#asentimiento").val(), //($('input:checkbox[name=asentimiento]').prop('checked') == true) ? '1' : '0',
                         tipoasentimiento    : $("#tipoasentimiento").val().trim(),
                         relfam              : parseInt($("#relfam").val().trim()),
                         nombfirma           : $("#name1tutor").val().trim(),
@@ -194,8 +207,8 @@ var saveCartaTMP = function(){
                         edadmeses           : parseInt(0),
                         edaddias            : parseInt(0),
                         accion              : $("#accion").val().trim(),
-                        parte               : parts,
-                        estudios_actuales: $("#estudios").val()
+                        parte               : parts
+                        //estudios_actuales: $("#estudios").val()
                     };
                     var url = dir.saveUrl;
                     $.ajax({
@@ -334,14 +347,16 @@ var saveCartaTMP = function(){
                 }
             }
 
-            /*
-            aqui vacio el select2
-             $('#parte').select2().empty();
-            aqui recorro los options del select2
-            $("#parte option").each(function(){
-                alert('opcion '+$(this).text()+' valor '+ $(this).attr('value') +' selected '+ $(this).prop('selected') )
+
+            $("#asentimiento").on("change",function(){
+                if($(this).val() === "0"){
+                    $('#tipoasentimiento').val("0").trigger('change.select2');
+                }else{
+                    $('#tipoasentimiento').val("").trigger('change.select2');
+                    $("#tipoasentimiento").select2("open");
+                }
             });
-            */
+
             function deseleccionar(id) {
                 var cod = parseInt(id);
                 for (var i = 0; i < elementos.length; i++) {
@@ -368,6 +383,23 @@ var saveCartaTMP = function(){
                 highlight: true
             });
 
+
+            $( "#nombre1Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(parametros.getNombre1Url, {nombre1: $('#nombre1Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+
             $( "#name2tutor" ).autocomplete({
                 delay:100,
                 source: function(request, response){
@@ -384,6 +416,22 @@ var saveCartaTMP = function(){
             });
 
 
+
+            $( "#nombre2Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(parametros.getNombre2Url, {nombre2: $('#nombre2Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
             $( "#apellido1tutor" ).autocomplete({
                 delay:100,
                 source: function(request, response){
@@ -399,10 +447,40 @@ var saveCartaTMP = function(){
                 highlight: true
             });
 
+            $( "#apellido1Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(parametros.getApellido1Url, {apellido1: $('#apellido1Testigo').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
             $( "#apellido2Firma" ).autocomplete({
                 delay:100,
                 source: function(request, response){
                     $.getJSON(parametros.getApellido2Url, {apellido2: $('#apellido2Firma').val().trim(), ajax: 'true'},function(data){
+                        response($.map(data, function (value, key) {
+                            return {
+                                label: value
+                            };
+                        }));
+                    });
+                },minLength: 3,
+                scroll: true,
+                highlight: true
+            });
+
+            $( "#apellido2Testigo" ).autocomplete({
+                delay:100,
+                source: function(request, response){
+                    $.getJSON(parametros.getApellido2Url, {apellido2: $('#apellido2Testigo').val().trim(), ajax: 'true'},function(data){
                         response($.map(data, function (value, key) {
                             return {
                                 label: value

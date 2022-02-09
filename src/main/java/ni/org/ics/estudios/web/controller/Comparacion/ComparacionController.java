@@ -50,8 +50,8 @@ public class ComparacionController {
     //region RECEPCION BHC CONTROLER***
     @RequestMapping(value="/bhc", method = RequestMethod.GET)
     public String bhc(ModelMap model) throws Exception {
-       List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
-       model.addAttribute("usuarios", usuarios);
+       //List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
+       //model.addAttribute("usuarios", usuarios);
        List<MessageResource> lugar = messageResourceService.getCatalogo("CAT_LUGAR_RECEP");
        model.addAttribute("lugar", lugar);
        model.addAttribute("agregando",true);
@@ -72,8 +72,8 @@ public class ComparacionController {
             model.addAttribute("caso", caso);
             model.addAttribute("agregando",false);
             model.addAttribute("editando",true);
-            List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
-            model.addAttribute("usuarios", usuarios);
+            //List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
+            //model.addAttribute("usuarios", usuarios);
             List<MessageResource> lugar = messageResourceService.getCatalogo("CAT_LUGAR_RECEP");
             model.addAttribute("lugar", lugar);
             List<RecepcionBHC> listaBhc = this.comparasionService.getAllBhc();
@@ -288,8 +288,8 @@ public class ComparacionController {
     //region RECEPCION MUESTRAS
     @RequestMapping(value="/muestra", method = RequestMethod.GET)
     public String muestra(ModelMap model) throws Exception {
-        List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
-        model.addAttribute("usuarios", usuarios);
+        //List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
+        //model.addAttribute("usuarios", usuarios);
         List<Personal_Cargo> recurso =  this.comparasionService.getRecursos();
         model.addAttribute("recurso", recurso);
         List<MessageResource> SiNo = messageResourceService.getCatalogo("CHF_CAT_SINO");
@@ -374,7 +374,7 @@ public class ComparacionController {
             ,@RequestParam(value = "fechaMx", required = true) String fechaMx
             ,@RequestParam(value = "recurso1", required = true) String recurso1
             ,@RequestParam(value = "recurso2", required = false) String recurso2
-            ,@RequestParam(value = "usernameMx", required = true) String usernameMx
+            ,@RequestParam(value = "username", required = true) String username
             ,@RequestParam(value = "terrenoMx", required = true) String terrenoMx
             ,@RequestParam(value = "txtpinchazo", required = true) String txtpinchazo
             ,@RequestParam(value = "tubobhc", required = false) String tubobhc
@@ -408,7 +408,7 @@ public class ComparacionController {
             movil.setSimserial("111");
             movil.getPhonenumber();
             movil.setToday(DateUtil.StringToDate(fechaReg, "dd/MM/yyyy HH:mm:ss"));
-            movil.setUsername(usernameMx);
+            movil.setUsername(username);
             movil.setRecurso1(Integer.parseInt(recurso1));
             movil.setRecurso2(Integer.parseInt(recurso2));
             movil.setUltimoCambio(form.format(new Date()));
@@ -457,6 +457,19 @@ public class ComparacionController {
         }
     }
     //endregion
+
+    @RequestMapping(value = "/getUserName", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<String> getUserName(@RequestParam(value = "username", required = true) String username)
+            throws Exception {
+        ArrayList<String> nombreArrayList = null;
+        try {
+            List<String> listaPart = this.comparasionService.getNombreUsuario(username);
+            return listaPart;
+        }catch (Exception e){
+            return nombreArrayList = null;
+        }
+    }
 
     /*  Esta Funcion retorna un Json  */
     private ResponseEntity<String> createJsonResponse( Object o )

@@ -1,26 +1,20 @@
 package ni.org.ics.estudios.web.controller.DomicilioController;
 
 import com.google.gson.Gson;
-import ni.org.ics.estudios.domain.Casa;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.Participante;
-import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
-import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.muestreoanual.MovilInfo;
+import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.CambioDomParticipanteDto;
 import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
-
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
-import ni.org.ics.estudios.domain.catalogs.Barrio;
-import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.Domicilios.DomicilioService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
-import ni.org.ics.estudios.users.model.UserSistema;
-import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
@@ -35,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.Null;
 import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
@@ -151,7 +144,16 @@ public class DomicilioController {
         modelView.addObject("barrios", barrios);
         List<MessageResource> NoGeo = messageResourceService.getCatalogo("CP_CAT_NOGEO");
         modelView.addObject("NoGeo", NoGeo);
-        List<Personal_Cargo> person = DomicilioService.ListPersonal();
+        // Personal
+        List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_COORDENADAS");
+        String[] parts = obtenerPersonal.get(0).getSpanish().split(",");
+        List<Integer> personal = new ArrayList<Integer>();
+        List<String> cargoId = Arrays.asList(parts);
+        for (int i = 0; i < cargoId.size(); i++) {
+            int value = Integer.parseInt( cargoId.get(i) );
+            personal.add(value);
+        }
+        List<Personal_Cargo> person = DomicilioService.ListPersonal(personal);
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/FormDomicilio");
         return modelView;
@@ -324,7 +326,16 @@ public class DomicilioController {
         modelView.addObject("barrios", barrios);
         List<MessageResource> NoGeo = messageResourceService.getCatalogo("CP_CAT_NOGEO");
         modelView.addObject("NoGeo", NoGeo);
-        List<Personal_Cargo> person = DomicilioService.ListPersonal();
+        // Personal
+        List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_COORDENADAS");
+        String[] parts = obtenerPersonal.get(0).getSpanish().split(",");
+        List<Integer> personal = new ArrayList<Integer>();
+        List<String> cargoId = Arrays.asList(parts);
+        for (int i = 0; i < cargoId.size(); i++) {
+            int value = Integer.parseInt( cargoId.get(i) );
+            personal.add(value);
+        }
+        List<Personal_Cargo> person = DomicilioService.ListPersonal(personal);
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/CambioDomPorCasa");
         return modelView;

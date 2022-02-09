@@ -8,4 +8,5 @@ public class Constants {
     public static final String TPR_HEMOREPORTE = "HEMOREPORTE";
     public static final String TPR_REPORTECARTA ="REPORTECARTA";
     public static final String TPR_ENVIOREPORTE = "ENVIOREPORTE";
+    public static final String TPR_ENVIOREPORTEPBCM = "ENVIOREPORTEPBMC";
 }

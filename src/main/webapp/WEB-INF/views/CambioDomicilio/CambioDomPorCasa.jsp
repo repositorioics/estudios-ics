@@ -322,7 +322,7 @@
                                                     <select name="recurso1" id="recurso1" class="form-control focusNext" required="required" tabindex="7">
                                                         <option selected value=""><spring:message code="select" /></option>
                                                         <c:forEach items="${person}" var="person">
-                                                            <option value="${person.personal.idPersona}">${person.personal.idPersona} - ${person.personal.nombre}</option>
+                                                            <option value="${person.personal.idpersonal}">${person.personal.idpersonal} - ${person.personal.nombreApellido}</option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>

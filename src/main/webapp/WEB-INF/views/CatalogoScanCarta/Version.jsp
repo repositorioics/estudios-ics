@@ -17,14 +17,10 @@
     <jsp:include page="../fragments/headTag.jsp"/>
     <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
     <link href="${boot}" rel="stylesheet" type="text/css"/>
-    <spring:url value="/resources/css/dtresponsive/twitter-bootstrap.css" var="boot1"/>
-    <link href="${boot1}" rel="stylesheet" type="text/css"/>
+
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
-    <!-- END DATE PICKER -->
-    <spring:url value="/resources/css/bootstrapdt.css" var="bdt"/>
-    <link rel="stylesheet" href="${bdt}" type="text/css"/>
 
     <style>
     span.error {
@@ -37,110 +33,6 @@
         color:red;
         display:none;
     }
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: #FFF none repeat scroll 0% 0%;
-            z-index: 99999;
-        }
-
-        #page-loader .preloader-interior {
-            display: block;
-            position: relative;
-            left: 50%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #3498db;
-
-            -webkit-animation: spin 2s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 2s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #e74c3c;
-
-            -webkit-animation: spin 3s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 3s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #f9c922;
-
-            -webkit-animation: spin 1.5s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 1.5s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        /**/
 
         .card {
             position: relative;
@@ -163,7 +55,7 @@
         .mailbox-widget .custom-tab .nav-item .nav-link.active {
             background: 0 0;
             color: #fff;
-            border-bottom: 3px solid #2cd07e;
+            border-bottom: 5px solid #f7f7f7;
         }
 
         .no-wrap td, .no-wrap th {
@@ -351,12 +243,17 @@
         }
         /*fin*/
         .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-            background-color: #007bff;
+            background-color: #008cba;
         }
         .nav-tabs .nav-link, .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:hover, .nav-tabs .nav-link.disabled:focus {
             border-color: rgba(0, 0, 0, 0.1);
-            background-color: #007bff;
+            background-color: #008cba;
         }
+    .form-control-feedback {
+        margin-top: 0.25rem;
+        width: 95%;
+        text-align: left;
+    }
     </style>
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
     <link href="${swalcss}" rel="stylesheet" type="text/css"/>
@@ -458,9 +355,13 @@
                         <div class="form-group row">
                             <label for="fecha_version" class="col-sm-2 col-form-label text-right"><spring:message code="Fecha" /> <spring:message code="Versión" /></label>
                             <div class="col-sm-10">
-                                <input name="fecha_version" id="fecha_version" class="form-control date-picker years" type="text" data-date-end-date="+0d"
-                                       value="${caso.fecha_version}" required="required" />
-
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupPrepend"><i class="fa fa-calendar-o text-info"></i></span>
+                                    </div>
+                                    <input name="fecha_version" id="fecha_version" class="form-control date-picker years" type="text" data-date-end-date="+0d"
+                                           value="${caso.fecha_version}" required="required" />
+                                </div>
                             </div>
                         </div>
                         <div hidden="hidden" class="form-group row">
@@ -473,21 +374,31 @@
                         <div class="form-group row">
                             <label for="version" class="col-sm-2 col-form-label text-right"><spring:message code="Nombre" /> <spring:message code="Versión" /></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" placeholder="Nombre de la versión" id="version" name="version" required="required" value="${caso.version}" >
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-vimeo text-info"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Nombre de la versión" id="version" name="version" required="required" value="${caso.version}" >
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="activo" class="col-sm-2 col-form-label text-right"><spring:message code="Activar?" /></label>
+                            <label for="activo" class="col-sm-2 col-form-label text-right"></label>
                             <div class="col-sm-8">
-                            <c:choose>
-                                <c:when test="${caso.activo eq true }">
-                                    <p><input type="checkbox" class="custom-control-input" checked="checked" id="activo" name="activo"></p>
-                                </c:when>
-                                <c:otherwise>
-                                    <p><input type="checkbox" class="custom-control-input" id="activo" name="activo"></p>
-                                </c:otherwise>
-                            </c:choose>
+                                <div class="form-check">
+                                    <c:choose>
+                                        <c:when test="${caso.activo eq true }">
+                                            <input type="checkbox" class="form-check-input" checked="checked" id="activo" name="activo">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="checkbox" class="form-check-input" id="activo" name="activo">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <label class="form-check-label" for="activo">
+                                        <spring:message code="Activar?" />
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <br/>
@@ -804,8 +715,6 @@
 <spring:url value="/resources/js/libs/sweetalert.js" var="sweet"/>
 <script type="text/javascript" src="${sweet}"></script>
 
-<spring:url value="/resources/js/libs/lc_switch.js" var="lc"/>
-<script type="text/javascript" src="${lc}"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -824,10 +733,7 @@
             autoclose: true
         });
         $("#idcarta").select2();
-        lc_switch('#activo', {
-            on_txt: 'Si',
-            off_txt: 'No'
-        });
+
         var parameters = {
             saveVersionUrl: "${saveVersionUrl}",
             ListadoVersionUrl: "${ListadoVersionUrl}",

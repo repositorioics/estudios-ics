@@ -62,110 +62,6 @@
         background-color: #028dba;
     }
 
-    /* fin */
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: #FFF none repeat scroll 0% 0%;
-            z-index: 99999;
-        }
-
-        #page-loader .preloader-interior {
-            display: block;
-            position: relative;
-            left: 50%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #3498db;
-
-            -webkit-animation: spin 2s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 2s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #e74c3c;
-
-            -webkit-animation: spin 3s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 3s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        #page-loader .preloader-interior:after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #f9c922;
-
-            -webkit-animation: spin 1.5s linear infinite;
-            /* Chrome, Opera 15+, Safari 5+ */
-            animation: spin 1.5s linear infinite;
-            /* Chrome, Firefox 16+, IE 10+, Opera */
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(0deg);
-                /* IE 9 */
-                transform: rotate(0deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-                /* Chrome, Opera 15+, Safari 3.1+ */
-                -ms-transform: rotate(360deg);
-                /* IE 9 */
-                transform: rotate(360deg);
-                /* Firefox 16+, IE 10+, Opera */
-            }
-        }
-
         /*ini*/
         .toast-title {
             font-weight: bold;
@@ -401,6 +297,32 @@
         display: none;
     }
 
+    .mailbox-widget .custom-tab .nav-item .nav-link.active {
+        background: 0 0;
+        color: #fff;
+        border-bottom: 5px solid #fff
+    }
+
+    .dropdown-item {
+        position: relative;
+        padding: 10px 20px;
+        border-bottom: 1px solid #dbdee0;
+    }
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 3px 1.5rem;
+        clear: both;
+        font-weight: normal;
+        color: #34383c;
+        text-align: inherit;
+        white-space: nowrap;
+        background: none;
+        border: 0;
+        border-bottom-color: currentcolor;
+        border-bottom-style: none;
+        border-bottom-width: 0px;
+    }
 
     </style>
 
@@ -445,7 +367,7 @@
                     <li class="nav-item">
                         <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
                             <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                            <span class="d-none d-md-block"><spring:message code="List" /></span>
+                            <span class="d-none d-md-block"><spring:message code="List" /> <i class="badge badge-light">${listaDto.size()}</i></span>
                         </a>
                     </li>
                 </ul>
@@ -468,8 +390,20 @@
             <spring:url value="/cartas/saveCartaExample" var="saveCartaExampleUrl"/>
             <spring:url value="/cartas/saveTmpsToOficial" var="saveTmpsToOficialUrl"/>
             <spring:url value="/cartas/CartaParticipantTmp" var="CartaParticipantTmpUrl"/>
+            <c:set var="userEnabledLabel"><spring:message code="login.userEnabled" /></c:set>
             <c:set var="successMessage"><spring:message code="process.success" /></c:set>
-
+            <div class="d-flex justify-content-between">
+                <div class="p-2 bd-highlight">
+                    <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom"
+                       title="Ir al Listado Extensiones"
+                       href="<spring:url value="/cartas/listExtensionTmp" htmlEscape="true "/>">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i>
+                        <spring:message code="List"/>  <spring:message code="Extension"/>
+                    </a>
+                </div>
+                <div class="p-2 bd-highlight"></div>
+                <div class="p-2 bd-highlight"></div>
+            </div>
             <%--aqui el formulario--%>
                     <hr/>
                     <div class="container col-sm-12 col-lg-12">
@@ -510,7 +444,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="idcarta"><spring:message code="Estudio" /></label>
+                                <label for="idcarta"><spring:message code="study" /></label>
                                 <span class="required text-danger"> * </span>
                                 <select class="form-control" id="idcarta" name="idcarta" required="required">
                                     <option selected value=""><spring:message code="select" />...</option>
@@ -583,7 +517,7 @@
                             <div class="form-group">
                                 <label for="name1tutor"><spring:message code="first.name" /> <spring:message code="lbl.tutor" /> </label>
                                 <span class="required text-danger"> * </span>
-                                <input type="text" class="form-control onlytext form-control-sm" id="name1tutor" name="name1tutor" required="required" value="${caso.name1tutor}"/>
+                                <input type="text" class="form-control onlytext form-control-sm compName1" id="name1tutor" name="name1tutor" required="required" value="${caso.name1tutor}"/>
                                 <div class="invalid-feedback">
                                     <spring:message code="lbl.required" />
                                 </div>
@@ -680,11 +614,11 @@
                                     <option selected value=""><spring:message code="select"/>...</option>
                                     <c:forEach items="${person}" var="p">
                                         <c:choose>
-                                            <c:when test="${caso.recurso eq p.personal.codigo}">
-                                                <option selected value="${p.personal.codigo}">${p.personal.codigo} - ${p.personal.nombre}</option>
+                                            <c:when test="${caso.recurso eq p.personal.idpersonal}">
+                                                <option selected value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
                                             </c:when>
                                             <c:otherwise>
-                                                <option value="${p.personal.codigo}">${p.personal.codigo} - ${p.personal.nombre}</option>
+                                                <option value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
@@ -698,8 +632,45 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
+                                <div class="form-check mt-4">
+                                    <c:choose>
+                                        <c:when test="${caso.testigopresent eq true}">
+                                            <input class="form-check-input" type="checkbox" id="chkTestigo" name="chkTestigo" checked="checked">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input class="form-check-input" type="checkbox" id="chkTestigo" name="chkTestigo">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <label class="form-check-label" for="chkTestigo">
+                                        <spring:message code="lbl.witness.present" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="form-check mt-4">
+                                    <c:choose>
+                                        <c:when test="${caso.contactoFuturo eq true}">
+                                            <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo" checked="checked">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <label class="form-check-label" for="contactoFuturo">
+                                        <spring:message code="lbl.Accept.future.contact" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label for="asentimiento"><spring:message code="lbl.assent" /> </label>
-                                <select name="asentimiento" id="asentimiento" class="form-control">
+                                <select name="asentimiento" id="asentimiento" class="form-control" required="required">
                                     <option selected value=""><spring:message code="select" />...</option>
                                     <c:forEach items="${SiNoNA}" var="s">
                                         <c:choose>
@@ -714,23 +685,7 @@
                                 </select>
                             </div>
                         </div>
-                       <%-- <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="form-check mt-4">
-                                    <c:choose>
-                                        <c:when test="${caso.asentimiento eq true}">
-                                            <input class="form-check-input" type="checkbox" id="asentimiento" name="asentimiento" checked="checked">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <input class="form-check-input" type="checkbox" id="asentimiento" name="asentimiento">
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <label class="form-check-label" for="asentimiento">
-                                        <spring:message code="Asentimiento" />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>--%>
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tipoasentimiento"><spring:message code="type.assent" /> </label>
@@ -753,42 +708,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="form-check mt-4">
-                                    <c:choose>
-                                        <c:when test="${caso.contactoFuturo eq true}">
-                                            <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo" checked="checked">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo">
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <label class="form-check-label" for="contactoFuturo">
-                                        <spring:message code="lbl.Accept.future.contact" />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <div class="form-check mt-4">
-                                    <c:choose>
-                                        <c:when test="${caso.testigopresent eq true}">
-                                            <input class="form-check-input" type="checkbox" id="chkTestigo" name="chkTestigo" checked="checked">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <input class="form-check-input" type="checkbox" id="chkTestigo" name="chkTestigo">
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <label class="form-check-label" for="chkTestigo">
-                                        <spring:message code="lbl.witness.present" />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
                     <div id="showDivTestigo" style="display: none">
@@ -797,7 +716,7 @@
                                 <div class="form-group">
                                     <label for="nombre1Testigo"><spring:message code="first.name" /> <spring:message code="lbl.witness" /> </label>
                                     <span class="required text-danger"> * </span>
-                                    <input type="text" class="form-control onlytext focusNext form-control-sm" tabindex="5" id="nombre1Testigo" name="nombre1Testigo" value="${caso.nombre1testigo}"/>
+                                    <input type="text" class="form-control onlytext focusNext form-control-sm compName1" tabindex="5" id="nombre1Testigo" name="nombre1Testigo" value="${caso.nombre1testigo}"/>
                                 </div>
                             </div>
 
@@ -843,14 +762,11 @@
                         <div class="p-2 bd-highlight"></div>
                         <div class="p-2 bd-highlight">
                             <a href="<spring:url value="/cartas/CartaParticipantTmp" htmlEscape="true"/>" class="btn btn-warning btn-lg btn-ladda" data-style="expand-right">
-                                <spring:message code="cancel" />
-                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i> <spring:message code="cancel" />
                             </a>
                         </div>
                     </div>
-
                     </form>
-
                     </div>
                 <%--fin del formulario--%>
             </div>
@@ -861,10 +777,7 @@
                         <div class="col-sm-12 col-lg-12">
                             <div class="d-flex justify-content-between">
                                 <div class="p-2 bd-highlight">
-                                    <button id="btnFinalizar" class="btn btn-success btn-lg" data-toggle="tooltip" data-placement="bottom" title="Subir Información">
-                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                        <spring:message code="end" /> <spring:message code="processes" />
-                                    </button>
+
                                 </div>
                                 <div class="p-2 bd-highlight"></div>
                                 <div class="p-2 bd-highlight"></div>
@@ -875,25 +788,32 @@
                                     <table id="tblPart_Cartatmp" class="table table-bordered email-table no-wrap table-hover v-middle mb-0 font-14 dt-responsive nowrap" style="width: 100%">
                                         <thead>
                                         <tr>
-                                            <th scope="col" class="text-center"><spring:message code="count"/></th>
-                                            <th scope="col" class="text-center"><spring:message code="id"/></th>
+                                            <th scope="col" class="text-center"><spring:message code="code"/></th>
                                             <th scope="col" class="text-center"><spring:message code="code"/> <spring:message code="participant"/></th>
                                             <th scope="col" class="text-center"><spring:message code="dateAdded"/></th>
-                                            <th scope="col" class="text-center"><spring:message code="tutor"/></th>
-                                            <th scope="col" class="text-center"><spring:message code="user"/></th>
+                                            <th scope="col" class="text-center"><spring:message code="lbl.tutor"/></th>
+                                            <th scope="col" class="text-center"><spring:message code="username"/></th>
                                             <td scope="col" class="text-center"><spring:message code="actions"/></td>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${listaDto}" var="list"  varStatus="theCount">
                                             <tr>
+                                                <c:set var="confirmar"><spring:message code="confirm" /></c:set>
+                                                <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
+                                                <c:set var="fecha"><spring:message code="lbl.date" /></c:set>
+
                                                 <spring:url value="/cartas/extensionTmp/{codigo}" var="extensionUrl">
                                                     <spring:param name="codigo" value="${list.codigo}" />
                                                 </spring:url>
                                                 <spring:url value="/cartas/editTmp/{codigo}" var="editTmpUrl">
                                                     <spring:param name="codigo" value="${list.codigo}" />
                                                 </spring:url>
-                                                <th class="text-center" scope="row">${theCount.count}</th>
+
+                                                <spring:url value="/cartas/desactAllTmp/{idparticipantecartatmp}"
+                                                            var="desactUrl">
+                                                    <spring:param name="idparticipantecartatmp" value="${list.codigo}" />
+                                                </spring:url>
                                                 <td class="text-center">${list.codigo}</td>
                                                 <td class="text-center">${list.idparticipante}</td>
                                                 <td class="text-center">${list.fechacarta}</td>
@@ -911,21 +831,17 @@
                                                                 <%--<a class="dropdown-item delete" data-id="${list.codigo}" > <i class="fa fa-trash"></i>  <spring:message code="delete"/></a>--%>
                                                             <a title="<spring:message code="edit" />" href="${fn:escapeXml(editTmpUrl)}" class="dropdown-item edit"><i class="fa fa-edit"></i> <spring:message code="edit"/></a>
                                                             <div class="dropdown-divider"></div>
+                                                            <a title="<spring:message code="disable" />" data-id="${fn:escapeXml(desactUrl)}" class="dropdown-item desact"> <i class="fa fa-trash-o" aria-hidden="true"></i> <spring:message code="disable"/></a>
+                                                            <div class="dropdown-divider"></div>
                                                             <c:choose>
                                                                 <c:when test="${list.tineneExtension eq true}">
                                                                     <a class="dropdown-item" href="${fn:escapeXml(extensionUrl)}">
                                                                         <strong>
-                                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
                                                                             <spring:message code="Extension"/>
                                                                         </strong></a>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <button class="dropdown-item" disabled="disabled" style="cursor:no-drop;">
-                                                                        <strong>
-                                                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                                                            <spring:message code="WithOut.Extension"/>
-                                                                        </strong>
-                                                                    </button>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
@@ -936,9 +852,18 @@
                                         </tbody>
                                     </table>
                 <%--fin de la tabla--%>
-
                             </div>
-
+                            </div>
+                            <hr/>
+                            <div class="d-flex justify-content-between">
+                                <div class="p-2 bd-highlight"></div>
+                                <div class="p-2 bd-highlight"></div>
+                                <div class="p-2 bd-highlight">
+                                    <button id="btnFinalizar" class="btn btn-success btn-lg" data-toggle="tooltip" data-placement="bottom" title="Subir Información">
+                                        <i class="fa fa-upload" aria-hidden="true"></i>
+                                        <spring:message code="end" /> <spring:message code="processes" />
+                                    </button>
+                                </div>
                             </div>
                             </div>
             </div>
@@ -952,6 +877,28 @@
                </div> <!-- /.conainer-fluid -->
             </div>
         </div>
+        <%--init modal--%>
+        <div class="modal fade bd-example-modal-lg" id="basic2" tabindex="-1" data-role="basic2" data-backdrop="static" data-aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" data-aria-hidden="true"></button>
+                        <div id="titulo"></div>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="accionUrl"/>
+                        <div id="cuerpo"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal"><spring:message code="cancel" /></button>
+                        <button type="button" class="btn btn-info" onclick="ejecutarAccion()"><spring:message code="ok" /></button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <%--finish modal--%>
     </div>
     <div class="modal fade bd-example-modal-lg" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -990,6 +937,7 @@
     </div>
 </div>
 <c:set var="confirmar"><spring:message code="confirm" /></c:set>
+<c:set var="DisabledLabel"><spring:message code="notenabled" /></c:set>
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
@@ -1310,12 +1258,24 @@
 
 
         $("#btnFinalizar").on("click", function(){
-            PasarDatos();
+            swal({
+                title: "Deseas pasar la información?",
+                text:  "Recuerda tener la información del Participante",
+                type:  "info",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function (e) {
+                console.log(e);
+                if(e){
+                  PasarDatos();
+                }
+            });
         });
 
         function PasarDatos(){
             var dataArrayToSend = [];
-            table.column(1).data().each( function ( value, index ) {
+            table.column(0).data().each( function ( value, index ) {
                 dataArrayToSend.push(parseInt(value));
             });
             if(dataArrayToSend.length > 0) {
@@ -1340,13 +1300,30 @@
                                 window.location.href = parametros.CartaParticipantTmpUrl;
                             }, 1500);
                         }
-                    },
-                    error: function (xhr, thrownError) {
-                        toastr.error("Interno del Servidor","ERROR",{timeOut:6000});
+                    },error: function (xhr, thrownError) {
+                        swal("ERROR!","Interno del Servidor.", "error");
                     }
                 });
             }
         }
+
+
+        $(".desact").click(function(){
+            $('#accionUrl').val($(this).data('id'));
+            $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
+            debugger;
+            var currentRow = $(this).closest("tr");
+            var col1 = currentRow.find("td:eq(1)").text();
+            var col2 = currentRow.find("td:eq(2)").text();
+            $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+ '<strong>'+ col1 +'</strong>'+ " ${fecha} "+'<strong>'+ col2 +'</strong></h3>');
+            $('#basic2').modal('show');
+        });
+
+
+        if ("${RegistrosBloqueado}"){
+            toastr.info("${DisabledLabel}", "INFO",{timeOut:7000} );
+        }
+
         /*
         if ("${usuarioHabilitado}"){
             toastr.success("${userEnabledLabel}", "${nombreUsuario}" );

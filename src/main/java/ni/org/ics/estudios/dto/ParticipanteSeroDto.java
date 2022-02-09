@@ -1,58 +1,112 @@
 package ni.org.ics.estudios.dto;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ICS on 19/10/2020.
  */
-public class ParticipanteSeroDto {
+public class ParticipanteSeroDto implements Serializable {
 
-    private Integer codigo;
+    private String codigo;
+    private Integer idSerologia;
+    private Integer idparticipante;
+    private double volumen;
+    private Integer edadMeses;
     private String nombreCompleto;
-    private Integer casaPediatrica;
-    private String casaFamilia;
-    private String estudios;
-    private String subEstudios;
+    private Integer codigo_casa_PDCS;
+    private String codigo_casa_Familia;
+    private String edad_year;
+    private String edad_meses;
+    private String edad_dias;
     private Integer estado;
     private Date fechaNacimiento;
     private String edadParticipante;
+    private String estudios;
     private ArrayList<String> SusEstudios;
     private String nombrepadre;
     private String nombremadre;
     private String nombretutor;
-
+    private String observacion;
+    private String descripcion;
+    private Date fecha;
 
     public ParticipanteSeroDto() {
     }
 
-    public ParticipanteSeroDto(Integer codigo, String nombreCompleto, Integer casaPediatrica, String casaFamilia, String estudios, String subEstudios, Integer estado, Date fechaNacimiento, String edadParticipante, ArrayList<String> susEstudios, String nombrepadre, String nombremadre,String nombretutor) {
+    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, Integer edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, Integer estado, Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, Date fecha,String descripcion) {
         this.codigo = codigo;
+        this.idSerologia = idSerologia;
+        this.idparticipante = idparticipante;
+        this.volumen = volumen;
+        this.edadMeses = edadMeses;
         this.nombreCompleto = nombreCompleto;
-        this.casaPediatrica = casaPediatrica;
-        this.casaFamilia = casaFamilia;
-        this.estudios = estudios;
-        this.subEstudios = subEstudios;
+        this.codigo_casa_PDCS = codigo_casa_PDCS;
+        this.codigo_casa_Familia = codigo_casa_Familia;
+        this.edad_year = edad_year;
+        this.edad_meses = edad_meses;
+        this.edad_dias = edad_dias;
         this.estado = estado;
         this.fechaNacimiento = fechaNacimiento;
         this.edadParticipante = edadParticipante;
+        this.estudios= estudios;
         SusEstudios = susEstudios;
         this.nombrepadre = nombrepadre;
         this.nombremadre = nombremadre;
         this.nombretutor = nombretutor;
+        this.observacion = observacion;
+        this.fecha = fecha;
+        this.descripcion= descripcion;
+    }
+/*Getter & Setter*/
+
+    public Date getFecha() {
+        return fecha;
     }
 
-    public Integer getCodigo() {
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public Integer getIdSerologia() {
+        return idSerologia;
+    }
+
+    public void setIdSerologia(Integer idSerologia) {
+        this.idSerologia = idSerologia;
+    }
+
+    public Integer getIdparticipante() {
+        return idparticipante;
+    }
+
+    public void setIdparticipante(Integer idparticipante) {
+        this.idparticipante = idparticipante;
+    }
+
+    public double getVolumen() {
+        return volumen;
+    }
+
+    public void setVolumen(double volumen) {
+        this.volumen = volumen;
+    }
+
+    public Integer getEdadMeses() {
+        return edadMeses;
+    }
+
+    public void setEdadMeses(Integer edadMeses) {
+        this.edadMeses = edadMeses;
     }
 
     public String getNombreCompleto() {
@@ -63,28 +117,44 @@ public class ParticipanteSeroDto {
         this.nombreCompleto = nombreCompleto;
     }
 
-    public String getCasaFamilia() {
-        return casaFamilia;
+    public Integer getCodigo_casa_PDCS() {
+        return codigo_casa_PDCS;
     }
 
-    public void setCasaFamilia(String casaFamilia) {
-        this.casaFamilia = casaFamilia;
+    public void setCodigo_casa_PDCS(Integer codigo_casa_PDCS) {
+        this.codigo_casa_PDCS = codigo_casa_PDCS;
     }
 
-    public String getEstudios() {
-        return estudios;
+    public String getCodigo_casa_Familia() {
+        return codigo_casa_Familia;
     }
 
-    public void setEstudios(String estudios) {
-        this.estudios = estudios;
+    public void setCodigo_casa_Familia(String codigo_casa_Familia) {
+        this.codigo_casa_Familia = codigo_casa_Familia;
     }
 
-    public String getSubEstudios() {
-        return subEstudios;
+    public String getEdad_year() {
+        return edad_year;
     }
 
-    public void setSubEstudios(String subEstudios) {
-        this.subEstudios = subEstudios;
+    public void setEdad_year(String edad_year) {
+        this.edad_year = edad_year;
+    }
+
+    public String getEdad_meses() {
+        return edad_meses;
+    }
+
+    public void setEdad_meses(String edad_meses) {
+        this.edad_meses = edad_meses;
+    }
+
+    public String getEdad_dias() {
+        return edad_dias;
+    }
+
+    public void setEdad_dias(String edad_dias) {
+        this.edad_dias = edad_dias;
     }
 
     public Integer getEstado() {
@@ -111,12 +181,12 @@ public class ParticipanteSeroDto {
         this.edadParticipante = edadParticipante;
     }
 
-    public Integer getCasaPediatrica() {
-        return casaPediatrica;
+    public String getEstudios() {
+        return estudios;
     }
 
-    public void setCasaPediatrica(Integer casaPediatrica) {
-        this.casaPediatrica = casaPediatrica;
+    public void setEstudios(String estudios) {
+        this.estudios = estudios;
     }
 
     public ArrayList<String> getSusEstudios() {
@@ -149,5 +219,21 @@ public class ParticipanteSeroDto {
 
     public void setNombretutor(String nombretutor) {
         this.nombretutor = nombretutor;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

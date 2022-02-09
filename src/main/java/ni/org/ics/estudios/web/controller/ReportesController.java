@@ -1,7 +1,8 @@
 package ni.org.ics.estudios.web.controller;
 
-import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
+import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
+import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
@@ -12,6 +13,7 @@ import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
+import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
@@ -25,15 +27,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Miguel Salinas on 9/8/2017.
@@ -66,6 +69,10 @@ public class ReportesController {
 
     @Resource(name = "SerologiaService")
     private SerologiaOct2020Service serologiaservice;
+
+    @Resource(name = "PbmcService")
+    private PbmcService pbmcService;
+
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -123,7 +130,7 @@ public class ReportesController {
         return excelView;
     }
 
-//region Reorte Serologia
+//region Reporte Serologia
     @RequestMapping(value = "/downloadFileEnviosSerologia", method = RequestMethod.GET)
     public ModelAndView downloadFileEnviosSerologia(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
             @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
@@ -141,10 +148,69 @@ public class ReportesController {
         ReporteEnvio.addObject("fechaInicio",fechaInicio);
         ReporteEnvio.addObject("fechaFin",fechaFin);
         ReporteEnvio.addObject("SerologiasEnviadas",SerologiasEnviadas);
+        List<Serologia_Detalle_Envio> allSerologia = this.serologiaservice.getAllSerologia(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvio.addObject("allSerologia",allSerologia);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTE);
         return ReporteEnvio;
     }
+
+
+
+    @RequestMapping(value = "downloadFileSerologiaExcel", method = RequestMethod.GET)
+    public ModelAndView SerologiaExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                       @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                       @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception {
+        ModelAndView ReporteEnvio = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        if (fechaInicio != null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin != null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+        List<SerologiaEnvio> SerologiasEnviadas = this.serologiaservice.getSerologiaEnvioByDates(nEnvios, dFechaInicio, dFechaFin);
+        ReporteEnvio.addObject("nEnvios", nEnvios);
+        List<MessageResource> sitios = messageResourceService.getCatalogo("CAT_SITIOS_ENVIO_SEROLOGIA");
+        ReporteEnvio.addObject("sitios", sitios);
+        ReporteEnvio.addObject("fechaInicio", fechaInicio);
+        ReporteEnvio.addObject("fechaFin", fechaFin);
+        ReporteEnvio.addObject("SerologiasEnviadas", SerologiasEnviadas);
+        List<Serologia_Detalle_Envio> allSerologia = this.serologiaservice.getAllSerologia(nEnvios, dFechaInicio, dFechaFin);
+        ReporteEnvio.addObject("allSerologia", allSerologia);
+        ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTE);
+        return ReporteEnvio;
+    }
+
 //endregion
+
+    //todo generar reporte PBMC PDF and EXCEL
+    @RequestMapping(value = "/EnvioPbmcPdf", method = RequestMethod.GET)
+    public ModelAndView EnvioPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                                    @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                                    @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+        List<SerologiaEnvio> EnvioPbmc =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("nEnvios",nEnvios);
+        ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
+        ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+        ReporteEnvioPbmcPdf.addObject("EnvioPbmc",EnvioPbmc);
+        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
+        ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCM);
+        return ReporteEnvioPbmcPdf;
+    }
+
+
+    //fin reporte PBMC
 
 
     /*Este controlador devuelve archivo Hemodinámica  /ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f    */

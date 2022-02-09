@@ -1,14 +1,12 @@
 package ni.org.ics.estudios.web.controller.Retiro;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.xpath.internal.operations.*;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
-import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import ni.org.ics.estudios.dto.ParticipanteSeroDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
@@ -17,7 +15,6 @@ import ni.org.ics.estudios.service.retiro.RetiroService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
-import org.hibernate.mapping.Array;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.lang.String;
 import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
@@ -144,33 +140,42 @@ public class RetiroController {
         try{
             List<MessageResource> parentesco = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
             model.addAttribute("parentesco", parentesco);
-
-            List<Personal> recibidaPor = this.retiroservice.getPersonalRecibeRetiro();
-            model.addAttribute("recibidaPor", recibidaPor);
-
             List<MessageResource> tipoFecha = this.messageResourceService.getCatalogo("RETIROS_CAT_TIPO_FECHA");
             model.addAttribute("tipoFecha",tipoFecha);
-
             List<MessageResource> estudioAretirar = messageResourceService.getCatalogo("RETIROS_CAT_TIPO_ESTUDIO");
             model.addAttribute("estudioAretirar",estudioAretirar);
-
             List<MessageResource> causaRetiro = messageResourceService.getCatalogo("CAT_CAUSAS_RETIROS");
             model.addAttribute("causaRetiro",causaRetiro);
-
-            List<Personal_Cargo> supervisor = this.retiroservice.getSupervisor();
+            // SuperVisor
+            List<MessageResource> obtenerSupervisor = messageResourceService.getCatalogo("CAT_SELECCIONAR_SUPERVISOR_RETIROS");
+            String[] parts = obtenerSupervisor.get(0).getSpanish().split(",");
+            List<Integer> supervisores = new ArrayList<Integer>();
+            List<String> cargoId = Arrays.asList(parts);
+            for (int i = 0; i < cargoId.size(); i++) {
+                int value = Integer.parseInt( cargoId.get(i) );
+                supervisores.add(value);
+            }
+            List<Personal_Cargo> supervisor = this.retiroservice.getSupervisor(supervisores);
             model.addAttribute("supervisor", supervisor);
-
-            List<Personal_Cargo> supervisorYdigitador = this.retiroservice.getSupervisorAndDigitador();
+            //Varios
+            List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_RETIROS");
+            String[] person = obtenerPersonal.get(0).getSpanish().split(",");
+            List<Integer> personal = new ArrayList<Integer>();
+            List<String> cargosId = Arrays.asList(person);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                personal.add(value);
+            }
+            List<Personal_Cargo> supervisorYdigitador = this.retiroservice.getSupervisorAndDigitador(personal);
             model.addAttribute("supervisorYdigitador", supervisorYdigitador);
-
             model.addAttribute("estudios", "");
             return "/retiro/RetiroForm";
         }
         catch (Exception e){
-            logger.error(e.getMessage());
-            throw e;
+            return "404";
         }
     }
+
 
     //Obtener motivos
     @RequestMapping(value = "/getMotivo", method = RequestMethod.GET, produces="application/json" )
@@ -344,9 +349,9 @@ public class RetiroController {
             test = this.retiroservice.getSupervisorById(idsupervisor);
             Razones_Retiro motivoDetalle = this.retiroservice.getRazonRetiro(obj.getMotivo());
             map.put("motivoDetalle", motivoDetalle.getDescripcion());
-            map.put("medicosupervisor", (test != null) ? test.getNombre() : "-" );
+            //map.put("medicosupervisor", (test != null) ? test.getNombre() : "-" );
             Personal objPersonalDocumenta = this.retiroservice.getSupervisorById(obj.getPersonadocumenta());
-            map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
+            //map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
             if (obj.getCodigocasapdcs() == null){
                 Integer numerocasa = 0;
                 map.put("casapediatrica", numerocasa.toString());
