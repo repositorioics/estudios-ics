@@ -63,7 +63,16 @@ public class CartasController {
             model.addAttribute("carta", carta);
             List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
             model.addAttribute("relFam", relFam);
-            List<Personal_Cargo> person = scanCartaService.getPersonal();
+
+            List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+            String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+            List<Integer> personal = new ArrayList<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                personal.add(value);
+            }
+            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
             model.addAttribute("person", person);
             List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
             model.addAttribute("proyecto", proyecto);
@@ -86,8 +95,19 @@ public class CartasController {
         model.addAttribute("carta", carta);
         List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
         model.addAttribute("relFam", relFam);
-        List<Personal_Cargo> person = scanCartaService.getPersonal();
+
+
+        List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+        String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+        List<Integer> personal = new ArrayList<Integer>();
+        List<String> cargosId = Arrays.asList(personId);
+        for (int i = 0; i < cargosId.size(); i++) {
+            int value = Integer.parseInt( cargosId.get(i) );
+            personal.add(value);
+        }
+        List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
         model.addAttribute("person", person);
+
         List<MessageResource> scanca = messageResourceService.getCatalogo("SCANCARTA");
         model.addAttribute("scanca", scanca);
         List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
@@ -399,7 +419,8 @@ public class CartasController {
                 obj.setIdVersion(pcarta.getVersion().getIdversion());
                 obj.setNombreVersion(pcarta.getVersion().getVersion());
                 obj.setFechaCarta(DateUtil.DateToString(pcarta.getFechacarta(), "dd/MM/yyyy"));
-                obj.setEstado("" + procesos.getEstPart());
+                int estado = (procesos!=null)?procesos.getEstPart():0;
+                obj.setEstado(""+estado);
                 obj.setAnulada(pcarta.isAnulada());
                 obj.setPqAnulada(pcarta.getPq_anulada());
                 obj.setTieneExtesion(this.scanCartaService.tieneExtensionByVersion(pcarta.getVersion().getIdversion()));
@@ -602,6 +623,16 @@ public class CartasController {
             model.addAttribute("listDetailParte", listDetailParte);
             model.addAttribute("agregando", true);
             model.addAttribute("editando", false);
+            List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+            String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+            List<Integer> personal = new ArrayList<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                personal.add(value);
+            }
+            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            model.addAttribute("person", person);
             model.addAttribute("caso", new ParticipanteExtension());
         } catch (Exception e) {
             e.printStackTrace();
@@ -628,6 +659,16 @@ public class CartasController {
             model.addAttribute("getPartExt", getParticipantExt);
             List<ParticipanteExtension>participanteExtensionObj = this.scanCartaService.getAllExtensiones();
             model.addAttribute("participanteExtensionObj",participanteExtensionObj);
+            List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+            String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+            List<Integer> personal = new ArrayList<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                personal.add(value);
+            }
+            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            model.addAttribute("person", person);
             model.addAttribute("caso", caso);
         } catch (Exception e) {
             return "404";
@@ -693,6 +734,7 @@ public class CartasController {
             , @RequestParam(value = "idParticipanteCarta", required = true) Integer idParticipanteCarta
             , @RequestParam(value = "idVersion", required = true) Integer idVersion
             , @RequestParam(value = "idParticipantExtension", required = true) Integer idParticipantExtension
+            , @RequestParam(value = "person", required = true) Integer person
     ) throws Exception {
         try {
 
@@ -701,7 +743,7 @@ public class CartasController {
                 editObj.setIdParticipantExtension(idParticipantExtension);
                 editObj.setFechaExtension(DateUtil.StringToDate(fechaExtension, "dd/MM/yyyy"));
                 editObj.setNombre1Tutor(nombre1tutor.toUpperCase());
-                String name2tutor = ""; // = (nombre2tutor != null) ? nombre2tutor.toUpperCase():"";
+                String name2tutor = "";
                 if (nombre2tutor.equals("")) {
                     editObj.setNombre2Tutor(name2tutor);
                 } else {
@@ -808,7 +850,15 @@ public class CartasController {
         model.addAttribute("cartas", cartas);
         List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
         model.addAttribute("relFam", relFam);
-        List<Personal_Cargo> person = scanCartaService.getPersonal();
+        List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+        String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+        List<Integer> personal = new ArrayList<Integer>();
+        List<String> cargosId = Arrays.asList(personId);
+        for (int i = 0; i < cargosId.size(); i++) {
+            int value = Integer.parseInt( cargosId.get(i) );
+            personal.add(value);
+        }
+        List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
         model.addAttribute("person", person);
         List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
         model.addAttribute("proyecto", proyecto);
@@ -869,7 +919,6 @@ public class CartasController {
 
             List<Version> version = this.scanCartaService.getVersioCarta(caso.getVersion().getEstudio().getCodigo());
             model.addAttribute("version", version);
-
             List<DetalleParteTmp> dp = scanCartaService.getList_Detalle_Parte_Tmp(caso.getId());
             Parte oP = null;
             for (DetalleParteTmp prici : dp){
@@ -877,14 +926,20 @@ public class CartasController {
             }
             model.addAttribute("partePrincipal",oP.getParte());
             model.addAttribute("dp", dp);
-
             List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
             model.addAttribute("relFam", relFam);
-            List<Personal_Cargo> person = scanCartaService.getPersonal();
+            List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+            String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+            List<Integer> personal = new ArrayList<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                personal.add(value);
+            }
+            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
             model.addAttribute("person", person);
             List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
             model.addAttribute("proyecto", proyecto);
-
 
             List<ParticipanteCartaTmp> cartaTmp = this.scanCartaService.getAllParticipanteCartaTmp();
             //model.addAttribute("cartaTmp",cartaTmp);
@@ -1090,7 +1145,7 @@ public class CartasController {
                         dp.setPasive('0');
                         scanCartaService.saveParteCartaTMP(dp);
                     }
-                    System.out.println("total " + count + " registros.");
+                    //System.out.println("total " + count + " registros.");
                 }
                 return JsonUtil.createJsonResponse(temporal);
             } else {
@@ -1597,8 +1652,8 @@ public class CartasController {
                 pc.setObservacion(o);
                 pc.setPq_anulada("");
                 pc.setProyecto(cartaTemporal.getProyecto());
-                Personal person = new Personal();
-                //person.setCodigo(cartaTemporal.getRecurso());
+                Personal person = this.scanCartaService.getPersonalById(cartaTemporal.getRecurso());
+                pc.setPersonal(person);
                 Integer relfam = cartaTemporal.getRelfam();
                 pc.setRelfam(relfam);
                 boolean testgPresent = (cartaTemporal.isTestigopresent() == false) ? false : true;
@@ -1606,12 +1661,10 @@ public class CartasController {
 
                 pc.setTipoasentimiento(cartaTemporal.getTipoasentimiento());
                 pc.setParticipante(participanteNuevo);
-                pc.setPersonal(person);
                 Version version = new Version();
                 version.setIdversion(cartaTemporal.getVersion().getIdversion());
                 pc.setVersion(version);
                 pc.setContactoFuturo(cartaTemporal.isContactoFuturo());
-                //boolean asent = (cartaTemporal.isAsentimiento() == true) ? true : false;
                 pc.setAsentimiento(cartaTemporal.getAsentimiento());
                 contador++;
                 scanCartaService.saveOrUpdateScanCarta(pc);

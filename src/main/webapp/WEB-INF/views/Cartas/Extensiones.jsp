@@ -288,7 +288,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group">
                 <label for="fechaExtension"><spring:message code="dateAdded"/> <spring:message code="letters"/>:</label>
                 <span class="required text-danger"> * </span>
@@ -297,7 +297,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group">
                 <label for="idExtension"><spring:message code="Extension"/></label>
                 <span class="required text-danger"> * </span>
@@ -314,6 +314,29 @@
                         </c:choose>
                     </c:forEach>
                 </select>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="person"><spring:message code="lbl.resource"/></label>
+                <span class="required text-danger"> * </span>
+                <select name="person" id="person" class="form-control" required="required">
+                    <option selected value=""><spring:message code="select"/>...</option>
+                    <c:forEach items="${person}" var="p">
+                        <c:choose>
+                            <c:when test="${caso.personal.idpersonal eq p.personal.idpersonal}">
+                                <option selected value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select>
+                <div class="invalid-feedback">
+                    <spring:message code="lbl.resource"/> <spring:message code="lbl.required" />
+                </div>
             </div>
         </div>
 
@@ -364,7 +387,6 @@
     <div id="showDivTestigo" style="display: none">
         <div class="card w-100">
             <div class="card-body">
-                <%--<h5 class="card-title"><spring:message code="Information" /> <spring:message code="lbl.witness" /></h5>--%>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">

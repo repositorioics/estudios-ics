@@ -5,6 +5,8 @@ package ni.org.ics.estudios.domain.scancarta;
  */
 
 import ni.org.ics.estudios.domain.BaseMetaData;
+import ni.org.ics.estudios.domain.catalogs.Personal;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,27 +31,9 @@ public class ParticipanteExtension extends BaseMetaData implements Serializable 
     private ParticipanteCarta participantecarta;
     private Extensiones extensiones;
     private boolean anulada;
+    private Personal personal;
 
     public ParticipanteExtension() {}
-
-
-    public ParticipanteExtension(Integer idParticipantExtension, Date fechaExtension, String nombre1Tutor, String nombre2Tutor, String apellido1Tutor, String apellido2Tutor, boolean testigoPresente, String nombre1Testigo, String nombre2Testigo, String apellido1Testigo, String apellido2Testigo, String observacion, ParticipanteCarta participantecarta, Extensiones extensiones, boolean anulada) {
-        this.idParticipantExtension = idParticipantExtension;
-        this.fechaExtension = fechaExtension;
-        this.nombre1Tutor = nombre1Tutor;
-        this.nombre2Tutor = nombre2Tutor;
-        this.apellido1Tutor = apellido1Tutor;
-        this.apellido2Tutor = apellido2Tutor;
-        this.testigoPresente = testigoPresente;
-        this.nombre1Testigo = nombre1Testigo;
-        this.nombre2Testigo = nombre2Testigo;
-        this.apellido1Testigo = apellido1Testigo;
-        this.apellido2Testigo = apellido2Testigo;
-        this.observacion = observacion;
-        this.participantecarta = participantecarta;
-        this.extensiones = extensiones;
-        this.anulada = anulada;
-    }
 
     @Id
     @Column(name = "ID_PARTICIPANT_EXTENSION", nullable = false)
@@ -190,4 +174,16 @@ public class ParticipanteExtension extends BaseMetaData implements Serializable 
     public void setAnulada(boolean anulada) {
         this.anulada = anulada;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "IDPERSONA", nullable = false)
+    @ForeignKey(name = "FK_IDPERSONA")
+    public Personal getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(Personal personal) {
+        this.personal = personal;
+    }
+
 }

@@ -169,9 +169,9 @@ var saveCartaTMP = function(){
             function guardarCartaTmp(dir){
                 debugger;
                 var parts = [];
-                $("#parte option").each(function(){
+                /*$("#parte option").each(function(){
                     console.info('value: '+$(this).prop('value') +' selected: '+ $(this).prop('selected'));
-                });
+                });*/
                 var x = document.getElementById('parte');
                 console.warn(x.options);
                 for(var i = 0; i < x.options.length; i++){
@@ -219,17 +219,46 @@ var saveCartaTMP = function(){
                         data: JSON.stringify(obj),
                         success: function (data, status) {
                             if(data.msjCodigo != null){
-                                toastr.error(data.msjCodigo,"ERROR", {timeOut: 5000});
+                                //toastr.error(data.msjCodigo,"ERROR", {timeOut: 5000});
+                                swal({
+                                    title: "Error!",
+                                    text: data.msjCodigo,
+                                    type: "Error",
+                                    closeOnConfirm: true,
+                                    timer: 2200
+                                });
+
                             }else if (data.msj != null){
-                                toastr.warning(data.msj, {timeOut: 5000});
+                                //toastr.warning(data.msj, {timeOut: 5000});
+                                swal({
+                                    title: "Advertencia!",
+                                    text: data.msjCodigo,
+                                    type: "warning",
+                                    closeOnConfirm: true,
+                                    timer: 2200
+                                });
                             } else {
-                                toastr.success(dir.successmessage);
+                                //toastr.success(dir.successmessage);
+                                swal({
+                                    title: "Buen trabajo!",
+                                    text: dir.successmessage,
+                                    type: "success",
+                                    closeOnConfirm: true,
+                                    timer: 2200
+                                });
                                 window.setTimeout(function () {
-                                    window.location.href = parametros.CartaParticipantTmpUrl;
+                                    window.location.reload(true);
                                 }, 1500);
                             }
                         }, error: function (request, status, error) {
                             console.log("error: ", request.responseText);
+                            swal({
+                                title: "Error 500!",
+                                text: "Interno del Servidor",
+                                type: "error",
+                                closeOnConfirm: true,
+                                timer: 2200
+                            });
                         }
                     });
             };

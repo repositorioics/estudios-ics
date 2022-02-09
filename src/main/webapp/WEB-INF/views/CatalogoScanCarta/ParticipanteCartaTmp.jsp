@@ -869,10 +869,8 @@
             </div>
             </div>
             </div>
-            <%--<div id="page-loader"> <span class="preloader-interior"></span></div>--%>
             </div>
                 </div>
-
                 </div>
                </div> <!-- /.conainer-fluid -->
             </div>
@@ -1109,7 +1107,7 @@
             var currentRow = $(this).closest("tr");
             var col0 = currentRow.find("td:eq(0)").text();
             var col1 = currentRow.find("td:eq(1)").text();
-            console.warn("columna 0: "+col0+" columna 1 : "+col1);
+            //console.warn("columna 0: "+col0+" columna 1 : "+col1);
             eliminarAll(col0,col1);
         });
         function eliminarAll(id, fecha) {
@@ -1266,7 +1264,7 @@
                 closeOnConfirm: false,
                 showLoaderOnConfirm: true
             }, function (e) {
-                console.log(e);
+                //console.log(e);
                 if(e){
                   PasarDatos();
                 }
@@ -1286,22 +1284,47 @@
                     contentType: "application/json",
                     dataType: "json",
                     success: function (result) {
-                        console.log(result);
+                        //console.log(result);
                         if(result.mensaje != null){
-                            toastr.info(result.mensaje,"INFORMACION", {timeOut: 6000});
+                            swal({
+                                title: "Información!",
+                                text: result.mensaje,
+                                type: "info",
+                                closeOnConfirm: true
+                            });
+                            //toastr.info(result.mensaje,"INFORMACION", {timeOut: 6000});
                             window.setTimeout(function(){
                                 window.location.href = parametros.CartaParticipantTmpUrl;
                             }, 1500);
                         }else if(result.msj != null) {
-                            toastr.error(result.msj,"ERROR",{timeOut:6000});
+                            //toastr.error(result.msj,"ERROR",{timeOut:6000});
+                            swal({
+                                title: "Información!",
+                                text: result.msj,
+                                type: "error",
+                                closeOnConfirm: true
+                            });
+
                         }else{
-                            toastr.success(direct.successmessage);
+                            //toastr.success(direct.successmessage);
+                            swal({
+                                title: "Información!",
+                                text: direct.successmessage,
+                                type: "info",
+                                closeOnConfirm: true
+                            });
+
                             window.setTimeout(function(){
                                 window.location.href = parametros.CartaParticipantTmpUrl;
                             }, 1500);
                         }
                     },error: function (xhr, thrownError) {
-                        swal("ERROR!","Interno del Servidor.", "error");
+                        swal({
+                            title: "Error 500!",
+                            text: "Interno del Servidor.",
+                            type: "error",
+                            closeOnConfirm: true
+                        });
                     }
                 });
             }

@@ -342,10 +342,9 @@
 
     </style>
 
-    <!--<spring:url value="/resources/css/smartWizardCss/smarthWizardCss.css" var="smw" />
-    <link href="${smw}" rel="stylesheet" type="text/css"/>
-    <spring:url value="/resources/css/smartWizardCss/smart_wizard_theme_arrows.min.css" var="smwtheme" />
-    <link href="${smwtheme}" rel="stylesheet" type="text/css"/>-->
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -367,11 +366,8 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-            <!--    <div id="page-loader">
-                  <span class="preloader-interior"></span>
-              </div>
-             inicio smart wizard  -->
-                <div class="container col-sm-12 col-lg-12">
+                <div class="container col-sm-12 col-lg-10">
+                    <spring:url value="/cartas/ListadoCartaParticipant" var="listUrl"/>
                     <spring:url value="/cartas/searchParticipant" var="searchPartUrl"/>
                     <spring:url value="/cartas/VersionCarta" var="VersionCartatUrl"/>
                     <spring:url value="/cartas/ParteVersion" var="ParteVersionUrl"/>
@@ -403,7 +399,6 @@
                                         <div class="card-body">
                                             <div class="media">
                                                 <div class="media-body">
-
                                                     <div class="row">
                                                         <div hidden="hidden">
                                                             <div class="col-md-6">
@@ -853,7 +848,6 @@
                                                         <div id="selectt" style="display: none">
                                                             <div class="row">
                                                                 <div class="col-md-3">
-
                                                                     <div class="form-group">
                                                                         <label for="nombre1Testigo"><spring:message code="first.name" /> <spring:message code="lbl.witness" /> </label>
                                                                         <span class="required text-danger"> * </span>
@@ -893,8 +887,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-
                                                         <br/>
                                                         <br/>
                                                         <div class="row">
@@ -906,30 +898,21 @@
                                                             </div>
                                                             <div class="col-md-4"></div>
                                                             <div class="col-md-4">
-                                                                <!--  <button type="button" id="btnCancel" class="btn btn-default btn-block btn-lg">
-                                                                      <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                                                                      Cancelar
-                                                                  </button> -->
                                                                 <a class="btn btn-warning btn-block btn-lg" href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
                                                                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
                                                                     <spring:message code="cancel" /></a>
                                                             </div>
                                                         </div>
-                                                        </div  >
+                                                        </div>
                                                         <br/>
                                                         <br/>
                                                     </form>
                                                 </div>
-
-
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -971,15 +954,10 @@
 
 <spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
-<!--
-<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
-<script type="text/javascript" src="${sw}"></script>
 
-<spring:url value="/resources/js/libs/smartWizard/jquery.smartWizard.js" var="jqsw"/>
-<script type="application/javascript" src="${jqsw}"></script>
--->
-<spring:url value="/resources/js/libs/lc_switch.js" var="lc" />
-<script type="text/javascript" src="${lc}"></script>
+<spring:url value="/resources/js/libs/sweetalert.js" var="sweet" />
+<script type="text/javascript" src="${sweet}"></script>
+
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
@@ -1024,7 +1002,8 @@
             successmessage      : "${successMessage}",
             error               : "${errorProcess}",
             cartaSaveEditUrl    : "${cartaSaveEditUrl}",
-            dataTablesLang      : "${dataTablesLang}"
+            dataTablesLang      : "${dataTablesLang}",
+            "listUrl"           : "${listUrl}"
         };
 
         var table2 = $("#tblDetalleParte").DataTable({
@@ -1184,7 +1163,7 @@
                     $('#apellido1Testigo').parents('.form-group').addClass('has-success');
                 }
             }
-            debugger;
+
             if( $("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == ""){
                 $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
                 $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
@@ -1257,18 +1236,28 @@
         });
         function ActualizarScan(obj){
             $.ajax({
-                url:  parametros.UpdateAllUrl,//'/estudios_ics/cartas/UpdateAll/',
+                url:  parametros.UpdateAllUrl,
                 type: "POST",
                 data: JSON.stringify(data),
                 dataType: "JSON",
                 contentType: "application/json",
                 success: function(response){
-                    toastr.success(parametros.successmessage);
+                    swal({
+                        title: "Buen trabajo!",
+                        text: parametros.successmessage,
+                        type: "success",
+                        timer: 2000
+                    });
                    window.setTimeout(function(){
-                        window.location.href = parametros.cartaSaveEditUrl+"/"+response.idparticipantecarta;
+                        window.location.href = parametros.listUrl;
                     }, 1500);
                 },error: function(jqXHR, textStatus,e){
-                    toastr.error(textStatus,"ERROR",{timeOut:6000});
+                    swal({
+                        title: "Error 500!",
+                        text: "Interno del Servidor",
+                        type: "error",
+                        timer: 2000
+                    });
                 }
             });
         }

@@ -307,11 +307,11 @@ public class ScanCartaService {
         }
     }
 
-    public List<Personal_Cargo>getPersonal(){
+    @SuppressWarnings("unchecked")
+    public List<Personal_Cargo>getPersonal(List<Integer> ids){
         Session session = sessionFactory.getCurrentSession();
-        Integer cod []= {1, 2, 3, 6, 7};
-        Query query = session.createQuery("from Personal_Cargo p where p.cargo.idcargo in (:cod) and p.pasive ='0' ");
-        query.setParameterList("cod",cod);
+        Query query = session.createQuery("from Personal_Cargo p where p.cargo.idcargo in (:ids) and p.pasive ='0' ");
+        query.setParameterList("ids",ids);
         return query.list();
     }
 

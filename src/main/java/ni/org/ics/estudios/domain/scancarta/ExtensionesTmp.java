@@ -1,7 +1,9 @@
 package ni.org.ics.estudios.domain.scancarta;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
+import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Version;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,25 +32,9 @@ public class ExtensionesTmp extends BaseMetaData implements Serializable {
     private ParticipanteCartaTmp participantecartatmp;
     private Extensiones extensiones;
     private boolean anulada;
+    private Personal personal;
 
     public ExtensionesTmp(){}
-
-    public ExtensionesTmp(Date recordDate, String recordUser, Integer idParticipantExtensiontmp, Date fechaExtension, String nombre1Tutor, String nombre2Tutor, String apellido1Tutor, String apellido2Tutor, boolean testigoPresente, String nombre1Testigo, String nombre2Testigo, String apellido1Testigo, String apellido2Testigo, String observacion, ParticipanteCartaTmp participantecartatmp, Extensiones extensiones, boolean anulada) {
-        this.idParticipantExtensiontmp = idParticipantExtensiontmp;
-        this.fechaExtension = fechaExtension;
-        this.nombre1Tutor = nombre1Tutor;
-        this.nombre2Tutor = nombre2Tutor;
-        this.apellido1Tutor = apellido1Tutor;
-        this.apellido2Tutor = apellido2Tutor;
-        this.testigoPresente = testigoPresente;
-        this.nombre1Testigo = nombre1Testigo;
-        this.nombre2Testigo = nombre2Testigo;
-        this.apellido1Testigo = apellido1Testigo;
-        this.apellido2Testigo = apellido2Testigo;
-        this.observacion = observacion;
-        this.participantecartatmp = participantecartatmp;
-        this.extensiones = extensiones;
-    }
 
     @Id
     @Column(name = "ID_PARTICIPANT_EXTENSION_TMP", nullable = false)
@@ -167,5 +153,17 @@ public class ExtensionesTmp extends BaseMetaData implements Serializable {
     public void setExtensiones(Extensiones extensiones) {
         this.extensiones = extensiones;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "IDPERSONA", nullable = false)
+    @ForeignKey(name = "FK_IDPERSONA")
+    public Personal getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(Personal personal) {
+        this.personal = personal;
+    }
+
 
 }
