@@ -441,7 +441,7 @@
         <div class="col-md-4">
             <button class="btn btn-primary btn-block btn-lg focusNext btn-ladda" data-style="expand-right"
                     tabindex="10" type="submit">
-                <i class="fa fa-save" aria-hidden="true"></i><spring:message code="save"/>
+                <i class="fa fa-save" aria-hidden="true"></i> <spring:message code="save"/>
             </button>
         </div>
         <div class="col-md-4"></div>
@@ -678,7 +678,7 @@
         });
 
         const id = $("#idParticipanteCarta").val();
-        toastr.info("Codigo Carta: " + id, {timeOut: 5000});
+        //toastr.info("Codigo Carta: " + id, {timeOut: 5000});
 
     });
 </script>

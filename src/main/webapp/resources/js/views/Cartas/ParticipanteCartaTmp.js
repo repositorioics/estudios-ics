@@ -251,7 +251,7 @@ var saveCartaTMP = function(){
                                 }, 1500);
                             }
                         }, error: function (request, status, error) {
-                            console.log("error: ", request.responseText);
+                            //console.log("error: ", request.responseText);
                             swal({
                                 title: "Error 500!",
                                 text: "Interno del Servidor",

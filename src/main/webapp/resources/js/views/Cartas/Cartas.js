@@ -79,7 +79,14 @@ var scanCarta = function(){
                     }
                     else{
                         if(data.estado == "0"){
-                            toastr.warning("Participante Retirado!",{timeOut: 5000});
+                            //toastr.warning("Participante Retirado!",{timeOut: 5000});
+                            swal({
+                                title: "Advertencia!",
+                                text: "Participante Retirado",
+                                type: "info",
+                                closeOnConfirm: true,
+                                timer: 2200
+                            });
                             clearInput();
                             $("#carta").select2().empty();
                             $("#carta").select2().val("").change();
@@ -106,7 +113,7 @@ var scanCarta = function(){
                             var relfamiliar = parseInt(data.realFam);
                             $("#relfam").val(relfamiliar).trigger('change.select2');
                             if(data.menorEdad == true){
-                                debugger;
+                                //debugger;
                                 $("#divAsentimiento").fadeIn("slow");
                                 $("#asentimiento").select2().val(1).trigger('change.select2');
 
@@ -156,7 +163,14 @@ var scanCarta = function(){
                         }
                     }
                 }).fail(function() {
-                    toastr.error("Error Interno en el Servidor!",{timeOut: 5000});
+                    //toastr.error("Error Interno en el Servidor!",{timeOut: 5000});
+                    swal({
+                        title: "Error 500!",
+                        text: "Interno del Servidor",
+                        type: "error",
+                        closeOnConfirm: true,
+                        timer: 2000
+                    });
                     $("#carta").select2().empty();
                     $("#carta").select2().val("").change();
                     $("#version").select2().empty();
@@ -680,16 +694,37 @@ var scanCarta = function(){
                     success: function(response){
                         console.log(response);
                         if(response.msj != null){
-                            toastr.warning(response.msj,{timeOut: 5000});
+                            //toastr.warning(response.msj,{timeOut: 5000});
+                            swal({
+                                title: "Advertencia!",
+                                text: response.msj,
+                                type: "info",
+                                closeOnConfirm: true,
+                                timer: 2000
+                            });
                         }else{
                             clearInput();
-                            toastr.success(direct.successmessage);
+                            //toastr.success(direct.successmessage);
+                            swal({
+                                title: "Buen trabajo!",
+                                text: direct.successmessage,
+                                type: "success",
+                                closeOnConfirm: true,
+                                timer: 2000
+                            });
                             window.setTimeout(function(){
                                 window.location.href = direct.cartaSaveEditUrl+"/"+response.idparticipantecarta;
                             }, 1500);
                         }
                     },error: function(jqXHR, textStatus,e){
-                        toastr.error(textStatus,"ERROR",{timeOut:6000});
+                        //toastr.error(textStatus,"ERROR",{timeOut:6000});
+                        swal({
+                            title: "Error 500!",
+                            text: "Interno del Servidor",
+                            type: "error",
+                            closeOnConfirm: true,
+                            timer: 2000
+                        });
                     }
                 });
             }
@@ -832,11 +867,6 @@ var scanCarta = function(){
                 scroll: true,
                 highlight: true
             });
-
-
-
-
-
         }
     }
 }();

@@ -1,24 +1,17 @@
 package ni.org.ics.estudios.domain.catalogs;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by ICS_Inspiron3 on 23/07/2019.
  */
 
 @Entity
-@Table(name = "cargo", catalog = "estudios_ics")
+@Table(name = "cat_cargo", catalog = "estudios_ics")
 public class Cargo extends BaseMetaData implements Serializable {
 
     private static final long serialVersionUID = 1L;

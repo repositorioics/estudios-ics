@@ -31,7 +31,6 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-group"></i> <spring:message code="Personal" />
@@ -148,8 +147,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <!-- /.conainer-fluid -->
@@ -162,7 +159,7 @@
                         <div id="titulo"></div>
                     </div>
                     <div class="modal-body">
-                        <input type=text class="form-control" id="accionUrl"/>
+                        <input type=hidden class="form-control" id="accionUrl"/>
                         <div id="cuerpo"></div>
                     </div>
                     <div class="modal-footer">
@@ -178,7 +175,7 @@
         <c:set var="userEnabledLabel"><spring:message code="login.userEnabled" /></c:set>
         <c:set var="userLockedLabel"><spring:message code="login.accountLocked" /></c:set>
         <c:set var="desbloquear"><spring:message code="unlock" /></c:set>
-
+        <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
         <!-- Modal -->
         <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -294,10 +291,10 @@
 
         $(".desact").click(function(){
             var id = $(this).data('id');
-            console.log("este es el ID: "+id);
+            //console.log("este es el ID: "+id);
             $('#accionUrl').val($(this).data('id'));
             $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
-            $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("*")+1))+'?</h3>');
+            $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+$(this).data('id').substr($(this).data('id').lastIndexOf("/")+1)+'?</h3>');
             $('#btnOkAct').show();
             $('#dvSalida').hide();
             $('#btnOkClose').hide();

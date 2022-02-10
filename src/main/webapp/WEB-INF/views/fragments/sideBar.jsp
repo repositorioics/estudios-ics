@@ -16,6 +16,11 @@
                                 <i class="icon-people">
                                 </i><spring:message code="users" /></a>
                         </li>
+                        <li class="nav-item users">
+                            <a class="nav-link" href="<spring:url value="/admin/personal/list" htmlEscape="true "/>">
+                                <i class="icon-people">
+                                </i><spring:message code="Personal" /></a>
+                        </li>
                         <li class="nav-item casas">
                             <a class="nav-link" href="<spring:url value="/casas/obtenerCasas/" htmlEscape="true "/>">
                                 <i class="fa fa-home" ></i>

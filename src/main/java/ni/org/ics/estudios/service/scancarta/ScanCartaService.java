@@ -489,6 +489,8 @@ public class ScanCartaService {
            }
      }
 
+    @SuppressWarnings("unchecked")
+    @Transactional
     public void saveOrUpdateScanCarta(ParticipanteCarta scanCarta) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(scanCarta);

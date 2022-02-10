@@ -33,6 +33,13 @@ var saveExtensiones = function(){
                         SaveExtension(urls);
                     }else{
                         toastr.error("Seleccione la Extensión",{timeOut: 4000});
+                        swal({
+                            title: "Error!",
+                            text:  "Seleccione la Extensión",
+                            type: "error",
+                            closeOnConfirm: true,
+                            timer: 2000
+                        });
                         $('#idExtension').select2('open');
                         return;
                     }
@@ -42,25 +49,49 @@ var saveExtensiones = function(){
 
             function SaveExtension(url){
                 $.post(url.saveExtensCarta,form1.serialize(),function( data ){
-                   //console.log(data);
+                   console.log(data);
                     if(data.msj != null){
                         var respuesta =  data;
-                        toastr.error(data.msj,"Error",{timeOut: 5000});
+                        swal({
+                            title: "Error!",
+                            text: data.msj,
+                            type: "error",
+                            closeOnConfirm: true,
+                            timer: 2200
+                        });
                     }else{
                         var registro = JSON.parse(data);
                         if(registro.idParticipantExtension === undefined){
-                            toastr.error(data,"Error",{timeOut: 5000});
+                            swal({
+                                title: "Error!",
+                                text: data,
+                                type: "error",
+                                closeOnConfirm: true,
+                                timer: 2200
+                            });
                         }else {
                             CleanInput();
-                            toastr.success(url.successmessage);
+                            swal({
+                                title: "Buen trabajo!",
+                                text:  url.successmessage,
+                                type: "success",
+                                closeOnConfirm: true,
+                                timer: 2200
+                            });
                             setTimeout(function () {
-                                //window.location.reload();
                                window.location.href = url.listCartaUrl;
                             }, 1400);
                         }
                     }
                 },'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
                     toastr.error("Fail Server!",{timeOut: 6000});
+                    swal({
+                        title: "Error 500!",
+                        text:  "Interno del Servidor.",
+                        type: "error",
+                        closeOnConfirm: true,
+                        timer: 2200
+                    });
                 });
             }
 

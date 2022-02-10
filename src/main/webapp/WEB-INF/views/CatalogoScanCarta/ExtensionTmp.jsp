@@ -346,7 +346,7 @@
                 </div>
 
                 <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="fechaExtension"><spring:message code="Fecha Extension:" /></label>
                             <span class="required text-danger"> * </span>
                             <input type="text" class="form-control" required="required" name="fechaExtension" id="fechaExtension" data-date-end-date="+0d"
@@ -356,7 +356,7 @@
                             </div>
                         </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="idExtension"><spring:message code="Extension:" /></label>
                         <span class="required text-danger"> * </span>
                         <select class="form-control" name="idExtension" id="idExtension" required="required">
@@ -377,6 +377,28 @@
                         </div>
                     </div>
 
+                    <div class="form-group col-md-4">
+                        <div class="">
+                            <label for="person"><spring:message code="lbl.resource"/></label>
+                            <span class="required text-danger"> * </span>
+                            <select name="person" id="person" class="form-control" required="required">
+                                <option selected value=""><spring:message code="select"/>...</option>
+                                <c:forEach items="${person}" var="p">
+                                    <c:choose>
+                                        <c:when test="${caso.personal.idpersonal eq p.personal.idpersonal}">
+                                            <option selected value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${p.personal.idpersonal}">${p.personal.idpersonal} - ${p.personal.nombreApellido}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </select>
+                            <div class="invalid-feedback">
+                                <spring:message code="lbl.resource"/> <spring:message code="lbl.required" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-3">
@@ -537,17 +559,16 @@
     $(document).ready(function(){
       $("#idExtension").select2();
         var parameters = {
-            saveExtensionTmpUrl : "${saveExtensionTmpUrl}",
-            successmessage      : "${successMessage}",
-            error               : "${errorProcess}",
+            saveExtensionTmpUrl   : "${saveExtensionTmpUrl}",
+            successmessage        : "${successMessage}",
+            error                 : "${errorProcess}",
             ExtensionTmpPasiveUrl : "${ExtensionTmpPasiveUrl}",
-            getNombre1Url           : "${getNombre1Url}",
-            getNombre2Url           : "${getNombre2Url}",
-            getApellido1Url         : "${getApellido1Url}",
-            getApellido2Url         : "${getApellido2Url}",
-            listExtensionTmpUrl         : "${listExtensionTmpUrl}",
-            formTmpUrl         : "${formTmpUrl}"
-
+            getNombre1Url         : "${getNombre1Url}",
+            getNombre2Url         : "${getNombre2Url}",
+            getApellido1Url       : "${getApellido1Url}",
+            getApellido2Url       : "${getApellido2Url}",
+            listExtensionTmpUrl   : "${listExtensionTmpUrl}",
+            formTmpUrl            : "${formTmpUrl}"
         };
         $("#fechaExtension").datepicker({
             autoclose: true,
@@ -621,11 +642,22 @@
         });
         function GuardarExtensionTmp(dir){
             $.post(dir.saveExtensionTmpUrl, form.serialize(), function(data){
-                console.log(data);
                 if(data.mensaje!=null){
-                    toastr.warning(data.mensaje,"Advertencia!",{timeOut: 6000});
+                    swal({
+                        title: "Error!",
+                        text:  data.mensaje,
+                        type: "error",
+                        closeOnConfirm: true,
+                        timer: 2000
+                    });
                 }else{
-                    toastr.success(dir.successmessage,"ÉXITO",{timeOut: 6000});
+                    swal({
+                        title: "Buen Trabajo!",
+                        text:  dir.successmessage,
+                        type: "success",
+                        closeOnConfirm: true,
+                        timer: 2000
+                    });
                     window.setTimeout(function(){
                      window.location.href = parameters.formTmpUrl;
                      }, 1000);
@@ -655,8 +687,8 @@
               }, function(isConfirm) {
                   if (isConfirm) {
                       $.post(parameters.ExtensionTmpPasiveUrl, { codigo: id_tabla_ext_tmp, ajax: 'true'}).done(function(data) {
-                          debugger;
-                          console.log(data);
+                          //debugger;
+                          //console.log(data);
                           swal("Anulado!", "con éxito!", "success");
                           row.remove();
                       }).fail(function() {
@@ -744,8 +776,6 @@
             scroll: true,
             highlight: true
         });
-
-
     })
 </script>
 </body>

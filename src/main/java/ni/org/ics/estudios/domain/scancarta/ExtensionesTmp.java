@@ -155,8 +155,8 @@ public class ExtensionesTmp extends BaseMetaData implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "IDPERSONA", nullable = false)
-    @ForeignKey(name = "FK_IDPERSONA")
+    @JoinColumn(name = "PERSONA_ID", nullable = false)
+    @ForeignKey(name = "FK_PERSONA_ID")
     public Personal getPersonal() {
         return personal;
     }
