@@ -410,7 +410,7 @@
                 $('#motivoDetalle').val(data.motivoDetalle);
                 $("#exampleModal").modal("show");
             }).fail(function(){
-                swal("Error","falló el servidor","error");
+                toastr.error("Interno del Servidor","ERROR",{timeOut:6000});
             })
         }
         $("#parametro").focus();

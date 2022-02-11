@@ -50,10 +50,10 @@ var RealizarRetiro = function(){
                         }
                         else {
                             $("#nombreCompleto").val(data.nombreCompleto);
-                            $("#casaPDCS").val(data.casaPediatrica);
-                            $("#casaFamilia").val(data.casaFamilia);
+                            $("#casaPDCS").val(data.codigo_casa_PDCS);
+                            $("#casaFamilia").val(data.codigo_casa_Familia);
                             $("#estudio").val(data.estudios);
-                            $("#codigoParticipante").val(data.codigo);
+                            $("#codigoParticipante").val(data.idparticipante);
                             $("#nombreMadre").val(data.nombremadre);
                             $("#nombrePadre").val(data.nombrepadre);
                             $("#edad").val(data.edadParticipante);
@@ -92,7 +92,7 @@ var RealizarRetiro = function(){
                     $razon.append('<option value="' + val.motivo + '">' + val.motivo +" - "+ val.Descripcion + '</option>');
                     });
                 }).fail(function() {
-                   $.notify("Error al obtener los motivos", "error" );
+                   toastr.error("Error al obtener los motivos", "ERROR!",{timeOut:6000} );
                 });
             }
             $("#razonretiro").on("change", function(){

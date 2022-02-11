@@ -40,7 +40,7 @@ public class RetiroService {
     @SuppressWarnings("unchecked")
     public ParticipanteSeroDto getDatosParticipanteByCodigo(Integer codigo){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select p.codigo as codigo, concat(p.nombre1,' ',p.nombre2,' ',p.apellido1,' ',p.apellido2) as nombreCompleto, p.casa.codigo as casaPediatrica, pp.casaCHF as casaFamilia, pp.estudio as estudios, p.fechaNac as fechaNacimiento, pp.estPart as estado " +
+        Query query = session.createQuery("select p.codigo as idparticipante, concat(p.nombre1,' ',p.nombre2,' ',p.apellido1,' ',p.apellido2) as nombreCompleto, p.casa.codigo as codigo_casa_PDCS, pp.casaCHF as codigo_casa_Familia, pp.estudio as estudios, p.fechaNac as fechaNacimiento, pp.estPart as estado " +
                 " from Participante p, ParticipanteProcesos pp where p.codigo = pp.codigo and p.codigo= :codigo");
         query.setParameter("codigo", codigo);
         query.setResultTransformer(Transformers.aliasToBean(ParticipanteSeroDto.class));
@@ -124,15 +124,11 @@ public class RetiroService {
     }
 
  */
-
+      @SuppressWarnings("unchecked")
       public Personal getSupervisorById(Integer idpersona)throws Exception {
         Session session = sessionFactory.getCurrentSession();
-        Integer cargoId = 14;
-        String verdad = "true";
-        Query query = session.createQuery("from Personal p where p.idPersona= :idpersona and p.cargo.codigo= :cargoId and p.activochf= :verdad");
+        Query query = session.createQuery("from Personal p where p.idpersonal= :idpersona ");
         query.setParameter("idpersona",idpersona);
-        query.setParameter("cargoId",cargoId);
-        query.setParameter("verdad",verdad);
         Personal obj = (Personal) query.uniqueResult();
         return obj;
     }

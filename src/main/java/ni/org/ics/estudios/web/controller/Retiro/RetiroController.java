@@ -140,10 +140,6 @@ public class RetiroController {
         try{
             List<MessageResource> parentesco = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
             model.addAttribute("parentesco", parentesco);
-            List<MessageResource> tipoFecha = this.messageResourceService.getCatalogo("RETIROS_CAT_TIPO_FECHA");
-            model.addAttribute("tipoFecha",tipoFecha);
-            List<MessageResource> estudioAretirar = messageResourceService.getCatalogo("RETIROS_CAT_TIPO_ESTUDIO");
-            model.addAttribute("estudioAretirar",estudioAretirar);
             List<MessageResource> causaRetiro = messageResourceService.getCatalogo("CAT_CAUSAS_RETIROS");
             model.addAttribute("causaRetiro",causaRetiro);
             // SuperVisor
@@ -349,9 +345,9 @@ public class RetiroController {
             test = this.retiroservice.getSupervisorById(idsupervisor);
             Razones_Retiro motivoDetalle = this.retiroservice.getRazonRetiro(obj.getMotivo());
             map.put("motivoDetalle", motivoDetalle.getDescripcion());
-            //map.put("medicosupervisor", (test != null) ? test.getNombre() : "-" );
+            map.put("medicosupervisor", test != null ? test.getNombreApellido() : "-" );
             Personal objPersonalDocumenta = this.retiroservice.getSupervisorById(obj.getPersonadocumenta());
-            //map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombre() : "-" );
+            map.put("personadocumenta", objPersonalDocumenta != null ? objPersonalDocumenta.getNombreApellido() : "-" );
             if (obj.getCodigocasapdcs() == null){
                 Integer numerocasa = 0;
                 map.put("casapediatrica", numerocasa.toString());

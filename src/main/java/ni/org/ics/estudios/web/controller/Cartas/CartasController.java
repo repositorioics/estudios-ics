@@ -792,7 +792,7 @@ public class CartasController {
                 editObj.setPasive('0');
                 editObj.setRecordDate(new Date());
                 editObj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                //editObj.setPersonal(personal);
+                editObj.setPersonal(personal);
                 this.scanCartaService.saveParticpanteExtension(editObj);
                 return JsonUtil.createJsonResponse(editObj);
             } else {
@@ -836,7 +836,7 @@ public class CartasController {
                     ext.setPasive('0');
                     ext.setRecordDate(new Date());
                     ext.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                    //ext.setPersonal(personal);
+                    ext.setPersonal(personal);
                     this.scanCartaService.saveParticpanteExtension(ext);
                     return createJsonResponse(ext);
                 } else {
