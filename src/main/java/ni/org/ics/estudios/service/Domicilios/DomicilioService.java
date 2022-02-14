@@ -2,6 +2,7 @@ package ni.org.ics.estudios.service.Domicilios;
 
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.Participante;
+import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
@@ -61,11 +62,13 @@ public class DomicilioService {
         }
     }
     /*poblar el Select Usuario*/
-    public List<Personal_Cargo>ListPersonal(List<Integer> ids)throws Exception{
+    public List<Personal> ListPersonal(List<Integer> ids)throws Exception{
         try{
+            //2022-01-07. Se solicita aparezcan todos los cargos. Jairo Carey
             Session session = sessionFactory.getCurrentSession();
-            Query query  = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:ids) order by pc.personal.nombreApellido asc");
-            query.setParameterList("ids", ids);
+            // Query query = session.createQuery("from Personal order by Nombre");
+            Query query  = session.createQuery("select distinct pc.personal from Personal_Cargo pc where pc.cargo.idcargo in (:ids) order by pc.personal.idpersonal" );
+        query.setParameterList("ids", ids);
             return query.list();
         }catch (Exception e)
         { throw e;}

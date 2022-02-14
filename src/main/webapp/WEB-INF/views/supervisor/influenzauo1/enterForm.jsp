@@ -141,6 +141,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="FIS"><spring:message code="FIS" />
+										<span class="required">
+											 *
+										</span>
+                                    </label>
+                                    <div class="input-group col-md-9">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                            </span>
+                                        <input name="fis" id="fis" class="form-control date-picker" type="text" data-date-end-date="+0d"
+                                               value="<fmt:formatDate value="${caso.fis}" pattern="dd/MM/yyyy" />"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="form-control-label col-md-3" for="fif"><spring:message code="fif" />
 										<span class="required">
 											 *

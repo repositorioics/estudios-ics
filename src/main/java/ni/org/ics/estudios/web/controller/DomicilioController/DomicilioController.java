@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
+import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.muestreoanual.MovilInfo;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
@@ -152,7 +153,7 @@ public class DomicilioController {
             int value = Integer.parseInt( cargosId.get(i) );
             personal.add(value);
         }
-        List<Personal_Cargo> person = DomicilioService.ListPersonal(personal);
+        List<Personal> person = DomicilioService.ListPersonal(personal);
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/FormDomicilio");
         return modelView;
@@ -333,7 +334,7 @@ public class DomicilioController {
             int value = Integer.parseInt( cargosId.get(i) );
             personal.add(value);
         }
-        List<Personal_Cargo> person = DomicilioService.ListPersonal(personal);
+        List<Personal> person = DomicilioService.ListPersonal(personal);
         modelView.addObject("person", person);
         modelView.setViewName("/CambioDomicilio/CambioDomPorCasa");
         return modelView;

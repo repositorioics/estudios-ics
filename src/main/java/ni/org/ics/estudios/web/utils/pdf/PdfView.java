@@ -5,7 +5,7 @@ import com.lowagie.text.Font;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 import com.lowagie.text.pdf.draw.LineSeparator;
-import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
+//import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
@@ -66,9 +66,9 @@ public class PdfView extends AbstractPdfView {
         if (model.get("TipoReporte").equals(Constants.TPR_ENVIOREPORTE)){
             ReporteEnvio(model, document, writer);
         }
-        if (model.get("TipoReporte").equals(Constants.TPR_ENVIOREPORTEPBCM)){
+        /*if (model.get("TipoReporte").equals(Constants.TPR_ENVIOREPORTEPBCM)){
             ReporteEnvioPbmc(model, document, writer);
-        }
+        }*/
     }
 
     private PdfPCell createCell(String text, Font f, int border){
@@ -1723,6 +1723,7 @@ public class PdfView extends AbstractPdfView {
  //endregion
 
     //region todo: Reporte Envio de Muestra PBMC
+    /*
     private void ReporteEnvioPbmc(Map<String, Object> model, Document document, PdfWriter writer) throws Exception {
         List<SerologiaEnvio> datos_envios = (List<SerologiaEnvio>) model.get("EnvioPbmc");
         List<Pbmc_Detalle_Envio> pbmc_detalle_envios = (List<Pbmc_Detalle_Envio>) model.get("allPbmc");
@@ -1781,6 +1782,7 @@ public class PdfView extends AbstractPdfView {
 
         document.close();
     }
+    */
     //endregion
 
     private String getDescripcionCatalogoScan(String codigo,String catroot){

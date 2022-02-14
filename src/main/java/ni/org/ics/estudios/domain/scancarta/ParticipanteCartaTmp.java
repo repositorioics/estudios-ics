@@ -64,7 +64,7 @@ public class ParticipanteCartaTmp extends BaseMetaData implements Auditable {
 
     @ManyToOne
     @JoinColumn(name = "IDVERSION", nullable = false)
-    @ForeignKey(name = "FK_VERSION")
+    @ForeignKey(name = "FK_VERSION_CARTATMP")
     public Version getVersion() {
         return version;
     }

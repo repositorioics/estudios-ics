@@ -21,6 +21,7 @@
                                 <i class="icon-people">
                                 </i><spring:message code="Personal" /></a>
                         </li>
+                        <!--
                         <li class="nav-item casas">
                             <a class="nav-link" href="<spring:url value="/casas/obtenerCasas/" htmlEscape="true "/>">
                                 <i class="fa fa-home" ></i>
@@ -30,8 +31,8 @@
                         <a class="nav-link" href="<spring:url value="/casasfamilia/getCasasFamilia/" htmlEscape="true "/>">
                             <i class="fa fa-university" aria-hidden="true"></i>
                             <spring:message code="ecasa.Family" /></a>
-                    </li>
-
+                        </li>
+-->
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/CatalogoVersion/CrearNuevaVersion" htmlEscape="true "/>">
                                 <i class="fa fa-vimeo" aria-hidden="true"></i>

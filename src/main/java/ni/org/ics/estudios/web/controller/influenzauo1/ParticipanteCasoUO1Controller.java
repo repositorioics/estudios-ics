@@ -107,16 +107,25 @@ public class ParticipanteCasoUO1Controller {
             , @RequestParam( value="codigoParticipante", required=false, defaultValue="" ) Integer codigoParticipante
             , @RequestParam( value="fif", required=true, defaultValue="" ) String fif
             , @RequestParam( value="positivoPor", required=true, defaultValue="" ) String positivoPor
+            , @RequestParam( value="fis", required=true, defaultValue="" ) String fis
     )
     {
         try{
             Date dFechaIngreso = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
             Date dFIF = DateUtil.StringToDate(fif, "dd/MM/yyyy");
+            Date dFIS = DateUtil.StringToDate(fis, "dd/MM/yyyy");
+
             if (dFechaIngreso.after(new Date())){
                 return JsonUtil.createJsonResponse("Fecha de inicio es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
             }
-            if (dFIF.after(new Date())){
+            if (dFIF != null && dFIF.after(new Date())){
                 return JsonUtil.createJsonResponse("FIF es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
+            }
+            if (dFIS != null && dFIS.after(new Date())){
+                return JsonUtil.createJsonResponse("FIS es posterior a la fecha actual: "+DateUtil.DateToString(new Date(), "dd/MM/yyyy"));
+            }
+            if (dFIS != null && dFIF != null && dFIS.after(dFIF)){
+                return JsonUtil.createJsonResponse("FIS es posterior a la FIF: "+fif);
             }
             ParticipanteCasoUO1 casaCasoExistente = this.participanteCasoUO1Service.getCasoActivoParticipante(codigoParticipante);
             ParticipanteCasoUO1 casaCaso = this.participanteCasoUO1Service.getCasoByCodigo(codigo);
@@ -129,6 +138,7 @@ public class ParticipanteCasoUO1Controller {
                 casaCaso.setParticipante(this.participanteService.getParticipanteByCodigo(codigoParticipante));
                 casaCaso.setFechaIngreso(dFechaIngreso);
                 casaCaso.setFif(dFIF);
+                casaCaso.setFis(dFIS);
                 casaCaso.setPositivoPor(positivoPor);
                 casaCaso.setEstado('1');
                 casaCaso.setPasive('0');
@@ -142,6 +152,7 @@ public class ParticipanteCasoUO1Controller {
                     return JsonUtil.createJsonResponse("Ya existe un caso activo para esta casa con fecha de inicio: "+DateUtil.DateToString(casaCasoExistente.getFechaIngreso(),"dd/MM/yyyy"));
                 }else {
                     casaCasoExistente.setFechaIngreso(dFechaIngreso);
+                    casaCasoExistente.setFis(dFIS);
                     casaCasoExistente.setFif(dFIF);
                     casaCasoExistente.setPositivoPor(positivoPor);
                     this.participanteCasoUO1Service.saveOrUpdate(casaCasoExistente);
@@ -152,9 +163,7 @@ public class ParticipanteCasoUO1Controller {
             return JsonUtil.createJsonResponse(casaCaso);
         }
         catch(Exception e){
-            Gson gson = new Gson();
-            String json = gson.toJson(e.toString());
-            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+            return JsonUtil.createJsonResponse(e.toString());
         }
     }
 

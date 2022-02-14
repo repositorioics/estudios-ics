@@ -74,9 +74,11 @@ public class CasaCohorteFamiliaCasoWController {
         List<ParticipanteCohorteFamiliaCaso> casos = participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosPositivos();
         List<MessageResource> visitas = messageResourceService.getCatalogo("CHF_CAT_VIS_MI");
         List<MessageResource> tiposEtiquetas = messageResourceService.getCatalogo("CHF_CAT_TIP_ETIQ_MI");
+        List<MessageResource> positivoPor = messageResourceService.getCatalogo("CHF_CAT_POSITIVO_POR");
         model.addAttribute("casos",casos);
         model.addAttribute("visitas", visitas);
         model.addAttribute("etiquetas", tiposEtiquetas);
+        model.addAttribute("positivoPor",positivoPor);
         return "/supervisor/casos/list";
     }
 
@@ -84,25 +86,31 @@ public class CasaCohorteFamiliaCasoWController {
     public String obtenerParticipantesCaso(@PathVariable("codigo") String codigo, Model model) throws ParseException {
         logger.debug("Mostrando participantes de caso monitoreo intensivo en JSP");
         List<ParticipanteCohorteFamiliaCaso> participantes = participanteCohorteFamiliaCasoService.getParticipantesCohorteFamiliaCasoByCodigoCaso(codigo);
+        List<MessageResource> positivoPor = messageResourceService.getCatalogo("CHF_CAT_POSITIVO_POR");
         model.addAttribute("participantes",participantes);
         model.addAttribute("caso", participantes.get(0).getCodigoCaso());
+        model.addAttribute("positivoPor",positivoPor);
         return "/supervisor/casos/participantsList";
     }
 
     @RequestMapping(value = "newCase", method = RequestMethod.GET)
     public String initAddCaseForm(Model model) {
+        List<MessageResource> positivoPor = messageResourceService.getCatalogo("CHF_CAT_POSITIVO_POR");
         model.addAttribute("agregando",true);
         model.addAttribute("editando",false);
         model.addAttribute("caso", new ParticipanteCohorteFamiliaCaso());
+        model.addAttribute("positivoPor", positivoPor);
         return "/supervisor/casos/enterForm";
     }
 
     @RequestMapping(value = "editCase/{codigo}", method = RequestMethod.GET)
     public String initEditCaseForm(@PathVariable("codigo") String codigo, Model model) {
         ParticipanteCohorteFamiliaCaso participanteCaso = this.participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByCodigo(codigo);
+        List<MessageResource> positivoPor = messageResourceService.getCatalogo("CHF_CAT_POSITIVO_POR");
         model.addAttribute("agregando",false);
         model.addAttribute("editando",true);
         model.addAttribute("caso", participanteCaso);
+        model.addAttribute("positivoPor", positivoPor);
         return "/supervisor/casos/enterForm";
     }
 
@@ -179,6 +187,7 @@ public class CasaCohorteFamiliaCasoWController {
             , @RequestParam( value="codigoParticipante", required=false, defaultValue="" ) Integer codigoParticipante
             , @RequestParam( value="fif", required=false, defaultValue="" ) String fif
             , @RequestParam( value="fis", required=false, defaultValue="" ) String fis
+            , @RequestParam( value="positivoPor", required=true, defaultValue="" ) String positivoPor
     )
     {
         try{
@@ -236,6 +245,7 @@ public class CasaCohorteFamiliaCasoWController {
             participanteCaso.setEnfermo("S");
             participanteCaso.setFechaEnfermedad(dFIF);
             participanteCaso.setFis(dFIS);
+            participanteCaso.setPositivoPor(positivoPor);
 
 
             this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCaso);
@@ -276,6 +286,7 @@ public class CasaCohorteFamiliaCasoWController {
                         participanteCaso.setEnfermo("N");
                         participanteCaso.setFechaEnfermedad(null);
                         participanteCaso.setFis(null);
+                        participanteCaso.setPositivoPor(null);
                         participanteCaso.setRecordDate(new Date());
                         participanteCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         participanteCaso.setPasive('0');

@@ -123,6 +123,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-sm-3 form-control-label" for="partContacto"><spring:message code="lbl.positive.by"/><span class="required">*</span></label>
+                                    <div class="col-sm-3">
+                                        <select name="positivoPor" id="positivoPor" class="form-control select2-single">
+                                            <option selected value=""><spring:message code="select" />...</option>
+                                            <c:forEach items="${positivoPor}" var="cat">
+                                                <c:choose>
+                                                    <c:when test="${caso.positivoPor eq cat.catKey}">
+                                                        <option selected value="${cat.catKey}">${cat.spanish}</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${cat.catKey}">${cat.spanish}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="form-control-label col-md-3" for="FIS"><spring:message code="FIS" />
                                     </label>
                                     <div class="input-group col-md-9">

@@ -64,13 +64,14 @@
                         <table class="table table-hover table-bordered" id="lista_casos">
                             <thead>
                             <tr>
-                                <th width="12%"><spring:message code="code" /></th>
-                                <th width="12%"><spring:message code="house" /></th>
-                                <th width="15%"><spring:message code="logindate" /></th>
-                                <th width="15%"><spring:message code="lbl.positive.by" /></th>
-                                <th width="15%"><spring:message code="fif" /></th>
-                                <th width="15%"><spring:message code="logoutdate" /></th>
-                                <th width="16%"><spring:message code="actions" /></th>
+                                <th width="9%"><spring:message code="code" /></th>
+                                <th width="9%"><spring:message code="house" /></th>
+                                <th width="14%"><spring:message code="logindate" /></th>
+                                <th width="12%"><spring:message code="lbl.positive.by" /></th>
+                                <th width="14%"><spring:message code="FIS" /></th>
+                                <th width="14%"><spring:message code="fif" /></th>
+                                <th width="14%"><spring:message code="logoutdate" /></th>
+                                <th width="14%"><spring:message code="actions" /></th>
                             </tr>
                             </thead>
                             <c:forEach items="${casos}" var="parti">
@@ -93,19 +94,20 @@
                                             </c:if>
                                         </c:forEach>
                                     </td>
+                                    <td><fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.fif}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.fechaDesactivacion}" pattern="dd/MM/yyyy" /></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${parti.activo=='0'}">
                                                 <button title="<spring:message code="edit" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-edit"></i></button>
-                                                <button title="<spring:message code="close.case" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-sign-out"></i></button>
-                                                <button title="<spring:message code="disable" />" class="btn btn-outline-primary btn-sm" disabled><i class="fa fa-trash-o"></i></button>
+                                                <button title="<spring:message code="close.case" />" class="btn btn-outline-warning btn-sm" disabled><i class="fa fa-sign-out"></i></button>
+                                                <button title="<spring:message code="disable" />" class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-trash-o"></i></button>
                                             </c:when>
                                             <c:otherwise>
                                                 <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                <a title="<spring:message code="close.case" />" data-toggle="modal" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-primary btn-sm salida"><i class="fa fa-sign-out"></i></a>
-                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-primary btn-sm desact"><i class="fa fa-trash-o"></i></a>
+                                                <a title="<spring:message code="close.case" />" data-toggle="modal" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-warning btn-sm salida"><i class="fa fa-sign-out"></i></a>
+                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -232,12 +234,12 @@
                         {
                             "sExtends": "csv",
                             "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4, 5 ]
+                            "mColumns": [ 0, 1, 2, 3, 4, 5, 6 ]
                         },
                         {
                             "sExtends": "pdf",
                             "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4, 5 ],
+                            "mColumns": [ 0, 1, 2, 3, 4, 5, 6 ],
                             "sPdfOrientation": "landscape"
                         }
                     ]

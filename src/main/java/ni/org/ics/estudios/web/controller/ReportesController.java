@@ -1,6 +1,6 @@
 package ni.org.ics.estudios.web.controller;
 
-import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
+//import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
@@ -13,7 +13,7 @@ import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
-import ni.org.ics.estudios.service.Pbmc.PbmcService;
+//import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
@@ -70,8 +70,8 @@ public class ReportesController {
     @Resource(name = "SerologiaService")
     private SerologiaOct2020Service serologiaservice;
 
-    @Resource(name = "PbmcService")
-    private PbmcService pbmcService;
+    //@Resource(name = "PbmcService")
+    //private PbmcService pbmcService;
 
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
@@ -184,7 +184,7 @@ public class ReportesController {
 //endregion
 
     //todo generar reporte PBMC PDF and EXCEL
-    @RequestMapping(value = "/EnvioPbmcPdf", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/EnvioPbmcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                                     @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
                                                     @RequestParam(value="fechaFin", required=false ) String fechaFin)
@@ -207,7 +207,7 @@ public class ReportesController {
         ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
         ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCM);
         return ReporteEnvioPbmcPdf;
-    }
+    }*/
 
 
     //fin reporte PBMC
