@@ -63,7 +63,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     @ManyToOne
     @JoinColumn(name = "CODIGO_PARTICIPANTE", nullable = false)
-    @ForeignKey(name = "FK_IDPARTICIPANTE")
+    @ForeignKey(name = "FK_IDPARTICIPANTE_CARTA")
     public Participante getParticipante() {
         return participante;
     }
@@ -74,7 +74,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     @ManyToOne
     @JoinColumn(name = "IDVERSION", nullable = false)
-    @ForeignKey(name = "FK_VERSION")
+    @ForeignKey(name = "FK_VERSION_CARTA")
     public Version getVersion() {
         return version;
     }
@@ -105,7 +105,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     @ManyToOne
     @JoinColumn(name = "IDPERSONA", nullable = false)
-    @ForeignKey(name = "FK_IDPERSONA")
+    @ForeignKey(name = "FK_IDPERSONAL")
     public Personal getPersonal() {
         return personal;
     }

@@ -52,18 +52,32 @@ var ProcessCaseUO1 = function () {
                     codigoParticipante: {
                         required: true
                     },
-                    fif: {
-                        required: true
-                    },
+                    fis: {required: function () {
+                        return $('#fif').val().length <= 0;
+                    }},
+                    fif: {required: function () {
+                        return $('#fis').val().length <= 0;
+                    }},
                     positivoPor: {
                         required: true
                     }
                 },
+                messages: {
+                    fis: {
+                        required: "FIS o FIF es requerida"
+                    },
+                    fif: {
+                        required: "FIS o FIF es requerida"
+                    }
+                },
                 errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
+                    console.log(element.prop( 'type' ));
                     error.addClass( 'form-control-feedback' );
                     if ( element.prop( 'type' ) === 'checkbox' ) {
                         error.insertAfter( element.parent( 'label' ) );
+                    } if ( element.prop( 'type' ) === 'select-one' ) {
+                        error.insertAfter( element );
                     } else {
                         //error.insertAfter( element ); //cuando no es input-group
                         error.insertAfter(element.parent('.input-group'));
@@ -109,9 +123,8 @@ var ProcessCaseUO1 = function () {
         	            , function( data )
         	            {
         	    			registro = JSON.parse(data);
-                            console.log(registro);
         	    			if (registro.codigoCasoParticipante === undefined) {
-        						toastr.error(data,"Error",{timeOut: 0});
+        						toastr.error(registro.mensaje,"Error",{timeOut: 0});
         					}
         					else {
                                 toastr.success(parametros.successmessage);

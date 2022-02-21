@@ -28,6 +28,7 @@ public class ParticipanteCohorteFamiliaCaso extends BaseMetaData implements Audi
 	private String enfermo;
 	private Date fechaEnfermedad;
     private Date fis;
+    private String positivoPor;
     
 	@Id
     @Column(name = "CODIGO_PARTICIPANTE_CASO", length = 50, nullable = false)
@@ -87,6 +88,15 @@ public class ParticipanteCohorteFamiliaCaso extends BaseMetaData implements Audi
 
     public void setFis(Date fis) {
         this.fis = fis;
+    }
+
+    @Column(name = "POSITIVO_POR", length = 2, nullable = true)
+    public String getPositivoPor() {
+        return positivoPor;
+    }
+
+    public void setPositivoPor(String positivoPor) {
+        this.positivoPor = positivoPor;
     }
 
 	@Override

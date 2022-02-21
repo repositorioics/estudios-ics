@@ -1232,3 +1232,76 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS_01', '1', 'COVID_CAT_DOSIS', NULL, '0', 1, '0', 'Una');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS_02', '2', 'COVID_CAT_DOSIS', NULL, '0', 2, '0', 'Dos');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_DOSIS_03', '3', 'COVID_CAT_DOSIS', NULL, '0', 3, '0', 'Tres');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_POSITIVO_POR', NULL, NULL, NULL, '1', 0, '0', 'Caso CHF positivo por');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_POSITIVO_01', '01', 'CHF_CAT_POSITIVO_POR', NULL, '0', 1, '0', 'PCR');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CHF_CAT_POSITIVO_02', '02', 'CHF_CAT_POSITIVO_POR', NULL, '0', 2, '0', 'PR');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SND_SINFECHA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo Si/No/Desconocido/Si, no conoce fecha');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SND_SINFECHA_01', '1', 'CAT_SND_SINFECHA', NULL, '0', 1, '0', 'Si');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SND_SINFECHA_02', '0', 'CAT_SND_SINFECHA', NULL, '0', 2, '0', 'No');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SND_SINFECHA_03', '2', 'CAT_SND_SINFECHA', NULL, '0', 4, '0', 'Si, no conoce fecha');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SND_SINFECHA_999', '9', 'CAT_SND_SINFECHA', NULL, '0', 3, '0', 'Desconocido');
+
+/*scan cartas**/
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'ecasa.Pediatric', 'Casas Pediátrica','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'ecasa.Family', 'Casas Familia','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'cat.version', 'Catálogo Versión','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'cat.part', 'Catálogo Parte','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'cat.extension', 'Catálogo Extensión','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'letters', 'Cartas','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'consent', 'Consentimiento','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'Latitude', 'Latitud','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'Length', 'Longitud','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'Information','Información','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.land','Terreno','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Reception','Recepción','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Letter.Parts','Partes Cartas','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.resource','Recurso','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('type.assent','Tipo Asentimiento:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.assent','Asentimiento:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.project','Proyecto:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Guardian / Witness','Tutor/Testigo:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('first.name','1er. Nombre','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('second.name','2do. Nombre','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('first.surname','1er. Apellido','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('second.surname','2do. Apellido','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.Accept.future.contact','Acepta Contacto Futuro?','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.witness.present','Testigo presente?','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.witness','Testigo:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.required','Requerido','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.years','años:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.mounths','meses:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.days','dias:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.update','Actualizar','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.error','Error!','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.invalidate','Anular','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.close','Cerrar','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.ok','Acepta?','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('select.options','Selecciona una opción','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.invalid','Anulada?','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('why.invalid','Pq Anulada?','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('rason.invalid','Anulada por:','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Extension','Extensión','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('WithOut.Extension','Sin Extensión','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('family.relationship','Relación Familiar','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.temporary','temporal','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.To.assign','Asignar','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.Person', 'Personal','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.Position', 'Cargos','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para el tipo de Proyecto ScanCarta');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_UO1', '1', 'CAT_SCAN_PROYECTO', NULL, '0', 1, '0', 'UO1');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_CIERS', '2','CAT_SCAN_PROYECTO', NULL, '0', 2, '0', 'CIERS');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_DENGUE', '3','CAT_SCAN_PROYECTO', NULL, '0', 3, '0', 'DENGUE');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCAN_PROYECTO_OTRO', '4','CAT_SCAN_PROYECTO', NULL, '0', 4, '0', 'OTROS');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_SUPERVISOR_RETIROS', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para Seleccionar Supervisor en los módulo Retiro');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_Supervisor', '1', 'CAT_SELECCIONAR_SUPERVISOR_RETIROS', NULL, '0', 1, '0', '14,15');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_PERSONAL_RETIROS', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para Seleccionar personal en los módulo Retiro');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_Personal', '1', 'CAT_SELECCIONAR_PERSONAL_RETIROS', NULL, '0', 1, '0', '1,14,4,5');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_PERSONAL_COORDENADAS', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para Seleccionar Personal en los módulo Cambio Domicilio-Coordenada');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_Coordenadas', '1', 'CAT_SELECCIONAR_PERSONAL_COORDENADAS', NULL, '0', 1, '0', '1,2,3,4,5,6,7,8,9,12,13,14,15');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para Seleccionar Personal en los módulo Carta y Extension');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_CartaExtension', '1', 'CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION', NULL, '0', 1, '0', '4,5');
+
+
+/*Fin**/

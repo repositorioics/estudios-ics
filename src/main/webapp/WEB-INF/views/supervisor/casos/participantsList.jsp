@@ -53,6 +53,8 @@
                                 <th><spring:message code="participant" /></th>
                                 <th><spring:message code="age" /></th>
                                 <th><spring:message code="positive" /></th>
+                                <th><spring:message code="lbl.positive.by" /></th>
+                                <th><spring:message code="FIS" /></th>
                                 <th><spring:message code="fif" /></th>
                                 <th><spring:message code="actions" /></th>
                             </tr>
@@ -75,6 +77,14 @@
                                             <td><span class="badge badge-danger"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
                                         </c:otherwise>
                                     </c:choose>
+                                    <td>
+                                        <c:forEach items="${positivoPor}" var="cat">
+                                            <c:if test="${cat.catKey eq parti.positivoPor}">
+                                                <c:out value="${cat.spanish}" />
+                                            </c:if>
+                                        </c:forEach>
+                                    </td>
+                                    <td><fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.fechaEnfermedad}" pattern="dd/MM/yyyy" /></td>
                                     <td>
                                         <c:choose>

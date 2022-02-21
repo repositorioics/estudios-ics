@@ -27,6 +27,7 @@ public class ParticipanteCasoUO1 extends BaseMetaData implements Auditable {
 	private Date fif;
 	private Date fechaIngreso;
 	private Date fechaDesactivacion;
+    private Date fis;
 	
     
 	@Id
@@ -94,6 +95,15 @@ public class ParticipanteCasoUO1 extends BaseMetaData implements Auditable {
 	public void setFechaDesactivacion(Date fechaDesactivacion) {
 		this.fechaDesactivacion = fechaDesactivacion;
 	}
+
+    @Column(name = "FIS", nullable = true)
+    public Date getFis() {
+        return fis;
+    }
+
+    public void setFis(Date fis) {
+        this.fis = fis;
+    }
 
 	@Override
 	public String toString(){

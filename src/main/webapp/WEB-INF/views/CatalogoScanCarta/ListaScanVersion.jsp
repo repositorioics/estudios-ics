@@ -496,7 +496,7 @@
         $('.collapse').on('show.bs.collapse', function () {
             // do something…
             debugger;
-        })
+        });
         lc_switch('#contactoFuturo',{
             on_txt: 'Si',
             off_txt: 'No'

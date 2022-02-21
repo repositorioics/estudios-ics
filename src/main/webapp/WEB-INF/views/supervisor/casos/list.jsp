@@ -64,13 +64,14 @@
                         <table class="table table-hover table-bordered" id="lista_casos">
                             <thead>
                             <tr>
-                                <th width="12%"><spring:message code="house" /></th>
-                                <th width="15%"><spring:message code="logindate" /></th>
+                                <th width="10%"><spring:message code="house" /></th>
+                                <th width="13%"><spring:message code="logindate" /></th>
                                 <th width="12%"><spring:message code="positive" /></th>
-                                <th width="15%"><spring:message code="fif" /></th>
-                                <th width="15%"><spring:message code="FIS" /></th>
-                                <th width="15%"><spring:message code="logoutdate" /></th>
-                                <th width="16%"><spring:message code="actions" /></th>
+                                <th width="12%"><spring:message code="lbl.positive.by" /></th>
+                                <th width="13%"><spring:message code="FIS" /></th>
+                                <th width="13%"><spring:message code="fif" /></th>
+                                <th width="13%"><spring:message code="logoutdate" /></th>
+                                <th width="14%"><spring:message code="actions" /></th>
                             </tr>
                             </thead>
                             <c:forEach items="${casos}" var="parti">
@@ -90,8 +91,15 @@
                                     <td><c:out value="${parti.codigoCaso.casa.codigoCHF}" /></td>
                                     <td><fmt:formatDate value="${parti.codigoCaso.fechaInicio}" pattern="dd/MM/yyyy" /></td>
                                     <td><c:out value="${parti.participante.participante.codigo}" /></td>
-                                    <td><fmt:formatDate value="${parti.fechaEnfermedad}" pattern="dd/MM/yyyy" /></td>
+                                    <td>
+                                        <c:forEach items="${positivoPor}" var="cat">
+                                            <c:if test="${cat.catKey eq parti.positivoPor}">
+                                                <c:out value="${cat.spanish}" />
+                                            </c:if>
+                                        </c:forEach>
+                                    </td>
                                     <td><fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /></td>
+                                    <td><fmt:formatDate value="${parti.fechaEnfermedad}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.codigoCaso.fechaInactiva}" pattern="dd/MM/yyyy" /></td>
                                     <td>
                                         <c:choose>
