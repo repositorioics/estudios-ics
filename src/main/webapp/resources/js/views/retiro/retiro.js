@@ -58,7 +58,7 @@ var RealizarRetiro = function(){
                             $("#nombrePadre").val(data.nombrepadre);
                             $("#edad").val(data.edadParticipante);
                             $("#nombretutor").val(data.nombretutor);
-                            $("#estado").val(data.estado);
+                            $("#estado").val(data.est_part);
                             var $ele = $('#aretiro');
                             $ele.empty();
                             $ele.append($('<option/>').val('').text('Seleccione'));
@@ -255,7 +255,6 @@ var GuardarRetiro = function(){
                 var jqxhr = $.post( p.savePartRetiradoUrl, form2.serialize(), function( data ){
                     $('#page-loader').fadeIn('slow');
                 }).done(function() {
-                    //swal("Éxito!", "Retiro Realizado!", "success");
                     toastr.success(p.successmessage);
                     window.setTimeout(function(){
                         $('#page-loader').fadeOut('slow');
@@ -263,7 +262,6 @@ var GuardarRetiro = function(){
                     }, 1500);
                     $("#smartwizard").smartWizard("goToStep", 0);
                 }).fail(function() {
-                    //$.notify("Error al Guardar!.","error");
                     toastr.error(params.errorProcess);
                 });
 

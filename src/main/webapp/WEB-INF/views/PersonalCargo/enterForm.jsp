@@ -182,10 +182,10 @@
 <script>
     $(document).ready(function(){
         var parametros ={
-            savePersonUrl: "${savePersonUrl}",
-            successmessage: "${successMessage}",
-            error: "${errorProcess}",
-            personListUrl:"${personListUrl}"
+            savePersonUrl   : "${savePersonUrl}",
+            successmessage  : "${successMessage}",
+            error           : "${errorProcess}",
+            personListUrl   : "${personListUrl}"
         };
         var handleMultiSelect = function () {
             $('#cargos').multiSelect();
@@ -201,7 +201,7 @@
                     number:true
                 },
                 completeName: {
-                    minlength: 5,
+                    minlength: 3,
                     maxlength: 250,
                     required: true
                 },
@@ -235,16 +235,14 @@
         function processUser(){
             $.post( parametros.savePersonUrl, form1.serialize(), function( data ) {
                   usuario = JSON.parse(data);
-                        console.warn(data);
+                        console.warn(usuario);
                 debugger;
-                         if (usuario.nombre === undefined) {
-                            toastr.error(data.msj,"Error",{timeOut: 6000});
-                             toastr.success(parametros.successmessage,usuario.nombre);
-                        }
+                         if (usuario.nombre ===undefined) {
+                            toastr.error(usuario.msj,"Error",{timeOut: 6000});
+                         }
                         else{
                             toastr.success(parametros.successmessage,usuario.nombre);
                         }
-                        $('#completeName').focus();
                         window.setTimeout(function(){
                             window.location.href = parametros.personListUrl;
                         }, 1500);
@@ -252,6 +250,7 @@
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                         toastr.error( "error:" + errorThrown, {timeOut:6000});
                     });
+            $('#completeName').focus();
         }
     });
 </script>

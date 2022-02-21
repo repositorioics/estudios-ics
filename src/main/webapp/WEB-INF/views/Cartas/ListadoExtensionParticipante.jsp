@@ -45,13 +45,13 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-                <div class="card">
+                <div class="container col-md-10 col-lg-12">
+                    <div class="card">
                     <div class="card-header">
                         <h5>
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <spring:message code="List"/>  <spring:message code="Extension"/>
                         </h5>
-
                     </div>
                     <div class="card-body">
                         <spring:url value="/cartas/ListadoCartaParticipant" var="ListadoCartaParticipantUrl"/>
@@ -68,11 +68,9 @@
                             <div class="col-md-4"></div>
                             <div class="col-md-4"></div>
                         </div>
-
                         <hr/>
-
                         <div class="table-responsive">
-                            <table  id="list_participante_extension"  class="table table-hover table-bordered" style="width: 100%">
+                            <table  id="list_participante_extension" class="table table-hover table-bordered" style="width: 100%">
                                 <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -114,6 +112,7 @@
                             </table>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
 

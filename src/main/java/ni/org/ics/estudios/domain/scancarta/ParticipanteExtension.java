@@ -32,6 +32,7 @@ public class ParticipanteExtension extends BaseMetaData implements Serializable 
     private Extensiones extensiones;
     private boolean anulada;
     private Personal personal;
+    private Integer relfam;
 
     public ParticipanteExtension() {}
 
@@ -184,6 +185,15 @@ public class ParticipanteExtension extends BaseMetaData implements Serializable 
 
     public void setPersonal(Personal personal) {
         this.personal = personal;
+    }
+
+    @Column(name = "RELACION_FAMILIAR", nullable = false)
+    public Integer getRelfam() {
+        return relfam;
+    }
+
+    public void setRelfam(Integer relfam) {
+        this.relfam = relfam;
     }
 
 }

@@ -63,6 +63,7 @@
                                     <th><spring:message code="code" /> <spring:message code="lbl.Person" /></th>
                                     <th><spring:message code="Activo" /></th>
                                     <th><spring:message code="actions" /> </th>
+                                    <%--<th><spring:message code="Cargos" /> </th>--%>
                                 </tr>
                                 </thead>
                                 <c:forEach items="${personalCargoDtoList}" var="list" varStatus="loop">
@@ -141,6 +142,13 @@
                                                        </c:otherwise>
                                                    </c:choose>
                                                </td>
+                                        <%--<td>
+                                            <c:forEach items="${cargos}" var="c">
+                                                <c:if test="${list.cargos eq list.cargos.nombre}">
+                                                    <c:out value="${c.nombreCargo}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>--%>
                                     </tr>
                                 </c:forEach>
                             </table>

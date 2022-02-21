@@ -234,9 +234,12 @@
         color: #fff;
         border-bottom: 5px solid #fff
     }
-
+    .form-control:disabled, .daterangepicker .input-mini:disabled, .input-group > .ui-select-bootstrap > input.ui-select-search.form-control:disabled, .form-control[readonly], .daterangepicker [readonly].input-mini, .input-group > .ui-select-bootstrap > input[readonly].ui-select-search.form-control {
+        background-color: #e9ebec00;
+        opacity: 1;
+        cursor: not-allowed;
+    }
     </style>
-
     <spring:url value="/resources/css/sweetalert.css" var="swalcss"/>
     <link href="${swalcss}" rel="stylesheet" type="text/css"/>
 
@@ -403,41 +406,65 @@
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <label for="nombre1Tutor"><spring:message code="1er. Nombre Tutor:" /></label>
-                        <input type="text" class="form-control onlytext" id="nombre1Tutor" name="nombre1Tutor" required="required" value="${caso.nombre1Tutor}">
+                        <input type="text" class="form-control onlytext" id="nombre1Tutor" name="nombre1Tutor" required="required" value="${nombre1Tutor}">
                         <div class="invalid-feedback">
                             Campo reqierido.
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="nombre2Tutor"><spring:message code="2do. Nombre Tutor:" /></label>
-                        <input type="text" class="form-control onlytext" id="nombre2Tutor" name="nombre2Tutor"  value="${caso.nombre2Tutor}">
+                        <input type="text" class="form-control onlytext" id="nombre2Tutor" name="nombre2Tutor"  value="${nombre2Tutor}">
                     </div>
                     <div class="form-group col-md-3">
                         <label for="apellido1Tutor"><spring:message code="1er. Apellido Tutor:" /></label>
-                        <input type="text" class="form-control onlytext" id="apellido1Tutor" name="apellido1Tutor" required="required"  value="${caso.apellido1Tutor}">
+                        <input type="text" class="form-control onlytext" id="apellido1Tutor" name="apellido1Tutor" required="required"  value="${Surname1tutor}">
                         <div class="invalid-feedback">
                             Campo Requerido.
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="apellido2Tutor"><spring:message code="2do. Apellido Tutor:" /></label>
-                        <input type="text" class="form-control onlytext" id="apellido2Tutor" name="apellido2Tutor" value="${caso.apellido2Tutor}">
+                        <input type="text" class="form-control onlytext" id="apellido2Tutor" name="apellido2Tutor" value="${Surname2tutor}">
                     </div>
                 </div>
 
-                <div class="">
-                    <div class="form-check mt-4">
-                        <c:choose>
-                            <c:when test="${caso.testigoPresente eq true}">
-                                <input type="checkbox" checked="checked" id="chktestigo" name="chktestigo" />
-                            </c:when>
-                            <c:otherwise>
-                                <input type="checkbox" id="chktestigo" name="chktestigo"   class="chktestigo"  />
-                            </c:otherwise>
-                        </c:choose>
-                        <label class="form-check-label" for="chktestigo">
-                            <spring:message code="lbl.witness.present" />
-                        </label>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="relfam"><spring:message code="family.relationship" /> </label>
+                            <span class="required text-danger"> * </span>
+                            <select name="relfam" id="relfam" class="form-control" required>
+                                <option selected value=""><spring:message code="select" />...</option>
+                                <c:forEach items="${relFam}" var="rel">
+                                    <c:choose>
+                                        <c:when test="${relFamTutor eq rel.catKey }">
+                                            <option selected value="${rel.catKey}">${rel.catKey}-${rel.spanish}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${rel.catKey}">${rel.catKey}-${rel.spanish}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </select>
+                            <div class="invalid-feedback">
+                                <spring:message code="family.relationship" /> <spring:message code="lbl.required" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check mt-4">
+                            <c:choose>
+                                <c:when test="${caso.testigoPresente eq true}">
+                                    <input type="checkbox" checked="checked" id="chktestigo" name="chktestigo" />
+                                </c:when>
+                                <c:otherwise>
+                                    <input type="checkbox" id="chktestigo" name="chktestigo"   class="chktestigo"  />
+                                </c:otherwise>
+                            </c:choose>
+                            <label class="form-check-label" for="chktestigo">
+                                <spring:message code="lbl.witness.present" />
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <br/>
@@ -558,6 +585,8 @@
 <script type="text/javascript">
     $(document).ready(function(){
       $("#idExtension").select2();
+      $("#person").select2();
+      $("#relfam").select2();
         var parameters = {
             saveExtensionTmpUrl   : "${saveExtensionTmpUrl}",
             successmessage        : "${successMessage}",

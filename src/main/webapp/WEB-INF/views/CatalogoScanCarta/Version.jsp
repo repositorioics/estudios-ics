@@ -277,10 +277,6 @@
 </ol>
 <div class="container-fluid">
 <div class="animated fadeIn">
-<!--<div id="page-loader">
-    <span class="preloader-interior"></span>
-</div> -->
-
 <div class="">
 <div class="row">
 <div class="col-md-12 col-lg-12">

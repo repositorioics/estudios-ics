@@ -15,10 +15,6 @@ var EnviarSerologiasForm = function(){
                         "targets": [0],
                         "visible": false,
                         "searchable": false
-                    },{
-                        "targets": [9],
-                        "visible": false,
-                        "searchable": false
                     }, {
                         targets: [1,2,4,5,7,8],
                         className: 'text-center'
@@ -27,22 +23,29 @@ var EnviarSerologiasForm = function(){
             });
             CargarDatos();
             function CargarDatos(){
-                var myUrl = urls.MxNoEnviadasUrl
+                var myUrl = urls.MxNoEnviadasUrl;
                 $.getJSON(myUrl, function(data){
                     var len = data.length;
+                    console.log(data);
                     if(data==0){
-                        toastr.warning("No se encontraron registro","ADVERTENCIA!",{timeOut:6000});
+                        //toastr.warning("No se encontraron registro","ADVERTENCIA!",{timeOut:6000});
+                        swal({
+                            title: "¡Serologia!",
+                            text: "No se encontraron registro.",
+                            type: "info",
+                            timer: 2000
+                        });
                     }else{
                         for ( var i = 0; i < len; i++) {
-                            var d = new Date(data[i].fecha);
-                            var partsUrl = "${editUrl}" + '/'+data[i].idSerologia + '/';
+                            var partsUrl =  urls.editUrl+ '/'+data[i].idSerologia + '/';
                             var codParticipante;
 
                             if( data[i].participante == null ||  data[i].participante ==''){
                                 codParticipante = data[i].codigonuevoparticipante;
                             }else{
-                                codParticipante = data[i].participante.codigo
+                                codParticipante = data[i].participante
                             }
+                            var d = new Date(data[i].fecha);
                             var datestring = ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
                             var fregistro = new Date(data[i].recordDate);
                             var datestring2 = ("0" + fregistro.getDate()).slice(-2) + "/" + ("0"+(fregistro.getMonth()+1)).slice(-2) + "/" + fregistro.getFullYear();
@@ -50,23 +53,26 @@ var EnviarSerologiasForm = function(){
                             if(data[i].estudio == '-'){
                                 botonUpdate =  '<button type="button" id="btnDisabled"  class="btn btn-warning btn-sm" disabled=disabled> <i class="fa fa-edit" aria-hidden="true"></i>  </button>';
                             }   else{
-                                botonUpdate ='<a class="btn btn-warning" href='+ partsUrl + '><i class="fa fa-edit"></i></a>';
+                                botonUpdate ='<a class="btn btn-warning" href='+ partsUrl + '><i class="fa fa-edit" aria-hidden="true"></i></a>';
                             }
                             var botonEnvio  = '<button type="button" id="btnEnviar"  class="btn btn-primary btn-sm btnEnviar" data-id='+ data[i].idSerologia + '> <i class="fa fa-send" aria-hidden="true"></i>  </button>';
+                            var btnPasive  = '<button type="button" id="btnPasive" data-toggle="tooltip" data-placement="bottom" title="Eliminar"  class="btn btn-danger btn-sm btnPasive" data-id='+ data[i].idSerologia + '> <i class="fa fa-trash" aria-hidden="true"></i>  </button>';
                             table.row.add([
                                 data[i].idSerologia,
-                                datestring,
-                                (data[i].cerrado==0)?"<span class='badge badge-danger'> <i class='fa fa-arrow-circle-o-down' aria-hidden='false'></i></span>":"<span class='badge badge-success'><i class='fa fa-arrow-circle-o-up'></i></span>",
-                                data[i].estudio,
-                                codParticipante,
+                                data[i].fecha,
+                                (data[i].enviado==0)?"<h4><span class='badge badge-danger'> <i class='fa fa-times' aria-hidden='true'></i> </span> </h4>":"<h4> <span class='badge badge-success'><i class='fa fa-check' aria-hidden='true'></i> </span></h4>",
+                                data[i].estudios,
+                                data[i].idparticipante,
                                 data[i].volumen,
                                 data[i].observacion,
-                                data[i].casaCHF,
+                                //data[i].casaPDCS,
                                 botonUpdate,
-                                botonEnvio
+                                btnPasive
                             ]).draw(false);
                         }
                     }
+                }).fail(function(jqXHR, textStatus, errorThrown){
+                    console.error("jqXHR:"+jqXHR, " textStatus: "+textStatus, " errorThrown: "+errorThrown);
                 });
             }//fin funccion
 
@@ -93,7 +99,11 @@ var EnviarSerologiasForm = function(){
                     }},
                     hasta: {required: function () {
                         return $('#hasta').val().length > 0;
-                    }}
+                    }},
+                    temperatura:{
+                        required: true,
+                        number: true
+                    }
                 },errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
                     error.addClass( 'form-control-feedback' );
@@ -116,27 +126,107 @@ var EnviarSerologiasForm = function(){
                         $validator.focusInvalid();
                         return false;
                     } else {
-                        $.post(urls.sendAllSerologiasUrl, form1.serialize(), function (data) {
-                            debugger;
-                            console.log(data);
-                            if (data.mensaje != null) {
-                            toastr.info(data.mensaje, "INFORMACIÓN", {timeOut:6000});
-                                window.setTimeout(function () {
-                                    table.clear().draw( false );
-                                    CargarDatos();
-                                    location.reload();
-                                }, 1300);
-                            }
-                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                           toastr.error("Error 500 Internal Server", 'EROOR!',{timeOut:6000});
-                        });
+                        crearEnvio();
                     }
                 }
             });
 
+            function crearEnvio(){
+                swal({
+                    title: "Deseas enviar las Muestras...",
+                    text: "para generar el Reporte?",
+                    type: "info",
+                    showCancelButton: true,
+                    cancelButtonClass:"btn-warning",
+                    cancelButtonText: "Cancelar!",
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true,
+                    confirmButtonText: "Si, enviar!"
+                }, function () {
+                    $.post(urls.sendAllSerologiasUrl, form1.serialize(), function (data) {
+                        debugger;
+                        console.log(data);
+                        if (data.mensaje != null) {
+                            swal("INFORMACIÓN",data.mensaje,"info");
+                        }
+                        window.setTimeout(function () {
+                            table.clear().draw( false );
+                            CargarDatos();
+                            location.reload();
+                        }, 1300);
+                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        //toastr.error("Error 500 Internal Server", 'EROOR!',{timeOut:6000});
+                        swal("Error 500!", "Interno del Servidor!", "error");
+                    });
+                });
+            }
 
+            /*******************************/
+            $("#close-form").validate({
+                errorElement: 'span', //default input error message container
+                focusInvalid: false, // do not focus the last invalid input
+                rules: {
+                    message_razon: {
+                        required: true
+                    }
+                }, errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( 'form-control-feedback' );
+                    if ( element.prop( 'type' ) === 'checkbox' ) {
+                        error.insertAfter( element.parent( 'label' ) );
+                    } else {
+                        //error.insertAfter( element ); //cuando no es input-group
+                        error.insertAfter(element.parent('.input-group'));
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                    $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                    $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+                },
+                submitHandler: function (form) {
+                    serologiaPasive();
+                }
+            });
+            function serologiaPasive(){
+                var form2 =$("#close-form");
+                $.post( urls.closeUrl, form2.serialize(), function( data ){
+                    registro = JSON.parse(data);
+                    if (registro.idSerologia ===undefined) {
+                        swal({
+                            title: "¡INFORMACIÓN!",
+                            text: data,
+                            type: "error",
+                            timer: 2000
+                        });
+                    }
+                    else {
+                        $("#basic").modal('hide');
+                        swal({
+                            title: "¡Buen trabajo!!",
+                            text: urls.successMessage,
+                            type: "success",
+                            timer: 2000
+                        });
+                        window.setTimeout(function () {
+                            window.location.href = urls.listSerologiaUrl;
+                        }, 1500);
+                    }
+                },'text' )
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                        swal({
+                            title: "¡INFORMACIÓN!",
+                            text: errorThrown,
+                            type: "error",
+                            timer: 2000
+                        });
+                    });
+            }
 
-
+            /*****************************/
             $("#Lista_Muestra tbody").on("click", ".btnEnviar",function(){
                 var id = $(this).data('id');
                 SendId(id);
@@ -180,7 +270,13 @@ var EnviarSerologiasForm = function(){
                             dataType: "JSON",
                             success: function(response) {
                                 if (response != null) {
-                                    toastr.success(misUrl.successMessage, {timeOut:6000});
+                                    //toastr.success(misUrl.successMessage, {timeOut:6000});
+                                    swal({
+                                        title: "¡Serologia!",
+                                        text: misUrl.successMessage,
+                                        type: "success",
+                                        timer: 2000
+                                    });
                                     window.setTimeout(function () {
                                         table.clear().draw( false );
                                         CargarDatos();
@@ -188,18 +284,33 @@ var EnviarSerologiasForm = function(){
                                     }, 1300);
 
                                 } else {
-                                    toastr.error("Error al Guardar",{timeOut:6000});
+                                    //toastr.error("Error al Guardar",{timeOut:6000});
+                                    swal({
+                                        title: "¡Serologia!",
+                                        text: "Error la Guardar",
+                                        type: "error",
+                                        timer: 2000
+                                    });
                                 }
                             },error: function(response) {
-                                toastr.error("Error 500 Internal Server",{timeOut:6000});
+                                //toastr.error("Error 500 Internal Server",{timeOut:6000});
+                                swal({
+                                    title: "¡ERROR 500!",
+                                    text: "Interno del Servidor",
+                                    type: "success",
+                                    timer: 2000
+                                });
                             }
                         });
                     }
                 }
             };
 
-
-
+            $("#Lista_Muestra tbody").on("click", ".btnPasive",function(){
+                var id = $(this).data('id');
+                $("#idAccion").val(id);
+                $("#basic").modal('show');
+            });
 
         }
     }

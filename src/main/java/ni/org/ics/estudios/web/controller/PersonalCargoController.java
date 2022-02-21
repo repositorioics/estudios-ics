@@ -1,29 +1,18 @@
 package ni.org.ics.estudios.web.controller;
 
 import com.google.gson.Gson;
-import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Cargo;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
-import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
-import ni.org.ics.estudios.domain.relationships.UserStudy;
 import ni.org.ics.estudios.dto.CargoDto;
 import ni.org.ics.estudios.dto.PersonalCargoDto;
-import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.PersonalCargoService;
-import ni.org.ics.estudios.service.UsuarioService;
-import ni.org.ics.estudios.service.scancarta.ScanCartaService;
-import ni.org.ics.estudios.users.model.*;
-import ni.org.ics.estudios.web.utils.DateUtil;
-import ni.org.ics.estudios.web.utils.JsonUtil;
-import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +62,8 @@ public class PersonalCargoController implements Serializable {
             }
             personalCargoDtoList.add(objdto);
         }
+        List<Cargo> cargos = this.personalCargoService.getAllCargos();
+        model.addAttribute("cargos", cargos);
         model.addAttribute("personalCargoDtoList", personalCargoDtoList);
         return "PersonalCargo/ListPersonCargo";
     }
@@ -161,6 +152,10 @@ public class PersonalCargoController implements Serializable {
                 this.personalCargoService.saveOrUpdatePersona(editPerson);
                 boolean result = this.personalCargoService.deleteAllCargos(editPerson.getIdpersonal());
                 if(result) {
+                    objDto = new PersonalCargoDto();
+                    objDto.setCodigo(editPerson.getIdpersonal());
+                    objDto.setNombre(editPerson.getNombreApellido().toUpperCase());
+
                     //Cargos del Personal
                     Personal_Cargo pc = null;
                     for (Integer a : cargos) {
@@ -181,7 +176,7 @@ public class PersonalCargoController implements Serializable {
                     map.put("msj", "Error al  modificar los Cargos!");
                     return createJsonResponse(map);
                 }
-                return createJsonResponse(editPerson);
+                return createJsonResponse(objDto);
             }
         }
         catch(Exception e){

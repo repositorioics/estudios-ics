@@ -4,6 +4,7 @@ import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.*;
 import ni.org.ics.estudios.domain.scancarta.*;
 //import ni.org.ics.estudios.domain.scancarta.ScanCarta;
+import ni.org.ics.estudios.dto.ParticipanteCartaDto;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.security.cert.Extension;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -50,12 +52,12 @@ public class ScanCartaService {
         return participante;
     }
 
-
     public List<Carta> getScanCartas(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Carta order by carta");
         return query.list();
     }
+
     public List<Extension> getExtensionVersion(Integer idversion){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Extensiones e where e.version.id=:idversion");
@@ -308,7 +310,7 @@ public class ScanCartaService {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Personal_Cargo>getPersonal(List<Integer> ids){
+    public List<Personal_Cargo>getPersonal(HashSet<Integer> ids){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Personal_Cargo p where p.cargo.idcargo in (:ids) and p.pasive ='0' ");
         query.setParameterList("ids",ids);
@@ -506,8 +508,6 @@ public class ScanCartaService {
         session.saveOrUpdate(extensiones);
     }
 
-
-
     public Extensiones getExtensionById(Integer idextension){
         Session session =  sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Extensiones e where e.id=:idextension ");
@@ -541,20 +541,17 @@ public class ScanCartaService {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(obj);
     }
-    // , Integer idVersion, Integer idParticipante
-    public boolean VerificaExtension(String dinicial, String dfinal, Integer idExtension)throws Exception{
+    //Integer idVersion, Integer idParticipante
+    public boolean VerificaExtension(String dinicial, String dfinal, Integer idExtension, Integer idparticipantecarta)throws Exception{
         try {
             Session session = sessionFactory.getCurrentSession();
             Date finicial = DateUtil.StringToDate(dinicial, "dd/MM/yyyy");
             Date ffinal =  DateUtil.StringToDate(dfinal+ " 23:59:59", "dd/MM/yyyy HH:mm:ss"); //DateUtil.StringToDate(dfinal, "dd/MM/yyyy");
-            Query query = session.createQuery("from ParticipanteExtension pe where pe.recordDate between :finicial and :ffinal and pe.extensiones.id=:idExtension and  pe.anulada=false ");
+            Query query = session.createQuery("from ParticipanteExtension pe where pe.fechaExtension between :finicial and :ffinal and pe.extensiones.id=:idExtension and pe.participantecarta.idparticipantecarta =:idparticipantecarta and  pe.anulada=false ");
             query.setParameter("finicial", finicial);
             query.setParameter("ffinal", ffinal);
             query.setParameter("idExtension", idExtension);
-            /*query.setParameter("idVersion", idVersion);
-            query.setParameter("idParticipante", idParticipante);
-            and pe.extensiones.version.id=:idVersion and pe.participantecarta.participante.codigo=:idParticipante
-            */
+            query.setParameter("idparticipantecarta", idparticipantecarta);
             return query.list().size() > 0;
         }catch (Exception e){
             return false;
@@ -841,4 +838,18 @@ public class ScanCartaService {
     //endregion
 
 
+    public List<ParticipanteCartaDto> getDataScan(int idparticipante){
+        Session session = sessionFactory.getCurrentSession();
+        String Sql = "select s.codigo as idparticipante , s.asentimiento as codigo, s.cons as version from scan s where s.codigo=:idparticipante";
+        Query query = session.createQuery(Sql);
+        query.setParameter("idparticipante", idparticipante);
+        List<ParticipanteCartaDto> list = query.list();
+        for (ParticipanteCartaDto a : list) {
+            System.out.println("Author "
+                    + a.getIdparticipante()
+                    + " "
+                    + a.getCodigo());
+        }
+        return list;
+    }
 }

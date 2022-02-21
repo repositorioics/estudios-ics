@@ -7,9 +7,12 @@ var saveExtensiones = function(){
             var form1 = $("#formExt");
             form1.validate({
                 rules:{
-                    fechaExtension : { required: true },
-                    nombre1tutor   : { required: true },
-                    apellido1tutor : { required: true }
+                    nombre1Tutor    :{ required: true, letras_espacios:true },
+                    nombre2Tutor    :{ letras_espacios:true },
+                    apellido1Tutor  :{ required: true, letras_espacios:true },
+                    apellido2Tutor  :{ letras_espacios:true },
+                    fechaExtension  :{ required: true },
+                    idExtension     :{ required: true}
                 },
                 errorElement: 'em',
                 errorPlacement: function ( error, element ) {
@@ -32,7 +35,6 @@ var saveExtensiones = function(){
                     if(!$("#idExtension").val() == ""){
                         SaveExtension(urls);
                     }else{
-                        toastr.error("Seleccione la Extensión",{timeOut: 4000});
                         swal({
                             title: "Error!",
                             text:  "Seleccione la Extensión",
@@ -84,7 +86,6 @@ var saveExtensiones = function(){
                         }
                     }
                 },'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                    toastr.error("Fail Server!",{timeOut: 6000});
                     swal({
                         title: "Error 500!",
                         text:  "Interno del Servidor.",

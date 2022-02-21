@@ -40,7 +40,7 @@ public class RetiroService {
     @SuppressWarnings("unchecked")
     public ParticipanteSeroDto getDatosParticipanteByCodigo(Integer codigo){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select p.codigo as idparticipante, concat(p.nombre1,' ',p.nombre2,' ',p.apellido1,' ',p.apellido2) as nombreCompleto, p.casa.codigo as codigo_casa_PDCS, pp.casaCHF as codigo_casa_Familia, pp.estudio as estudios, p.fechaNac as fechaNacimiento, pp.estPart as estado " +
+        Query query = session.createQuery("select p.codigo as idparticipante, concat(p.nombre1,' ',p.nombre2,' ',p.apellido1,' ',p.apellido2) as nombreCompleto, p.casa.codigo as codigo_casa_PDCS, pp.casaCHF as codigo_casa_Familia, pp.estudio as estudios, p.fechaNac as fechaNacimiento, pp.estPart as est_part " +
                 " from Participante p, ParticipanteProcesos pp where p.codigo = pp.codigo and p.codigo= :codigo");
         query.setParameter("codigo", codigo);
         query.setResultTransformer(Transformers.aliasToBean(ParticipanteSeroDto.class));

@@ -20,7 +20,8 @@ public class ParticipanteSeroDto implements Serializable {
     private String edad_year;
     private String edad_meses;
     private String edad_dias;
-    private Integer estado;
+    private String estado;
+    private Integer est_part;//Utilizado en RetiroController
     private Date fechaNacimiento;
     private String edadParticipante;
     private String estudios;
@@ -31,11 +32,15 @@ public class ParticipanteSeroDto implements Serializable {
     private String observacion;
     private String descripcion;
     private Date fecha;
+    private double edadEnMeses;
+    private String volumen_serologia_desde_bd;
+    private String volumen_adicional_desde_bd;
+
 
     public ParticipanteSeroDto() {
     }
 
-    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, Integer edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, Integer estado, Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, Date fecha,String descripcion) {
+    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, Integer edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, String estado, Integer est_part,Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, String descripcion, Date fecha, double edadEnMeses, String volumen_serologia_desde_bd, String volumen_adicional_desde_bd) {
         this.codigo = codigo;
         this.idSerologia = idSerologia;
         this.idparticipante = idparticipante;
@@ -48,18 +53,23 @@ public class ParticipanteSeroDto implements Serializable {
         this.edad_meses = edad_meses;
         this.edad_dias = edad_dias;
         this.estado = estado;
+        this.est_part=est_part;
         this.fechaNacimiento = fechaNacimiento;
         this.edadParticipante = edadParticipante;
-        this.estudios= estudios;
-        SusEstudios = susEstudios;
+        this.estudios = estudios;
+        this.SusEstudios = susEstudios;
         this.nombrepadre = nombrepadre;
         this.nombremadre = nombremadre;
         this.nombretutor = nombretutor;
         this.observacion = observacion;
+        this.descripcion = descripcion;
         this.fecha = fecha;
-        this.descripcion= descripcion;
+        this.edadEnMeses = edadEnMeses;
+        this.volumen_serologia_desde_bd = volumen_serologia_desde_bd;
+        this.volumen_adicional_desde_bd = volumen_adicional_desde_bd;
     }
-/*Getter & Setter*/
+
+    /*Getter & Setter*/
 
     public Date getFecha() {
         return fecha;
@@ -157,12 +167,20 @@ public class ParticipanteSeroDto implements Serializable {
         this.edad_dias = edad_dias;
     }
 
-    public Integer getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Integer getEst_part() {
+        return est_part;
+    }
+
+    public void setEst_part(Integer est_part) {
+        this.est_part = est_part;
     }
 
     public Date getFechaNacimiento() {
@@ -235,5 +253,29 @@ public class ParticipanteSeroDto implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public double getEdadEnMeses() {
+        return edadEnMeses;
+    }
+
+    public void setEdadEnMeses(double edadEnMeses) {
+        this.edadEnMeses = edadEnMeses;
+    }
+
+    public String getVolumen_serologia_desde_bd() {
+        return volumen_serologia_desde_bd;
+    }
+
+    public void setVolumen_serologia_desde_bd(String volumen_serologia_desde_bd) {
+        this.volumen_serologia_desde_bd = volumen_serologia_desde_bd;
+    }
+
+    public String getVolumen_adicional_desde_bd() {
+        return volumen_adicional_desde_bd;
+    }
+
+    public void setVolumen_adicional_desde_bd(String volumen_adicional_desde_bd) {
+        this.volumen_adicional_desde_bd = volumen_adicional_desde_bd;
     }
 }

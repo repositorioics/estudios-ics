@@ -125,7 +125,7 @@ public class RetiroController {
                     padre = padre + " " + participante2.getApellido2Padre().toUpperCase();
                 participante.setNombrepadre(padre);
 
-                if (participante.getEstado().equals(0))
+                if (participante.getEst_part().equals(0))
                     return JsonUtil.createJsonResponse("Participante retirado");
             } else return JsonUtil.createJsonResponse("No se encontró participante según el código ingresado");
             return JsonUtil.createJsonResponse(participante);

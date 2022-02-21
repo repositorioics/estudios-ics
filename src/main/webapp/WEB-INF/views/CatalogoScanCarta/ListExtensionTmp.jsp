@@ -53,9 +53,9 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-                <div class="row">
-                    <div class="container col-sm-12 col-md-12 col-lg-12">
-                <div class="card">
+                <div class="container col-md-10 col-lg-12">
+                    <div>
+                        <div class="card">
                     <div class="card-header">
                         <i class="fa fa-list-alt" aria-hidden="true"></i>
                         <spring:message code="List"/>  <spring:message code="Extension"/>
@@ -121,7 +121,7 @@
                 </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
         <!-- /.conainer-fluid -->
     </div>

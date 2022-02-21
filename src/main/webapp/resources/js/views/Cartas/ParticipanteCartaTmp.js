@@ -223,7 +223,7 @@ var saveCartaTMP = function(){
                                 swal({
                                     title: "Error!",
                                     text: data.msjCodigo,
-                                    type: "Error",
+                                    type: "error",
                                     closeOnConfirm: true,
                                     timer: 2200
                                 });
@@ -232,7 +232,7 @@ var saveCartaTMP = function(){
                                 //toastr.warning(data.msj, {timeOut: 5000});
                                 swal({
                                     title: "Advertencia!",
-                                    text: data.msjCodigo,
+                                    text: data.msj,
                                     type: "warning",
                                     closeOnConfirm: true,
                                     timer: 2200
@@ -247,7 +247,7 @@ var saveCartaTMP = function(){
                                     timer: 2200
                                 });
                                 window.setTimeout(function () {
-                                    window.location.reload(true);
+                                    window.location.href = dir.CartaParticipantTmpUrl;
                                 }, 1500);
                             }
                         }, error: function (request, status, error) {

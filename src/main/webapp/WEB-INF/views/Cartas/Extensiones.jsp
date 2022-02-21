@@ -227,8 +227,8 @@
 <div>
 
     <!-- Form -->
-         <form action="#" name="formExt" id="formExt" method="post" role="form" autocomplete="off">
-    <div hidden="hidden" class="row">
+   <form action="#" name="formExt" id="formExt" method="post" role="form" autocomplete="off">
+    <div class="row" hidden="hidden">
         <div class="col-md-4">
             <div class="form-group">
                 <label for="idParticipanteCarta">idParticipanteCarta</label>
@@ -240,7 +240,7 @@
             <div class="form-group">
                 <label for="idVersion">idVersion</label>
                 <input type="text" class="form-control" id="idVersion" name="idVersion"
-                       value="${caso.participantecarta.version.idversion}">
+                       value="${idVersion}">
             </div>
         </div>
         <div class="col-md-2">
@@ -253,7 +253,7 @@
             <div class="form-group">
                 <label for="idParticipante">idParticipante</label>
                 <input type="text" class="form-control" id="idParticipante" name="idParticipante"
-                       value="${caso.participantecarta.participante.codigo}">
+                       value="${idParticipante}">
             </div>
 
         </div>
@@ -314,6 +314,9 @@
                         </c:choose>
                     </c:forEach>
                 </select>
+                <div class="invalid-feedback">
+                    <spring:message code="Extension"/> <spring:message code="lbl.required" />
+                </div>
             </div>
         </div>
 
@@ -344,30 +347,54 @@
             <div class="form-group">
                 <label for="nombre1tutor"><spring:message code="first.name" /> <spring:message code="lbl.tutor" />: </label>
                 <span class="required text-danger"> * </span>
-                <input type="text" class="form-control focusNext" tabindex="1" id="nombre1tutor" name="nombre1tutor" value="${caso.nombre1Tutor}" required/>
+                <input type="text" class="form-control focusNext" tabindex="1" id="nombre1tutor" name="nombre1tutor" value="${nombre1Tutor}" required/>
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="nombre2tutor"><spring:message code="second.name" /> <spring:message code="lbl.tutor" />:</label>
-                <input type="text" class="form-control focusNext" tabindex="2" id="nombre2tutor" name="nombre2tutor" value="${caso.nombre2Tutor}">
+                <input type="text" class="form-control focusNext" tabindex="2" id="nombre2tutor" name="nombre2tutor" value="${nombre2Tutor}">
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="apellido1tutor"><spring:message code="first.surname" /> <spring:message code="lbl.tutor" />:</label>
                 <span class="required text-danger"> * </span>
-                <input type="text" class="form-control focusNext" tabindex="3" id="apellido1tutor" required name="apellido1tutor" value="${caso.apellido1Tutor}">
+                <input type="text" class="form-control focusNext" tabindex="3" id="apellido1tutor" required name="apellido1tutor" value="${apellido1Tutor}">
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="apellido2tutor"><spring:message code="second.surname" /> <spring:message code="lbl.tutor" />:</label>
-                <input type="text" class="form-control focusNext" tabindex="4" id="apellido2tutor" name="apellido2tutor" value="${caso.apellido2Tutor}">
+                <input type="text" class="form-control focusNext" tabindex="4" id="apellido2tutor" name="apellido2tutor" value="${apellido2Tutor}">
             </div>
         </div>
 
-           <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="relfam"><spring:message code="family.relationship" /> </label>
+                <span class="required text-danger"> * </span>
+                <select name="relfam" id="relfam" class="form-control" required>
+                    <option selected value=""><spring:message code="select" />...</option>
+                    <c:forEach items="${relFam}" var="rel">
+                        <c:choose>
+                            <c:when test="${relFamTutor eq rel.catKey }">
+                                <option selected value="${rel.catKey}">${rel.catKey}-${rel.spanish}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${rel.catKey}">${rel.catKey}-${rel.spanish}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select>
+                <div class="invalid-feedback">
+                    <spring:message code="family.relationship" /> <spring:message code="lbl.required" />
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
                <div class="form-check mt-4">
                    <c:choose>
                        <c:when test="${caso.testigoPresente eq true}">
@@ -518,15 +545,11 @@
 <script type="text/javascript" src="${moment}"></script>
 <spring:url value="/resources/js/libs/sweetalert.js" var="sweet"/>
 <script type="text/javascript" src="${sweet}"></script>
-
 <!-- bootstrap datepicker -->
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin"/>
 <script src="${datepickerPlugin}"></script>
-
-
 <spring:url value="/resources/js/views/Cartas/Extensiones.js" var="extensioneScript"/>
 <script src="${extensioneScript}" type="text/javascript"></script>
-
 <script>
     $(document).ready(function () {
         var table = $('#tblextension').DataTable({
@@ -570,7 +593,8 @@
             todayBtn: true
         }).val(fechaNow);
         $("#idExtension").select2();
-
+        $("#person").select2();
+        $("#relfam").select2();
 
         $("#chktestigo").click(function () {
             $("#nombTestigo").focus();

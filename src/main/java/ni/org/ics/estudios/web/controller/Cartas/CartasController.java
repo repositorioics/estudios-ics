@@ -71,12 +71,14 @@ public class CartasController {
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
             List<Integer> personal = new ArrayList<Integer>();
+            HashSet<Integer> hset =
+                    new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
-                personal.add(value);
+                hset.add(value);
             }
-            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
             model.addAttribute("person", person);
             List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
             model.addAttribute("proyecto", proyecto);
@@ -104,12 +106,14 @@ public class CartasController {
         List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
         String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
         List<Integer> personal = new ArrayList<Integer>();
+        HashSet<Integer> hset =
+                new HashSet<Integer>();
         List<String> cargosId = Arrays.asList(personId);
         for (int i = 0; i < cargosId.size(); i++) {
             int value = Integer.parseInt( cargosId.get(i) );
-            personal.add(value);
+            hset.add(value);
         }
-        List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+        List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
         model.addAttribute("person", person);
 
         List<MessageResource> scanca = messageResourceService.getCatalogo("SCANCARTA");
@@ -177,12 +181,14 @@ public class CartasController {
     }
 
 
+    //Realiza búsqueda de participante para agregar una nuevo Cartas
     @RequestMapping(value = "/searchParticipant", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     ResponseEntity<String> BuscarParticipanteByID(@RequestParam(value = "parametro", required = true) Integer parametro) throws Exception {
         try {
             Map<String, String> map = new HashMap<String, String>();
+            //List<ParticipanteCartaDto> scanDto = this.scanCartaService.getDataScan(parametro);
             BuscaParticipanteForCarta objEncontrado = new BuscaParticipanteForCarta();
             Participante participante = datoshemodinamicaService.getParticipante(parametro);
             if (participante != null) {
@@ -581,7 +587,8 @@ public class CartasController {
 
     @RequestMapping(value = "/HabYDesCarta/{accion}/{idcarta}", method = RequestMethod.GET)
     public String HabYDesParte(@PathVariable("idcarta") String idcarta,
-                               @PathVariable("accion") String accion, RedirectAttributes redirectAttributes) throws Exception {
+                               @PathVariable("accion") String accion, RedirectAttributes redirectAttributes)
+        throws Exception {
         String redirecTo = "404";
         try {
             Integer id = Integer.parseInt(idcarta);
@@ -625,18 +632,29 @@ public class CartasController {
             model.addAttribute("participanteExtensionObj",participanteExtensionObj);
             List<DetalleParte> listDetailParte = this.scanCartaService.getDetalleParteList(objParticipanteCarta.getIdparticipantecarta());
             model.addAttribute("listDetailParte", listDetailParte);
+            //tutor
+            model.addAttribute("nombre1Tutor",objParticipanteCarta.getParticipante().getNombre1Tutor());
+            model.addAttribute("nombre2Tutor",objParticipanteCarta.getParticipante().getNombre2Tutor());
+            model.addAttribute("apellido1Tutor",objParticipanteCarta.getParticipante().getApellido1Tutor());
+            model.addAttribute("apellido2Tutor",objParticipanteCarta.getParticipante().getApellido2Tutor());
+            model.addAttribute("relFamTutor",objParticipanteCarta.getParticipante().getRelacionFamiliarTutor());
+
             model.addAttribute("agregando", true);
             model.addAttribute("editando", false);
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
             List<Integer> personal = new ArrayList<Integer>();
+            HashSet<Integer> hset =
+                    new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
-                personal.add(value);
+                hset.add(value);
             }
-            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
             model.addAttribute("person", person);
+            List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+            model.addAttribute("relFam", relFam);
             model.addAttribute("caso", new ParticipanteExtension());
         } catch (Exception e) {
             e.printStackTrace();
@@ -657,6 +675,8 @@ public class CartasController {
             model.addAttribute("version", objParticipanteCarta.getVersion().getVersion());
             model.addAttribute("estudio", objParticipanteCarta.getVersion().getEstudio().getNombre());
             model.addAttribute("idParticipanteCarta", objParticipanteCarta.getIdparticipantecarta());
+            model.addAttribute("idParticipante", objParticipanteCarta.getParticipante().getCodigo());
+            model.addAttribute("idVersion", objParticipanteCarta.getVersion().getIdversion());
             List<Extension> exts = scanCartaService.getExtensionVersion(caso.getParticipantecarta().getVersion().getIdversion());
             model.addAttribute("exts", exts);
             List<ParticipanteExtension> getParticipantExt = this.scanCartaService.getAllPartExt(objParticipanteCarta.getIdparticipantecarta());
@@ -665,14 +685,24 @@ public class CartasController {
             model.addAttribute("participanteExtensionObj",participanteExtensionObj);
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+            HashSet<Integer> personal2 = new HashSet<Integer>();
             List<Integer> personal = new ArrayList<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
-                personal.add(value);
+                personal2.add(value);
             }
-            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            List<Personal_Cargo> person = scanCartaService.getPersonal(personal2);
             model.addAttribute("person", person);
+            //tutor
+            model.addAttribute("nombre1Tutor",objParticipanteCarta.getQuienfirma());
+            model.addAttribute("nombre2Tutor",objParticipanteCarta.getNombre2Firma());
+            model.addAttribute("apellido1Tutor",objParticipanteCarta.getApellido1Firma());
+            model.addAttribute("apellido2Tutor",objParticipanteCarta.getApellido2Firma());
+            model.addAttribute("relFamTutor",objParticipanteCarta.getRelfam());
+
+            List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+            model.addAttribute("relFam", relFam);
             model.addAttribute("caso", caso);
         } catch (Exception e) {
             return "404";
@@ -739,6 +769,7 @@ public class CartasController {
             , @RequestParam(value = "idVersion", required = true) Integer idVersion
             , @RequestParam(value = "idParticipantExtension", required = true) Integer idParticipantExtension
             , @RequestParam(value = "person", required = true) Integer person
+            , @RequestParam(value = "relfam", required = true) Integer relfam
     ) throws Exception {
         try {
             Personal personal = this.scanCartaService.getPersonalById(person);
@@ -747,8 +778,6 @@ public class CartasController {
                 map.put("msj", "Código personal no encontrado.");
                 return createJsonResponse(map);
             }
-
-
 
             if (accion.equals("true")) { //aqui actualizar
                 ParticipanteExtension editObj = new ParticipanteExtension();
@@ -793,11 +822,12 @@ public class CartasController {
                 editObj.setRecordDate(new Date());
                 editObj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 editObj.setPersonal(personal);
+                editObj.setRelfam(relfam);
                 this.scanCartaService.saveParticpanteExtension(editObj);
                 return JsonUtil.createJsonResponse(editObj);
             } else {
                 ParticipanteExtension ext = new ParticipanteExtension();
-                if (!this.scanCartaService.VerificaExtension(fechaExtension, fechaExtension, idExtension)) {
+                if (!this.scanCartaService.VerificaExtension(fechaExtension, fechaExtension, idExtension, idParticipanteCarta)) {
                     ext.setFechaExtension(DateUtil.StringToDate(fechaExtension, "dd/MM/yyyy"));
                     ext.setNombre1Tutor(nombre1tutor.toUpperCase());
                     if (nombre2tutor.equals("")) {
@@ -837,6 +867,7 @@ public class CartasController {
                     ext.setRecordDate(new Date());
                     ext.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                     ext.setPersonal(personal);
+                    ext.setRelfam(relfam);
                     this.scanCartaService.saveParticpanteExtension(ext);
                     return createJsonResponse(ext);
                 } else {
@@ -867,12 +898,14 @@ public class CartasController {
         List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
         String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
         List<Integer> personal = new ArrayList<Integer>();
+        HashSet<Integer> hset =
+                new HashSet<Integer>();
         List<String> cargosId = Arrays.asList(personId);
         for (int i = 0; i < cargosId.size(); i++) {
             int value = Integer.parseInt( cargosId.get(i) );
-            personal.add(value);
+            hset.add(value);
         }
-        List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+        List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
         model.addAttribute("person", person);
         List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
         model.addAttribute("proyecto", proyecto);
@@ -945,12 +978,14 @@ public class CartasController {
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
             List<Integer> personal = new ArrayList<Integer>();
+            HashSet<Integer> hset =
+                    new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
-                personal.add(value);
+                hset.add(value);
             }
-            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
             model.addAttribute("person", person);
             List<MessageResource> proyecto = messageResourceService.getCatalogo("CAT_SCAN_PROYECTO");
             model.addAttribute("proyecto", proyecto);
@@ -1031,12 +1066,13 @@ public class CartasController {
                 map.put("msj", "Seleccione las partes.");
                 return createJsonResponse(map);
             }
+            /*
             Participante participante = datoshemodinamicaService.getParticipante(obj.getIdparticipante());
             if (participante != null) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("msjCodigo", "Codigo: ".concat(obj.getIdparticipante().toString()) + " Participante ya existe!.");
                 return createJsonResponse(map);
-            }
+            }*/
 
             if (obj.getAsentimiento().equals("0") && obj.getTipoasentimiento() == 0) {
                 Map<String, String> map = new HashMap<String, String>();
@@ -1334,18 +1370,34 @@ public class CartasController {
             model.addAttribute("codigo_participante",participantecartatmp.getIdparticipante());
             List<Extensiones> exts =  this.scanCartaService.getExtensionsByVersion(participantecartatmp.getVersion().getIdversion());
             model.addAttribute("exts",exts);
+
+
+            model.addAttribute("nombre1Tutor", participantecartatmp.getName1tutor());
+            String name2 = (participantecartatmp.getName2tutor()=="") ? "" : participantecartatmp.getName2tutor();
+            model.addAttribute("nombre2Tutor", name2 );
+            model.addAttribute("Surname1tutor",  participantecartatmp.getSurname1tutor());
+            String ape2 = (participantecartatmp.getSurname2tutor()== "") ? "" : participantecartatmp.getSurname2tutor();
+            model.addAttribute("Surname2tutor", ape2 );
+            model.addAttribute("relFamTutor", participantecartatmp.getRelfam());
+
+
+
             model.addAttribute("agregando",false);
             model.addAttribute("editando",true);
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
             List<Integer> personal = new ArrayList<Integer>();
+            HashSet<Integer> hset =
+                    new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
-                personal.add(value);
+                hset.add(value);
             }
-            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
             model.addAttribute("person", person);
+            List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+            model.addAttribute("relFam", relFam);
             return "CatalogoScanCarta/ExtensionTmp";
         }catch (Exception e){
             return "404";
@@ -1354,7 +1406,7 @@ public class CartasController {
 
 
     //endregion
-    // Agregar extensionTmp temporal por idcartaparticipanteTmp
+    // todo: Guardar extensionTmp temporal por idcartaparticipanteTmp
     @RequestMapping(value = "/extensionTmp/{codigo}", method = RequestMethod.GET)
     public String extensionTmp(@PathVariable(value = "codigo") Integer codigo, Model model) throws Exception {
         try {
@@ -1373,32 +1425,34 @@ public class CartasController {
             model.addAttribute("idversion",participantecartatmp.getVersion().getIdversion());
             model.addAttribute("estudio", participantecartatmp.getVersion().getEstudio().getNombre());
             model.addAttribute("codigo_participante",participantecartatmp.getIdparticipante());
+
             model.addAttribute("nombre1Tutor", participantecartatmp.getName1tutor());
             String name2 = (participantecartatmp.getName2tutor()=="") ? "" : participantecartatmp.getName2tutor();
             model.addAttribute("nombre2Tutor", name2 );
             model.addAttribute("Surname1tutor",  participantecartatmp.getSurname1tutor());
             String ape2 = (participantecartatmp.getSurname2tutor()== "") ? "" : participantecartatmp.getSurname2tutor();
             model.addAttribute("Surname2tutor", ape2 );
+            model.addAttribute("relFamTutor", participantecartatmp.getRelfam());
 
             List<Extensiones> exts =  this.scanCartaService.getExtension(participantecartatmp.getVersion().getIdversion());
             model.addAttribute("exts",exts);
-
             model.addAttribute("caso", new ExtensionesTmp());
-
             List<ExtensionesTmp> listaExtension = this.scanCartaService.getListExtensionTmp();
             model.addAttribute("listaExtension",listaExtension);
-
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
             List<Integer> personal = new ArrayList<Integer>();
+            HashSet<Integer> hset =
+                    new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
-                personal.add(value);
+                hset.add(value);
             }
-            List<Personal_Cargo> person = scanCartaService.getPersonal(personal);
+            List<Personal_Cargo> person = scanCartaService.getPersonal(hset);
             model.addAttribute("person", person);
-
+            List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+            model.addAttribute("relFam", relFam);
             model.addAttribute("editando", false);
             return "CatalogoScanCarta/ExtensionTmp";
         } catch (Exception e) {
@@ -1410,23 +1464,28 @@ public class CartasController {
     @RequestMapping(value = "/editextensionTmp/{idParticipantExtensiontmp}", method = RequestMethod.GET)
     public String editextensionTmp(Model model, @PathVariable(value = "idParticipantExtensiontmp") Integer idParticipantExtensiontmp) throws Exception {
         try {
-
             // obtener por ID la Extension
             ExtensionesTmp caso = this.scanCartaService.getExtensionTmpById(idParticipantExtensiontmp);
             model.addAttribute("caso", caso);
-
-
             // obtener por ID al participantecartaTmp
             ParticipanteCartaTmp participantecartatmp = this.scanCartaService.getAllParticipanteCartaTmpById(caso.getParticipantecartatmp().getId());
             model.addAttribute("participantecartatmp",participantecartatmp);
-
-
             List<Extensiones> exts =  this.scanCartaService.getExtension(caso.getParticipantecartatmp().getVersion().getIdversion());
             model.addAttribute("exts",exts);
-
             List<ExtensionesTmp> listaExtension = this.scanCartaService.getListExtensionTmp();
             model.addAttribute("listaExtension",listaExtension);
 
+            model.addAttribute("nombre1Tutor", participantecartatmp.getName1tutor());
+            String name2 = (participantecartatmp.getName2tutor()=="") ? "" : participantecartatmp.getName2tutor();
+            model.addAttribute("nombre2Tutor", name2 );
+            model.addAttribute("Surname1tutor",  participantecartatmp.getSurname1tutor());
+            String ape2 = (participantecartatmp.getSurname2tutor()== "") ? "" : participantecartatmp.getSurname2tutor();
+            model.addAttribute("Surname2tutor", ape2 );
+            model.addAttribute("relFamTutor", participantecartatmp.getRelfam());
+
+
+            List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+            model.addAttribute("relFam", relFam);
             model.addAttribute("agregando", false);
             model.addAttribute("editando", true);
         } catch (Exception e) {
@@ -1459,6 +1518,7 @@ public class CartasController {
           ,@RequestParam(value = "idversion",                    defaultValue = "", required = false) String idversion
           ,@RequestParam(value = "editando",                     defaultValue = "", required = false) String editando
           ,@RequestParam(value = "person",                       defaultValue = "", required = false) Integer person
+          ,@RequestParam(value = "relfam",                       defaultValue = "", required = false) Integer relfam
     ) throws Exception {
         String computerName = InetAddress.getLocalHost().getHostName();
         int id_participante_carta_tmp = Integer.parseInt(participantecartatmp);
@@ -1502,6 +1562,7 @@ public class CartasController {
             objToEdit.setObservacion(ob);
             objToEdit.setExtensiones(ex);
             objToEdit.setPersonal(personal);
+            objToEdit.setRelfam(relfam);
             this.scanCartaService.guardarExtensionTmp(objToEdit);
             return JsonUtil.createJsonResponse(objToEdit);
         }else { // Guardar Nuevo
@@ -1535,6 +1596,7 @@ public class CartasController {
                     tmp.setExtensiones(ex);
                     tmp.setParticipantecartatmp(pct);
                     tmp.setPersonal(personal);
+                    tmp.setRelfam(relfam);
                     this.scanCartaService.guardarExtensionTmp(tmp);
                     return JsonUtil.createJsonResponse(tmp);
                 } catch (Exception e) {
@@ -1658,6 +1720,7 @@ public class CartasController {
         try{
             String computerName = InetAddress.getLocalHost().getHostName();
                 int contador = 0;
+            int contadorExtension = 0;
             for (Integer num : dataArrayToSend){// Verificar q todas las q suban sean extensiones q no esten pasive 1
                 ParticipanteCartaTmp cartaTemporal = this.scanCartaService.getAllParticipanteCartaTmpById(num);
                 Participante participanteNuevo = this.scanCartaService.getParticipante(cartaTemporal.getIdparticipante());
@@ -1730,6 +1793,7 @@ public class CartasController {
                     //guardar las extensiones
                     List<ExtensionesTmp> listextensionTmps = this.scanCartaService.getListExtensionTmpByParticipanteCartaId(cartaTemporal.getId());
                     for (ExtensionesTmp ObjExtenstemp:listextensionTmps){
+                        contadorExtension++;
                         Extensiones catalog_extension = new Extensiones();
                         ParticipanteExtension part_Extension = new ParticipanteExtension();
                         part_Extension.setDeviceid(computerName);
@@ -1766,17 +1830,14 @@ public class CartasController {
                     this.scanCartaService.Borrar_Participante_Carta_Tmp(cartaTemporal.getId());
                 }
             }
-
-            return JsonUtil.createJsonResponse("Registro transferidos: ".concat(""+contador));
+            return JsonUtil.createJsonResponse("Consentimientos Transferidos: ".concat(""+contador).concat("\nExtensiones: "+contadorExtension));
         }catch (DataAccessException ex){
             Gson gson = new Gson();
             String json = gson.toJson(ex.getMostSpecificCause().getMessage());
-
             return new ResponseEntity<String>(json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //endregion
-
 
     /*  Esta Funcion retorna un Json  */
     private ResponseEntity<String> createJsonResponse( Object o )
@@ -1789,6 +1850,4 @@ public class CartasController {
         json = escaper.translate(json);
         return new ResponseEntity<String>( json, headers, HttpStatus.CREATED );
     }
-
-
 }

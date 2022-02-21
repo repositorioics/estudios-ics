@@ -2,7 +2,7 @@
  * Created by ICS on 15/10/2020.
  */
 var endPointSero = {};
-var Serologia2020 = function(){
+var SerologiaMA = function(){
     return{
         init: function(urls){
             endPointSero = urls;
@@ -47,47 +47,57 @@ var Serologia2020 = function(){
 
             function searchParticipante(){
                 $.getJSON(endPointSero.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
-                    debugger;
                     var len = data.length;
-                    if(data.mensaje != undefined){
-                        toastr.error(data.mensaje,"ERROR!",{timeOut:6000});
+                    if(data.msj != undefined || data.msj != null){
+                        swal({
+                            title: "¡ERROR!",
+                            type: "error",
+                            text: data.msj,
+                            timer: 2000
+                        });
                         Limpiartxt();
                         $("#fechaNac").val("");
                         $("#edadMeses").val("");
                     }
                     if(len==0){
-                        toastr.warning("Código no encontrado","ADVERTENCIA!",{timeOut:6000});
+                        swal({
+                            title: "¡ERROR!",
+                            type: "info",
+                            text: data.msj,
+                            timer: 2000
+                        });
                         Limpiartxt();
-                        $("#precepciona").val("").change();
                         $("#fechaNac").val("");
                         $("#edadMeses").val("");
                         $("#parametro").focus();
                     } else{
-                        if(data.estado == 0){
-                            toastr.error("Participante Retirado!", "ERROR!",{timeOut:6000});
-                            Limpiartxt();
-                        }else{
-                            var hoy=moment();
-                            $("#idParticipante").val(data.codigo);
-                            $("#nombreCompleto").val(data.nombreCompleto);
-                            $("#estudios").val(data.estudios);
-                            $("#casaCHF").val(data.casaFamilia);
-                            $("#volumen").val("");
-                            var dob = new Date(data.fechaNacimiento);
-                            var fnac = moment(dob).format('YYYY-MM-DD');
-                            var anios = hoy.diff(fnac,"years");
-                            var meses = hoy.diff(fnac,"months");
-                            var amd = daysMonthsYearsInDates(moment(dob).format('DD/MM/YYYY'),moment().format('DD/MM/YYYY'));
-                            $("#edadPart").val(amd);
-                            $("#fechaNac").val(fnac);
-                            $("#edadMeses").val(DifenciaMeses);
-                        }
+                        console.log(data);
+                        var hoy=moment();
+                        $("#idParticipante").val(data.idparticipante);
+                        $("#nombreCompleto").val(data.nombreCompleto);
+                        $("#estudios").val(data.estudios);
+                        $("#casaCHF").val(data.codigo_casa_Familia);
+                        $("#casaPDCS").val(data.codigo_casa_PDCS);
+                        $("#edad_year").val(data.edad_year);
+                        $("#edad_meses").val(data.edad_meses);
+                        $("#edad_dias").val(data.edad_dias);
+                        $("#volumen_adicional_desde_bd").val(data.volumen_adicional_desde_bd);
+                        $("#volumen_serologia_desde_bd").val(data.volumen_serologia_desde_bd);
+                        $("#edadMeses").val(data.edadEnMeses);
+                        $("#observacion").val(data.observacion);
+                        $("#estado").val(data.estado);
+                        $("#volumen").val("");
                     }
                 }).fail(function() {
                     Limpiartxt();
-                    toastr.error("Código no existe!", "Error!",{timeOut:6000});
-                    $("#parametro").val("");
-                    $("#parametro").focus();
+                    //toastr.error("Código no existe!", "Error!",{timeOut:6000});
+                    swal({
+                        title: "¡ERROR 500!",
+                        type: "error",
+                        text: "Interno del Servidor",
+                        timer: 2000
+                    });
+                    $("#parametro").focus().val("");
                 });
             }
 
@@ -125,67 +135,147 @@ var Serologia2020 = function(){
                 }
             });
 
-            function saveSerologia(urls){
-                var isAllValid = true;
-                debugger;
-                $("#edadMeses").val(DifenciaMeses);
-                var edad = $("#edadMeses").val();
-                var vol = $("#volumen").val();
-                if(edad < 6 && vol > 2){
-                    toastr.error("Volumen permitido de la Muestra para esta edad es hasta 2 cc","Error",{timeOut:6000});
-                    isAllValid = false;
-                    return;
-                }else if(edad >= 6 && edad < 24 && vol > 4){
-                    toastr.error("Volumen permitido de la Muestra para esta edad 4 cc","Error",{timeOut:6000});
-                    isAllValid = false;
-                    return;
-                }else if(edad >= 24 && edad < 168 && vol > 8 ){
-                    toastr.error("Volumen permitido de la Muestra para esta edad 8 cc","Error",{timeOut:6000});
-                    isAllValid = false;
-                    return;
-                }else if(edad >= 168 && vol > 18){
-                    toastr.error("Volumen permitido de la Muestra para esta edad 12 cc","Error",{timeOut:6000});
-                    isAllValid = false;
-                    return;
+            $('.submit_on_enter').on('keyup',function(event) {
+                if (event.which ===13) {
+                    event.preventDefault();
+                    $("#save-Serologia-form").submit();
                 }
+            });
 
-                if (isAllValid) {
-                    var formSerologia = $("#save-Serologia-form");
+
+            function saveSerologia(urls){
+                if($("#estado").val()===0 || $("#estado")=="") {
+                    swal({
+                        title: "Desear continuar?",
+                        text: "Participante Nuevo Ingreso!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Si, continuar!",
+                        cancelButtonText: "No, cancelar plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            swal("Buen Trabajo!", urls.successMessage, "success");
+                        } else {
+                            swal("Cancelado!", "Operación ha sido cancelada :)", "info");
+                        }
+                    });
+                }else if($("#estado").val()===3){
+                    swal({
+                        title: "Deseas continuar?",
+                        text: "Reactivar Participante",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Si, continuar!",
+                        cancelButtonText: "No, cancelar plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            swal("Buen Trabajo!", urls.successMessage, "success");
+                        } else {
+                            swal("Información!", "Operación ha sido cancelada :)", "info");
+                        }
+                    });
+                }else{
+                    saveSerologiaAjax(urls);
+                }
+            }//fin de la funcion saveSerologia
+
+
+            function saveSerologiaAjax(urls){
+                var volumen = parseInt($("#volumen").val());
+                var volumen_desde_db = parseInt($("#volumen_serologia_desde_bd").val());
+
+                var formSerologia = $("#save-Serologia-form");
+                if(volumen!=volumen_desde_db){
+                    swal({
+                            title: "Diferencia de Volumen?",
+                            text: "Deseas continuar?\n"+" Volumen sugerido para Serologia: "+ volumen_desde_db,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Si, continuar!",
+                            cancelButtonText: "No, cancelar plx!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                $.post(urls.saveFormUrl, formSerologia.serialize(), function (data) {
+                                    if (data.msj != null) {
+                                        swal({
+                                            title: "¡ERROR!",
+                                            text: data.msj,
+                                            type: "error",
+                                            timer: 2000
+                                        });
+                                        window.setTimeout(function () {
+                                            location.reload(true);
+                                        }, 3000);
+                                    } else {
+                                        swal({
+                                            title: "¡Buen trabajo!",
+                                            text: urls.successMessage,
+                                            type: 'success',
+                                            timer: 2000
+                                        });
+                                        window.setTimeout(function () {
+                                            window.location.href = urls.createUrl;
+                                        }, 3000);
+                                        $("#parametro").focus().val("");
+                                    }
+                                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                    console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
+                                    swal({
+                                        title: "¡ERROR 500!",
+                                        text: "Interno del Servidor.",
+                                        type: 'error',
+                                        timer: 2000
+                                    });
+                                });
+                            } else {
+                                swal("Cancelado", "Tu registro está seguro :)", "info");
+                            }
+                        });
+                }else {
                     $.post(urls.saveFormUrl, formSerologia.serialize(), function (data) {
                         if (data.msj != null) {
-                            toastr.error( data.msj, "Error!",{timeOut:6000});
+                            swal({
+                                title: "¡ERROR!",
+                                text: data.msj,
+                                type: "error",
+                                timer: 2000
+                            });
+                            window.setTimeout(function () {
+                                location.reload(true);
+                            }, 3000);
                         } else {
-                            toastr.success(urls.successMessage);
-                            Limpiartxt();
-                            $("#parametro").val("");
-                            $("#parametro").focus();
+                            swal({
+                                title: "¡Buen trabajo!",
+                                text: urls.successMessage,
+                                type: 'success',
+                                timer: 2000
+                            });
+                            window.setTimeout(function () {
+                                window.location.href = urls.createUrl;
+                            }, 3000);
+                            $("#parametro").focus().val("");
                         }
                     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        toastr.error("Error 500 Internal Server", "ERROR!",{timeOut:6000});
+                        console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
+                        swal({
+                            title: "¡ERROR 500!",
+                            text: "Interno del Servidor.",
+                            type: 'error',
+                            timer: 2000
+                        });
                     });
-
-                }//fin isValid
-            }
-
-            function DifenciaMeses(){
-                var numeroMeses;
-                var dateA = moment();
-                var dateB = moment($("#fechaNac").val()).format('YYYY-MM-DD');
-                var years = moment().diff($("#fechaNac").val(), 'years');
-                var years = moment().diff(dateB, 'years', false);
-                return numeroMeses = (years) * 12;
-            };
-
-
-            $("#volumen").on("keypress",function (e) {
-                if(e.which === 13){
-                    if(this.value === 12){
-                        $("#observacion").val('2 Tubos');
-                    }else{
-                        $("#observacion").val('');
-                    }
                 }
-            })
+            }
 
             function Limpiartxt(){
                 $("#idSerologia").val("");
@@ -198,8 +288,11 @@ var Serologia2020 = function(){
                 $("#volumen").val("");
                 $("#edadPart").val("");
                 $("#observacion").val("");
-                $("#precepciona").val("").change();
-                $("#parametro").focus();
+                $("#casaPDCS").val();
+                $("#edad_year").val();
+                $("#edad_meses").val();
+                $("#edad_dias").val();
+                $("#parametro").focus().val("");
             }
         }
     }
