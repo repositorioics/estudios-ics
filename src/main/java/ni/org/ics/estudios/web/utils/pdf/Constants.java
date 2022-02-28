@@ -9,4 +9,6 @@ public class Constants {
     public static final String TPR_REPORTECARTA ="REPORTECARTA";
     public static final String TPR_ENVIOREPORTE = "ENVIOREPORTE";
     public static final String TPR_ENVIOREPORTEPBCM = "ENVIOREPORTEPBMC";
+    public static final String TPR_ENVIOREPORTEPBCMTOEXCEL = "ENVIOREPORTEPBCMTOEXCEL";
+    public static final String TPR_ENVIOREPORTEBHC = "ENVIOREPORTEBHC";
 }
