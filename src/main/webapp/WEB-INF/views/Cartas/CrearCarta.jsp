@@ -387,21 +387,22 @@
             <div class="media">
                 <div class="media-body">
                     <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
-                        <div class="row">
-                            <div hidden="hidden">
-                                <div class="col-md-6">
-                                    <div class="form-group"  >
-                                        <label for="principal">principal</label>
-                                        <input type="text" class="form-control" disabled="disabled" id="principal"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group"  >
-                                        <label for="principal2">principal2</label>
-                                        <input type="text" class="form-control" disabled="disabled" id="principal2"/>
-                                    </div>
-                                </div>
+                    <div class="row"  hidden="hidden">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="principal">principal</label>
+                                <input type="text" class="form-control" disabled="disabled" id="principal"/>
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group"  >
+                                <label for="principal2">principal2</label>
+                                <input type="text" class="form-control" disabled="disabled" id="principal2"/>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fechacarta"><spring:message code="lbl.date" /></label>

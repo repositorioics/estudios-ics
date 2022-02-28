@@ -173,11 +173,18 @@ public class CartasController {
     }
 
     @RequestMapping(value = "/ParteVersion", method = RequestMethod.GET, produces = "application/json")
-    public   @ResponseBody
+    public @ResponseBody
     String GetParteCarta(@RequestParam(value = "idversion") Integer idversion, Model model) throws Exception {
         String result = "No Found";
         List<Parte> parte = scanCartaService.getParte(idversion);
         model.addAttribute("parte", parte);
+        ArrayList<String> partesPrincipales = new ArrayList<String>();
+        for(Parte p :parte){
+            if (p.isPrincipal()){
+                partesPrincipales.add(p.getParte());
+            }
+        }
+        model.addAttribute("partesPrincipales",partesPrincipales);
         String jsonResponse;
         jsonResponse = new Gson().toJson(model);
         UnicodeEscaper escaper = UnicodeEscaper.above(127);

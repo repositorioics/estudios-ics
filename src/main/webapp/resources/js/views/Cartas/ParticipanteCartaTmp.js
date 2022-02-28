@@ -83,95 +83,13 @@ var saveCartaTMP = function(){
                 }
                 return isAllValid;
             }
-            /*
-            function confirmaCodigoParticipante(){
-                var result = true;
-                if($("#idparticipante").val() =="" || $("#idparticipante").val() == null){
-                   toastr.error("Ingresa el codigo de participante","ERROR",{ timeOut : 6000});
-                    $("#idparticipante").addClass('is-invalid');
-                    $("#idparticipante").focus();
-                    result = false;
-                }else{
-                    $("#idparticipante").removeClass('is-invalid');
-                    $.getJSON(parametros.buscaCodigoUrl,{ idparticipante : $("#idparticipante").val(), ajax : 'true' }, function(data){
-                        if(data.mensaje != ""){
-                            toastr.error(data.mensaje,"ERROR!",{ timeOut : 6000 });
-                            result = false;
-                        }
-                    });
-                    return result;
-                }
-            }
-            */
-
-            /*form.validate({
-                rules: {
-                    idparticipante: {
-                        required: true,
-                        pattern: /^\+?[0-9]*\.?[0-9]+$/,
-                        maxlength: 5
-                    },
-                    name1tutor: {
-                        required: true
-                    },
-                    apellido1tutor: {
-                        required: true
-                    },
-                    fechacarta: {
-                        required: true
-                    },
-                    relfam: {
-                        required: true
-                    }
-                },
-                errorPlacement: function ( error, element ) {
-                    error.addClass( 'form-control-feedback' );
-                    if ( element.prop( 'type' ) === 'checkbox' ) {
-                        error.insertAfter( element.parent( 'label' ) );
-                    } else {
-                        error.insertAfter( element );
-                    }
-                    if (element.attr("name") == "signo") {
-                        error.insertAfter("#gendererror");
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-                highlight: function ( element, errorClass, validClass ) {
-                    $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
-                    $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
-                    $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
-                },
-                submitHandler: function () {
-                    saveexample(parametros);
-                }
-            });
-                function saveexample(){
-                    debugger;
-                    $.post(parametros.saveCartaExampleUrl, form.serialize(), function (data) {
-                        swal("Éxito!", "Información guardada!", "success")
-                        window.setTimeout(function () {
-                            window.location.href = dir.ListadoUrl;
-                        }, 1400);
-                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        swal("Error", "Problemas al Guardar!", "error");
-                    });
-                }*/
-
             jQuery("#idparticipante").on('input', function (evt) {
                 jQuery(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
             });
 
-            //var parts = [];
             function guardarCartaTmp(dir){
                 debugger;
                 var parts = [];
-                /*$("#parte option").each(function(){
-                    console.info('value: '+$(this).prop('value') +' selected: '+ $(this).prop('selected'));
-                });*/
                 var x = document.getElementById('parte');
                 console.warn(x.options);
                 for(var i = 0; i < x.options.length; i++){
@@ -219,7 +137,6 @@ var saveCartaTMP = function(){
                         data: JSON.stringify(obj),
                         success: function (data, status) {
                             if(data.msjCodigo != null){
-                                //toastr.error(data.msjCodigo,"ERROR", {timeOut: 5000});
                                 swal({
                                     title: "Error!",
                                     text: data.msjCodigo,
@@ -229,7 +146,6 @@ var saveCartaTMP = function(){
                                 });
 
                             }else if (data.msj != null){
-                                //toastr.warning(data.msj, {timeOut: 5000});
                                 swal({
                                     title: "Advertencia!",
                                     text: data.msj,
@@ -238,7 +154,6 @@ var saveCartaTMP = function(){
                                     timer: 2200
                                 });
                             } else {
-                                //toastr.success(dir.successmessage);
                                 swal({
                                     title: "Buen trabajo!",
                                     text: dir.successmessage,
@@ -350,11 +265,8 @@ var saveCartaTMP = function(){
                                 seleccionar(val.idparte);
                             }
                         });
-                        //$("#principal").val($("#parte").find('option:selected').text());
-                        var text = $('#parte option:selected').toArray().map(item => item.text).join();
-                        var arr = text.split(',');
-                        $("#principal").val(arr[0]);
-                        $("#principal2").val(arr[1]);
+                        $("#principal").val(data.partesPrincipales[0]);
+                        $("#principal2").val(data.partesPrincipales[1]);
 
                     }else{
                         $ele.empty();
@@ -365,17 +277,12 @@ var saveCartaTMP = function(){
             if($("#accion").val()=='true') {
                 getParteInTxt();
             }
-
             function getParteInTxt(){
-                var text = $('#parte option:selected').toArray().map(item => item.text).join();
-                var arr = text.split(',');
-                $("#principal").val(arr[0]);
-                $("#principal2").val(arr[1]);
-
+                $("#principal").val(data.partesPrincipales[0]);
+                $("#principal2").val(data.partesPrincipales[1]);
             };
 
             $("#parte").on("select2-removing", function(e) {
-                debugger;
                 var p = $("#principal").val();
                 if (e.choice.text === p) {
                     e.preventDefault();

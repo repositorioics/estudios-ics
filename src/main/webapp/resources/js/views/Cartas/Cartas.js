@@ -56,7 +56,6 @@ var scanCarta = function(){
                 $("#parametro").val("");
             }
             function searchParticipante(){
-                //debugger; //clearInput();
                 $("#carta").select2().empty();
                 $("#carta").select2().val("").change();
                 $("#version").select2().empty();
@@ -64,7 +63,6 @@ var scanCarta = function(){
                 $("#partes").select2().empty();
                 $("#partes").select2().val("").change();
                 $.getJSON(parametroII.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
-                    //console.warn(data);
                     var len = data.length;
                     if(len==0){
                         swal("Error!","Código no encontrado","error");
@@ -79,7 +77,6 @@ var scanCarta = function(){
                     }
                     else{
                         if(data.estado == "0"){
-                            //toastr.warning("Participante Retirado!",{timeOut: 5000});
                             swal({
                                 title: "Advertencia!",
                                 text: "Participante Retirado",
@@ -277,13 +274,6 @@ var scanCarta = function(){
                     e.preventDefault();
                     $(this).select2("close");
                 }
-                /*var nombres = p.split(",");
-                for(var i=0; i<nombres.length; i++){
-                    if (e.choice.text === nombres[i]) {
-                        e.preventDefault();
-                        $(this).select2("close");
-                    }
-                }*/
              });
 
             function seleccionar(id){
@@ -311,8 +301,8 @@ var scanCarta = function(){
                 var idversion = document.getElementById('version').value;
                 var $ele = $("#partes");
                 $.getJSON(parametros.ParteVersionUrl,{idversion : idversion, ajax:'true'}, function(data){
-                    debugger;
                      elementos = [];
+                    var texto="";
                     for(var i=0; i < data.parte.length; i++){
                         var obj = {};
                         obj.idparte = parseInt(data.parte[i].idparte);
@@ -325,16 +315,14 @@ var scanCarta = function(){
                         $("#principal").val('');
                         $("#principal2").val('');
                         $.each(data.parte, function (i, val) {
-                            var option = new Option(val.parte, val.idparte, false, val.principal );
+                            var option = new Option(val.parte, val.idparte, false, val.principal);
                             $ele.append(option).trigger('change');
                             if(val.principal){
                                 seleccionar(val.idparte);
                             }
                         });
-                        var text = $('#partes option:selected').toArray().map(item => item.text).join();
-                        var arr = text.split(',');
-                        $("#principal").val(arr[0]);
-                        $("#principal2").val(arr[1]);
+                        $("#principal").val(data.partesPrincipales[0]);
+                        $("#principal2").val(data.partesPrincipales[1]);
                     }else{
                         $ele.empty();
                     }
@@ -356,233 +344,6 @@ var scanCarta = function(){
                     console.log("else Id : " + num);
                 }
             });
-
-            //$("#btnSave").on("click", function(e){
-                //e.preventDefault();
-               /* var isValidItem = true;
-                $('#error').empty();
-                var data = {};
-                if($("#codigo").val() == "" || $("#codigo").val()== null){
-                    $('#codigo').siblings('span.error').css('visibility', 'visible');
-                    $('#codigo').parents('.form-group').addClass('has-danger');
-                    toastr.error("Seleccione participante!",{timeOut: 6000});
-                    $("#parametro").focus();
-                    isAllValid = false;
-                    return false;
-                }
-                else{
-                    $('#fechacarta').siblings('span.error').css('visibility', 'hidden');
-                    $('#fechacarta').parents('.form-group').removeClass('has-danger');
-                }
-
-                if($("#fechacarta").val() == "" || $("#fechacarta").val()== null){
-                    $('#fechacarta').siblings('span.error').css('visibility', 'visible');
-                    $('#fechacarta').parents('.form-group').addClass('has-danger');
-                    toastr.error("Seleccione la Fecha!",{timeOut: 6000});
-                    $("#fechacarta").focus();
-                    isAllValid = false;
-                    return false;
-                }
-                else{
-                    $('#fechacarta').siblings('span.error').css('visibility', 'hidden');
-                    $('#fechacarta').parents('.form-group').removeClass('has-danger');
-                }
-
-                if ($('#nombfirma').val().trim() == "" || $("#nombfirma").val().trim() == null) {
-                    $('#nombfirma').siblings('span.error').css('visibility', 'visible');
-                    $('#nombfirma').parents('.form-group').addClass('has-danger');
-                    toastr.error("1er. Nombre tutor es requerido!",{timeOut: 6000});
-                    isAllValid = false;
-                    return;
-                }
-                else {
-                    $('#nombfirma').siblings('span.error').css('visibility', 'hidden');
-                    $("#nombfirma").parents('.form-group').removeClass('has-danger');
-                }
-
-                if($("#apellido1Firma").val().trim() == "" || $("#apellido1Firma").val().trim() == null){
-                   $('#apellido1Firma').siblings('span.error').css('visibility', 'visible');
-                   $('#apellido1Firma').parents('.form-group').addClass('has-danger');
-                    isValidItem = false;
-                    toastr.error("1er. Apellido tutor es requerido!",{timeOut: 6000});
-                    return;
-                }else{
-                    $('#apellido1Firma').siblings('span.error').css('visibility', 'hidden');
-                    $("#apellido1Firma").parents('.form-group').removeClass('has-danger');
-                }
-
-                if ($('#relfam').val() == null || $('#relfam').val() == "") {
-                    $('#relfam').siblings('span.error').css('visibility', 'visible');
-                    $('#relfam').parents('.form-group').addClass('has-danger');
-                    isAllValid = false;
-                    toastr.error("Seleccione relación familiar!",{timeOut: 6000});
-                    return;
-                }
-                else {
-                    $('#relfam').siblings('span.error').css('visibility', 'hidden');
-                }
-
-                if($("#codigo").val().trim() == "" || $("#codigo").val()== null){
-                    $('#codigo').siblings('span.error').css('visibility', 'visible');
-                    $('#codigo').parents('.form-group').addClass('has-danger');
-                    $('#codigo').focus();
-                    isValidItem = false;
-                }else{
-                    $('#codigo').siblings('span.error').css('visibility', 'hidden');
-                    $('#codigo').parents('.form-group').removeClass('has-danger');
-                }
-
-                if($("#carta").val().trim() == "" || $("#carta").val().trim() == null){
-                    isValidItem = false;
-                    $('#carta').siblings('span.error').css('visibility', 'visible');
-                    toastr.error("Seleccione la Carta!",{timeOut: 6000});
-                    return;
-                }
-                else{
-                    $('#carta').siblings('span.error').css('visibility', 'hidden');
-                }
-
-                if($("#version").val() == null || $("#version").val() == ""){
-
-                    isValidItem = false;
-                    $('#version').siblings('span.error').css('visibility', 'visible');
-                    $('#version').parents('.form-group').addClass('has-danger');
-                    toastr.error("Seleccione la Versión!",{timeOut: 6000});
-                    return;
-                }
-                else{
-                    $('#version').siblings('span.error').css('visibility', 'hidden');
-                }
-
-                if($("#person").val()=="" || $("#person").val()== null){
-                    isValidItem = false;
-                    $('#person').siblings('span.error').css('visibility', 'visible');
-                    $('#person').parents('.form-group').addClass('has-danger');
-                    toastr.error("Seleccione el recurso!",{timeOut: 6000});
-                    return;
-                }
-                else{
-                    $('#person').siblings('span.error').css('visibility', 'hidden');
-                }
-                if($("#proyecto").val()=="" || $("#proyecto").val()== null){
-                    $('#proyecto').siblings('span.error').css('visibility', 'visible');
-                    $('#proyecto').parents('.form-group').addClass('has-danger');
-                    isValidItem = false;
-                    toastr.error("Seleccione el proyecto!",{timeOut: 6000});
-                    return;
-                }else{
-                    $('#proyecto').siblings('span.error').css('visibility', 'hidden');
-                }
-
-                var num = $("#partes").select2().val();
-                if($.isEmptyObject(num)){
-                    $('#partes').siblings('span.error').css('visibility', 'visible');
-                    $('#partes').parents('.form-group').addClass('has-danger');
-                    isValidItem = false;
-                    toastr.error("Seleccione partes principales!",{timeOut: 6000});
-                    return;
-                }else{
-                    $('#partes').siblings('span.error').css('visibility', 'hidden');
-                }
-                debugger;
-                if( $("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == ""){
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
-                    toastr.error("Verifica el tipo de asentimiento!",{timeOut: 5000});
-                    $("#tipoasentimiento").select2("open");
-                    isValidItem = false;
-                    return;
-                }else if($("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == "0" || $("#tipoasentimiento").val() == ""){
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
-                    toastr.error("Tipo de asentimiento requerido!",{timeOut: 5000});
-                    $("#tipoasentimiento").select2("open");
-                    isValidItem = false;
-                    return;
-                }
-                else{
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'hidden');
-                    $('#tipoasentimiento').parents('.form-group').removeClass('has-danger');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-success');
-                }
-                var status = ($("#chktestigo").is(':checked')) ? 'checked' : 'unchecked';
-                if(status == 'checked'){
-                    if($("#nombre1Testigo").val() == "" || $("#nombre1Testigo").val() == null){
-                        $('#nombre1Testigo').siblings('span.error').css('visibility', 'visible');
-                        $('#nombre1Testigo').parents('.form-group').addClass('has-danger');
-                        toastr.error("1er. Nombre del testigo es requerido,",{timeOut: 5000});
-                        isValidItem = false;
-                        return;
-                    }
-                    else{
-                        $('#nombre1Testigo').siblings('span.error').css('visibility', 'hidden');
-                        $('#nombre1Testigo').parents('.form-group').removeClass('has-danger');
-                        $('#nombre1Testigo').parents('.form-group').addClass('has-success');
-                    }
-
-                    if($('#apellido1Testigo').val() == "" || $('#apellido1Testigo')==null){
-                        $('#apellido1Testigo').siblings('span.error').css('visibility', 'visible');
-                        $('#apellido1Testigo').parents('.form-group').addClass('has-danger');
-                        toastr.error("1er. Apellido del testigo es requerido,",{timeOut: 5000});
-                        isValidItem = false;
-                        return;
-                    }else{
-                        $('#apellido1Testigo').siblings('span.error').css('visibility', 'hidden');
-                        $('#apellido1Testigo').parents('.form-group').removeClass('has-danger');
-                        $('#apellido1Testigo').parents('.form-group').addClass('has-success');
-                    }
-                }
-
-                if(isValidItem){
-                    debugger;
-                    if (typeof elementos !== 'undefined' && elementos.length > 0) {
-                        console.log('MyArrayPartes is not empty.');*/
-                        /*var x = document.getElementById('partes');
-                        for(var i = 0; i < x.options.length; i++){
-                            console.log("options"+[i]+" opciones: "+x.options);
-                            var obj = {};
-                            obj.idparte = parseInt(x.options[i].value);
-                            obj.acepta =  (x.options[i].acepta == "true") ? true : false;
-                            elementos.push(obj);
-                        }
-                    }else{
-                        console.log('MyArrayPartes is empty.');
-                        //toastr.error("Seleccione parte de la Carta!",{timeOut: 5000});
-                    }
-                    var text = $("#person option:selected").html();
-                    var separador = "-";
-                    var textoseparado = text.split(separador);
-                    data = {
-                        codigo: parseInt($("#codigo").val().trim()),
-                        version: parseInt($("#version").val().trim()),
-                        asentimiento: $("#asentimiento").val().trim(),
-                        relfam: parseInt($("#relfam").val().trim()),
-                        nombfirma: $("#nombfirma").val().trim(),
-                        nombre2Firma: $("#nombre2Firma").val().trim(),
-                        apellido1Firma: $("#apellido1Firma").val().trim(),
-                        apellido2Firma: $("#apellido2Firma").val().trim(),
-                        person: parseInt($("#person").val().trim()),
-                        fechacarta: $("#fechacarta").val(),
-                        proyecto: $("#proyecto").val(),
-                        contactoFuturo: ($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
-                        testigopresente: ($('input:checkbox[name=chktestigo]').prop('checked') == true) ? '1' : '0',
-                        nombre1testigo: $("#nombre1Testigo").val().trim(),
-                        nombre2testigo: $("#nombre2Testigo").val().trim(),
-                        apellido1testigo: $("#apellido1Testigo").val().trim(),
-                        apellido2testigo: $("#apellido2Testigo").val().trim(),
-                        observacion :$("#observacion").val().trim(),
-                        edadyears: parseInt( $("#edadyear").val().trim()),
-                        edadmeses: parseInt( $("#edadmeses").val().trim()),
-                        edaddias: parseInt( $("#edaddias").val().trim()),
-                        recurso: textoseparado[0],
-                        tipoasentimiento: $("#tipoasentimiento").val().trim(),
-                        parte: elementos
-                    };
-                    GuardarScan(data);
-                }*/
-            //});
-
-
             $('#form-scan').submit(function(e){
                 e.preventDefault();
                 var isOK = ValidateForm();
@@ -689,35 +450,6 @@ var scanCarta = function(){
                 }else{
                     $('#tipoasentimiento').removeClass('is-invalid');
                 }
-
-               /* if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
-                    isAllValid = false;
-                    $('#tipoasentimiento').addClass('is-invalid');
-                }else{
-                    $('#tipoasentimiento').removeClass('is-invalid');
-                }
-
-                debugger;
-                if( $("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == ""){
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
-                    toastr.error("Verifica el tipo de asentimiento!",{timeOut: 5000});
-                    $("#tipoasentimiento").select2("open");
-                    isValidItem = false;
-                    return;
-                }else if($("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == "0" || $("#tipoasentimiento").val() == ""){
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
-                    toastr.error("Tipo de asentimiento requerido!",{timeOut: 5000});
-                    $("#tipoasentimiento").select2("open");
-                    isValidItem = false;
-                    return;
-                }
-                else{
-                    $('#tipoasentimiento').siblings('span.error').css('visibility', 'hidden');
-                    $('#tipoasentimiento').parents('.form-group').removeClass('has-danger');
-                    $('#tipoasentimiento').parents('.form-group').addClass('has-success');
-                }*/
                 return isAllValid;
             }
 

@@ -410,7 +410,7 @@
                     <hr/>
                     <div class="container col-sm-12 col-lg-12">
                     <form id="form_carta_tmp" name="form_carta_tmp" autocomplete="off"  class="needs-validation" novalidate>
-                    <div class="row"  hidden="hidden">
+                    <div class="row" hidden="hidden">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="principal">principal</label>
@@ -654,7 +654,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="col-md-2">
                             <div class="form-group">
@@ -1295,7 +1294,6 @@
                 closeOnConfirm: false,
                 showLoaderOnConfirm: true
             }, function (e) {
-                //console.log(e);
                 if(e){
                   PasarDatos();
                 }
@@ -1315,7 +1313,6 @@
                     contentType: "application/json",
                     dataType: "json",
                     success: function (result) {
-                        //console.log(result);
                         if(result.mensaje != null){
                             swal({
                                 title: "Información!",
@@ -1323,12 +1320,10 @@
                                 type: "info",
                                 closeOnConfirm: true
                             });
-                            //toastr.info(result.mensaje,"INFORMACION", {timeOut: 6000});
                             window.setTimeout(function(){
                                 window.location.href = parametros.CartaParticipantTmpUrl;
                             }, 1500);
                         }else if(result.msj != null) {
-                            //toastr.error(result.msj,"ERROR",{timeOut:6000});
                             swal({
                                 title: "Información!",
                                 text: result.msj,
@@ -1337,7 +1332,6 @@
                             });
 
                         }else{
-                            //toastr.success(direct.successmessage);
                             swal({
                                 title: "Información!",
                                 text: direct.successmessage,
