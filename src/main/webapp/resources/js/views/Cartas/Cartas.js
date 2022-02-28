@@ -56,7 +56,7 @@ var scanCarta = function(){
                 $("#parametro").val("");
             }
             function searchParticipante(){
-                debugger; //clearInput();
+                //debugger; //clearInput();
                 $("#carta").select2().empty();
                 $("#carta").select2().val("").change();
                 $("#version").select2().empty();
@@ -97,6 +97,7 @@ var scanCarta = function(){
                             $("#parametro").focus();
                         }else{
                             clearInput();
+                            console.warn(data);
                             $("#codigo").val(data.codigoParticipante);
                             $("#tutor").val(data.nombreTutor);
                             $("#txtNombreCompleto").val(data.nombreCompleto);
@@ -112,21 +113,19 @@ var scanCarta = function(){
                             $("#apellido2Firma").val(data.surname2Tutor);
                             var relfamiliar = parseInt(data.realFam);
                             $("#relfam").val(relfamiliar).trigger('change.select2');
+                            debugger;
                             if(data.menorEdad == true){
-                                //debugger;
-                                $("#divAsentimiento").fadeIn("slow");
                                 $("#asentimiento").select2().val(1).trigger('change.select2');
-
                                 $("#asentimiento").select2().prop('required', true);
 
                                 $("#tipoasentimiento").prop('required', true);
+                                $("#tipoasentimiento").select2().val(1).trigger('change.select2');
                             }else{
-                                $("#divAsentimiento").fadeOut("slow");
-                                $("#asentimiento").val('').trigger('change.select2');
                                 $("#asentimiento").prop('required', false);
+                                $("#asentimiento").val(3).trigger('change.select2');
 
-                                $("#tipoasentimiento").val('').trigger('change.select2');
                                 $("#tipoasentimiento").prop('required', false);
+                                $("#tipoasentimiento").val(4).trigger('change.select2');
                                 $("#relfam").val(8).trigger('change.select2');
                             }
                             var text = "";
@@ -149,6 +148,9 @@ var scanCarta = function(){
                                 case "6":
                                     text="Otra Relación Familiar";
                                     break;
+                                case "9":
+                                    text="Hijo(a)";
+                                    break;
                                 default:
                                     text = "Participante";
                             }
@@ -157,13 +159,12 @@ var scanCarta = function(){
                             $carta.empty();
                             $carta.append('<option selected value="">'+ "Seleccione..." +'</option>');
                             $.each(data.listEstudios, function (i, val) {
-                                $carta.append($('<option></option>').val(val.prioridad).html(val.prioridad +" - "+val.nombreEstudio));
+                                $carta.append($('<option></option>').val(val.prioridad).html(val.nombreEstudio));
                             });
                             $("#peso").focus();
                         }
                     }
                 }).fail(function() {
-                    //toastr.error("Error Interno en el Servidor!",{timeOut: 5000});
                     swal({
                         title: "Error 500!",
                         text: "Interno del Servidor",
@@ -191,6 +192,12 @@ var scanCarta = function(){
             $("#carta").on("change", function(){
                 $('#version').val("").trigger('change.select2');
                 $('#version').select2().empty();
+                $("#partes").select2().empty();
+                //$("#partes").append($('<option></option>').val('').html('Seleccione'));
+                $('#partes').select2().empty().trigger('change.select2');
+                $("#partes").select2("val", "");
+                $("#principal").val('');
+                $("#principal2").val('');
                 if ($('#version').prop("disabled") == false) {}
                 if ($("#carta").val() == null  || $("#carta").val() == "") {
                     $('#version').empty();
@@ -208,6 +215,12 @@ var scanCarta = function(){
                 } else {
                     $('#proyecto').val(4).trigger('change.select2');
                 }
+                if($(this).val() ==="6"){
+                    $("#tipoCaso").prop('disabled',false);
+                }else{
+                    $("#tipoCaso").select2().val(0).trigger("change").prop('disabled',true);
+                }
+
                 $("#partes").prop('disabled',false);
                 $("#version").prop('disabled',false);
                 ObtenerVersion(parametroII);
@@ -233,7 +246,9 @@ var scanCarta = function(){
             $("#version").on("change", function(){
                 //debugger;
                 $("#partes").select2("val", "");
-                $("#partes").empty();
+                $("#partes").select2().empty();
+                $("#principal").val('');
+                $("#principal2").val('');
                 if($("#version").val() == "") {
                     $("#DivPartes").hide(1000);
                     $("#DivPartes").empty();
@@ -257,12 +272,18 @@ var scanCarta = function(){
             });
 
             $("#partes").on("select2-removing", function(e) {
-             debugger;
                 var p = $("#principal").val();
                 if (e.choice.text === p) {
                     e.preventDefault();
                     $(this).select2("close");
                 }
+                /*var nombres = p.split(",");
+                for(var i=0; i<nombres.length; i++){
+                    if (e.choice.text === nombres[i]) {
+                        e.preventDefault();
+                        $(this).select2("close");
+                    }
+                }*/
              });
 
             function seleccionar(id){
@@ -290,6 +311,7 @@ var scanCarta = function(){
                 var idversion = document.getElementById('version').value;
                 var $ele = $("#partes");
                 $.getJSON(parametros.ParteVersionUrl,{idversion : idversion, ajax:'true'}, function(data){
+                    debugger;
                      elementos = [];
                     for(var i=0; i < data.parte.length; i++){
                         var obj = {};
@@ -301,6 +323,7 @@ var scanCarta = function(){
                     if(data.parte.length > 0){
                         bandera=true;
                         $("#principal").val('');
+                        $("#principal2").val('');
                         $.each(data.parte, function (i, val) {
                             var option = new Option(val.parte, val.idparte, false, val.principal );
                             $ele.append(option).trigger('change');
@@ -308,13 +331,16 @@ var scanCarta = function(){
                                 seleccionar(val.idparte);
                             }
                         });
-                        $("#principal").val($("#partes").find('option:selected').text());
-
+                        var text = $('#partes option:selected').toArray().map(item => item.text).join();
+                        var arr = text.split(',');
+                        $("#principal").val(arr[0]);
+                        $("#principal2").val(arr[1]);
                     }else{
                         $ele.empty();
                     }
                 })
             }
+
             //Validar las cajas de texto...
             $('.onlytext').keypress(function (e) {
                 var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
@@ -589,7 +615,8 @@ var scanCarta = function(){
                         recurso: textoseparado[0],
                         tipoasentimiento: $("#tipoasentimiento").val().trim(),
                         parte: elementos,
-                        estudios_actuales: $("#estudios").val()
+                        estudios_actuales: $("#estudios").val(),
+                        esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim())
                     };
                     GuardarScan(data);
                 }
@@ -649,6 +676,19 @@ var scanCarta = function(){
                 else{
                     $('#person').removeClass('is-invalid');
                 }
+                if($("#asentimiento").val() == "" || $("#asentimiento").val() == null){
+                    isAllValid = false;
+                    $('#asentimiento').addClass('is-invalid');
+                }else{
+                    $('#asentimiento').removeClass('is-invalid');
+                }
+
+                if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
+                    isAllValid = false;
+                    $('#tipoasentimiento').addClass('is-invalid');
+                }else{
+                    $('#tipoasentimiento').removeClass('is-invalid');
+                }
 
                /* if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
                     isAllValid = false;
@@ -678,8 +718,6 @@ var scanCarta = function(){
                     $('#tipoasentimiento').parents('.form-group').removeClass('has-danger');
                     $('#tipoasentimiento').parents('.form-group').addClass('has-success');
                 }*/
-
-
                 return isAllValid;
             }
 
@@ -694,7 +732,6 @@ var scanCarta = function(){
                     success: function(response){
                         console.log(response);
                         if(response.msj != null){
-                            //toastr.warning(response.msj,{timeOut: 5000});
                             swal({
                                 title: "Advertencia!",
                                 text: response.msj,
@@ -704,7 +741,6 @@ var scanCarta = function(){
                             });
                         }else{
                             clearInput();
-                            //toastr.success(direct.successmessage);
                             swal({
                                 title: "Buen trabajo!",
                                 text: direct.successmessage,
@@ -717,7 +753,6 @@ var scanCarta = function(){
                             }, 1500);
                         }
                     },error: function(jqXHR, textStatus,e){
-                        //toastr.error(textStatus,"ERROR",{timeOut:6000});
                         swal({
                             title: "Error 500!",
                             text: "Interno del Servidor",
@@ -741,8 +776,6 @@ var scanCarta = function(){
                     $("#apellido1Testigo").prop('required', false);
                 }
             });
-
-
 
             $( "#nombfirma" ).autocomplete({
                 delay:100,
@@ -805,7 +838,6 @@ var scanCarta = function(){
             });
 
             //testigo
-
             $( "#nombre1Testigo" ).autocomplete({
                 delay:100,
                 source: function(request, response){
@@ -821,7 +853,6 @@ var scanCarta = function(){
                 highlight: true
             });
 
-
             $( "#nombre2Testigo" ).autocomplete({
                 delay:100,
                 source: function(request, response){
@@ -836,7 +867,6 @@ var scanCarta = function(){
                 scroll: true,
                 highlight: true
             });
-
 
             $( "#apellido1Testigo" ).autocomplete({
                 delay:100,

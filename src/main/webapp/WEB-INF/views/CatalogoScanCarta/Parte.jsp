@@ -452,14 +452,14 @@
                 $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
             },
             submitHandler: function (form) {
-                debugger;
+                //debugger;
                 SaveParte(parametros);
             }
         });
 
 
         function SaveParte(dir){
-            console.log(form.serialize())
+            //console.log(form.serialize());
             $.post(dir.saveParteUrl, form.serialize(), function(data){
                 console.log(data);
                 if (data.msj != null) {

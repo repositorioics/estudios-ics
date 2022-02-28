@@ -366,7 +366,7 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-                <div class="container col-sm-12 col-lg-10">
+                <div class="container col-sm-11 col-lg-12">
                     <spring:url value="/cartas/ListadoCartaParticipant" var="listUrl"/>
                     <spring:url value="/cartas/searchParticipant" var="searchPartUrl"/>
                     <spring:url value="/cartas/VersionCarta" var="VersionCartatUrl"/>
@@ -505,7 +505,7 @@
                                                             <div class="form-group">
                                                                 <label for="fechacarta"><spring:message code="lbl.date" /></label>
                                                                 <span class="required text-danger"> * </span>
-                                                                <input type="text" required="required" class="form-control form-control-sm focusNext" tabindex="5" id="fechacarta" name="fechacarta"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fechacarta}" pattern="dd/MM/yyyy"/>"/>
+                                                                <input type="text" required="required" class="form-control focusNext" tabindex="5" id="fechacarta" name="fechacarta"  data-date-end-date="+0d" value="<fmt:formatDate value="${obj.fechacarta}" pattern="dd/MM/yyyy"/>"/>
                                                                 <div class="invalid-feedback">
                                                                     <spring:message code="lbl.date" /> <spring:message code="lbl.required" />
                                                                 </div>
@@ -620,7 +620,7 @@
                                                                </div>--%>
                                                         </div>
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="person"><spring:message code="lbl.resource"/></label>
                                                                 <span class="required text-danger"> * </span>
@@ -643,7 +643,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="proyecto"><spring:message code="lbl.project" /> </label>
                                                                 <span class="required text-danger"> * </span>
@@ -704,9 +704,10 @@
                                                              </div>
                                                          </div>--%>
 
-                                                        <div class="col-md-6"  id="divAsentimiento">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="asentimiento"><spring:message code="lbl.assent" /> </label>
+                                                                <span class="required text-danger"> * </span>
                                                                 <select name="asentimiento" id="asentimiento" class="form-control">
                                                                     <option selected value=""><spring:message code="select" />...</option>
                                                                     <c:forEach items="${SiNoNA}" var="s">
@@ -720,13 +721,18 @@
                                                                         </c:choose>
                                                                     </c:forEach>
                                                                 </select>
+
+                                                                <div class="invalid-feedback">
+                                                                    <spring:message code="lbl.assent" /> <spring:message code="lbl.required" />
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <div id="DivtipoAsent">
                                                                 <div class="form-group">
                                                                     <label for="tipoasentimiento"><spring:message code="type.assent" /> </label>
+                                                                    <span class="required text-danger"> * </span>
                                                                     <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
                                                                         <option value=""><spring:message code="select" />...</option>
                                                                         <c:forEach items="${tpoasent}" var="ta">
@@ -740,7 +746,11 @@
                                                                             </c:choose>
                                                                         </c:forEach>
                                                                     </select>
-                                                                    <span class="error"><spring:message code="type.assent" /><spring:message code="lbl.required" />.</span>
+
+                                                                    <div class="invalid-feedback">
+                                                                        <spring:message code="type.assent" /><spring:message code="lbl.required" />.
+                                                                    </div>
+                                                                    <span class="error"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -781,7 +791,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="relfam"><spring:message code="family.relationship" /> </label>
                                                                     <span class="required text-danger"> * </span>
@@ -804,7 +814,29 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label for="tipoCaso"><spring:message code="cases" />: </label>
+                                                                            <select name="tipoCaso" id="tipoCaso" class="form-control">
+                                                                                <option selected value=""><spring:message code="select" />...</option>
+                                                                                <c:forEach items="${TipoCaso}" var="t">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${t.catKey eq obj.esIndiceOrMiembro}">
+                                                                                            <option selected value="${t.catKey}">${t.spanish}</option>
+                                                                                        </c:when>
+                                                                                        <c:otherwise>
+                                                                                            <option value="${t.catKey}">${t.catKey} - ${t.spanish}</option>
+                                                                                        </c:otherwise>
+                                                                                    </c:choose>
+                                                                                </c:forEach>
+                                                                            </select>
+                                                                            <div class="invalid-feedback">
+                                                                                <spring:message code="cases" /> <spring:message code="lbl.required" />
+                                                                            </div>
+                                                                        </div>
+                                                            </div>
+
+                                                            <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <div class="form-check mt-4 text-center">
                                                                         <c:choose>
@@ -815,17 +847,14 @@
                                                                                 <input type="checkbox" name="contactoFuturo" id="contactoFuturo" value="1" class="lcs_check" autocomplete="off" />
                                                                             </c:otherwise>
                                                                         </c:choose>
-
                                                                         <label class="form-check-label" for="contactoFuturo">
                                                                             <spring:message code="lbl.Accept.future.contact" />
                                                                         </label>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
 
-                                                            <div class="col-md-4">
-
+                                                            <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <div class="form-check mt-4 text-center">
                                                                         <c:choose>
@@ -841,7 +870,6 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
                                                         </div>
 
@@ -1038,7 +1066,7 @@
         $("#asentimiento").select2();
         $("#tipoasentimiento").select2();
         $("#proyecto").select2();
-
+        $("#tipoCaso").select2();
         $("#btnUpdate").on("click", function(e){
             e.preventDefault();
             var isValidItem = true;
@@ -1164,6 +1192,21 @@
                 }
             }
 
+            if($("#asentimiento").val() == "" || $("#asentimiento").val() == null){
+                isAllValid = false;
+                $('#asentimiento').addClass('is-invalid');
+            }else{
+                $('#asentimiento').removeClass('is-invalid');
+            }
+
+            if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
+                isAllValid = false;
+                $('#tipoasentimiento').addClass('is-invalid');
+            }else{
+                $('#tipoasentimiento').removeClass('is-invalid');
+            }
+
+
             if( $("#asentimiento").val() == "1" && $("#tipoasentimiento").val() == ""){
                 $('#tipoasentimiento').siblings('span.error').css('visibility', 'visible');
                 $('#tipoasentimiento').parents('.form-group').addClass('has-danger');
@@ -1229,7 +1272,8 @@
                         tipoasentimiento: $("#tipoasentimiento").val().trim(),
                         fecha_registro : ""+$("#fecha_registro").val(),
                         parte: MyArrayPartes,
-                        estudios_actuales: $("#estudios").val()
+                        estudios_actuales: $("#estudios").val(),
+                        esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim())
                     };
                     ActualizarScan(data);
                 }
@@ -1297,7 +1341,7 @@
         $("#carta").on("change", function(){
             $("#version option").remove();
             $("#version").select2('val', '');
-                ObtenerVersion(parametros);
+            ObtenerVersion(parametros);
         });
         function ObtenerVersion(parametros){
             var idcarta = document.getElementById('carta').value;
@@ -1427,6 +1471,15 @@
                 $("#selectt").fadeIn("slow");
             }else{
                 $("#selectt").fadeOut("slow");
+            }
+        }
+
+        HabilitarOrDisabledCaso();
+        function HabilitarOrDisabledCaso(){
+            if($("#carta").val() ==="6"){
+                $("#tipoCaso").prop('disabled',false);
+            }else{
+                $("#tipoCaso").select2().val(0).trigger("change").prop('disabled',true);
             }
         }
     });

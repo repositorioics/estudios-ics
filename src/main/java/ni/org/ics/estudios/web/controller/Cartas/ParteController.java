@@ -92,27 +92,6 @@ public class ParteController {
         }
     }
 
-/*
-    @RequestMapping(value = "/editParte/{idparte}", method = RequestMethod.GET)
-    public String editParte(@PathVariable(value = "idparte") Integer idparte, Model model)throws ParseException {
-        try{
-            Parte caso = this.scanCartaService.getParteById(idparte);
-            model.addAttribute("caso",caso);
-            List<Estudio> estudios = scanCartaService.getAllEstudios();
-            model.addAttribute("estudios", estudios);
-            List<Parte> parte = scanCartaService.getListParte();
-            model.addAttribute("parte", parte);
-            List<Estudio> cartas = scanCartaService.getEstudios();
-            model.addAttribute("cartas",cartas);
-            List<Version> version = scanCartaService.getVersioCarta(caso.getVersion().getEstudio().getCodigo());
-            model.addAttribute("version",version);
-            return"/CatalogoScanCarta/Parte";
-        }
-        catch (Exception e){
-            return "404";
-        }
-    }*/
-
     public boolean siTienePartePrincipal(List<Parte>list){
         boolean encontrado = false;
         for (Parte x :list)
@@ -122,6 +101,7 @@ public class ParteController {
             }
         return encontrado;
     }
+
     //CatalogoParte/saveParte
     @RequestMapping( value="saveParte", method=RequestMethod.POST)
     public ResponseEntity<String> saveVersion(@RequestParam( value="idversion", required=true ) Integer idversion
@@ -133,10 +113,13 @@ public class ParteController {
     )throws Exception{
         try {
             List<Parte> partesByIdVersion = scanCartaService.listadoPartesPrincipales(idversion);
-            if (siTienePartePrincipal(partesByIdVersion) && principal.equals("on")){
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("msj", "Ya existe una parte principal!");
-                return createJsonResponse(map);
+            Version vers = this.scanCartaService.getVersionById(idversion);
+            if(vers.getEstudio().getCodigo()!=6) {
+                if (siTienePartePrincipal(partesByIdVersion) && principal.equals("on")) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("msj", "Ya existe una parte principal!");
+                    return createJsonResponse(map);
+                }
             }
             Version v = new Version();
             Parte p = new Parte();
@@ -212,7 +195,7 @@ public class ParteController {
 
 
 
-        @RequestMapping(value = "UpdateParte", method = RequestMethod.POST)
+    @RequestMapping(value = "UpdateParte", method = RequestMethod.POST)
     public ResponseEntity<String> UpdateParte(@RequestParam( value="idparte", required=true ) Integer idparte
             ,@RequestParam( value="idversion", required=true ) Integer idversion
             ,@RequestParam( value="parte", required=true ) String parte
@@ -255,7 +238,6 @@ public class ParteController {
             String json = gson.toJson(e.toString());
             return  new ResponseEntity<String>( json, HttpStatus.CREATED);
         }
-
     }
 
     // CatalogoParte/GetVersion
@@ -306,14 +288,6 @@ public class ParteController {
     @RequestMapping(value = "delete", method= RequestMethod.POST)
     public ResponseEntity<String> delete(@RequestParam("idparte") Integer idparte)throws Exception{
         try{
-            /*
-            * parametros en el Controller  ->  HttpSession session, HttpServletRequest request
-            boolean verif = request.isUserInRole("ROLE_ADMIN");
-            if (request.isUserInRole("ROLE_ADMIN")){
-                System.out.println("Si tiene RoleAdmin"+ verif);
-            }else{
-                System.out.println("No tiene RoleAdmin"+verif);
-            }*/
             Parte parte = this.scanCartaService.getParteById(idparte);
             if (parte!=null) {
                 this.scanCartaService.DesHabilitarParte(idparte);

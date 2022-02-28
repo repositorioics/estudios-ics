@@ -388,14 +388,20 @@
                 <div class="media-body">
                     <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
                         <div class="row">
-                            <div class="col-md-6" >
-                                <div class="form-group" hidden="hidden">
-                                    <label for="principal">principal</label>
-                                    <input type="text" class="form-control" disabled="disabled" id="principal"/>
+                            <div hidden="hidden">
+                                <div class="col-md-6">
+                                    <div class="form-group"  >
+                                        <label for="principal">principal</label>
+                                        <input type="text" class="form-control" disabled="disabled" id="principal"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group"  >
+                                        <label for="principal2">principal2</label>
+                                        <input type="text" class="form-control" disabled="disabled" id="principal2"/>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-12"></div>
-
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="fechacarta"><spring:message code="lbl.date" /></label>
@@ -445,7 +451,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="person"><spring:message code="lbl.resource"/></label>
                                     <span class="required text-danger"> * </span>
@@ -461,9 +467,10 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="proyecto"><spring:message code="lbl.project" /> </label>
+                                    <span class="required text-danger"> * </span>
                                     <select name="proyecto" id="proyecto" class="form-control">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${proyecto}" var="p">
@@ -475,36 +482,40 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!-- fin row -->
 
-                        <div class="row" id="divAsentimiento" style="display: none">
-
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="asentimiento"><spring:message code="lbl.assent" /> </label>
-                                    <select name="asentimiento" id="asentimiento" class="form-control">
+                                    <span class="required text-danger"> * </span>
+                                    <select name="asentimiento" id="asentimiento" class="form-control" required="required">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${SiNoNA}" var="s">
-                                            <option value="${s.catKey}"><spring:message code="${s.spanish}" /></option>
+                                            <option value="${s.catKey}">${s.catKey} - <spring:message code="${s.spanish}" /></option>
                                         </c:forEach>
                                     </select>
+
+                                    <div class="invalid-feedback">
+                                        <spring:message code="lbl.assent" /> <spring:message code="lbl.required" />
+                                    </div>
                                 </div>
                             </div>
 
-
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="tipoasentimiento"><spring:message code="type.assent" /> </label>
-                                    <select name="tipoasentimiento" id="tipoasentimiento" class="form-control">
+                                    <span class="required text-danger"> * </span>
+                                    <select name="tipoasentimiento" id="tipoasentimiento" class="form-control" required="required">
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${tpoasent}" var="ta">
-                                            <option value="${ta.catKey}"><spring:message code="${ta.spanish}" /></option>
+                                            <option value="${ta.catKey}"> ${ta.catKey} - <spring:message code="${ta.spanish}" /></option>
                                         </c:forEach>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="type.assent" /> <spring:message code="lbl.required" />
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
+                        </div><!-- fin row -->
 
                         <div class="row">
                             <div class="col-md-3">
@@ -550,7 +561,7 @@
                                     <select name="relfam" id="relfam" class="form-control" required>
                                         <option selected value=""><spring:message code="select" />...</option>
                                         <c:forEach items="${relFam}" var="rel">
-                                            <option value="${rel.catKey}">${rel.spanish}</option>
+                                            <option value="${rel.catKey}">${rel.catKey} - ${rel.spanish}</option>
                                         </c:forEach>
                                     </select>
                                     <div class="invalid-feedback">
@@ -559,7 +570,25 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-2">
+
+                                <div class="form-group">
+                                    <label for="tipoCaso"><spring:message code="cases" />: </label>
+                                    <select name="tipoCaso" id="tipoCaso" class="form-control">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                        <c:forEach items="${TipoCaso}" var="t">
+                                            <option value="${t.catKey}">${t.spanish}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="cases" /> <spring:message code="lbl.required" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <div class="form-check mt-4 text-center">
                                         <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo">
@@ -571,7 +600,7 @@
                                <%-- <p> <h5 class="text-primary" style="font-family: Roboto"><spring:message code="lbl.Accept.future.contact" /></h5> </p>
                                 <p><input type="checkbox" name="contactoFuturo" id="contactoFuturo"  class="lcs_check" autocomplete="off" /></p>--%>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <div class="form-check mt-4 text-center">
                                         <input class="form-check-input chktestigo" type="checkbox" id="chkTestigo" name="chkTestigo">
@@ -620,6 +649,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -711,8 +741,11 @@
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
 
-<spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
+<spring:url value="/resources/js/libs/select2.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
+
+<spring:url value="/resources/js/libs/select2.min.js" var="selectMinJs" />
+<script type="text/javascript" src="${selectMinJs}"></script>
 
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
@@ -746,9 +779,7 @@
 </script>
 
 <script type="text/javascript">
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
+
     $(document).ready(function(){
         $(".collapse.show").each(function(){
             $(this).siblings(".card-header").find(".btn i").addClass("fa-minus-circle").removeClass("fa-plus-circle");
@@ -786,6 +817,7 @@
         $("#proyecto").select2();
         $("#asentimiento").select2();
         $("#tipoasentimiento").select2();
+        $("#tipoCaso").select2().val(0).trigger("change").prop('disabled',true);
 
         var parametros = {
             searchPartUrl       : "${searchPartUrl}",
@@ -798,10 +830,10 @@
             cartaSaveEditUrl    : "${cartaSaveEditUrl}",
             successmessage      : "${successMessage}",
             listExtensionesUrl  : "${listExtensionesUrl}",
-            getNombre1Url           : "${getNombre1Url}",
-            getNombre2Url           : "${getNombre2Url}",
-            getApellido1Url         : "${getApellido1Url}",
-            getApellido2Url         : "${getApellido2Url}"
+            getNombre1Url       : "${getNombre1Url}",
+            getNombre2Url       : "${getNombre2Url}",
+            getApellido1Url     : "${getApellido1Url}",
+            getApellido2Url     : "${getApellido2Url}"
         };
         scanCarta.init(parametros);
         var elementos = [];
@@ -815,6 +847,11 @@
         });
 
         $("#parametro").focus();
+    });
+</script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
     });
 </script>
 </body>

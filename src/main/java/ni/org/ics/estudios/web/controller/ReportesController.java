@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.web.controller;
 
-//import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
+import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
+import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
@@ -11,9 +12,10 @@ import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.language.MessageResource;
+import ni.org.ics.estudios.service.Bhc.BhcService;
 import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
-//import ni.org.ics.estudios.service.Pbmc.PbmcService;
+import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
@@ -70,8 +72,11 @@ public class ReportesController {
     @Resource(name = "SerologiaService")
     private SerologiaOct2020Service serologiaservice;
 
-    //@Resource(name = "PbmcService")
-    //private PbmcService pbmcService;
+    @Resource(name = "PbmcService")
+    private PbmcService pbmcService;
+
+    @Resource(name = "BhcService")
+    private BhcService bhcService;
 
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
@@ -155,7 +160,6 @@ public class ReportesController {
     }
 
 
-
     @RequestMapping(value = "downloadFileSerologiaExcel", method = RequestMethod.GET)
     public ModelAndView SerologiaExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                        @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
@@ -183,8 +187,8 @@ public class ReportesController {
 
 //endregion
 
-    //todo generar reporte PBMC PDF and EXCEL
-    /*@RequestMapping(value = "/EnvioPbmcPdf", method = RequestMethod.GET)
+    //todo generar reporte PBMC PDF
+    @RequestMapping(value = "/EnvioPbmcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                                     @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
                                                     @RequestParam(value="fechaFin", required=false ) String fechaFin)
@@ -207,11 +211,157 @@ public class ReportesController {
         ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
         ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCM);
         return ReporteEnvioPbmcPdf;
-    }*/
+    }
+
+        //todo envio Excel solo Pbmc
+    @RequestMapping(value = "/EnvioPbmcToExcel", method = RequestMethod.GET)
+    public ModelAndView EnvioPbmcToExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                         @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                         @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
 
 
+
+        ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
+        ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+
+        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
+
+        ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
+        return ReporteEnvioPbmcPdf;
+    }
+
+    //todo envio Excel solo Pbmc PDF
+    @RequestMapping(value = "/EnvioSerologiaConPbmcPdf", method = RequestMethod.GET)
+    public ModelAndView EnvioSerologiaConPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                         @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                         @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+
+        ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
+        ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+
+        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
+
+        ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
+        return ReporteEnvioPbmcPdf;
+    }
+
+
+
+
+
+    //todo: Excel PBMC con serologia
+    @RequestMapping(value = "/EnvioSeroPbmcExcel", method = RequestMethod.GET)
+    public ModelAndView EnvioSeroPbmcExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                     @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                     @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+        ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
+        ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+        List<Serologia_Detalle_Envio> SerologiaWithPbmc = this.serologiaservice.getSerologiaByPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("SerologiaWithPbmc",SerologiaWithPbmc);
+        ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCM);
+        return ReporteEnvioPbmcPdf;
+    }
+
+    //todo: PDF PBMC con serologia ******
+    @RequestMapping(value = "/EnvioSeroPbmcPdf", method = RequestMethod.GET)
+    public ModelAndView EnvioSeroPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                           @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                           @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvioSeroPbmcPdf = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+        ReporteEnvioSeroPbmcPdf.addObject("fechaInicio",fechaInicio);
+        ReporteEnvioSeroPbmcPdf.addObject("fechaFin",fechaFin);
+        List<Serologia_Detalle_Envio> SerologiaWithPbmc = this.serologiaservice.getSerologiaByPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioSeroPbmcPdf.addObject("SerologiaWithPbmc",SerologiaWithPbmc);
+        ReporteEnvioSeroPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
+        return ReporteEnvioSeroPbmcPdf;
+    }
     //fin reporte PBMC
 
+    //region todo Reporte BHC
+    @RequestMapping(value = "/EnvioBhcPdf", method = RequestMethod.GET)
+    public ModelAndView EnvioBhc(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                                    @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                                    @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvio = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+        ReporteEnvio.addObject("fechaInicio",fechaInicio);
+        ReporteEnvio.addObject("fechaFin",fechaFin);
+        List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvio.addObject("allBhc",allBhc);
+        ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEBHC);
+        return ReporteEnvio;
+    }
+
+    //todo: Reporte Bhc Excel
+    @RequestMapping(value = "/EnvioBhcExcel", method = RequestMethod.GET)
+    public ModelAndView EnvioBhcExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                 @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                 @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvio = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+        ReporteEnvio.addObject("fechaInicio",fechaInicio);
+        ReporteEnvio.addObject("fechaFin",fechaFin);
+        List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvio.addObject("allBhc",allBhc);
+        ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEBHC);
+        return ReporteEnvio;
+    }
+    //endregion
 
     /*Este controlador devuelve archivo Hemodinámica  /ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f    */
     @RequestMapping(value = "/ReporteHemodinamica", method = RequestMethod.GET)
@@ -255,9 +405,12 @@ public class ReportesController {
         relFam.addAll(messageResourceService.getCatalogo("SCANCARTA"));
         relFam.addAll(messageResourceService.getCatalogo("CAT_TIPO_ASENT"));
         relFam.addAll(messageResourceService.getCatalogo("TIPOASENTIMIENTO"));
+        relFam.addAll(messageResourceService.getCatalogo("CAT_CASOS_INDICE_MIEMBRO"));
         ReporteCarta.addObject("relFam",relFam);
         ReporteCarta.addObject("TipoReporte", Constants.TPR_REPORTECARTA);
          return ReporteCarta;
     }
+
+
 
 }

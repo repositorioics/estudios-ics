@@ -38,7 +38,7 @@ public class ParticipanteCartaTmp extends BaseMetaData implements Auditable {
     private String nombre2testigo;
     private String apellido1testigo;
     private String apellido2testigo;
-
+    private Integer esIndiceOrMiembro;
 
     public  ParticipanteCartaTmp(){}
 
@@ -223,6 +223,14 @@ public class ParticipanteCartaTmp extends BaseMetaData implements Auditable {
         this.apellido2testigo = apellido2testigo;
     }
 
+    @Column(name = "ES_CASO_INDICE_O_MIEMBRO")
+    public Integer getEsIndiceOrMiembro() {
+        return esIndiceOrMiembro;
+    }
+
+    public void setEsIndiceOrMiembro(Integer esIndiceOrMiembro) {
+        this.esIndiceOrMiembro = esIndiceOrMiembro;
+    }
     @Override
     public boolean isFieldAuditable(String fieldname) {
         return false;

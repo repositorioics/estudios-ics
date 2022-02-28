@@ -207,8 +207,8 @@ var saveCartaTMP = function(){
                         edadmeses           : parseInt(0),
                         edaddias            : parseInt(0),
                         accion              : $("#accion").val().trim(),
-                        parte               : parts
-                        //estudios_actuales: $("#estudios").val()
+                        parte               : parts,
+                        esIndiceOrMiembro   : parseInt($("#tipoCaso").val().trim())
                     };
                     var url = dir.saveUrl;
                     $.ajax({
@@ -278,6 +278,13 @@ var saveCartaTMP = function(){
                 } else {
                     $('#proyecto').val(4).trigger('change.select2');
                 }
+
+                if($(this).val() ==="6"){
+                    $("#tipoCaso").prop('disabled',false);
+                }else{
+                    $("#tipoCaso").select2().val(0).trigger("change").prop('disabled',true);
+                }
+
                 if($(this).val() === ""){
                     $("#version").select2("val", "").change();
                     $("#version").empty();
@@ -334,6 +341,7 @@ var saveCartaTMP = function(){
                     if(data.parte.length > 0){
                         bandera=true;
                         $("#principal").val('');
+                        $("#principal2").val('');
                         $.each(data.parte, function (i, val) {
                             debugger;
                             var option = new Option(val.parte, val.idparte, false, val.principal );
@@ -342,12 +350,30 @@ var saveCartaTMP = function(){
                                 seleccionar(val.idparte);
                             }
                         });
-                        $("#principal").val($("#parte").find('option:selected').text());
+                        //$("#principal").val($("#parte").find('option:selected').text());
+                        var text = $('#parte option:selected').toArray().map(item => item.text).join();
+                        var arr = text.split(',');
+                        $("#principal").val(arr[0]);
+                        $("#principal2").val(arr[1]);
+
                     }else{
                         $ele.empty();
                     }
                 })
             }
+
+            if($("#accion").val()=='true') {
+                getParteInTxt();
+            }
+
+            function getParteInTxt(){
+                var text = $('#parte option:selected').toArray().map(item => item.text).join();
+                var arr = text.split(',');
+                $("#principal").val(arr[0]);
+                $("#principal2").val(arr[1]);
+
+            };
+
             $("#parte").on("select2-removing", function(e) {
                 debugger;
                 var p = $("#principal").val();
@@ -443,7 +469,6 @@ var saveCartaTMP = function(){
                 scroll: true,
                 highlight: true
             });
-
 
 
             $( "#nombre2Testigo" ).autocomplete({

@@ -5,6 +5,7 @@ import ni.org.ics.estudios.domain.catalogs.Parte;
 import ni.org.ics.estudios.domain.catalogs.Version;
 import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ParticipanteCartaDto  {
     private String nombreUsuario;
     private String accion;
     private String estudios_actuales;
-
+    private Integer esIndiceOrMiembro;
     public ParticipanteCartaDto() {}
 
     public Integer getCodigo() {
@@ -303,5 +304,14 @@ public class ParticipanteCartaDto  {
 
     public void setEstudios_actuales(String estudios_actuales) {
         this.estudios_actuales = estudios_actuales;
+    }
+
+
+    public Integer getEsIndiceOrMiembro() {
+        return esIndiceOrMiembro;
+    }
+
+    public void setEsIndiceOrMiembro(Integer esIndiceOrMiembro) {
+        this.esIndiceOrMiembro = esIndiceOrMiembro;
     }
 }

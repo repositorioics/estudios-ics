@@ -367,7 +367,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
                             <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                            <span class="d-none d-md-block"><spring:message code="List" /> <i class="badge badge-light">${listaDto.size()}</i></span>
+                            <span class="d-none d-md-block"><spring:message code="List" />
+                                <i class="badge badge-light"> <c:out value="${total_ListaDto}" /> </i>
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -395,7 +397,7 @@
             <div class="d-flex justify-content-between">
                 <div class="p-2 bd-highlight">
                     <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom"
-                       title="Ir al Listado Extensiones"
+                       title="Ir a extensiones temporales"
                        href="<spring:url value="/cartas/listExtensionTmp" htmlEscape="true "/>">
                         <i class="fa fa-list-alt" aria-hidden="true"></i>
                         <spring:message code="List"/>  <spring:message code="Extension"/>
@@ -408,15 +410,20 @@
                     <hr/>
                     <div class="container col-sm-12 col-lg-12">
                     <form id="form_carta_tmp" name="form_carta_tmp" autocomplete="off"  class="needs-validation" novalidate>
-                    <div class="row" hidden="hidden">
+                    <div class="row"  hidden="hidden">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="principal">principal</label>
-                                <input type="text" class="form-control" disabled="disabled" id="principal" value="${partePrincipal}"/>
+                                <input type="text" class="form-control" disabled="disabled" id="principal"/>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="principal2">principal2</label>
+                                <input type="text" class="form-control" disabled="disabled" id="principal2"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="accion">editando</label>
                                 <input type="text" class="form-control" name="accion" id="accion" value="${accion}"/>
@@ -630,7 +637,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <div class="form-check mt-4">
                                     <c:choose>
@@ -649,7 +656,7 @@
                         </div>
 
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <div class="form-check mt-4">
                                     <c:choose>
@@ -663,6 +670,28 @@
                                     <label class="form-check-label" for="contactoFuturo">
                                         <spring:message code="lbl.Accept.future.contact" />
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="tipoCaso"><spring:message code="cases" />: </label>
+                                <select name="tipoCaso" id="tipoCaso" class="form-control">
+                                    <option selected value=""><spring:message code="select" />...</option>
+                                    <c:forEach items="${TipoCaso}" var="t">
+                                        <c:choose>
+                                            <c:when test="${t.catKey eq caso.esIndiceOrMiembro}">
+                                                <option selected value="${t.catKey}">${t.spanish}</option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${t.catKey}">${t.catKey} - ${t.spanish}</option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <spring:message code="cases" /> <spring:message code="lbl.required" />
                                 </div>
                             </div>
                         </div>
@@ -939,6 +968,9 @@
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
+
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
 <c:choose>
@@ -953,8 +985,7 @@
 <script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
-<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
-<script src="${uiJs}" type="text/javascript"></script>
+
 <spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
@@ -1347,36 +1378,24 @@
             toastr.info("${DisabledLabel}", "INFO",{timeOut:7000} );
         }
 
-        /*
-        if ("${usuarioHabilitado}"){
-            toastr.success("${userEnabledLabel}", "${nombreUsuario}" );
-        }
-        if ("${usuarioDeshabilitado}"){
-            toastr.error("${userDisabledLabel}", "${nombreUsuario}" );
+        HabilitarOrDisabledCaso();
+        function HabilitarOrDisabledCaso(){
+            if($("#idcarta").val() ==="6"){
+                $("#tipoCaso").select2().prop('disabled',false);
+            }else{
+                $("#tipoCaso").select2().val(0).trigger("change").prop('disabled',true);
+            }
         }
 
-        $('#tableParte tbody').on('click', '.Activar', function () {
-            var id = $(this).data('id');
-            $('#accionUrl').val($(this).data('id'));
-            var currentRow = $(this).closest("tr");
-            var col4 = currentRow.find("td:eq(4)").text();
-            $('#titulo').html('<h2 class="modal-title">'+ "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i>" + "Habilitar?" +'</h2>');
-            $('#cuerpo').html('<h3 class="text-warning">'+ col4 + '</h3>');
-            $('#basic').modal('show');
-        });
-        $('#tableParte tbody').on('click', '.desact', function () {
-            var id = $(this).data('id');
-            $('#accionUrl').val($(this).data('id'));
-            var currentRow = $(this).closest("tr");
-            var col4 = currentRow.find("td:eq(4)").text();
-            $('#titulo').html('<h2 class="modal-title">'+ "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i>" + "Deshabilitar?" +'</h2>');
-            $('#cuerpo').html('<h3 class="text-danger">'+ col4 + '</h3>');
-            $('#basic').modal('show');
-        });*/
     });
     function ejecutarAccion() {
         window.location.href = $('#accionUrl').val();
     }
+</script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 </body>
 </html>

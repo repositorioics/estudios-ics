@@ -60,6 +60,17 @@ var SearchCartaParticipant = function () {
         });
 
 
+        var tblScanParticipant = $("#tblScanParticipant").DataTable({
+            "searching" : false,
+            "autoWidth" : true,
+            "info"      : false,
+            paging      : true,
+            "oLanguage" : {
+                "sUrl"  : parametros.dataTablesLang
+            }
+        });
+
+
         $("#select-participante-form").validate( {
             rules: {
                 parametro: 'required',
@@ -84,7 +95,9 @@ var SearchCartaParticipant = function () {
             },
             submitHandler: function (form) {
                 table.clear().draw( false );
+                tblScanParticipant.clear().draw( false );
                 Buscarcp(parametros);
+                //BuscarEnScan(parametros);
             }
 
         });// fin validate
@@ -101,7 +114,7 @@ var SearchCartaParticipant = function () {
         function Buscarcp(dir){
             debugger;
             $.getJSON(dir.GetCartasParticipanteUrl,{parametro : $('#parametro').val(), ajax : 'true' },function(data){
-                console.log(data);
+                //console.log(data);
                 var len = data.length;
                 if(len == 0){
                     toastr.warning("No se encontró información de: "+'<strong>' + $('#parametro').val() +'</strong>',{timeOut: 5000});
@@ -155,6 +168,46 @@ var SearchCartaParticipant = function () {
                 $("#parametro").focus();
             });
         }
+
+        function BuscarEnScan(dir){
+            //debugger;
+            $.getJSON(dir.GetScanCartastUrl,{parametro : $('#parametro').val(), ajax : 'true' },function(data){
+                console.log(data);
+                var len = data.length;
+                 if(len == 0){
+                    toastr.warning("No se encontró información de: "+'<strong>' + $('#parametro').val() +'</strong>',{timeOut: 5000});
+                    $("#parametro").val("");
+                    $("#parametro").focus();
+                }else{
+                    for ( var i = 0; i < len; i++) {
+                        var cons = data[i].cons;
+                        var codigo = data[i].codigo;
+                        var fecha = data[i].fecha;
+                        var asentimiento = data[i].asentimiento;
+                        var parteA = data[i].parteA;
+                        var parteB = data[i].parteB;
+                        var parteC = data[i].parteC;
+                        var parteD = data[i].parteD;
+                        var editarUrl = parametros.EditCartaUrl + '/' + data[i].codigo;
+                        tblScanParticipant.row.add([
+                            codigo,
+                            fecha,
+                            cons,
+                            asentimiento,
+                            parteA,
+                            parteB,
+                            parteC,
+                            parteD,
+                            editarUrl
+                        ]).draw( false );
+                    }
+                }
+            }).fail(function() {
+                toastr.error( parametros.error,{timeOut: 2000});
+                $("#parametro").focus();
+            });
+        }
+
         /*valor     = '<a class="btn btn-outline-info btn-sm btnViewParte"  data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-history"></i></a>',
          reporte   = '<a class="btn btn-outline-success btn-sm btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book"></i></a>',
         $('#tableCartParticipnt tbody').on('click', '.btnEditar', function(){

@@ -195,6 +195,52 @@
                 width: 25em;
             }
         }
+        /* card principal*/
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid transparent;
+            border-radius: 0;
+        }
+        .mailbox-widget .custom-tab .nav-item .nav-link {
+            border: 0;
+            color: #fff;
+            border-bottom: 3px solid transparent;
+        }
+        .mailbox-widget .custom-tab .nav-item .nav-link.active {
+            background: 0 0;
+            color: #fff;
+            border-bottom: 3px solid #2cd07e;
+        }
+        .no-wrap td, .no-wrap th {
+            white-space: nowrap;
+        }
+        .table td, .table th {
+            padding: .9375rem .4rem;
+            vertical-align: top;
+            border-top: 1px solid rgba(120,130,140,.13);
+        }
+        .font-light {
+            font-weight: 300;
+        }
+        /**/
+        .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+            background-color: #028dba;
+        }
+        .nav-tabs .nav-link, .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:hover, .nav-tabs .nav-link.disabled:focus {
+            border-color: rgba(0, 0, 0, 0.1);
+            background-color: #028dba;
+        }
+        .mailbox-widget .custom-tab .nav-item .nav-link.active {
+            background: 0 0;
+            color: #fff;
+            border-bottom: 5px solid #fff
+        }
         /*fin*/
     </style>
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
@@ -218,79 +264,125 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
+                <spring:url value="/Domicilio/searchParticipant" var="searchPartUrl"/>
+                <spring:url value="/cartas/GetScanCartas" var="GetScanCartastUrl"/>
+                <!-- init -->
+                <div class="container  col-md-10 col-lg-12">
                 <div class="row">
-                    <div class="container col-sm-12 col-md-12 col-lg-12">
-                        <div class="card shadow bg-white rounded bg-white text-black-50" >
-                            <div class="card-header">
-                                <h5>  <i class="fa fa-clipboard" aria-hidden="true"></i>  <spring:message code="letters" /> <spring:message code="participant" /></h5>
+                <div class="col-md-12">
+                <div class="card">
+                <div class="card-body bg-primary text-white mailbox-widget pb-0">
+                    <h2 class="text-white pb-3"><i class="fa fa-clipboard" aria-hidden="true"></i>  <spring:message code="letters" /> <spring:message code="participant" /></h2>
+                    <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="true">
+                                <span class="d-block d-md-none"><i class="ti-email"></i></span>
+                                <span class="d-none d-md-block"> <spring:message code="letters" /> </span>
+                            </a>
+                        </li>
+                        <%--<li class="nav-item">
+                            <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
+                                <span class="d-block d-md-none"><i class="ti-export"></i></span>
+                                <span class="d-none d-md-block"><spring:message code="Tcovid" /> </span>
+                            </a>
+                        </li>--%>
+                    </ul>
+                </div>
+                <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade active show" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
+                <div>
+                <!-- init list-->
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="btn btn-info btn-lg mt-1 float-left" data-toggle="tooltip" data-placement="bottom" title="Asignar Carta" href="<spring:url value="/cartas/Crear" htmlEscape="true "/>">
+                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                <spring:message code="lbl.To.assign" /> <spring:message code="letters" />
+                            </a>
+                            <a class="btn btn-success btn-lg mt-1 float-right" data-toggle="tooltip" data-placement="bottom" title="Extensiones" href="<spring:url value="/cartas/ListExtension" htmlEscape="true "/>">
+                                <i class="fa fa-list-ol" aria-hidden="true"></i>
+                                <spring:message code="List" /> <spring:message code="Extension" />
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="container col-sm-8 col-md-8 col-lg-8">
+                                <form action="#" autocomplete="off" id="select-participante-form" class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="input-group col-md-10">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input id="parametro" name="parametro" type="text" value="" class="form-control"/>
+                                            <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                                <spring:message code="search" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div class="p-2 bd-highlight">
-                                        <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom" title="Asignar Carta" href="<spring:url value="/cartas/Crear" htmlEscape="true "/>">
-                                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                            <spring:message code="lbl.To.assign" /> <spring:message code="letters" />
-                                        </a>
-                                    </div>
-                                    <div class="p-2 bd-highlight"></div>
-                                    <div class="p-2 bd-highlight">
-                                        <a class="btn btn-success btn-lg" data-toggle="tooltip" data-placement="bottom" title="Extensiones" href="<spring:url value="/cartas/ListExtension" htmlEscape="true "/>">
-                                            <i class="fa fa-list-ol" aria-hidden="true"></i>
-                                            <spring:message code="List" /> <spring:message code="Extension" />
-                                        </a>
-                                    </div>
-
-                                </div>
-                                <spring:url value="/Domicilio/searchParticipant" var="searchPartUrl"/>
-                                <br/>
-                                <div class="row">
-                                    <div class="col-sm-2 col-md-2 col-lg-2"></div>
-                                    <div class="col-sm-8 col-md-8 col-lg-8">
-                                        <form action="#" autocomplete="off" id="select-participante-form" class="form-horizontal">
-                                            <div class="form-group row">
-                                                <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
-                                                    <span class="required">*</span>
-                                                </label>
-                                                <div class="input-group col-md-10">
-                                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                                    <input id="parametro" name="parametro" type="text" value="" class="form-control"/>
-                                                    <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
-                                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                                        <spring:message code="search" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-sm-2 col-md-2 col-lg-2"></div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="table-responsive" style="min-height: 400px;">
-                                        <table id="tableCartParticipnt" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center"><spring:message code="id" /></th>
-                                                <th class="text-center"><spring:message code="code" /></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="lbl.names.surnames"/></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="letters" /></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="version" /></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="dateAdded" /></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="lbl.invalid" /></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="why.invalid" /></th>
-                                                <th data-hide="phone,tablet" class="text-center"><spring:message code="actions" /></th>
-                                              <!--  <th data-hide="phone,tablet" class="text-center"><spring:message code="reports" /></th>
+                            <hr/>
+                            <div class="table-responsive" style="min-height: 400px;">
+                                <table id="tableCartParticipnt" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center"><spring:message code="id" /></th>
+                                        <th class="text-center"><spring:message code="code" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="lbl.names.surnames"/></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="letters" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="version" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="dateAdded" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="lbl.invalid" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="why.invalid" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="actions" /></th>
+                                        <!--  <th data-hide="phone,tablet" class="text-center"><spring:message code="reports" /></th>
                                                  <th data-hide="phone,tablet" class="text-center"><spring:message code="Extension" /></th>
                                                 <th data-hide="phone,tablet" class="text-center"><spring:message code="Editar" /></th>-->
-                                            </tr>
-                                            </thead>
-                                            <tbody class="fixed-table-body"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div> <!-- fin card body -->
-                        </div>  <!-- fin card body -->
+                                    </tr>
+                                    </thead>
+                                    <tbody class="fixed-table-body"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                <!--fin list-->
+                </div>
+                </div>
+                <div class="tab-pane fade" id="sent" aria-labelledby="sent-tab" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            Featured
+                        </div>
+                        <div class="card-block">
+                            <div class="table-responsive" style="min-height: 400px;">
+                                <table id="tblScanParticipant" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="code" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="dateAdded" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="consentimiento"/></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="asentimiento" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Parte A" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Parte B" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Parte C" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="Parte D" /></th>
+                                        <th data-hide="phone,tablet" class="text-center"><spring:message code="actions" /></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="fixed-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                <!--fin -->
+
                 <spring:url value="/cartas/GetCartasParticipante" var="GetCartasParticipanteUrl"/>
                 <spring:url value="/cartas/ListadoCartaParticipant" var="Lista2AllUrl"/>
                 <spring:url value="/cartas/VerParteCarta/" var="searchPartesUrl"></spring:url>
@@ -558,7 +650,8 @@
                 DeleteUrl                : "${DeleteUrl}",
                 haRoleAdmin              : "${haRoleAdmin}",
                 isAuthorizeAny           : "${isAuthorizeAny}",
-                Lista2AllUrl             : "${Lista2AllUrl}"
+                Lista2AllUrl             : "${Lista2AllUrl}",
+                "GetScanCartastUrl"      : "${GetScanCartastUrl}"
             };
         SearchCartaParticipant.init(parametros);
     });

@@ -3,8 +3,7 @@ package ni.org.ics.estudios.service.scancarta;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.*;
 import ni.org.ics.estudios.domain.scancarta.*;
-//import ni.org.ics.estudios.domain.scancarta.ScanCarta;
-import ni.org.ics.estudios.dto.ParticipanteCartaDto;
+import ni.org.ics.estudios.dto.scan;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -18,6 +17,8 @@ import java.security.cert.Extension;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
+//import ni.org.ics.estudios.domain.scancarta.ScanCarta;
 
 /**
  * Created by Miguel Salinas on 6/27/2017.
@@ -89,8 +90,7 @@ public class ScanCartaService {
 
     public List<Estudio>getEstudios(){
         Session session = sessionFactory.getCurrentSession();
-        Character verdadera = '1';
-        Query query = session.createQuery("from Estudio e order by e.id asc ");
+        Query query = session.createQuery("from Estudio e where e.pasive='0' order by e.nombre asc ");
         return query.list();
     }
 
@@ -137,8 +137,7 @@ public class ScanCartaService {
 
     public List<Version> getScanVersion(){
         Session session = sessionFactory.getCurrentSession();
-
-        Query query = session.createQuery("from Version order by version");
+        Query query = session.createQuery("from Version v where v.activo=true order by v.version");
         return query.list();
     }
 
@@ -595,6 +594,17 @@ public class ScanCartaService {
         return query.list();
     }
 
+
+    public Integer countCartaTmpByUser()throws Exception{
+        Session session = sessionFactory.getCurrentSession();
+        String nameUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Query query = session.createQuery("select count (*) from ParticipanteCartaTmp p where p.pasive='0' and p.recordUser=:nameUser order by p.id asc");
+        query.setParameter("nameUser",nameUser);
+        Integer result = Integer.valueOf(String.valueOf(query.uniqueResult()));
+        return result;
+    }
+
+
     public ParticipanteCartaTmp getAllParticipanteCartaTmpById(int id)throws Exception{
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from ParticipanteCartaTmp tm where tm.id=:id");
@@ -692,13 +702,13 @@ public class ScanCartaService {
 
 
     // METODO PARA OBTENER LA PARTE PRINCIPAL POR VERSION
-    public Parte getPartePrincipal(int idversion){
+    public List<Parte> getPartePrincipal(int idversion){
         Session session = sessionFactory.getCurrentSession();
         boolean si = true;
         Query query = session.createQuery("from Parte p where p.activo=:si and p.principal=:si and p.version.idversion=:idversion");
         query.setParameter("idversion", idversion);
         query.setParameter("si", si);
-        return (Parte) query.uniqueResult();
+        return (List<Parte>) query.list();
     }
 
     //region BUSCAR NOMBRE Y APELLIDOS TUTOR
@@ -833,22 +843,23 @@ public class ScanCartaService {
         int response =  query.executeUpdate();
         return response;
     }
-
-
     //endregion
 
 
-    public List<ParticipanteCartaDto> getDataScan(int idparticipante){
+    //TODO: --> * METODO PARA CONSULTAR TABLA SCAN * <--
+    public List<scan> getDataScan(int idparticipante){
         Session session = sessionFactory.getCurrentSession();
-        String Sql = "select s.codigo as idparticipante , s.asentimiento as codigo, s.cons as version from scan s where s.codigo=:idparticipante";
+        //int cons=10;
+        String Sql = "from scan s where s.codigo=:idparticipante ";
         Query query = session.createQuery(Sql);
         query.setParameter("idparticipante", idparticipante);
-        List<ParticipanteCartaDto> list = query.list();
-        for (ParticipanteCartaDto a : list) {
-            System.out.println("Author "
-                    + a.getIdparticipante()
-                    + " "
-                    + a.getCodigo());
+        //query.setParameter("cons", cons);
+        List<scan> list = query.list();
+        for (scan a : list) {
+            System.out.println("Codigo: "
+                    + a.getCodigo()+" Fecha:"
+                    + DateUtil.DateToString(a.getFecha(),"dd/MM/yyyy")+" Consentimiento:"
+                    + a.getCons());
         }
         return list;
     }
