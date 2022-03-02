@@ -113,14 +113,6 @@ public class ParteController {
     )throws Exception{
         try {
             List<Parte> partesByIdVersion = scanCartaService.listadoPartesPrincipales(idversion);
-            Version vers = this.scanCartaService.getVersionById(idversion);
-            if(vers.getEstudio().getCodigo()!=6) {
-                if (siTienePartePrincipal(partesByIdVersion) && principal.equals("on")) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("msj", "Ya existe una parte principal!");
-                    return createJsonResponse(map);
-                }
-            }
             Version v = new Version();
             Parte p = new Parte();
             if (editando.equals("true")){//actualizar
@@ -153,6 +145,14 @@ public class ParteController {
                 return createJsonResponse(p);
             }else { // guarda nuevo
                 if (!scanCartaService.CheckequalsParte(parte, idversion)) {
+                    Version vers = this.scanCartaService.getVersionById(idversion);
+                    if(vers.getEstudio().getCodigo()!=6) {
+                        if (siTienePartePrincipal(partesByIdVersion) && principal.equals("on")) {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("msj", "Ya existe una parte principal!");
+                            return createJsonResponse(map);
+                        }
+                    }
                     p.setParte(parte);
                     boolean ac = false;
                     if (activo == null || activo.equals(null) || activo.equals("off") || activo.equals("")) {

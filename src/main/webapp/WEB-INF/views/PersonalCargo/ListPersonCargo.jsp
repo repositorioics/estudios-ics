@@ -58,12 +58,12 @@
                             <table class="table table-hover table-bordered" id="lista_personal">
                                 <thead>
                                 <tr>
-                                    <th><spring:message code="code" /></th>
-                                    <th><spring:message code="lbl.names.surnames" /></th>
-                                    <th><spring:message code="code" /> <spring:message code="lbl.Person" /></th>
-                                    <th><spring:message code="Activo" /></th>
-                                    <th><spring:message code="actions" /> </th>
-                                    <%--<th><spring:message code="Cargos" /> </th>--%>
+                                    <th class="text-center"><spring:message code="#" /></th>
+                                    <th class="text-center"><spring:message code="code" /> <spring:message code="lbl.Person" /></th>
+                                    <th class="text-center"><spring:message code="lbl.names.surnames" /></th>
+                                    <th class="text-center"><spring:message code="Cargos" /> </th>
+                                    <th class="text-center"><spring:message code="Activo" /></th>
+                                    <th class="text-center"><spring:message code="actions" /> </th>
                                 </tr>
                                 </thead>
                                 <c:forEach items="${personalCargoDtoList}" var="list" varStatus="loop">
@@ -88,6 +88,20 @@
                                         <td>
                                             <c:choose>
                                                 <c:when test="${list.estado eq true}">
+                                                     <span>
+                                                         <c:out value="${list.codigo}" />
+                                                     </span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="text-decoration:line-through;" class="text-danger">
+                                                        <c:out value="${list.codigo}" />
+                                                    </span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${list.estado eq true}">
                                                     <a href="${fn:escapeXml(editUrl)}"><c:out value="${list.nombre}" /></a>
                                                 </c:when>
                                                 <c:otherwise>
@@ -98,14 +112,16 @@
                                         <td>
                                             <c:choose>
                                                 <c:when test="${list.estado eq true}">
-                                                     <span>
-                                                         <c:out value="${list.codigo}" />
-                                                     </span>
+                                                    <c:forEach items="${list.cargos}" var="c">
+                                                       <span class="badge badge-primary">
+                                                            <c:out value="${c.nombreCargo}"></c:out></span>
+                                                    </c:forEach>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span style="text-decoration:line-through;" class="text-danger">
-                                                        <c:out value="${list.codigo}" />
-                                                    </span>
+                                                    <c:forEach items="${list.cargos}" var="c">
+                                                       <span style="text-decoration:line-through;" class="badge badge-primary">
+                                                            <c:out value="${c.nombreCargo}"></c:out></span>
+                                                    </c:forEach>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
@@ -123,7 +139,7 @@
                                             </c:otherwise>
                                             </c:choose>
                                          </td>
-                                               <td>
+                                        <td>
                                                    <c:choose>
                                                        <c:when test="${list.estado eq true}">
                                                            <a href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
@@ -142,13 +158,6 @@
                                                        </c:otherwise>
                                                    </c:choose>
                                                </td>
-                                        <%--<td>
-                                            <c:forEach items="${cargos}" var="c">
-                                                <c:if test="${list.cargos eq list.cargos.nombre}">
-                                                    <c:out value="${c.nombreCargo}" />
-                                                </c:if>
-                                            </c:forEach>
-                                        </td>--%>
                                     </tr>
                                 </c:forEach>
                             </table>
@@ -275,10 +284,10 @@
                 targets: 2,
                 className: 'text-center'
             },{
-                targets: 3,
+                targets: 4,
                 className: 'text-center'
             },{
-                targets: 4,
+                targets: 5,
                 className: 'text-center'
             }]
         });
