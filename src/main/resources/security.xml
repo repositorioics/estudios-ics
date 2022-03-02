@@ -10,7 +10,7 @@
 		<intercept-url pattern="/loginfailed" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/resources/.*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/api/v1/hc/.*" access="ROLE_WEB" />
+        <intercept-url pattern="/api/v1/hc/.*" access="ROLE_HC" />
         <intercept-url pattern="/api/v1/.*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/chf/editarcaso/.*" access="ROLE_SUPER"/>
         <intercept-url pattern="/super/.*" access="ROLE_SUPER"/>

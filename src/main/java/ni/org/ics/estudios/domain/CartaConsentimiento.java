@@ -43,6 +43,7 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     private String aceptaParteC; //Consentimiento adicional para estudios genéticos
     private String aceptaParteD; //Consentimiento adicional para ZIKA (Estudio Cohorte Dengue)
     private String aceptaParteE; //Consentimiento para almacenamiento y uso de meustras en estudios futuros EstudioFLu
+    private String aceptaParteF;//re-enrolamiento y obtención de muestras de sangre adicionales-CEIRS. MA2022
     private String version; //Indicar la versión actual al momento de registrar la carta
     //reconsentimiento dengue 2018
     private String otroMotivoRechazoParteA;
@@ -64,6 +65,9 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     //muestra adicional chf covid19
     private String motivoRechazoParteE;
     private String otroMotivoRechazoParteE;
+    //re-enrolamiento y obtención de muestras de sangre adicionales-CEIRS. MA2022
+    private String motivoRechazoParteF;
+    private String otroMotivoRechazoParteF;
 
     @Id
     @Column(name = "CODIGO", nullable = false, insertable = true, updatable = false, length = 36)
@@ -430,6 +434,33 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
 
     public void setOtroMotivoRechazoParteE(String otroMotivoRechazoParteE) {
         this.otroMotivoRechazoParteE = otroMotivoRechazoParteE;
+    }
+
+    @Column(name = "ACEPTA_PARTE_F", length = 1)
+    public String getAceptaParteF() {
+        return aceptaParteF;
+    }
+
+    public void setAceptaParteF(String aceptaParteF) {
+        this.aceptaParteF = aceptaParteF;
+    }
+
+    @Column(name = "MOTIVO_RECHAZO_PARTE_F", nullable = true, length = 2)
+    public String getMotivoRechazoParteF() {
+        return motivoRechazoParteF;
+    }
+
+    public void setMotivoRechazoParteF(String motivoRechazoParteF) {
+        this.motivoRechazoParteF = motivoRechazoParteF;
+    }
+
+    @Column(name = "OTRO_MOT_RECHAZO_PARTE_F", nullable = true)
+    public String getOtroMotivoRechazoParteF() {
+        return otroMotivoRechazoParteF;
+    }
+
+    public void setOtroMotivoRechazoParteF(String otroMotivoRechazoParteF) {
+        this.otroMotivoRechazoParteF = otroMotivoRechazoParteF;
     }
 
     @Override

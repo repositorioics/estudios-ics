@@ -226,7 +226,7 @@ public class CartasController {
                 }
                 objEncontrado.setMenorEdad(menor_edad);
                 objEncontrado.setEstudios(participantesCodigo.getEstudio());
-                objEncontrado.setNombreTutor(participante.getNombre1Tutor() + " " + participante.getApellido1());
+                objEncontrado.setNombreTutor(participante.getNombre1Tutor() + " " + participante.getApellido1Tutor());
                 objEncontrado.setRealFam(participante.getRelacionFamiliarTutor());
                 String SusEstudios = participantesCodigo.getEstudio();
                 String[] arrayString = SusEstudios.split("  ");
@@ -250,33 +250,34 @@ public class CartasController {
                         }
                     }
                 }
-            }
-            objEncontrado.setCodigoParticipante(participante.getCodigo());
-            objEncontrado.setNombreCompleto(participante.getNombreCompleto());
-            objEncontrado.setFechaNac(participante.getFechaNac());
-            objEncontrado.setDireccion(participante.getCasa().getDireccion());
-            String madre = participante.getNombre1Madre().toUpperCase();
-            if (participante.getNombre2Madre() != null)
-                madre = madre + " " + participante.getNombre2Madre().toUpperCase();
-            madre = madre + " " + participante.getApellido1Madre().toUpperCase();
-            if (participante.getApellido2Madre() != null)
-                madre = madre + " " + participante.getApellido2Madre().toUpperCase();
-            objEncontrado.setNombreMadre(madre);
-            String padre = participante.getNombre1Padre().toUpperCase();
-            if (participante.getNombre2Padre() != null)
-                padre = padre + " " + participante.getNombre2Padre().toUpperCase();
-            padre = padre + " " + participante.getApellido1Padre().toUpperCase();
-            if (participante.getApellido2Padre() != null)
-                padre = padre + " " + participante.getApellido2Padre().toUpperCase();
-            objEncontrado.setNombrePadre(padre);
-            objEncontrado.setName1Tutor(participante.getNombre1Tutor());
-            String name2tutor = (participante.getNombre2Tutor() != null) ? participante.getNombre2Tutor().toUpperCase() : "";
-            objEncontrado.setName2Tutor(name2tutor);
-            objEncontrado.setSurname1Tutor(participante.getApellido1Tutor());
-            String ape2tutor = (participante.getApellido2Tutor() != null) ? participante.getApellido2Tutor().toUpperCase() : "";
-            objEncontrado.setSurname2Tutor(ape2tutor);
 
+                objEncontrado.setCodigoParticipante(participante.getCodigo());
+                objEncontrado.setNombreCompleto(participante.getNombreCompleto());
+                objEncontrado.setFechaNac(participante.getFechaNac());
+                objEncontrado.setDireccion(participante.getCasa().getDireccion());
+                String madre = participante.getNombre1Madre().toUpperCase();
+                if (participante.getNombre2Madre() != null)
+                    madre = madre + " " + participante.getNombre2Madre().toUpperCase();
+                madre = madre + " " + participante.getApellido1Madre().toUpperCase();
+                if (participante.getApellido2Madre() != null)
+                    madre = madre + " " + participante.getApellido2Madre().toUpperCase();
+                objEncontrado.setNombreMadre(madre);
+                String padre = participante.getNombre1Padre().toUpperCase();
+                if (participante.getNombre2Padre() != null)
+                    padre = padre + " " + participante.getNombre2Padre().toUpperCase();
+                padre = padre + " " + participante.getApellido1Padre().toUpperCase();
+                if (participante.getApellido2Padre() != null)
+                    padre = padre + " " + participante.getApellido2Padre().toUpperCase();
+                objEncontrado.setNombrePadre(padre);
+                objEncontrado.setName1Tutor(participante.getNombre1Tutor());
+                String name2tutor = (participante.getNombre2Tutor() != null) ? participante.getNombre2Tutor().toUpperCase() : "";
+                objEncontrado.setName2Tutor(name2tutor);
+                objEncontrado.setSurname1Tutor(participante.getApellido1Tutor());
+                String ape2tutor = (participante.getApellido2Tutor() != null) ? participante.getApellido2Tutor().toUpperCase() : "";
+                objEncontrado.setSurname2Tutor(ape2tutor);
+            }
             return JsonUtil.createJsonResponse(objEncontrado);
+
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -345,6 +346,7 @@ public class CartasController {
                     }
                     if (v.getEstudio().getCodigo()==6){
                         pc.setEsIndiceOrMiembro(obj.getEsIndiceOrMiembro());
+                        pc.setVigente(true);
                     }else{
                         pc.setEsIndiceOrMiembro(0);//NA(No Aplica)
                     }
@@ -457,7 +459,7 @@ public class CartasController {
     }
 
     //TODO:  BUSCAR participante en scan
-    @RequestMapping(value = "/GetScanCartas", method = RequestMethod.GET, produces = "application/json")
+    /*@RequestMapping(value = "/GetScanCartas", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<scanDto> GetScanCartas(@RequestParam(value = "parametro", required = true) Integer parametro)
       throws ParseException {
         List<scanDto> scanDtoList = new ArrayList<scanDto>();
@@ -479,7 +481,8 @@ public class CartasController {
         }catch (Exception e){
             return scanDtoList;
         }
-    }
+    }*/
+
     @RequestMapping(value = "/saveCartaDeScan", method = RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<String> saveCartaDeScan(@RequestParam(value = "codigo", defaultValue = "") Integer codigo
@@ -932,6 +935,7 @@ public class CartasController {
                     ext.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                     ext.setPersonal(personal);
                     ext.setRelfam(relfam);
+                    ext.setVigente(true);
                     this.scanCartaService.saveParticpanteExtension(ext);
                     return createJsonResponse(ext);
                 } else {
@@ -1851,6 +1855,7 @@ public class CartasController {
                 pc.setVersion(version);
                 if (version.getEstudio().getCodigo()==6){
                  pc.setEsIndiceOrMiembro(cartaTemporal.getEsIndiceOrMiembro());
+                    pc.setVigente(true);
                 }else{
                  pc.setEsIndiceOrMiembro(0);
                 }
@@ -1888,6 +1893,7 @@ public class CartasController {
                         part_Extension.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         part_Extension.setEstado('1');
                         part_Extension.setPasive('0');
+                        part_Extension.setVigente(true);
                         part_Extension.setFechaExtension(ObjExtenstemp.getFechaExtension());
                         part_Extension.setNombre1Tutor(ObjExtenstemp.getNombre1Tutor());
                         part_Extension.setNombre2Tutor(ObjExtenstemp.getNombre2Tutor());

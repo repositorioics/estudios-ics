@@ -1,10 +1,7 @@
 package ni.org.ics.estudios.api;
 
 import com.google.gson.Gson;
-import ni.org.ics.estudios.dto.HojaConsulta.HCConsentimientoDto;
-import ni.org.ics.estudios.dto.HojaConsulta.HCEscuelasDto;
-import ni.org.ics.estudios.dto.HojaConsulta.HCParticipanteDto;
-import ni.org.ics.estudios.dto.HojaConsulta.HCTipoConsentimientoDto;
+import ni.org.ics.estudios.dto.HojaConsulta.*;
 import ni.org.ics.estudios.dto.RangosFrecuenciasCardiacas;
 import ni.org.ics.estudios.dto.RangosPresion;
 import ni.org.ics.estudios.service.hc.ActualizacionHojaConsultaService;
@@ -20,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by miguel on 14/12/2020.
@@ -118,7 +112,8 @@ public class expose {
     List<HCConsentimientoDto> getConsentimientos() {
         try {
             logger.info("Descargando toda la informacion de los consentimientos de cada participante para el sistema hoja de consulta digital");
-            List<HCConsentimientoDto> respuestaList = actualizacionHojaConsultaService.getConsentimientos();
+            List<HCConsentimientoDto> respuestaList = actualizacionHojaConsultaService.getConsentimientosFromNewScan();
+            respuestaList.addAll(actualizacionHojaConsultaService.getConsentimientosFromOldScan());
             if (respuestaList == null) {
                 logger.debug("Nulo");
             }

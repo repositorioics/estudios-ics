@@ -33,6 +33,9 @@ public class ParticipanteExtension extends BaseMetaData implements Serializable 
     private boolean anulada;
     private Personal personal;
     private Integer relfam;
+    //controlar si ya se venció la extensión, en caso de ser temporal
+    private boolean vigente;
+    private Date fecFinVigencia;
 
     public ParticipanteExtension() {}
 
@@ -194,6 +197,25 @@ public class ParticipanteExtension extends BaseMetaData implements Serializable 
 
     public void setRelfam(Integer relfam) {
         this.relfam = relfam;
+    }
+
+    @Column(name = "VIGENTE")
+    public boolean isVigente() {
+        return vigente;
+    }
+
+    public void setVigente(boolean vigente) {
+        this.vigente = vigente;
+    }
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "FECHA_FIN_VIGENCIA")
+    public Date getFecFinVigencia() {
+        return fecFinVigencia;
+    }
+
+    public void setFecFinVigencia(Date fecFinVigencia) {
+        this.fecFinVigencia = fecFinVigencia;
     }
 
 }

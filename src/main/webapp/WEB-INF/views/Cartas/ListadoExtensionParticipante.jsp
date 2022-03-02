@@ -78,6 +78,8 @@
                                     <th class="text-center"> <spring:message code="dateAdded"/></th>
                                     <th class="text-center"><spring:message code="Extension"/></th>
                                     <th class="text-center"><spring:message code="lbl.tutor"/></th>
+                                    <th class="text-center"><spring:message code="lbl.vigente"/></th>
+                                    <th class="text-center"><spring:message code="lbl.fec.fic.vig"/></th>
                                     <th class="text-center"><spring:message code="observacion"/></th>
                                     <th class="text-center"><spring:message code="actions"/></th>
                                 </tr>
@@ -97,6 +99,15 @@
                                         <td class="text-center"><fmt:formatDate value="${e.fechaExtension}" pattern="dd/MM/yyyy"/></td>
                                         <td class="text-center">${e.extensiones.extension}</td>
                                         <td class="text-center">${e.nombre1Tutor} ${e.apellido1Tutor}</td>
+                                        <c:choose>
+                                            <c:when test="${e.vigente}">
+                                                <td class="text-center"><span class="badge badge-success"><spring:message code="CHF_CAT_SINO_SI" /></span></td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td class="text-center"><span class="badge badge-danger"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <td class="text-center"><fmt:formatDate value="${e.fecFinVigencia}" pattern="dd/MM/yyyy"/></td>
                                         <td class="">${e.observacion}</td>
                                         <td class="text-center">
                                             <a title="<spring:message code="edit" />" href="${fn:escapeXml(editExtensionUrl)}" class="btn btn-warning btn-sm">
