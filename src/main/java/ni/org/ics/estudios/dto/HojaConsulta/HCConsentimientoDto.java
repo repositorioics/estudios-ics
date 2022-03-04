@@ -1,5 +1,6 @@
 package ni.org.ics.estudios.dto.HojaConsulta;
 
+import java.math.BigInteger;
 import java.util.Date;
 /**
  * Created by miguel on 15/2/2022.
@@ -8,18 +9,18 @@ public class HCConsentimientoDto {
 
     private Date fecha;
     private Integer codigo;
-    private Byte cons;
-    private Byte asentChik;
-    private Integer parteB;
-    private Integer parteC;
-    private Integer parteD;
-    private Byte asentimientoEsc;
-    private Integer parteE;
-    private Integer parteF;
+    private BigInteger cons;
+    private BigInteger asentChik;
+    private BigInteger parteB;
+    private BigInteger parteC;
+    private BigInteger parteD;
+    private BigInteger asentimientoEsc;
+    private BigInteger parteE;
+    private BigInteger parteF;
     private String tipoPartTrans;
     private String reactivacion;
     private Date ahora;
-    private boolean retirado;
+    private boolean retirado = false;
 
     public Date getFecha() {
         return fecha;
@@ -37,67 +38,67 @@ public class HCConsentimientoDto {
         this.codigo = codigo;
     }
 
-    public Byte getCons() {
+    public BigInteger getCons() {
         return cons;
     }
 
-    public void setCons(Byte cons) {
+    public void setCons(BigInteger cons) {
         this.cons = cons;
     }
 
-    public Byte getAsentChik() {
+    public BigInteger getAsentChik() {
         return asentChik;
     }
 
-    public void setAsentChik(Byte asentChik) {
+    public void setAsentChik(BigInteger asentChik) {
         this.asentChik = asentChik;
     }
 
-    public Integer getParteB() {
+    public BigInteger getParteB() {
         return parteB;
     }
 
-    public void setParteB(Integer parteB) {
+    public void setParteB(BigInteger parteB) {
         this.parteB = parteB;
     }
 
-    public Integer getParteC() {
+    public BigInteger getParteC() {
         return parteC;
     }
 
-    public void setParteC(Integer parteC) {
+    public void setParteC(BigInteger parteC) {
         this.parteC = parteC;
     }
 
-    public Integer getParteD() {
+    public BigInteger getParteD() {
         return parteD;
     }
 
-    public void setParteD(Integer parteD) {
+    public void setParteD(BigInteger parteD) {
         this.parteD = parteD;
     }
 
-    public Byte getAsentimientoEsc() {
+    public BigInteger getAsentimientoEsc() {
         return asentimientoEsc;
     }
 
-    public void setAsentimientoEsc(Byte asentimientoEsc) {
+    public void setAsentimientoEsc(BigInteger asentimientoEsc) {
         this.asentimientoEsc = asentimientoEsc;
     }
 
-    public Integer getParteE() {
+    public BigInteger getParteE() {
         return parteE;
     }
 
-    public void setParteE(Integer parteE) {
+    public void setParteE(BigInteger parteE) {
         this.parteE = parteE;
     }
 
-    public Integer getParteF() {
+    public BigInteger getParteF() {
         return parteF;
     }
 
-    public void setParteF(Integer parteF) {
+    public void setParteF(BigInteger parteF) {
         this.parteF = parteF;
     }
 

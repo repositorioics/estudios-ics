@@ -18,6 +18,7 @@ import ni.org.ics.estudios.service.ParticipanteService;
 import ni.org.ics.estudios.service.cohortefamilia.ParticipanteCohorteFamiliaService;
 import ni.org.ics.estudios.service.covid.CovidService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
+import ni.org.ics.estudios.service.scancarta.ScanCartaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
 import ni.org.ics.estudios.web.utils.StringUtil;
@@ -65,6 +66,8 @@ public class CovidController {
     @Resource(name = "participanteCohorteFamiliaService")
     private ParticipanteCohorteFamiliaService participanteCohorteFamiliaService;
 
+    @Resource(name = "scanCartaService")
+    private ScanCartaService scanCartaService;
 
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
@@ -289,11 +292,15 @@ public class CovidController {
         try{
             CasoCovid19 casoExistente = this.covidService.getCasoCovid19ByCodigo(codigo);
             if (casoExistente!=null) {
-                casoExistente.setFechaInactivo(DateUtil.StringToDate(fechaInactivo, "dd/MM/yyyy"));
+                Date dFechaInactivo = DateUtil.StringToDate(fechaInactivo, "dd/MM/yyyy");
+                casoExistente.setFechaInactivo(dFechaInactivo);
                 //casoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 //casoExistente.setRecordDate(new Date());
                 casoExistente.setInactivo("1");
                 this.covidService.saveOrUpdateCasoCovid19(casoExistente);
+                //quitar vigencia a las extensiones de la carta o cartas de Tcovid de familia que puedan tener activas los participantes
+                this.scanCartaService.quitarVigenciaCartaTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
+                this.scanCartaService.quitarVigenciaExtensionTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
             }
             return JsonUtil.createJsonResponse(casoExistente);
         }

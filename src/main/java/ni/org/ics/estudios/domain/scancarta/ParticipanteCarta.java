@@ -50,6 +50,10 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     private String pq_anulada;
     private Integer esIndiceOrMiembro;
 
+    //controlar si ya se venció la carta, en caso de ser temporal
+    private boolean vigente;
+    private Date fecFinVigencia;
+
     @Id
     @Column(name = "IDPARTICIPANTECARTA", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -193,11 +197,6 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.observacion = observacion;
     }
 
-    @Override
-    public boolean isFieldAuditable(String fieldname) {
-        return true;
-    }
-
     @Transient
     public boolean isEsContacto() {
         return this.contactoFuturo == true;
@@ -296,4 +295,56 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     public void setEsIndiceOrMiembro(Integer esIndiceOrMiembro) {
         this.esIndiceOrMiembro = esIndiceOrMiembro;
     }
+
+    @Column(name = "VIGENTE")
+    public boolean isVigente() {
+        return vigente;
+    }
+
+    public void setVigente(boolean vigente) {
+        this.vigente = vigente;
+    }
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "FECHA_FIN_VIGENCIA")
+    public Date getFecFinVigencia() {
+        return fecFinVigencia;
+    }
+
+    public void setFecFinVigencia(Date fecFinVigencia) {
+        this.fecFinVigencia = fecFinVigencia;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ParticipanteCarta)) return false;
+
+        ParticipanteCarta that = (ParticipanteCarta) o;
+
+        if (!idparticipantecarta.equals(that.idparticipantecarta)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return idparticipantecarta.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "ParticipanteCarta{" +
+                ", id=" + idparticipantecarta +
+                "part=" + participante +
+                ", ver=" + version +
+                '}';
+    }
+
+    @Override
+    public boolean isFieldAuditable(String fieldname) {
+        return true;
+    }
+
+
 }

@@ -8,6 +8,7 @@ import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -844,6 +845,55 @@ public class ScanCartaService {
         return response;
     }
     //endregion
+
+    /**
+     * Método para marcar como no vigente las extensiones de cartas de familia - Tcovid cuándo se cierra el caso de seguimiento
+     * @param codigoCaso codigo del caso que se está cerrando
+     * @param fecFinVigencia fecha en que se está cerrando el caso
+     * @return cantidad de extensiones marcadas
+     */
+    public Integer quitarVigenciaExtensionTCovid(String codigoCaso, Date fecFinVigencia) {
+        // Retrieve session from Hibernate
+        Session s = sessionFactory.openSession();
+        Transaction tx = s.beginTransaction();
+        int updatedEntities = s.createSQLQuery("update scan_detalle_extension sde set VIGENTE=0, FECHA_FIN_VIGENCIA= :fecFinVigencia " +
+                "where sde.PARTICIPANTE_CARTA in ( " +
+                "select spc.IDPARTICIPANTECARTA from scan_participante_carta spc, covid_participantes_casos cpc " +
+                ",estudios_ics.covid_casos cc where cpc.CODIGO_CASO= :codigoCaso " +
+                "and spc.CODIGO_PARTICIPANTE = cpc.CODIGO_PARTICIPANTE and cpc.CODIGO_CASO=cc.CODIGO_CASO " +
+                "and cpc.PASIVO='0' and cc.PASIVO='0') " +
+                "and sde.VIGENTE=1" )
+                .setParameter("fecFinVigencia",fecFinVigencia)
+                .setString("codigoCaso", codigoCaso)
+                .executeUpdate();
+        tx.commit();
+        s.close();
+        return updatedEntities;
+    }
+
+    /**
+     * Método para marcar como no vigente las cartas pricipales de familia - Tcovid cuándo se cierra el caso de seguimiento
+     * @param codigoCaso codigo del caso que se está cerrando
+     * @param fecFinVigencia fecha en que se está cerrando el caso
+     * @return cantidad de cartas marcadas
+     */
+    public Integer quitarVigenciaCartaTCovid(String codigoCaso, Date fecFinVigencia) {
+        // Retrieve session from Hibernate
+        Session s = sessionFactory.openSession();
+        Transaction tx = s.beginTransaction();
+        int updatedEntities = s.createSQLQuery("update scan_participante_carta spc set VIGENTE=0, FECHA_FIN_VIGENCIA= :fecFinVigencia " +
+                        "where spc.CODIGO_PARTICIPANTE in ( " +
+                "select cpc.CODIGO_PARTICIPANTE from covid_participantes_casos cpc,estudios_ics.covid_casos cc where cpc.CODIGO_CASO= :codigoCaso and " +
+                "       cpc.CODIGO_CASO=cc.CODIGO_CASO " +
+                "       and cpc.PASIVO='0' and cc.PASIVO='0') " +
+                "and spc.VIGENTE=1")
+                .setParameter("fecFinVigencia",fecFinVigencia)
+                .setString("codigoCaso", codigoCaso)
+                .executeUpdate();
+        tx.commit();
+        s.close();
+        return updatedEntities;
+    }
 
 
     //TODO: --> * METODO PARA CONSULTAR TABLA SCAN * <--

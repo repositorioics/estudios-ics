@@ -182,15 +182,15 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.9</version>
-		</dependency>
+            <version>5.1.44</version><!-- para nuevo server-->
+        </dependency>
 
-		<!-- Postgresql 
-		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.0-801.jdbc4</version>
-		</dependency>-->
+    <!-- Postgresql
+    <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.0-801.jdbc4</version>
+    </dependency>-->
 
 		<!-- Hibernate -->
 		<dependency>
