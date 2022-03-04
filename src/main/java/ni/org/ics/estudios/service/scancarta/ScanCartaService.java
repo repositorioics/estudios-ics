@@ -267,7 +267,7 @@ public class ScanCartaService {
     public List<Parte>getParte(Integer idversion){
         Session session = sessionFactory.getCurrentSession();
         String t = "true";
-        Query query = session.createQuery("from Parte p where p.version.id = :idversion");
+        Query query = session.createQuery("from Parte p where p.version.id = :idversion and p.activo=true");
         query.setParameter("idversion",idversion);
         //query.setParameter("t",t);
         return query.list();

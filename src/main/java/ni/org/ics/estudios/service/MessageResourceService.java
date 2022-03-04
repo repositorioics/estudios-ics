@@ -1,17 +1,14 @@
 package ni.org.ics.estudios.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-
 import ni.org.ics.estudios.language.MessageResource;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Servicio para el objeto UserSistema
@@ -132,15 +129,12 @@ public class MessageResourceService {
     }
 
 
-        /* ocupar este para Mostrar los catalogos */
+    /* ocupar este para Mostrar los catalogos */
     public MessageResource getMensajeByCatalogAndCatKey(String catKey, String catalogo) {
-        // Retrieve session from Hibernate
         Session session = sessionFactory.getCurrentSession();
-        // Create a Hibernate query (HQL)
         Query query = session.createQuery("FROM MessageResource mens where mens.catRoot =:catalogo and mens.catKey =:catKey");
         query.setParameter("catalogo",catalogo);
         query.setParameter("catKey", catKey);
-        // Retrieve all
         return  (MessageResource) query.uniqueResult();
     }
 

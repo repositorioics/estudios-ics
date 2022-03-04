@@ -94,4 +94,15 @@ public class CartaConsentimientoService {
         if (estudio>0)  query.setParameter("estudio", estudio);
         return query.list();
     }
+
+
+    public CartaConsentimiento getCartaConsentimientoByParticipante(Integer codParticipante)
+    {
+        Session session = sessionFactory.getCurrentSession();
+        String sqlQuery = "from CartaConsentimiento where participante.codigo = :codigo ";
+        Query query = session.createQuery(sqlQuery);
+
+        query.setParameter("codigo", codParticipante);
+        return (CartaConsentimiento) query.uniqueResult();
+    }
 }

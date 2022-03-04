@@ -26,4 +26,10 @@ public final class StringUtil {
         }
         return cadenaAleatoria.toString();
     }
+    public static boolean sonValoresDiferentes(String valorAnterior, String valorNuevo) {
+        if (valorAnterior == null && valorNuevo != null) return true;
+        if (valorNuevo == null && valorAnterior != null) return true;
+        if (!valorAnterior.equalsIgnoreCase(valorNuevo)) return true;
+        return false;
+    }
 }

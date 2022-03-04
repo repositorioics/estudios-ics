@@ -1,6 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
+<style>
+    .text-bhc {
+        color: #debece !important;
+    }
+    .text-pbmc {
+        color: #b294de !important;
+    }
+</style>
 <div class="sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
@@ -205,15 +213,45 @@
                     </ul>
                 </li>
             </sec:authorize>
+
+            <sec:authorize access="hasAnyRole('ROLE_DIG')">
+                <li class="nav-item nav-dropdown comparacion">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-clone" aria-hidden="true"></i>
+                        <spring:message code="comparison" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/comparacion/cartas" htmlEscape="true "/>">
+                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                <spring:message code="letters" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
+
+            <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <spring:message code="Correccion" /></a>
+                <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                        <a class="nav-link" href="<spring:url value="/correcion/tutor/" htmlEscape="true "/>">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <spring:message code="Tutor" /></a>
+                    </li>
+                </ul>
+            </li>
+            </sec:authorize>
         <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-ambulance"  aria-hidden="true"></i>
+                        <i class="fa fa-flask text-danger" aria-hidden="true"></i>
                         <spring:message code="Serologia" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/Serologia/listSerologia" htmlEscape="true "/>">
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-list text-danger" aria-hidden="true"></i>
                                 <spring:message code="Listado" /></a>
                         </li>
                         <li class="nav-item filedata">
@@ -228,23 +266,46 @@
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Pbmc">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-flask" aria-hidden="true"></i>
+                        <i class="fa fa-flask text-pbmc" aria-hidden="true"></i>
                         <spring:message code="Pbmc" /></a>
                     <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/Pbmc/listPbmc" htmlEscape="true "/>">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                                <spring:message code="List" /> <spring:message code="Pbmc" /></a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Pbmc/listEnviosPbmc" htmlEscape="true "/>">
                                 <i class="fa fa-send"></i>
                                 <spring:message code="Envios" /> <spring:message code="Pbmc" /></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<spring:url value="/Pbmc/listPbmc" htmlEscape="true "/>">
-                                <i class="fa fa-list" aria-hidden="true"></i>
-                                <spring:message code="List" /> <spring:message code="Pbmc" /></a>
+                            <a class="nav-link" href="<spring:url value="/Pbmc/listSeroConPbmc" htmlEscape="true "/>">
+                                <i class="fa fa-send"></i>
+                                <spring:message code="Envios" /> <spring:message code="Pbmc Con Serologia" /></a>
                         </li>
                     </ul>
                 </li>
-            </sec:authorize>
 
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="fa fa-flask text-bhc" aria-hidden="true"></i>
+                            <spring:message code="Bhc" /></a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="<spring:url value="/Bhc/list" htmlEscape="true "/>">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                    <spring:message code="List" /></a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="<spring:url value="/Bhc/EnviadasBhc" htmlEscape="true "/>">
+                                    <i class="fa fa-send"></i>
+                                    <spring:message code="Envios" /> <spring:message code="Bhc" /></a>
+                            </li>
+                        </ul>
+                    </li>
+            </sec:authorize>
 
             <sec:authorize access="hasRole('ROLE_ROOT')">
                 <li class="nav-item nav-dropdown Domicilio">
