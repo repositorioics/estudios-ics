@@ -85,6 +85,14 @@ public class PbmcService {
             throw e;
         }
     }
+    public boolean yaTieneMuestraPbmcAnual(int yearActual, Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Pbmc p where year(p.fecha_pbmc)=:yearActual and p.codigo_participante=:codigo and p.pasive='0' ");
+        query.setParameter("yearActual", yearActual);
+        query.setParameter("codigo", codigo);
+        return query.list().size()>0;
+    }
+
     //endregion
 
     //Verifico q no exista un indice para la casa familia con misma fecha
@@ -110,6 +118,7 @@ public class PbmcService {
         return result;
     }
 
+    //todo: Método para enviar muestras de PBMC
     public List<Pbmc>ObtenerPbmcEnviadas(Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Pbmc p where p.fecha_pbmc between :fechaInicio and :fechaFin and p.enviado='0' and p.pasive='0' ");

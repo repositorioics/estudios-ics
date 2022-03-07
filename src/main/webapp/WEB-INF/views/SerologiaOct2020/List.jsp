@@ -24,6 +24,8 @@
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
     <style>
         /*ini*/
         .toast-title {
@@ -185,9 +187,54 @@
         }
         /*fin*/
 
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid transparent;
+            border-radius: 0;
+        }
+        .mailbox-widget .custom-tab .nav-item .nav-link {
+            border: 0;
+            color: #fff;
+            border-bottom: 3px solid transparent;
+        }
+        .mailbox-widget .custom-tab .nav-item .nav-link.active {
+            background: 0 0;
+            color: #fff;
+            border-bottom: 3px solid #2cd07e;
+        }
+        .no-wrap td, .no-wrap th {
+            white-space: nowrap;
+        }
+        .table td, .table th {
+            padding: .9375rem .4rem;
+            vertical-align: top;
+            border-top: 1px solid rgba(120,130,140,.13);
+        }
+        .font-light {
+            font-weight: 300;
+        }
+        .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+            background-color: #028dba;
+        }
+        .nav-tabs .nav-link, .nav-tabs .nav-link.disabled, .nav-tabs .nav-link.disabled:hover, .nav-tabs .nav-link.disabled:focus {
+            border-color: rgba(0, 0, 0, 0.1);
+            background-color: #028dba;
+        }
+        .mailbox-widget .custom-tab .nav-item .nav-link.active {
+            background: 0 0;
+            color: #fff;
+            border-bottom: 5px solid #fff
+        }
+
     </style>
 
-    <title></title>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -198,7 +245,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
-                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/Serologia/listSerologia/" htmlEscape="true "/>"><spring:message code="Lista Serologias" /></a>
+                <i class="fa fa-angle-right"></i> <a href="<spring:url value="/Serologia/listSerologia/" htmlEscape="true "/>"><spring:message code="List" /> <spring:message code="lbl.serologia" /></a>
             </li>
         </ol>
         <c:set var="recordDisabledLabel"><spring:message code="recordDisabled" /></c:set>
@@ -206,139 +253,193 @@
         <c:set var="cerrarCaso"><spring:message code="close.case" /></c:set>
         <c:set var="confirmar"><spring:message code="confirm" /></c:set>
         <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
-        <spring:url value="/covid/closeCase" var="closeUrl"/>
+        <spring:url value="/Serologia/closeCase" var="closeUrl"/>
+        <spring:url value="/Serologia/listSerologia" var="listSerologiaUrl"/>
+        <spring:url value="/Serologia/editMuestra" var="editUrl"/>
+        <spring:url value="/Serologia/enviarMuestra" var="envioUrl"/>
+        <spring:url value="/Serologia/sendAllSerologias" var="sendAllSerologiasUrl"/>
         <div class="container-fluid">
+            <div class="animated fadeIn">
+            <div class="">
+            <div class="row">
+            <div class="col-md-10 col-lg-12">
             <div class="card">
-                <div class="card-header">
-                    <i class="fa fa-list-alt"></i> <spring:message code="Serologia" />
-                </div>
-                <div class="card-block">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a href="<spring:url value="/Serologia/create" htmlEscape="true"/>" class="btn btn-success btn-lg">
-                                <i class="fa fa-plus" aria-hidden="true"></i> <spring:message code="lbl.new" /> <spring:message code="lbl.serologia" />  </a>
-                        </div>
+            <div class="card-body bg-primary text-white mailbox-widget pb-0">
+                <h2 class="text-white pb-3"><i class="fa fa-flask text-white" aria-hidden="true"></i> <spring:message code="lbl.serologia" /></h2>
+                <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="true">
+                            <span class="d-block d-md-none"><i class="ti-email"></i></span>
+                            <span class="d-none d-md-block">  <spring:message code="List" /> <spring:message code="lbl.serologia" /></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
+                            <span class="d-block d-md-none"><i class="ti-export"></i></span>
+                            <span class="d-none d-md-block"> <spring:message code="Form" />
+                                <spring:message code="Envío" />
+                                <spring:message code="lbl.serologia" /></span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+            <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade active show" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
+            <div>
+                <div class="">
+                    <br/>
+                    <div hidden="hidden">
+                        <button id="loadData" class="btn btn-primary"><i class="fa fa-download"></i> <spring:message code="Cargar Muestras" /></button>
+                    </div>
+                    <div class="col-md-12">
+                        <a href="<spring:url value="/Serologia/create" htmlEscape="true"/>" class="btn btn-success btn-lg">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <spring:message code="lbl.new" /> <spring:message code="lbl.serologia" />  </a>
                     </div>
                     <hr/>
-                    <div class="row">
-                        <!-- inicia form inline -->
-                        <div class="container">
-                            <form class="form-row" name="envio-allserologia-form" id="envio-allserologia-form">
+                    <div class="table-responsive">
+                        <spring:url value="/Serologia/listMuestrasNoEnviadas" var="MxNoEnviadasUrl"/>
+                        <table id="Lista_Muestra" class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="12%" hidden="hidden"><spring:message code="IDSEROLOGIA" /></th>
+                                <th width="12%" class="text-center"><spring:message code="dateAdded" /></th>
+                                <th width="10%" class="text-center"><spring:message code="lbl.envoy" /></th>
+                                <th width="12%" class="text-center"><spring:message code="userstudies" /></th>
+                                <th width="12%" class="text-center"><spring:message code="code" /></th>
+                                <th width="10%" class="text-center"><spring:message code="volumen" /></th>
+                                <th width="12%" class="text-center"><spring:message code="observacion" /></th>
+                                <th width="16%" class="text-center"><spring:message code="edit" /></th>
+                                <th width="16%" class="text-center"><spring:message code="delete" /></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="tab-pane fade" id="sent" aria-labelledby="sent-tab" role="tabpanel">
+                <div class="row">
+                    <!-- inicia form inline -->
+                    <div class="container">
+                        <form class="" name="envio-allserologia-form" id="envio-allserologia-form">
 
-                                <div class="form-group col-md-6">
-                                    <label class="control-label" for="horaEnvio"> <spring:message code="lbl.Hour" /></label>
-                                    <input type="text" class="form-control" id="horaEnvio" name="horaEnvio">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="fechaEnvio" class="control-label"><spring:message code="dateAdded" /></label>
+                            <div class="form-group row">
+                                <label for="fechaEnvio" class="col-sm-2 col-form-label"><spring:message code="dateAdded" /></label>
+                                <div class="col-sm-10">
                                     <input name="fechaEnvio" id="fechaEnvio" class="form-control date-picker" type="text" data-date-end-date="+0d" required="required" />
                                 </div>
+                            </div>
 
+                            <div class="form-group row">
+                                <label for="horaEnvio" class="col-sm-2 col-form-label"><spring:message code="lbl.Hour" /></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="horaEnvio" name="horaEnvio">
+                                </div>
+                            </div>
 
-                                <div class="form-group col-md-4">
-                                    <label class="control-label" for="desde"><spring:message code="lbl.from" /></label>
+                            <div class="form-group row">
+                                <label for="desde" class="col-sm-2 col-form-label"><spring:message code="lbl.from" /></label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control from_date datepicker" id="desde" name="desde" data-date-end-date="+0d">
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label class="control-label" for="hasta"><spring:message code="lbl.until" /></label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="desde" class="col-sm-2 col-form-label"><spring:message code="lbl.until" /></label>
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control to_date datepicker" id="hasta" name="hasta" data-date-end-date="+0d">
                                 </div>
+                            </div>
 
-                                <div class="form-group col-md-4">
-                                    <label class="control-label" for="numenvio"><spring:message code="lbl.send" /></label>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="numenvio"><spring:message code="lbl.send" /></label>
+                                <div class="col-sm-10">
                                     <select id="numenvio" name="numenvio" class="form-control" required="required">
                                         <option selected value=""><spring:message code="select" />...</option>
-                                        <c:forEach items="${nenvios}" var="n">
-                                            <option value="${n.idenvio}">${n.numeroEnvio}</option>
+                                        <c:forEach items="${numero_envio}" var="n">
+                                            <option value="${n.catKey}">${n.spanish}</option>
                                         </c:forEach>
                                     </select>
                                 </div>
+                            </div>
 
-                                <div class="form-group col-md-12">
-                                    <button type="submit" class="btn btn-primary"> <i class="fa fa-send" aria-hidden="false"></i>
+                            <div class="form-group row">
+                                <label for="temperatura" class="col-sm-2 col-form-label"><spring:message code="Temperatura" /></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="temperatura" name="temperatura" minlength="1" maxlength="4"  required="required">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary btn-lg float-right"> <i class="fa fa-send" aria-hidden="false"></i>
                                         <spring:message code="lbl.dispatch" />
                                         <spring:message code="sample" />
                                     </button>
                                 </div>
-
-                            </form>
-                        </div>
-
-                        <!-- fin form inline -->
-
-                    </div>
-                    <div class="col-md-12">
-                        <br/>
-                        <div hidden="hidden">
-                            <button id="loadData" class="btn btn-primary"><i class="fa fa-download"></i> <spring:message code="Cargar Muestras" /></button>
-                        </div>
-                        <hr/>
-                        <div class="table-responsive">
-                            <spring:url value="/Serologia/listMuestrasNoEnviadas" var="MxNoEnviadasUrl"/>
-                            <table id="Lista_Muestra" class="table table-hover table-bordered">
-                                <thead>
-                                <tr>
-                                    <th width="12%" hidden="hidden"><spring:message code="IDSEROLOGIA" /></th>
-                                    <th width="12%" class="text-center"><spring:message code="dateAdded" /></th>
-                                    <th width="10%" class="text-center"><spring:message code="lbl.envoy" /></th>
-                                    <th width="12%" class="text-center"><spring:message code="userstudies" /></th>
-                                    <th width="12%" class="text-center"><spring:message code="code" /></th>
-                                    <th width="10%" class="text-center"><spring:message code="volumen" /></th>
-                                    <th width="12%" class="text-center"><spring:message code="observacion" /></th>
-                                    <th width="12%" class="text-center"><spring:message code="chf.house" /></th>
-                                    <th width="16%" class="text-center"><spring:message code="edit" /></th>
-                                    <th width="16%" hidden="hidden"><spring:message code="lbl.dispatch" /></th>
-                                </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" data-aria-hidden="true"></button>
-                        <div id="titulo"></div>
-                    </div>
-                    <div class="modal-body">
-                        <input type=hidden id="accionUrl"/>
-                        <div id="cuerpo"></div>
-                        <form action="#" autocomplete="off" id="close-form" class="form-horizontal">
-                            <div id="dvSalida" class="form-group row">
-                                <label class="form-control-label col-md-3" for="fechaSalida"><spring:message code="logoutdate" />
-                                            <span class="required">
-                                                 *
-                                            </span>
-                                </label>
-                                <div class="input-group col-md-9">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i>
-                                                </span>
-                                    <input name="fechaSalida" id="fechaSalida" class="form-control date-picker" type="text" data-date-end-date="+0d" value="" />
-                                </div>
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="cancel" /></button>
-                        <button type="button" id="btnOkAct" class="btn btn-info" onclick="ejecutarAccion()"><spring:message code="ok" /></button>
-                        <button type="button" id="btnOkClose" class="btn btn-info"><spring:message code="ok" /></button>
-                    </div>
+                    <!-- fin form inline -->
                 </div>
-                <!-- /.modal-content -->
+
             </div>
-            <!-- /.modal-dialog -->
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
         </div>
+        <div class="modal fade bd-example-modal-lg" id="basic" tabindex="-1" data-role="basic" data-backdrop="static" data-keyboard="false" data-aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel"><i class="fa fa-trash" aria-hidden="true"></i>
+                    <spring:message code="lbl.invalidate" />
+                </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" autocomplete="off" id="close-form" name="close-form" class="form-horizontal">
+                    <input type="hidden" class="form-control" id="idAccion" name="idAccion"/>
+                    <div id="dvSalida" class="form-group row">
+                        <div class="form-group col-md-12">
+                            <label for="message_razon" class="col-form-label"> <spring:message code="rason.invalid" />
+                                <span class="required">* </span>
+                            </label>
+                            <textarea class="form-control" id="message_razon" name="message_razon"></textarea>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2 bd-highlight"><button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <spring:message code="cancel" /></button></div>
+                        <div class="p-2 bd-highlight"></div>
+                        <div class="p-2 bd-highlight">
+                            <button type="submit" class="btn btn-primary">  <i class="fa fa-save" aria-hidden="true"></i> <spring:message code="save" /></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
     </div>
 </div>
 
-    <jsp:include page="../fragments/bodyFooter.jsp" />
-    <jsp:include page="../fragments/corePlugins.jsp" />
+<jsp:include page="../fragments/bodyFooter.jsp" />
+<jsp:include page="../fragments/corePlugins.jsp" />
 <!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
 <script src="${dataTableJs}" type="text/javascript"></script>
@@ -390,23 +491,9 @@
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
-<%--
 
-<spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
-<script type="text/javascript" src="${TablesResponsive}"></script>
-
-<spring:url value="/resources/js/libs/dataTableResponsive/dataTables.bootstrap4.min.js" var="Tablesb4" />
-<script type="text/javascript" src="${Tablesb4}"></script>
-
-<spring:url value="/resources/js/libs/dataTableResponsive/dataTables.responsive.min.js" var="TablesResponsive" />
-<script type="text/javascript" src="${TablesResponsive}"></script>
-
-<spring:url value="/resources/js/libs/dataTableResponsive/responsive.bootstrap4.min.js" var="TResponsiveb4" />
-<script type="text/javascript" src="${TResponsiveb4}"></script>
-
-<spring:url value="/resources/js/libs/notify.min.js" var="noty" />
-<script type="text/javascript" src="${noty}"></script>
---%>
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
 
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
@@ -414,18 +501,17 @@
 <spring:url value="/resources/js/views/SerologiaOct2020/ListSerologia.js" var="SeroJs" />
 <script type="text/javascript" src="${SeroJs}"></script>
 
-<spring:url value="/Serologia/editMuestra" var="editUrl"/>
-<spring:url value="/Serologia/enviarMuestra" var="envioUrl"/>
-<spring:url value="/Serologia/sendAllSerologias" var="sendAllSerologiasUrl"/>
-<c:set var="successMessage"><spring:message code="process.success" /></c:set>
 <script>
     jQuery(document).ready(function() {
         var misUrl ={
-            "sendAllSerologiasUrl":"${sendAllSerologiasUrl}",
-            "successMessage":"${successMessage}",
-            "envioUrl":"${envioUrl}",
-            "dataTablesLang": "${dataTablesLang}",
-            "MxNoEnviadasUrl":"${MxNoEnviadasUrl}"
+            "sendAllSerologiasUrl"  : "${sendAllSerologiasUrl}",
+            "successMessage"        : "${successMessage}",
+            "envioUrl"              : "${envioUrl}",
+            "dataTablesLang"        : "${dataTablesLang}",
+            "MxNoEnviadasUrl"       : "${MxNoEnviadasUrl}",
+            "editUrl"               : "${editUrl}",
+            "closeUrl"              : "${closeUrl}",
+            "listSerologiaUrl"        : "${listSerologiaUrl}"
         }
         EnviarSerologiasForm.init(misUrl);
 
@@ -453,7 +539,7 @@
             todayHighlight: true,
             autoclose: true,
             endDate: '-0d'
-        }).val(strDate);
+        }).val(moment().format('DD/MM/YYYY'));//.val(strDate);
     });
 </script>
 </body>

@@ -32,8 +32,7 @@ public class Bhc_Detalle_envio implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name="ENVIO_MUESTRA_ID", updatable = false, nullable = false, referencedColumnName = "ENVIO_MUESTRA_ID")
-    @ForeignKey(name = "FK_ENVIO_MUESTRA_ID")
+    @JoinColumn(name="ENVIO_MUESTRA_ID", nullable = false)
     public SerologiaEnvio getSerologiaEnvio() {
         return serologiaEnvio;
     }

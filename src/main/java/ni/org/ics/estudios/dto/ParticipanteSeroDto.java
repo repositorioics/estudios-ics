@@ -13,7 +13,7 @@ public class ParticipanteSeroDto implements Serializable {
     private Integer idSerologia;
     private Integer idparticipante;
     private double volumen;
-    private Integer edadMeses;
+    private double edadMeses;
     private String nombreCompleto;
     private Integer codigo_casa_PDCS;
     private String codigo_casa_Familia;
@@ -40,7 +40,7 @@ public class ParticipanteSeroDto implements Serializable {
     public ParticipanteSeroDto() {
     }
 
-    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, Integer edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, String estado, Integer est_part,Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, String descripcion, Date fecha, double edadEnMeses, String volumen_serologia_desde_bd, String volumen_adicional_desde_bd) {
+    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, double edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, String estado, Integer est_part,Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, String descripcion, Date fecha, double edadEnMeses, String volumen_serologia_desde_bd, String volumen_adicional_desde_bd) {
         this.codigo = codigo;
         this.idSerologia = idSerologia;
         this.idparticipante = idparticipante;
@@ -111,11 +111,11 @@ public class ParticipanteSeroDto implements Serializable {
         this.volumen = volumen;
     }
 
-    public Integer getEdadMeses() {
+    public double getEdadMeses() {
         return edadMeses;
     }
 
-    public void setEdadMeses(Integer edadMeses) {
+    public void setEdadMeses(double edadMeses) {
         this.edadMeses = edadMeses;
     }
 

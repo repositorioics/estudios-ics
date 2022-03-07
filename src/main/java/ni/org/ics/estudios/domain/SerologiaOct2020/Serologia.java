@@ -26,7 +26,7 @@ public class Serologia extends BaseMetaData implements Serializable  {
     private String estudio;
     private String casaCHF;
     private Integer casaPDCS;
-    private Integer edadMeses;
+    private double edadMeses;
     private Integer codigoPbmc;
 
     //getter and setter
@@ -108,11 +108,11 @@ public class Serologia extends BaseMetaData implements Serializable  {
 
 
     @Column(name = "EDAD_MESES", nullable = true)
-    public Integer getEdadMeses() {
+    public double getEdadMeses() {
         return edadMeses;
     }
 
-    public void setEdadMeses(Integer edadMeses) {
+    public void setEdadMeses(double edadMeses) {
         this.edadMeses = edadMeses;
     }
 

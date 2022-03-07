@@ -29,10 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.net.InetAddress;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ICS on 16/02/2022.
@@ -120,6 +117,7 @@ public class BhcController {
                     bhcDto.setCodigo_casa_familia(procesos.getCasaCHF());
                     bhcDto.setEstado("" + procesos.getEstPart());
                     bhcDto.setCodigo_participante(participante.getCodigo());
+                    bhcDto.setFechaNacimiento(participante.getFechaNac());
                     //edad Meses
                     double d = Double.parseDouble(part1)*12;
                     Double edadMeses = d % 12;
@@ -150,7 +148,7 @@ public class BhcController {
                     String casaFam = (procesos.getCasaCHF()=="")?"0":procesos.getCasaCHF();
                     bhcDto.setCodigo_casa_familia(casaFam);
                     //edad
-                    string = participante.getEdad();
+                    bhcDto.setFechaNacimiento(new Date());
                     string = participante.getEdad();
                     String[] parts = string.split("/");
                     String part1 = parts[0];
@@ -183,6 +181,7 @@ public class BhcController {
                 bhcDto.setEdadM("0");
                 bhcDto.setEdadD("0");
                 bhcDto.setCodigo_participante(parametro);
+                bhcDto.setFechaNacimiento(new Date());
                 bhcDto.setEdadEnMeses(0.0);
                 Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(0,"BHC","NULL");
                 if (rango!=null){
@@ -205,7 +204,7 @@ public class BhcController {
         //region todo: guardar bhc
         @RequestMapping(value = "saveBhc", method = RequestMethod.POST)
         public ResponseEntity<String>saveBhc (@RequestParam(value = "bhc_id", required=false, defaultValue="") String bhc_id
-                ,@RequestParam(value = "edadMeses",     required=false, defaultValue="") Integer edadMeses
+                ,@RequestParam(value = "edadMeses",     required=false, defaultValue="") String edadMeses
                 ,@RequestParam( value="tiporequest",    required=false, defaultValue=""  ) String tiporequest
                 ,@RequestParam(value = "estado",        required=false, defaultValue="") String estado
                 ,@RequestParam( value="idParticipante", required=false, defaultValue="" ) Integer idParticipante
@@ -235,9 +234,13 @@ public class BhcController {
                 Bhc bhc = new Bhc();
                 String nameComputer = InetAddress.getLocalHost().getHostName();
                 if (tiporequest.equals("false")){// Guardar nuevo registro
-                    if (!this.bhcService.ExisteBhc(DateUtil.StringToDate(fecha, "dd/MM/yyyy"),idParticipante)){
+
+                    Date date = DateUtil.StringToDate(fecha, "dd/MM/yyyy");
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    int dateYear = calendar.get(Calendar.YEAR);
+                    if (!this.bhcService.yaTieneMuestraBhcAnual(dateYear, idParticipante)){
                         //Estudios y edades
-                        //ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(idParticipante);
                         bhc.setDeviceid(nameComputer);
                         bhc.setEstado('1');
                         bhc.setPasive('0');
@@ -256,7 +259,8 @@ public class BhcController {
                             bhc.setNotas("");
                         }
                         bhc.setFecha_bhc(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
-                        bhc.setEdadMeses(edadMeses);
+                        double EdadEnMeses = Double.parseDouble(edadMeses);
+                        bhc.setEdadMeses(EdadEnMeses);
                         String obs = (observacion.equals("")) ? "" : observacion.toUpperCase();
                         bhc.setObservacion(obs);
                         bhc.setVolumen(Double.parseDouble(volumen));
@@ -265,7 +269,7 @@ public class BhcController {
                     }
                     else {
                         Map<String, String> map = new HashMap<String, String>();
-                        map.put("msj", "Muestra BHC ya existe." );
+                        map.put("msj", "Participante ya tiene Muestra Anual" );
                         return JsonUtil.createJsonResponse(map);
                     }
                 }else{// Editando registro
@@ -282,7 +286,8 @@ public class BhcController {
                     bhc.setEnviado('0');
                     bhc.setEstudios(estudios);
                     bhc.setFecha_bhc(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
-                    bhc.setEdadMeses(edadMeses);
+                    double EdadEnMeses = Double.parseDouble(edadMeses);
+                    bhc.setEdadMeses(EdadEnMeses);
                     String obs = (observacion.equals(""))?"":observacion.toUpperCase();
                     bhc.setObservacion(obs);
                     bhc.setVolumen(Double.parseDouble(volumen));
@@ -317,7 +322,7 @@ public class BhcController {
             caso.setFecha(bhc.getFecha_bhc());
             caso.setVolumen_bhc(""+bhc.getVolumen());
             caso.setObservacion(bhc.getObservacion());
-            int edadConverted = (bhc.getEdadMeses()/12);
+            int edadConverted = (int) (bhc.getEdadMeses()/12);
             caso.setEdadA(""+edadConverted);
             String est_part ="Ingreso";
             // buscar estado, nombres
@@ -329,6 +334,15 @@ public class BhcController {
                 String apellidos = participante.getApellido1().toUpperCase();
                 apellidos += (participante.getApellido2() != null) ? " "+participante.getApellido2().toUpperCase() : "";
                 caso.setNombreCompleto(nombres +" "+ apellidos);
+                String string = participante.getEdad();
+                String[] parts = string.split("/");
+                String part1 = parts[0];
+                String part2 = parts[1];
+                String part3 = parts[2];
+                caso.setEdadA(part1);
+                caso.setEdadM(part2);
+                caso.setEdadD(part3);
+                caso.setFechaNacimiento(participante.getFechaNac());
                 procesos = this.participanteProcesosService.getParticipante(bhc.getCodigo_participante());
                 if (procesos.getEstPart()==1)
                     est_part="Activo";
@@ -336,6 +350,7 @@ public class BhcController {
                     est_part="Inactivo";
             }else {
                 caso.setNombreCompleto("-");
+                caso.setFecha(new Date());
             }
             String estudiosFinales = "";
             if (caso.getEstudios().contains("Tcovid")) {
@@ -348,15 +363,14 @@ public class BhcController {
             } else {
                 estudiosFinales = procesos.getEstudio().trim();
             }
-            Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edadConverted, "BHC", estudiosFinales.trim());
+            int edad_val = (int) edadConverted;
+            Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edad_val, "BHC", estudiosFinales.trim());
             if(rango!=null){
                 caso.setVolumen_bhc_desde_bd("" + rango.getVolumen());
             }else {
                 caso.setVolumen_bhc_desde_bd("0");
             }
             caso.setEstado(est_part);
-            caso.setEdadM("0");
-            caso.setEdadD("0");
             model.addAttribute("caso", caso);
             model.addAttribute("agregando",false);
             model.addAttribute("editando",true);
@@ -455,6 +469,23 @@ public class BhcController {
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/getObservaciones", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<String> getObservaciones(@RequestParam(value = "observacion", required = true) String observacion)
+            throws Exception {
+        List<MessageResource> obsv =new ArrayList<MessageResource>();
+        try {
+            ArrayList<String> observacionArrayList = new ArrayList<String>();
+            obsv = messageResourceService.getCatalogo("CHF_CAT_RAZON_NO_MX");
+            for (MessageResource m: obsv){
+                observacionArrayList.add(m.getSpanish());
+            }
+            return observacionArrayList;
+        }catch (Exception e){
+            return null;
         }
     }
 

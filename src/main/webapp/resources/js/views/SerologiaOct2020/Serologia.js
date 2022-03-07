@@ -72,8 +72,8 @@ var SerologiaMA = function(){
                         $("#parametro").focus();
                     } else{
                         console.log(data);
-                        var hoy=moment();
                         $("#idParticipante").val(data.idparticipante);
+                        $("#fechaNac").val(data.fechaNacimiento);
                         $("#nombreCompleto").val(data.nombreCompleto);
                         $("#estudios").val(data.estudios);
                         $("#casaCHF").val(data.codigo_casa_Familia);
@@ -83,7 +83,7 @@ var SerologiaMA = function(){
                         $("#edad_dias").val(data.edad_dias);
                         $("#volumen_adicional_desde_bd").val(data.volumen_adicional_desde_bd);
                         $("#volumen_serologia_desde_bd").val(data.volumen_serologia_desde_bd);
-                        $("#edadMeses").val(data.edadEnMeses);
+                        $("#edadMeses").val(DifenciaMeses());
                         $("#observacion").val(data.observacion);
                         $("#estado").val(data.estado);
                         $("#volumen").val("");
@@ -107,6 +107,13 @@ var SerologiaMA = function(){
                 errorElement: 'span', //default input error message container
                 focusInvalid: false, // do not focus the last invalid input
                 rules:{
+                    idParticipante:{
+                        required:true,
+                        number: true
+                    },
+                    fecha:{
+                        required:true
+                    },
                     volumen:{
                         required:true,
                         number: true,
@@ -189,58 +196,61 @@ var SerologiaMA = function(){
             function saveSerologiaAjax(urls){
                 var volumen = parseInt($("#volumen").val());
                 var volumen_desde_db = parseInt($("#volumen_serologia_desde_bd").val());
-
+                debugger;
                 var formSerologia = $("#save-Serologia-form");
                 if(volumen!=volumen_desde_db){
-                    swal({
-                            title: "Diferencia de Volumen?",
-                            text: "Deseas continuar?\n"+" Volumen sugerido para Serologia: "+ volumen_desde_db,
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn-danger",
-                            confirmButtonText: "Si, continuar!",
-                            cancelButtonText: "No, cancelar plx!",
-                            closeOnConfirm: false,
-                            closeOnCancel: false
-                        },
-                        function(isConfirm) {
-                            if (isConfirm) {
-                                $.post(urls.saveFormUrl, formSerologia.serialize(), function (data) {
-                                    if (data.msj != null) {
-                                        swal({
-                                            title: "¡ERROR!",
-                                            text: data.msj,
-                                            type: "error",
-                                            timer: 2000
-                                        });
-                                        window.setTimeout(function () {
-                                            location.reload(true);
-                                        }, 3000);
-                                    } else {
-                                        swal({
-                                            title: "¡Buen trabajo!",
-                                            text: urls.successMessage,
-                                            type: 'success',
-                                            timer: 2000
-                                        });
-                                        window.setTimeout(function () {
-                                            window.location.href = urls.createUrl;
-                                        }, 3000);
-                                        $("#parametro").focus().val("");
-                                    }
-                                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                    console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
-                                    swal({
-                                        title: "¡ERROR 500!",
-                                        text: "Interno del Servidor.",
-                                        type: 'error',
-                                        timer: 2000
-                                    });
-                                });
-                            } else {
-                                swal("Cancelado", "Tu registro está seguro :)", "info");
-                            }
-                        });
+                   if(validObservacion()) {
+                       swal({
+                               title: "Diferencia de Volumen!",
+                               text: "Volumen sugerido para Serologia: " + volumen_desde_db + "\nDeseas continuar?",
+                               type: "warning",
+                               showCancelButton: true,
+                               confirmButtonClass: "btn-danger",
+                               confirmButtonText: "Si, continuar!",
+                               cancelButtonText: "No, cancelar plx!",
+                               closeOnConfirm: false,
+                               closeOnCancel: false
+                           },
+                           function (isConfirm) {
+                               if (isConfirm) {
+                                   $.post(urls.saveFormUrl, formSerologia.serialize(), function (data) {
+                                       if (data.msj != null) {
+                                           swal({
+                                               title: "¡ERROR!",
+                                               text: data.msj,
+                                               type: "error",
+                                               timer: 2000
+                                           });
+                                           window.setTimeout(function () {
+                                               location.reload(true);
+                                           }, 3000);
+                                       } else {
+                                           swal({
+                                               title: "¡Buen trabajo!",
+                                               text: urls.successMessage,
+                                               type: 'success',
+                                               timer: 2000
+                                           });
+                                           window.setTimeout(function () {
+                                               window.location.href = urls.createUrl;
+                                           }, 3000);
+                                           $("#parametro").focus().val("");
+                                       }
+                                   }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                       console.log("XMLHttpRequest: " + XMLHttpRequest, "textStatus: " + textStatus, "errorThrown:" + errorThrown);
+                                       swal({
+                                           title: textStatus,
+                                           text: errorThrown,
+                                           type: 'error',
+                                           timer: 2000
+                                       });
+                                   });
+                               } else {
+                                   swal("Cancelado", "Tu registro está seguro :)", "info");
+                               }
+                           });
+                   }//fin valida observacion
+
                 }else {
                     $.post(urls.saveFormUrl, formSerologia.serialize(), function (data) {
                         if (data.msj != null) {
@@ -268,14 +278,36 @@ var SerologiaMA = function(){
                     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                         console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
                         swal({
-                            title: "¡ERROR 500!",
-                            text: "Interno del Servidor.",
+                            title: textStatus,
+                            text: errorThrown,
                             type: 'error',
                             timer: 2000
                         });
                     });
                 }
             }
+
+            function validObservacion (){
+                var isAllValid = true;
+                if($("#observacion").val() == null || $("#observacion").val() == ""){
+                    isAllValid = false;
+                    $('#observacion').addClass('is-invalid').focus();
+                }
+                else{
+                    $('#observacion').removeClass('is-invalid');
+                }
+                return isAllValid;
+            }
+
+
+
+            function DifenciaMeses(){
+                debugger;
+                var a = moment();
+                var b = moment($("#fechaNac").val()).format('L');
+                var months = a.diff(b, 'months', true);
+                return months.toFixed(2);
+            };
 
             function Limpiartxt(){
                 $("#idSerologia").val("");

@@ -5,6 +5,7 @@ import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
+import ni.org.ics.estudios.domain.catalogs.Rango_Edad_Volumen;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteSeroDto;
 import ni.org.ics.estudios.dto.SerologiaDto;
@@ -31,10 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //import com.sun.deploy.uitoolkit.ui.LoggerConsole;
 //import ni.org.ics.estudios.domain.Participante;
@@ -50,7 +48,6 @@ public class SerologiaOct2020Controller {
     /* Instancia de mi Servicio Hemodinamico */
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
-
 
     @Resource(name = "participanteService")
     private ParticipanteService participanteService;
@@ -79,55 +76,88 @@ public class SerologiaOct2020Controller {
     public String editMuestra(Model model, @PathVariable("idSerologia") String idSerologia) throws Exception
     {
         try{
-            Serologia caso = this.serologiaService.getSerologiaById(idSerologia);
-            ParticipanteSeroDto participanteSeroDto = new ParticipanteSeroDto();
-            if (caso.getParticipante() !=null){
-                Participante participante = this.participanteService.getParticipanteByCodigo(caso.getParticipante());
-                if (participante != null){
-                    //ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(caso.getParticipante().getCodigo());
-                    participanteSeroDto.setIdSerologia(caso.getIdSerologia());
-                    participanteSeroDto.setEdadMeses(caso.getEdadMeses());
-                    participanteSeroDto.setFechaNacimiento(participante.getFechaNac());
-                    participanteSeroDto.setIdparticipante(caso.getParticipante());
-                    participanteSeroDto.setNombreCompleto(participante.getNombreCompleto());
-                    participanteSeroDto.setCodigo_casa_PDCS(caso.getCasaPDCS());
-                    String string;
-                    string = participante.getEdad();
+            Serologia serologia = this.serologiaService.getSerologiaById(idSerologia);
+            String estudiosFinales = "";
+            if(serologia !=null) {
+                ParticipanteProcesos procesos = null;
+                ParticipanteSeroDto caso = new ParticipanteSeroDto();
+                String estudios = "";
+                int edad =0;
+                caso.setIdSerologia(serologia.getIdSerologia());
+                caso.setEdadEnMeses(serologia.getEdadMeses());
+                caso.setIdparticipante(serologia.getParticipante());
+                caso.setEstudios(serologia.getEstudio());
+                caso.setCodigo_casa_Familia(serologia.getCasaCHF());
+                caso.setCodigo_casa_PDCS(serologia.getCasaPDCS());
+                int edadConverted = (int) serologia.getEdadMeses()/12;
+                caso.setEdad_year(""+edadConverted);
+                caso.setEdad_meses("0");
+                caso.setEdad_dias("0");
+                caso.setFecha(serologia.getFecha());
+                caso.setVolumen(serologia.getVolumen());
+                caso.setObservacion(serologia.getObservacion());
+                String est_part ="Ingreso";
+                caso.setEstado(est_part);
+                // buscar estado, nombre
+                Participante participante = this.participanteService.getParticipanteByCodigo(serologia.getParticipante());
+                if (participante!=null){
+                    //Nombre participante
+                    String nombres = participante.getNombre1().toUpperCase();
+                    nombres += (participante.getNombre2() != null) ? " "+participante.getNombre2().toUpperCase() : "";
+                    String apellidos = participante.getApellido1().toUpperCase();
+                    apellidos += (participante.getApellido2() != null) ? " "+participante.getApellido2().toUpperCase() : "";
+                    caso.setNombreCompleto(nombres +" "+ apellidos);
+
+                    //fecha nacimiento
+                    caso.setFechaNacimiento(participante.getFechaNac());
+                    String string = participante.getEdad();
                     String[] parts = string.split("/");
                     String part1 = parts[0];
                     String part2 = parts[1];
                     String part3 = parts[2];
-                    participanteSeroDto.setEdad_year(part1);
-                    participanteSeroDto.setEdad_meses(part2);
-                    participanteSeroDto.setEdad_dias(part3);
-                    participanteSeroDto.setFecha(caso.getFecha());
-                    participanteSeroDto.setVolumen(caso.getVolumen());
-                    participanteSeroDto.setObservacion(caso.getObservacion());
-                    participanteSeroDto.setEstudios(caso.getEstudio());
-                }else{
-                    participanteSeroDto.setIdSerologia(caso.getIdSerologia());
-                    participanteSeroDto.setEdadMeses(caso.getEdadMeses());
-                    participanteSeroDto.setFechaNacimiento(new Date());
-                    participanteSeroDto.setIdparticipante(caso.getParticipante());
-                    participanteSeroDto.setNombreCompleto("-");
-                    participanteSeroDto.setCodigo_casa_PDCS(0);
-                    participanteSeroDto.setCodigo_casa_Familia("0");
-                    participanteSeroDto.setEdad_year("0");
-                    participanteSeroDto.setEdad_meses("0");
-                    participanteSeroDto.setEdad_dias("0");
-                    participanteSeroDto.setFecha(caso.getFecha());
-                    participanteSeroDto.setVolumen(caso.getVolumen());
-                    participanteSeroDto.setObservacion(caso.getObservacion());
-                    participanteSeroDto.setEstudios(caso.getEstudio());
+                    caso.setEdad_year(part1);
+                    caso.setEdad_meses(part2);
+                    caso.setEdad_dias(part3);
+                    edad = Integer.parseInt(part1);
+                    procesos = this.participanteProcesosService.getParticipante(serologia.getParticipante());
+                    if (procesos.getEstPart()==1)
+                        est_part = "Activo";
+                    else
+                        est_part = "Reactivar";
+                }else {
+                    caso.setNombreCompleto("-");
+                    caso.setFechaNacimiento(new Date());
                 }
-                model.addAttribute("caso", participanteSeroDto);
+                String estudiosParticipante = procesos.getEstudio();
+                double edadEnMeses = serologia.getEdadMeses();
+                caso.setEdadMeses(edadEnMeses);
+
+
+                if (estudiosParticipante.contains("Tcovid")) {
+                    String s = procesos.getEstudio();
+                    String[] result = s.split("Tcovid", 2);
+                    String first = result[0];
+                    estudiosFinales = first.trim();
+                } else {
+                    estudiosFinales = procesos.getEstudio().trim();
+                }
+
+                Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(edad, "SEROLOGIA", estudiosFinales.trim());
+                if (rango!=null){
+                    caso.setVolumen_serologia_desde_bd("" + rango.getVolumen());
+                    caso.setVolumen_adicional_desde_bd("" + rango.getVolumen_adicional());
+                }else{
+                    caso.setVolumen_serologia_desde_bd("0");
+                    caso.setVolumen_adicional_desde_bd("0");
+                }
+                caso.setEstado(est_part);
+                model.addAttribute("caso", caso);
                 model.addAttribute("agregando",false);
                 model.addAttribute("editando",true);
-                model.addAttribute("estudios", "-");
-                return "/SerologiaOct2020/SerologiaForm";
             }else{
                 return "404";
             }
+            return "/SerologiaOct2020/SerologiaForm";
         }
         catch (Exception e){
             logger.error(e.getMessage());
@@ -166,7 +196,7 @@ public class SerologiaOct2020Controller {
     //endregion
 
 
-    // Metodo ya modificado **
+    // todo: Metodo para realiza el envio de Serologías **
     @RequestMapping(value = "/sendAllSerologias", method = RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<String> sendAllSerologias(@RequestParam(value="numenvio", required=false ) Integer numenvio
@@ -209,7 +239,6 @@ public class SerologiaOct2020Controller {
                         detalles_envio.setSerologiaEnvio(envio);
                         this.serologiaService.save_Detalles_Serologia_Envio(detalles_envio);// guardo el detalle del envio
                     }
-
                 }else {
                     return JsonUtil.createJsonResponse("Registros enviados: ".concat(""+ListaSerologiaYaEnviadas.size()));
                 }
@@ -218,7 +247,7 @@ public class SerologiaOct2020Controller {
         }catch (Exception ex){
             Gson gson = new Gson();
             String json = gson.toJson(ex.toString());
-            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+            return new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -227,41 +256,97 @@ public class SerologiaOct2020Controller {
     public @ResponseBody
     ResponseEntity<String> BuscarParticipanteByID(@RequestParam(value = "parametro", required = true) Integer parametro)throws Exception {
         try {
-            Map<String, String> map = new HashMap<String, String>();
             ParticipanteSeroDto participanteSeroDto = new ParticipanteSeroDto();
+            ParticipanteProcesos procesos;
             Participante participante = this.serologiaService.getParticipanteByCodigo(parametro);
             if (participante!=null){
-                ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getCodigo());
-
-                //if (procesos==null)
-                    //return JsonUtil.createJsonResponse("No se encontraron Processos del participante!");
-                //if (procesos.getEstPart().equals(0))
-                    //return JsonUtil.createJsonResponse("Participante retirado");
 
                 String nombres = participante.getNombre1().toUpperCase();
                 nombres += (participante.getNombre2() != null) ? " "+participante.getNombre2().toUpperCase() : "";
                 String apellidos = participante.getApellido1().toUpperCase();
                 apellidos += (participante.getApellido2() != null) ? " "+participante.getApellido2().toUpperCase() : "";
-                participanteSeroDto.setNombreCompleto(nombres + " " + apellidos);
-                participanteSeroDto.setEstudios(procesos.getEstudio());
                 String string;
-                string = participante.getEdad();
-                String[] parts = string.split("/");
-                String part1 = parts[0];
-                String part2 = parts[1];
-                String part3 = parts[2];
-                participanteSeroDto.setEdad_year(part1);
-                participanteSeroDto.setEdad_meses(part2);
-                participanteSeroDto.setEdad_dias(part3);
-                participanteSeroDto.setCodigo_casa_PDCS(participante.getCasa().getCodigo());
-                participanteSeroDto.setCodigo_casa_Familia(procesos.getCasaCHF());
+
+                //fecha nacimiento
                 participanteSeroDto.setFechaNacimiento(participante.getFechaNac());
-                participanteSeroDto.setEstado(procesos.getEstPart());
-                participanteSeroDto.setIdparticipante(participante.getCodigo());
-                return JsonUtil.createJsonResponse(participanteSeroDto);
-            }else {
+
+                procesos = this.participanteProcesosService.getParticipante(participante.getCodigo());
+                if (procesos.getEstPart()==1 & procesos.getEstudio()!=""){
+                    String estudios = procesos.getEstudio();
+                    participanteSeroDto.setNombreCompleto(nombres + " " + apellidos);
+                    participanteSeroDto.setEstudios(procesos.getEstudio().trim());
+                    string = participante.getEdad();
+                    String[] parts = string.split("/");
+                    String part1 = parts[0];
+                    String part2 = parts[1];
+                    String part3 = parts[2];
+                    participanteSeroDto.setEdad_year(part1);
+                    participanteSeroDto.setEdad_meses(part2);
+                    participanteSeroDto.setEdad_dias(part3);
+                    participanteSeroDto.setCodigo_casa_PDCS(participante.getCasa().getCodigo());
+                    participanteSeroDto.setCodigo_casa_Familia(procesos.getCasaCHF());
+                    participanteSeroDto.setFechaNacimiento(participante.getFechaNac());
+                    participanteSeroDto.setEstado("Activo");
+                    participanteSeroDto.setIdparticipante(participante.getCodigo());
+                    //edad Meses
+                    double d = Double.parseDouble(part1)*12;
+                    //Double edad = Math.floor(d/12); Double edadMeses = d % 12;
+                    participanteSeroDto.setEdadEnMeses(d);
+                    int edad = Integer.parseInt(part1) * 12;
+                    String estudiosFinales = "";
+                    if (estudios.contains("Tcovid")) {
+                        String s = estudios;
+                        String[] result = s.split("Tcovid", 2);
+                        String first = result[0];
+                        estudiosFinales = first.trim();
+                    } else {
+                        estudiosFinales = procesos.getEstudio().trim();
+                    }
+                    Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(edad, "SEROLOGIA", estudiosFinales.trim());
+                    if (rango!=null){
+                        participanteSeroDto.setVolumen_serologia_desde_bd("" + rango.getVolumen());
+                        participanteSeroDto.setVolumen_adicional_desde_bd("" + rango.getVolumen_adicional());
+                    }else{
+                        participanteSeroDto.setVolumen_serologia_desde_bd("0");
+                        participanteSeroDto.setVolumen_adicional_desde_bd("0");
+                    }
+                    return JsonUtil.createJsonResponse(participanteSeroDto);
+                }else{//todo: Reactivar
+                    participanteSeroDto.setNombreCompleto(nombres + " " + apellidos);
+                    participanteSeroDto.setEstudios("-");
+                    participanteSeroDto.setEstado("Reactivar");
+                    participanteSeroDto.setCodigo_casa_PDCS(0);
+                    participanteSeroDto.setCodigo_casa_Familia("0");
+                    //edad
+                    string = participante.getEdad();
+                    string = participante.getEdad();
+                    String[] parts = string.split("/");
+                    String part1 = parts[0];
+                    String part2 = parts[1];
+                    String part3 = parts[2];
+                    participanteSeroDto.setEdad_year(part1);
+                    participanteSeroDto.setEdad_meses(part2);
+                    participanteSeroDto.setEdad_dias(part3);
+                    //edad Meses
+                    double d = Double.parseDouble(part1)*12;
+                    Double edadMeses = d % 12;
+                    participanteSeroDto.setEdadEnMeses(d);
+                    participanteSeroDto.setFechaNacimiento(participante.getFechaNac());
+                    participanteSeroDto.setIdparticipante(participante.getCodigo());
+                    Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(0,"SEROLOGIA","NULL");
+                    if (rango!=null){
+                       participanteSeroDto.setVolumen_serologia_desde_bd(""+rango.getVolumen());
+                       participanteSeroDto.setVolumen_adicional_desde_bd(""+rango.getVolumen_adicional());
+                    }else{
+                        participanteSeroDto.setVolumen_serologia_desde_bd("0");
+                        participanteSeroDto.setVolumen_adicional_desde_bd("0");
+                    }
+                    return JsonUtil.createJsonResponse(participanteSeroDto);
+                }
+            }else {// todo: Nuevo Ingreso
                 participanteSeroDto.setNombreCompleto("-");
                 participanteSeroDto.setEstudios("-");
+                participanteSeroDto.setEstado("Ingreso");//nuevo ingreso
                 participanteSeroDto.setCodigo_casa_PDCS(0);
                 participanteSeroDto.setCodigo_casa_Familia("0");
                 participanteSeroDto.setEdad_year("0");
@@ -269,6 +354,15 @@ public class SerologiaOct2020Controller {
                 participanteSeroDto.setEdad_dias("0");
                 participanteSeroDto.setFechaNacimiento(new Date());
                 participanteSeroDto.setIdparticipante(parametro);
+                participanteSeroDto.setEdadMeses(0);
+                Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(0,"SEROLOGIA","NULL");
+                if (rango!=null){
+                 participanteSeroDto.setVolumen_serologia_desde_bd(""+rango.getVolumen());
+                 participanteSeroDto.setVolumen_adicional_desde_bd(""+rango.getVolumen_adicional());
+                }else{
+                    participanteSeroDto.setVolumen_serologia_desde_bd("0");
+                    participanteSeroDto.setVolumen_adicional_desde_bd("0");
+                }
             }
             return JsonUtil.createJsonResponse(participanteSeroDto);
         }catch (Exception e){
@@ -284,15 +378,16 @@ public class SerologiaOct2020Controller {
     //region Serologia/GuardarSerologia
     @RequestMapping(value = "GuardarSerologia", method = RequestMethod.POST)
     public ResponseEntity<String>GuardarSerologia (@RequestParam(value = "idSerologia", required=false, defaultValue="") String idSerologia
-           ,@RequestParam( value="idParticipante", defaultValue="" ) Integer idParticipante
-           ,@RequestParam( value="fecha", required=false, defaultValue=""  ) String fecha
-           ,@RequestParam( value="volumen", required=false, defaultValue=""  ) String volumen
-           ,@RequestParam( value="observacion", required=false, defaultValue=""  ) String observacion
-           ,@RequestParam( value="estudios", required=false, defaultValue=""  ) String estudios
-           ,@RequestParam( value="casaCHF", required=false, defaultValue=""  ) String casaCHF
-           ,@RequestParam( value="casaPDCS", required=false, defaultValue=""  ) Integer casaPDCS
-           ,@RequestParam( value="tiporequest", required=false, defaultValue=""  ) String tiporequest
-           ,@RequestParam(value = "edadMeses",required=false, defaultValue="") Integer edadMeses
+           ,@RequestParam( value = "idParticipante", defaultValue="" ) Integer idParticipante
+           ,@RequestParam( value = "fecha"      , required=false, defaultValue=""  ) String fecha
+           ,@RequestParam( value = "volumen"    , required=false, defaultValue=""  ) String volumen
+           ,@RequestParam( value = "observacion", required=false, defaultValue=""  ) String observacion
+           ,@RequestParam( value = "estudios"   , required=false, defaultValue=""  ) String estudios
+           ,@RequestParam( value = "casaCHF"    , required=false, defaultValue=""  ) String casaCHF
+           ,@RequestParam( value = "casaPDCS"   , required=false, defaultValue=""  ) Integer casaPDCS
+           ,@RequestParam( value = "tiporequest", required=false, defaultValue=""  ) String tiporequest
+           ,@RequestParam( value = "edadMeses"  ,required=false,  defaultValue=""  ) String edadMeses
+           ,@RequestParam( value = "estado"     ,required=false,  defaultValue=""  ) String estado
     ) throws Exception {
         try{
             if (volumen.equals("0") || volumen.equals("")){
@@ -313,9 +408,14 @@ public class SerologiaOct2020Controller {
             Serologia sero = new Serologia();
             String nameComputer = InetAddress.getLocalHost().getHostName();
             if (tiporequest.equals("false")){// Guardar nuevo registro
-                if (!serologiaService.ExisteSerologia(DateUtil.StringToDate(fecha,"dd/MM/yyyy"),idParticipante)){
+
+                Date date = DateUtil.StringToDate(fecha, "dd/MM/yyyy");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int dateYear = calendar.get(Calendar.YEAR);
+
+                if (!serologiaService.yaTieneMuestraSerologiaAnual(dateYear,idParticipante)){
                     //Estudios y edades
-                    //ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(idParticipante);
                         sero.setDeviceid(nameComputer);
                         sero.setEstado('1');
                         sero.setPasive('0');
@@ -326,24 +426,26 @@ public class SerologiaOct2020Controller {
                         sero.setCasaPDCS(casaPDCS);
                         sero.setEnviado('0');
                         sero.setEstudio(estudios);
-                        if (casaPDCS == 0 && edadMeses == 0) {
-                            sero.setDescripcion("Nuevo Ingreso");
-                        } else {
+                        if (estado.equals("Activo")) {
                             sero.setDescripcion("");
+                        } else if (estado.equals("Reactivar")){
+                            sero.setDescripcion("Reactivar");
+                        }else {
+                            sero.setDescripcion("Nuevo Ingreso");
                         }
                         sero.setFecha(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
-                        sero.setEdadMeses(edadMeses);
+                        double EdadEnMeses = Double.parseDouble(edadMeses);
+                        sero.setEdadMeses(EdadEnMeses);
                         String obs = (observacion.equals("")) ? "" : observacion.toUpperCase();
                         sero.setObservacion(obs);
                         sero.setVolumen(Double.parseDouble(volumen));
                         sero.setCodigoPbmc(0);
                         serologiaService.saveSerologia(sero);
-
                     return JsonUtil.createJsonResponse(sero);
                 }
                 else {
                     Map<String, String> map = new HashMap<String, String>();
-                    map.put("msj", "Muestra ya existe." );
+                    map.put("msj", "Participante ya tiene Muestra Anual" );
                     return JsonUtil.createJsonResponse(map);
                 }
             }else{// Editando registro
@@ -360,11 +462,19 @@ public class SerologiaOct2020Controller {
                 sero.setEnviado('0');
                 sero.setEstudio(estudios);
                 sero.setFecha(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
-                sero.setEdadMeses(edadMeses);
+                double EdadEnMeses = Double.parseDouble(edadMeses);
+                sero.setEdadMeses(EdadEnMeses);
                 String obs = (observacion.equals(""))?"":observacion.toUpperCase();
                 sero.setObservacion(obs);
                 sero.setVolumen(Double.parseDouble(volumen));
                 sero.setCodigoPbmc(0);
+                if (estado.equals("Activo")) {
+                    sero.setDescripcion("");
+                } else if (estado.equals("Reactivar")){
+                    sero.setDescripcion("Reactivar");
+                }else {
+                    sero.setDescripcion("Nuevo Ingreso");
+                }
                 serologiaService.saveSerologia(sero);
                 return JsonUtil.createJsonResponse(sero);
             }
@@ -375,7 +485,6 @@ public class SerologiaOct2020Controller {
             String json = gson.toJson(e.toString());
             return  new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 //endregion
@@ -432,6 +541,24 @@ public class SerologiaOct2020Controller {
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @RequestMapping(value = "/getObservaciones", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<String> getObservaciones(@RequestParam(value = "observacion", required = true) String observacion)
+            throws Exception {
+        List<MessageResource> obsv =new ArrayList<MessageResource>();
+        try {
+            ArrayList<String> observacionArrayList = new ArrayList<String>();
+             obsv = messageResourceService.getCatalogo("CHF_CAT_RAZON_NO_MX");
+            for (MessageResource m: obsv){
+                observacionArrayList.add(m.getSpanish());
+            }
+            return observacionArrayList;
+        }catch (Exception e){
+            return null;
         }
     }
 

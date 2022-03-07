@@ -6,6 +6,7 @@ import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
+import ni.org.ics.estudios.domain.catalogs.Rango_Edad_Volumen;
 import ni.org.ics.estudios.dto.ParticipanteSeroDto;
 import ni.org.ics.estudios.dto.SerologiaDto;
 import ni.org.ics.estudios.service.UsuarioService;
@@ -64,7 +65,7 @@ public class SerologiaOct2020Service {
     public boolean ExisteSerologia(Date fecha, Integer codigo) throws Exception{
         try{
             Session session = sessionFactory.getCurrentSession();
-            Query query = session.createQuery("from Serologia s where s.fecha =:fecha and s.participante =:codigo and s.codigoPbmc=0");
+            Query query = session.createQuery("from Serologia s where s.fecha =:fecha and s.participante =:codigo and s.codigoPbmc=0 and s.pasive='0' ");
             query.setParameter("fecha", fecha);
             query.setParameter("codigo", codigo);
             return  query.list().size()>0;
@@ -74,6 +75,15 @@ public class SerologiaOct2020Service {
             throw e;
         }
     }
+
+    public boolean yaTieneMuestraSerologiaAnual(int yearActual, Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from  Serologia s where year(s.fecha)=:yearActual and s.participante=:codigo and s.pasive='0' ");
+        query.setParameter("yearActual", yearActual);
+        query.setParameter("codigo", codigo);
+        return query.list().size()>0;
+    }
+
     //endregion
 
     //region Métodos para Guardar Serologia
@@ -176,9 +186,10 @@ public class SerologiaOct2020Service {
         query.executeUpdate();
     }
 
+    //todo: obtengo las Serologias Previamente Enviadas entre 2° y 8°**
     public List<Serologia>ObtenerSerologiasEnviadas(Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Serologia s where s.fecha between :fechaInicio and :fechaFin and s.enviado='0' ");
+        Query query = session.createQuery("from Serologia s where s.fecha between :fechaInicio and :fechaFin and s.enviado='0' and s.pasive='0' ");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         return query.list();
@@ -256,4 +267,30 @@ public class SerologiaOct2020Service {
         return query.list();
     }
 
+    // todo **  Consulta para llenar el reporte Serologia con PBMC **
+    public List<Serologia_Detalle_Envio>getSerologiaByPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Serologia_Detalle_Envio se where se.serologiaEnvio.fecha between :fechaInicio and :fechaFin and se.serologiaEnvio.idenvio =:nEnvios and se.serologia.codigoPbmc>0 and se.serologia.descripcion='PBMC' and se.serologia.pasive='0' order by se.serologia.participante asc ");
+        query.setParameter("fechaInicio", fechaInicio);
+        query.setParameter("fechaFin", fechaFin);
+        query.setParameter("nEnvios", nEnvios);
+        return query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Rango_Edad_Volumen getRangoEdadByTipoMuestra(int edad, String tipoMuestra, String estudio){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Rango_Edad_Volumen r where :edad between r.edad_meses_minima and r.getEdad_meses_maxima and r.tipo_muestra=:tipoMuestra and r.estudio=:estudio");
+        query.setParameter("edad",edad);
+        query.setParameter("tipoMuestra",tipoMuestra);
+        query.setParameter("estudio",estudio);
+        return (Rango_Edad_Volumen) query.uniqueResult();
+    }
+
+    public List<String> getObservaciones(String observacion){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select distinct p.nombre1Tutor from Participante p where p.nombre1Tutor like :observacion");
+        query.setParameter("observacion", '%' + observacion + '%');
+        return query.list();
+    }
 }

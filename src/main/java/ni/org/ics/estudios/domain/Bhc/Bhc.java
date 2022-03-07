@@ -20,7 +20,7 @@ public class Bhc extends BaseMetaData implements Serializable {
     private double volumen;
     private Character enviado ='0';
     private String estudios;
-    private Integer edadMeses;
+    private double edadMeses;
     private String notas;
     private String observacion;
     private String casa_Familia;
@@ -83,11 +83,11 @@ public class Bhc extends BaseMetaData implements Serializable {
     }
 
     @Column(name = "EDAD_MESES", nullable = true)
-    public Integer getEdadMeses() {
+    public double getEdadMeses() {
         return edadMeses;
     }
 
-    public void setEdadMeses(Integer edadMeses) {
+    public void setEdadMeses(double edadMeses) {
         this.edadMeses = edadMeses;
     }
 

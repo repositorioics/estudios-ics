@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by ICS on 03/02/2022.
@@ -18,7 +19,7 @@ public class PbmcDto implements Serializable {
     private String edadM;
     private String estudios;
     private String estado;
-    private String fechaNacimiento;
+    private Date fechaNacimiento;
     private double edadEnMeses;
     private Integer id_serologia;
     private String codigo_casa_familia;
@@ -117,11 +118,11 @@ public class PbmcDto implements Serializable {
         this.estado = estado;
     }
 
-    public String getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
+    public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

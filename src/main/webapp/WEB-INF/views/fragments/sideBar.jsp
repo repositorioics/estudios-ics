@@ -243,6 +243,8 @@
                 </ul>
             </li>
             </sec:authorize>
+
+
         <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
@@ -251,13 +253,13 @@
                     <ul class="nav-dropdown-items">
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/Serologia/listSerologia" htmlEscape="true "/>">
-                                <i class="fa fa-list text-danger" aria-hidden="true"></i>
+                                <i class="fa fa-list" aria-hidden="true"></i>
                                 <spring:message code="Listado" /></a>
                         </li>
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/Serologia/listEnviosMuestras" htmlEscape="true "/>">
                                 <i class="fa fa-send"></i>
-                                <spring:message code="Envios" /></a>
+                                <spring:message code="reports" /> <spring:message code="Envios" /></a>
                         </li>
                     </ul>
                 </li>
@@ -277,7 +279,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Pbmc/listEnviosPbmc" htmlEscape="true "/>">
                                 <i class="fa fa-send"></i>
-                                <spring:message code="Envios" /> <spring:message code="Pbmc" /></a>
+                                <spring:message code="reports" /> <spring:message code="Pbmc" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Pbmc/listSeroConPbmc" htmlEscape="true "/>">
@@ -301,7 +303,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="<spring:url value="/Bhc/EnviadasBhc" htmlEscape="true "/>">
                                     <i class="fa fa-send"></i>
-                                    <spring:message code="Envios" /> <spring:message code="Bhc" /></a>
+                                    <spring:message code="reports" /> <spring:message code="Bhc" /></a>
                             </li>
                         </ul>
                     </li>

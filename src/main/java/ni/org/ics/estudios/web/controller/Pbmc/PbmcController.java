@@ -30,10 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.net.InetAddress;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ICS on 03/02/2022.
@@ -91,9 +88,7 @@ public class PbmcController {
             caso.setCodigo_casa_PDCS(pbmc.getCasaPDCS());
             caso.setCodigo_participante(pbmc.getCodigo_participante());
             caso.setEstudios(pbmc.getEstudios());
-            int edadConverter = pbmc.getEdadMeses()/12;
-            caso.setEdadA(""+edadConverter);
-            caso.setEdadM("0");
+            int edadConverter =0;
             caso.setFecha(DateUtil.DateToString(pbmc.getFecha_pbmc(),"dd/MM/yyyy"));
             caso.setVolumen_pbmc(""+pbmc.getVolumen());
             if (pbmc.getPbmc_tiene_serologia()=='1') {
@@ -106,6 +101,15 @@ public class PbmcController {
             caso.setObservacion(pbmc.getObservacion());
             Participante participante = this.participanteService.getParticipanteByCodigo(pbmc.getCodigo_participante());
             if (participante!=null){
+                caso.setFechaNacimiento(participante.getFechaNac());
+                String string;
+                string = participante.getEdad();
+                String[] parts = string.split("/");
+                String part1 = parts[0];
+                String part2 = parts[1];
+                edadConverter = Integer.parseInt(part1);
+                caso.setEdadA(part1);
+                caso.setEdadM(part2);
                 procesos = this.participanteProcesosService.getParticipante(pbmc.getCodigo_participante());
                 if (procesos.getEstPart()==1)
                     est_part = "Activo";
@@ -170,11 +174,15 @@ public class PbmcController {
             Participante participante = this.participanteService.getParticipanteByCodigo(parametro);
             if (participante!=null) {
                 procesos = this.participanteProcesosService.getParticipante(participante.getCodigo());
+
+                if (procesos.getPbmc().equals("No")) {
+                    return JsonUtil.createJsonResponse("Código no aplica para PBMC");
+                }
+
                 if (procesos.getEstPart()==1 & procesos.getEstudio()!="" ){//Participante activo
                 String estudios = (procesos.getEstudio().equals("")) ? "-" : procesos.getEstudio();
                 participantePbmcDto.setEstudios(estudios);
-                fechaNacimiento = DateUtil.DateToString(participante.getFechaNac(), "yyyy-MM-dd");
-                participantePbmcDto.setFechaNacimiento(fechaNacimiento);
+                participantePbmcDto.setFechaNacimiento(participante.getFechaNac());
                 String string;
                 string = participante.getEdad();
                 String[] parts = string.split("/");
@@ -209,7 +217,7 @@ public class PbmcController {
                 String casaFam = (procesos.getCasaCHF() == null) ? "0" : procesos.getCasaCHF();
                 participantePbmcDto.setCodigo_casa_familia(casaFam);
             }else{//Reactivación
-                    participantePbmcDto.setFechaNacimiento(DateUtil.DateToString(participante.getFechaNac(),"dd/MM/yyyy"));
+                    participantePbmcDto.setFechaNacimiento(participante.getFechaNac());
                     String string = participante.getEdad();
                     String[] parts = string.split("/");
                     String part1 = parts[0];
@@ -238,9 +246,7 @@ public class PbmcController {
                 participantePbmcDto.setEstudios("-");
                 participantePbmcDto.setEdadA("0");
                 participantePbmcDto.setEdadM("0");
-                fechaNacimiento = DateUtil.DateToString(new Date(),"yyyy-MM-dd");
-                participantePbmcDto.setEdadEnMeses(0);
-                participantePbmcDto.setFechaNacimiento(fechaNacimiento);
+                participantePbmcDto.setFechaNacimiento(new Date());
                 participantePbmcDto.setEstado("Ingreso");
                 participantePbmcDto.setCodigo_casa_PDCS(0);
                 participantePbmcDto.setCodigo_casa_familia("0");
@@ -298,8 +304,11 @@ public class PbmcController {
             }
 
             if (editando.equals("false")) {// Guardar nuevo Registro PBMC
-
-                if (!this.pbmcService.ExistePbmc(DateUtil.StringToDate(fecha, "dd/MM/yyyy"), codigo_participante)) {
+                Date date = DateUtil.StringToDate(fecha, "dd/MM/yyyy");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int dateYear = calendar.get(Calendar.YEAR);
+                if (!this.pbmcService.yaTieneMuestraPbmcAnual(dateYear, codigo_participante)) {
                     // METADATA PBMC
                     String nameComputer = InetAddress.getLocalHost().getHostName();
                     String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -309,7 +318,8 @@ public class PbmcController {
                     pbmc.setEstado('1');
                     pbmc.setPasive('0');
                     pbmc.setCodigo_participante(codigo_participante);
-                    pbmc.setEdadMeses(Integer.valueOf(edadEnMeses));
+                    double EdadEnMeses = Double.parseDouble(edadEnMeses);
+                    pbmc.setEdadMeses(EdadEnMeses);
                     pbmc.setEnviado('0');
                     pbmc.setEstudios(estudios);
                     pbmc.setFecha_pbmc(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
@@ -342,7 +352,7 @@ public class PbmcController {
                             serologia.setCasaPDCS(codecasaP);
                             serologia.setCasaCHF(codigo_casa_familia);
                             serologia.setCodigoPbmc(pbmc.getPbcm_id());
-                            serologia.setEdadMeses(Integer.valueOf(edadEnMeses));
+                            serologia.setEdadMeses(EdadEnMeses);
                             serologia.setEnviado('0');
                             serologia.setEstudio(estudios);
                             serologia.setFecha(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
@@ -359,7 +369,7 @@ public class PbmcController {
                     }
                 }else { //is  not  Saved
                     Map<String, String> map = new HashMap<String, String>();
-                    map.put("msj", "Registro Pbmc ya existe.");
+                    map.put("msj", "Participante ya Tiene Muestra Anual.");
                     return JsonUtil.createJsonResponse(map);
                 }
             }else {//Editando Registro de PBMC
@@ -486,15 +496,6 @@ public class PbmcController {
                         Pbmc pbmc = this.pbmcService.getPbmcByID(obj.getPbcm_id());
                         pbmc.setEnviado('1');
                         this.pbmcService.saveOrUpdatePbmc(pbmc);//Actualizo el campo enviado a '1' (Si)
-                        /*if (pbmc.getPbmc_tiene_serologia()=='1') {
-                            Serologia serologiaDePbmc = this.pbmcService.getSerologiaByPbmc_Id(pbmc.getPbcm_id());
-                            serologiaDePbmc.setEnviado('1');
-                            this.serologiaService.saveSerologia(serologiaDePbmc);// Actualizo el campo enviado a '1' (Si)  en tabla serologia
-                            Serologia_Detalle_Envio serologia_detalle_envio = new Serologia_Detalle_Envio();// creo obj de la tabla Serologia_detalle_envio
-                            serologia_detalle_envio.setSerologia(serologiaDePbmc);
-                            serologia_detalle_envio.setSerologiaEnvio(envio);// mismo envio de
-                            this.serologiaService.save_Detalles_Serologia_Envio(serologia_detalle_envio);
-                        }*/
                         pbmc_detalle_envio.setPbmc(pbmc);
                         pbmc_detalle_envio.setSerologiaEnvio(envio);
                         this.pbmcService.save_Detalles_Pbmc_Envio(pbmc_detalle_envio);// guardo el detalle del envio de PBMC
@@ -574,5 +575,23 @@ public class PbmcController {
             return new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(value = "/getObservaciones", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<String> getObservaciones(@RequestParam(value = "observacion", required = true) String observacion)
+            throws Exception {
+        List<MessageResource> obsv =new ArrayList<MessageResource>();
+        try {
+            ArrayList<String> observacionArrayList = new ArrayList<String>();
+            obsv = messageResourceService.getCatalogo("CHF_CAT_RAZON_NO_MX");
+            for (MessageResource m: obsv){
+                observacionArrayList.add(m.getSpanish());
+            }
+            return observacionArrayList;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
 
 }

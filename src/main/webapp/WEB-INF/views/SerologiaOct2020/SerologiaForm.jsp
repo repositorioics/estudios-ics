@@ -14,11 +14,13 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
-    <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
-    <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
+    <spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
+    <link href="${uiCss}" rel="stylesheet" type="text/css"/>
 
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
+    <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
+    <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <style>
         /*ini*/
         .toast-title {
@@ -186,8 +188,14 @@
             color:red;
             font-size:90%;
         }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #eee0;
+            opacity: 1;
+            cursor: not-allowed;
+        }
     </style>
-
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -207,12 +215,11 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-              <div class="container">
+              <div class="container col-md-10 col-lg-12">
                   <div class="card">
                       <div class="card-header">
-                          <h3 class="page-title">
-                              Serologia -
-                              <small>
+                          <h4 class="float-left mt-1">
+                              <i class="fa fa-flask text-danger" aria-hidden="true"></i>
                                   <c:choose>
                                       <c:when test="${agregando}">
                                           <spring:message code="add" />
@@ -221,112 +228,170 @@
                                           <spring:message code="edit" />
                                       </c:otherwise>
                                   </c:choose>
-                              </small>
-                          </h3>
-                          <button id="btnmyModal"  class="btn btn-primary pull-right"><i class="fa fa-plus"></i> <spring:message code="lbl.new.entry" /></button>
+                              <spring:message code="Recepción" /> <spring:message code="sample" />   <spring:message code="lbl.serologia" />
+                          </h4>
                       </div>
                       <div class="card-body">
                           <spring:url value="/Serologia/GuardarSerologia" var="saveFormUrl"/>
+                          <spring:url value="/Serologia/getObservaciones" var="getObservacionesUrl"/>
                           <spring:url value="/Serologia/GuardarNuevaSerologia" var="GuardarNuevaSerologiaUrl"/>
                           <spring:url value="/Serologia/searchParticipant" var="searchPartUrl"/>
                           <spring:url value="/Serologia/listSerologia/" var="listaUrl"/>
-                          <spring:url value="/Serologia/BuscarUltGradilla/" var="ultGradillaUrl"/>
+                          <spring:url value="/Serologia/create/" var="createUrl"/>
                           <c:set var="successMessage"><spring:message code="process.success" /></c:set>
                           <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
                           <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal">
-                              <div class="row">
-                                  <div class="form-group col-sm-12 col-md-6 col-lg-12">
-                                      <label><spring:message code="participant.code" /></label>
-                                      <input type="text" class="form-control" placeholder="Ingrese el código" id="parametro" name="parametro" tabindex="1">
-                                      <div id="gendererror" class="text-danger"></div>
+                                  <div class="row">
+                                      <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                          <div class="well search-result">
+                                              <div class="input-group">
+                                                  <input type="text" class="form-control form-control-lg"  placeholder="Ingrese el código" id="parametro" name="parametro" tabindex="1">
+                                              <span class="input-group-btn">
+                                                  <button id="btnBuscar" class="btn btn-info btn-lg" type="submit">
+                                                      <i class="fa fa-search" aria-hidden="true"></i>
+                                                  </button>
+                                              </span>
+                                              </div>
+                                              <div id="gendererror" class="text-danger"></div>
+                                          </div>
+                                      </div>
                                   </div>
-                              </div>
                           </form>
-
+                            <hr/>
                           <form class="form-horizontal" name="save-Serologia-form" id="save-Serologia-form" autocomplete="off">
-                              <div hidden="hidden" class="form-row">
-                                  <div class="col-md-3">
+                              <div class="form-row" hidden="hidden">
+                                  <div class="col-md-4">
+                                      <label for="idSerologia">idSerologia</label>
                                       <input id="idSerologia" name="idSerologia" type="text" class="form-control" value="${caso.idSerologia}"/>
                                   </div>
-                                  <div class="col-md-3">
-                                      <input type="text" class="form-control" id="idParticipante" name="idParticipante" value="${caso.participante.codigo}" >
-                                  </div>
 
-                                  <div class="col-md-3">
+                                  <div class="col-md-4">
+                                      <label for="edadMeses">edadMeses</label>
                                       <input type="text" class="form-control" id="edadMeses" name="edadMeses" value="${caso.edadMeses}"  />
                                   </div>
-                                  <input type="text" class="form-control" id="tiporequest" name="tiporequest" value="${editando}" />
-                                  <input type="text" class="form-control" id="totalGradilla" name="totalGradilla" value="50"  />
 
-                                  <div class="col-md-12">
+                                  <div class="col-md-4">
+                                      <label for="tiporequest">tiporequest</label>
+                                    <input type="text" class="form-control" id="tiporequest" name="tiporequest" value="${editando}" />
+                                  </div>
+
+                                  <div class="col-md-4">
+                                      <label for="estado">estado</label>
+                                      <input type="text" class="form-control" id="estado" name="estado" value="${caso.estado}" />
+                                  </div>
+
+                                  <div class="col-md-4">
+                                      <label for="volumen_adicional_desde_bd">volumen_adicional_desde_bd</label>
+                                      <input type="text" class="form-control" id="volumen_adicional_desde_bd" name="volumen_adicional_desde_bd" value="${caso.volumen_adicional_desde_bd}"  />
+                                  </div>
+                                  <div class="col-md-4">
                                       <label for="fecha">Fecha Nacimiento</label>
-                                      <input type="text" class="form-control" id="fechaNac" name="fechaNac"  value="<fmt:formatDate value="${caso.participante.fechaNac}"  pattern="yyyy-MM-dd"/>"  >
-                                      <small id="fechaHelpInline" class="text-muted"> yyyy/mm/dd.</small>
+                                      <input type="text" class="form-control" id="fechaNac" name="fechaNac"  value="<fmt:formatDate value="${caso.fechaNacimiento}"  pattern="yyyy-MM-dd"/>"  >
+                                      <small id="fechaHelpInline" class="text-muted"> yyyy-mm-dd.</small>
                                   </div>
-                              </div>
-
-
-                              <div   class="form-row">
-                                  <div class="form-group col-md-6">
-                                      <label for="nombreCompleto"><spring:message code="lbl.names.surnames" /></label>
-                                      <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" value="${caso.participante.nombreCompleto}"  disabled="disabled">
-                                  </div>
-                                  <div class="form-group col-md-6">
-                                      <label for="estudios"><spring:message code="userstudies" /></label>
-                                      <input type="text" class="form-control" name="estudios" id="estudios"  value="${caso.estudio}" readonly>
-                                  </div>
-
-                                  <div class="form-group col-md-6">
-                                      <label for="casaCHF"><spring:message code="chf.house" /></label>
-                                      <input type="text" class="form-control" name="casaCHF" id="casaCHF" value="${caso.casaCHF}" readonly>
-                                  </div>
-
-                                  <div class="form-group col-md-6">
-                                      <label for="nombreCompleto"><spring:message code="lbl.age" /></label>
-                                      <input type="text" class="form-control" id="edadPart" name="edadPart" value="${caso.participante.edad}"  disabled="disabled">
-                                      <small id="edadParthelp" class="text-muted"> Años/Meses.</small>
-                                  </div>
-
                               </div>
 
                               <div class="form-row">
-                                  <div class="form-group col-md-6">
-                                      <label for="fecha"><spring:message code="lbl.date" /></label>
-                                      <input type="text" class="form-control date-picker" id="fecha" name="fecha" data-date-end-date="+0d"
-                                             value="<fmt:formatDate value="${caso.fecha}" pattern="dd/MM/yyyy" />"   />
-                                      <small id="fechaHelpInline1" class="text-muted"> dd/mm/yyyy.</small>
+                                  <div class="col-md-2">
+                                      <label for="idParticipante"><spring:message code="code" /></label>
+                                      <input type="text" class="form-control" id="idParticipante" name="idParticipante" value="${caso.idparticipante}" readonly/>
                                   </div>
 
                                   <div class="form-group col-md-6">
-                                      <label for="volumen"><spring:message code="volumen" /></label>
-                                      <input type="text" name="volumen" id="volumen" class="form-control focusNext" placeholder="Volumen" value="${caso.volumen}" tabindex="2">
+                                      <label for="nombreCompleto"><spring:message code="lbl.names.surnames" /></label>
+                                      <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" value="${caso.nombreCompleto}"  disabled="disabled">
                                   </div>
 
+                                  <div class="form-group col-md-4">
+                                      <label for="estudios"><spring:message code="userstudies" /></label>
+                                      <input type="text" class="form-control" name="estudios" id="estudios"  value="${caso.estudios}" readonly>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <div class="card">
+                                          <div class="card-body">
+                                              <h5 class="card-title"><spring:message code="Casa"/></h5>
+                                              <div class="form-row">
+                                                  <div class="form-group col-md-6">
+                                                      <input type="text" class="form-control" name="casaCHF" id="casaCHF" value="${caso.codigo_casa_Familia}" readonly>
+                                                      <small class="text-muted"> <spring:message code="chf.house" /></small>
+                                                  </div>
+
+                                                  <div class="form-group col-md-6">
+                                                      <input type="text" class="form-control" name="casaPDCS" id="casaPDCS" value="${caso.codigo_casa_PDCS}" readonly>
+                                                      <small class="text-muted"> <spring:message code="PDCS"/></small>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-sm-6">
+                                      <div class="card">
+                                          <div class="card-body">
+                                              <h5 class="card-title">Edad del Participante.</h5>
+                                              <div class="form-row">
+
+                                                  <div class="form-group col-md-4">
+                                                      <input type="text" class="form-control" id="edad_year" name="edad_year" value="${caso.edad_year}"  disabled="disabled">
+                                                      <small class="text-muted"> Años.</small>
+                                                  </div>
+
+                                                  <div class="form-group col-md-4">
+                                                      <input type="text" class="form-control" id="edad_meses" name="edad_meses" value="${caso.edad_meses}"  disabled="disabled">
+                                                      <small  class="text-muted"> Meses.</small>
+                                                  </div>
+
+                                                  <div class="form-group col-md-4">
+                                                      <input type="text" class="form-control" id="edad_dias" name="edad_dias" value="${caso.edad_dias}"  disabled="disabled">
+                                                      <small class="text-muted"> Dias.</small>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+
+                              <div class="col-md-6">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <h5 class="card-title">Volumen Sugerido</h5>
+                                      <div class="form-row">
+                                          <div class="form-group col-md-12">
+                                              <label for="volumen_serologia_desde_bd"><spring:message code="Volumen Sugerido"/></label>
+                                              <input type="text" class="form-control text-center" id="volumen_serologia_desde_bd" name="volumen_serologia_desde_bd" data-toggle="tooltip" data-placement="top" title="Volumen sugerido"  value="${caso.volumen_serologia_desde_bd}" >
+                                              <small id="fechaHelpInline2" class="text-muted"> &nbsp;</small>
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="card">
+                                      <div class="card-body">
+                                          <h5 class="card-title">Muestra</h5>
+                                            <div class="form-row">
+                                              <div class="form-group col-md-6">
+                                                  <label for="fecha"><spring:message code="lbl.date" /></label>
+                                                  <input type="text" class="form-control date-picker" id="fecha" name="fecha" data-date-end-date="+0d"
+                                                         value="<fmt:formatDate value="${caso.fecha}" pattern="dd/MM/yyyy" />"   />
+                                                  <small id="fechaHelpInline1" class="text-muted"> dd/mm/yyyy.</small>
+                                              </div>
 
+                                              <div class="form-group col-md-6">
+                                                  <label for="volumen"><spring:message code="volumen" /></label>
+                                                  <input type="text" name="volumen" id="volumen" class="form-control focusNext" placeholder="Volumen" value="${caso.volumen}" tabindex="2">
+                                                  <small class="text-muted"> </small>
+                                              </div>
+                                            </div>
+                                      </div>
+                                  </div>
+                              </div>
+                      </div>
                               <div class="form-row">
                                   <div class="form-group col-md-12">
                                       <label for="observacion"><spring:message code="observacion" /></label>
-                                      <input type="text" class="form-control" id="observacion" name="observacion" >
+                                      <textarea class="form-control" id="observacion" name="observacion" rows="2">${caso.observacion}</textarea>
                                   </div>
-                                <!--  <div class="form-group col-sm-6">
-                                      <label for="precepciona">Recepciona:</label>
-                                      <span class="required text-danger"> * </span>
-                                      <select name="precepciona" id="precepciona" required class="form-control focusNext" tabindex="4">
-                                          <option selected value=""><spring:message code="select" />...</option>
-                                          <c:forEach items="${personaValida}" var="person">
-                                              <c:choose>
-                                                  <c:when test="${person.idPersona eq caso.precepciona}">
-                                                      <option selected value="${person.idPersona}"> <spring:message code="${person.idPersona} - ${person.nombre}" /></option>
-                                                  </c:when>
-                                                  <c:otherwise>
-                                                      <option value="${person.idPersona}"> ${person.idPersona} - ${person.nombre}</option>
-                                                  </c:otherwise>
-                                              </c:choose>
-                                          </c:forEach>
-                                      </select>
-                                  </div> -->
-
                               </div>
 
                               <div class="form-row">
@@ -346,61 +411,12 @@
                           </form>
                       </div>
                   </div>
-
               </div>
-
             </div>
-            <!--modal -->
-
-            <div class="modal fade" id="exampleModalNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-plus"></i> Nuevo Ingreso</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="#" id="FormnuevoIngreso" name="FormnuevoIngreso">
-
-                                <div class="form-group">
-                                    <input type="text" class="form-control date-picker" id="fechaNuevoIng" name="fechaNuevoIng" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtNewParticipante" class="col-form-label">Código Nuevo:</label>
-                                    <input type="text" class="form-control" name="txtNewParticipante" id="txtNewParticipante">
-                                    <span class="error text-danger">Código Requerido.</span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="txtvolumen" class="col-form-label">Volumen:</label>
-                                    <input type="text" class="form-control" id="txtvolumen" name="txtvolumen">
-                                    <span class="error text-danger">Volumen Requerido.</span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="txtObservacion" class="col-form-label">Observación:</label>
-                                    <input type="text" class="form-control" id="txtObservacion" name="txtObservacion" value="Nuevo Ingreso">
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                <i class="fa fa-close"></i> <spring:message code="lbl.close" /></button>
-                            <button type="button" id="btnGuardarNuevo" class="btn btn-success">
-                                <i class="fa fa-save"></i>
-                                <spring:message code="save" /> <spring:message code="lbl.new.entry" /> </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--fin Modal -->
         </div>
         <!-- /.conainer-fluid -->
     </div>
 </div>
-
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
 <c:choose>
@@ -411,6 +427,9 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
+
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
 <!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
@@ -418,21 +437,18 @@
 <script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
 <script src="${validateAMJs}" type="text/javascript"></script>
-
 <spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 <script src="${jQValidationLoc}"></script>
-
 <spring:url value="/resources/js/libs/jquery.maskedinput.min.js" var="mask" />
 <script type="text/javascript" src="${mask}"></script>
 
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
 
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
-
-<spring:url value="/resources/js/libs/notify.min.js" var="noty" />
-<script type="text/javascript" src="${noty}"></script>
 
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
@@ -450,108 +466,8 @@
     $(document).ready(function(){
         $('#fechaNac').mask("9999-99-99", {placeholder: 'yyyy-MM-dd' });
         actDesact();
-        var points ={
-            "searchPartUrl": "${searchPartUrl}",
-            "saveFormUrl" : "${saveFormUrl}",
-            ultGradillaUrl: "${ultGradillaUrl}",
-            "GuardarNuevaSerologiaUrl":"${GuardarNuevaSerologiaUrl}",
-            "successMessage":"${successMessage}"
-        };
-        Serologia2020.init(points);
-
-
-        $("#volumen").on("keyup",function(){
-            debugger;
-            var valor = $("#volumen").val();
-            var mensaje ='';
-            if(valor === '12'){
-                mensaje ='2 Tubos de 6 ml.'
-                $("#observacion").val(mensaje);
-            }else if(valor === '13'){
-                mensaje = '2 Tubos de 6.5 ml.'
-                $("#observacion").val(mensaje);
-            }else if(valor === '14'){
-                mensaje = '2 Tubos de 6.5 y 7 ml.'
-                $("#observacion").val(mensaje);
-            }else{
-                $("#observacion").val(mensaje);
-            }
-        });
-
-
-
-        $("#btngetGradilla").on("click",function(){
-            getGradilla(points);
-
-        });
-        function getGradilla(endPointSero){
-            debugger;
-            $.getJSON(endPointSero.ultGradillaUrl, { fechaInicio : $('#fecha').val(),   ajax : 'true'  }, function(data) {
-                if(data != null){
-                    console.log(JSON.stringify(data));
-                }else{
-                    $.notify("Error","error");
-                }
-            });
-        }
-
-
-        $('#btnmyModal').on("click",function() {
-            $("#exampleModalNew").modal('show');
-            $("#txtNewParticipante").focus();
-        });
-
-        $('#txtNewParticipante').keyup(function (e) {
-            if (e.keyCode === 13) {
-                $("#txtvolumen").focus();
-            }
-        });
-
-
-        $("#btnGuardarNuevo").on("click",function(){
-            var isValidItem = true;
-            if (!($('#txtvolumen').val().trim() != '' && !isNaN($('#volumen').val().trim()))) {
-                isValidItem = false;
-                $('#txtvolumen').siblings('span.error').css('visibility', 'visible');
-            }
-            else {
-                $('#txtvolumen').siblings('span.error').css('visibility', 'hidden');
-            }
-            if (!($('#txtNewParticipante').val() != '' && !isNaN($('#txtNewParticipante').val()))) {
-                isValidItem = false;
-                $('#txtNewParticipante').siblings('span.error').css('visibility', 'visible');
-            }
-            else {
-                $('#txtNewParticipante').siblings('span.error').css('visibility', 'hidden');
-            }
-
-            if (isValidItem) {
-                GuardarNuevoIngreso(points);
-            }
-
-        });
-
-        function GuardarNuevoIngreso(urls){
-            var FormNuevaSero = $("#FormnuevoIngreso");
-        $.post(urls.GuardarNuevaSerologiaUrl, FormNuevaSero.serialize(), function (data) {
-                if (data.msj != null) {
-                    toastr.warning( data.msj, "ERROR!",{timeOut:6000});
-                } else {
-                    toastr.success(urls.successMessage, {timeOut:6000});
-                    Limpiartxt();
-                }
-            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                toastr.error("500 Internal Server","ERROR!",{timeOut:6000});
-            });
-        };
-        function Limpiartxt(){
-            $("#txtvolumen").val("");
-            $("#txtNewParticipante").val("");
-            $("#exampleModalNew").modal('hide');
-        };
-
-
         var today = moment().format('YYYY-MM-DD');
+
         $("#fecha").datepicker({
             format: "dd/mm/yyyy",
             todayBtn:true,
@@ -559,16 +475,45 @@
             autoclose: true,
             endDate: '-0d'
         }).val(moment().format('DD/MM/YYYY'));
-        $("#fechaNuevoIng").val(today);
+
+        var points ={
+            "searchPartUrl"           : "${searchPartUrl}",
+            "saveFormUrl"             : "${saveFormUrl}",
+            "createUrl"               : "${createUrl}",
+            "successMessage"          : "${successMessage}",
+            "GuardarNuevaSerologiaUrl": "${GuardarNuevaSerologiaUrl}",
+            "getObservacionesUrl"       :"${getObservacionesUrl}"
+        };
+        SerologiaMA.init(points);
+
+
+        $( "#observacion" ).autocomplete({
+            delay:100,
+            source: function(request, response){
+                $.getJSON(points.getObservacionesUrl, {observacion: $('#observacion').val().trim(), ajax: 'true'},function(data){
+                    response($.map(data, function (value, key) {
+                        return {
+                            label: value
+                        };
+                    }));
+                });
+            },minLength: 3,
+            scroll: true,
+            highlight: true
+        });
+
         function actDesact(){
             var verif = "${editando}";
             if(verif === "true"){
                 $("#parametro").prop("disabled", true);
+                $("#btnBuscar").prop("disabled", true);
             }else{
                 $("#parametro").removeAttr("disabled");
+                $("#btnBuscar").removeAttr("disabled");
                 $("#volumen").val(0);
             }
         }
+
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter
             if (evt.key !== 'Enter') {
@@ -589,10 +534,12 @@
             }
         });
         $("#parametro").focus();
-
     });
-
 </script>
-
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>
 </body>
 </html>

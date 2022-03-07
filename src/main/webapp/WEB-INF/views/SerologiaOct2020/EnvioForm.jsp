@@ -14,12 +14,10 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
-
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
-
     <style>
         /*ini*/
         .toast-title {
@@ -180,8 +178,14 @@
             }
         }
         /*fin*/
+        .form-control-feedback {
+            margin-top: 0.25rem;
+            width: 95%;
+            text-align: center !important;
+        }
     </style>
-
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -197,13 +201,18 @@
             </li>
         </ol>
         <spring:url value="/reportes/downloadFileEnviosSerologia/" var="pdfEnvioSeroUrl"/>
+        <spring:url value="/reportes/downloadFileSerologiaExcel/" var="excelEnvioSeroUrl"/>
         <c:set var="successMessage"><spring:message code="process.success" /></c:set>
         <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
         <div class="container-fluid col-8">
             <div class="card">
                 <div class="card-header">
                     <h5 class="page-title">
-                        <small><spring:message code="Generar" /> <spring:message code="Reporte Envios" /></small>
+                        <i class="fa fa-file-text" aria-hidden="true"></i>
+                        <small><spring:message code="Generar" />
+                            <spring:message code="Reporte Envios" />
+                            <spring:message code="Serologia" />
+                        </small>
                     </h5>
                 </div>
                 <div class="card-block">
@@ -216,8 +225,8 @@
                                     <div class="col-sm-6">
                                         <select id="nEnvios" name="nEnvios" class="form-control" required="required">
                                             <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${nenvios}" var="n">
-                                                <option value="${n.idenvio}">${n.numeroEnvio}</option>
+                                            <c:forEach items="${numero_envio}" var="n">
+                                                <option value="${n.catKey}">${n.spanish}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -243,11 +252,42 @@
                                     </div>
                                 </div>
 
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6 text-center">
+                                            <button id="toPdf" type="submit" data-toggle="tooltip" data-placement="top" title="Serologia en Pdf" class="btn btn-success btn-ladda" data-style="expand-right">
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                <spring:message code="generate" /> <spring:message code="Serologia" />
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6 text-center">
+                                            <button id="toExcel" type="submit" data-toggle="tooltip" data-placement="top" title="Serologia en Excel" class="btn btn-info btn-ladda" data-style="expand-right">
+                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                <spring:message code="generate" /> <spring:message code="Serologia" />
+                                            </button>
+                                        </div>
+                                        <%--<div class="col-md-6 text-center mt-1">
+                                            <button id="Sero_PBMC_PDF" type="submit" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Pdf" class="btn btn-danger btn-ladda" data-style="expand-right">
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6 text-center mt-1">
+                                            <button id="Sero_PBMC_Excel" type="submit" class="btn btn-danger btn-ladda" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Excel" data-style="expand-right">
+                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
+                                            </button>
+                                        </div>--%>
+                                    </div>
+                                </div>
+
+                           <%--
+
                                 <div class="form-actions fluid">
                                     <div class="col-md-offset-6 col-md-10">
                                         <button id="toPdf" type="submit" class="btn btn-success btn-ladda" data-style="expand-right"><spring:message code="generate" /> <i class="fa fa-file-pdf-o"></i></button>
                                     </div>
-                                </div>
+                                </div>--%>
                             </form>
                         </div>
                     </div>
@@ -289,10 +329,15 @@
 <script src="${App}" type="text/javascript"></script>
 <spring:url value="/resources/js/views/handleDatePickers.js" var="handleDatePickers" />
 <script src="${handleDatePickers}"></script>
+
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
+
 <spring:url value="/resources/js/views/casos/process-case.js" var="processVersionJs" />
 <script src="${processVersionJs}"></script>
 <script>
     $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
         $("li.reports").addClass("open");
         $("li.filedata").addClass("open");
     });
@@ -308,15 +353,12 @@
                 nEnvios: {
                     required: true
                 },
-
                 fechaFin: {required: function () {
                     return $('#fechaInicio').val().length > 0;
                 }},
                 fechaInicio: {required: function () {
                     return $('#fechaFin').val().length > 0;
-                }},
-                fechaInicio:{required:true},
-                fechaFin:{required:true}
+                }}
             },
             errorPlacement: function ( error, element ) {
                 console.log(element.prop( 'type' ));
@@ -344,14 +386,47 @@
                     $validator.focusInvalid();
                     return false;
                 } else {
-                    /*$(this).attr("href", "${pdfUrl}"+$('#participantCode').val());
-                     event.preventDefault();
-                     event.stopPropagation();*/
                     window.open("${pdfEnvioSeroUrl}?"+form1.serialize(), '_blank');
                 }
             }
         });
+
+        $("#toExcel").on("click", function(){
+            var $validarForm = form1.valid();
+            if (!$validarForm) {
+                $validator.focusInvalid();
+                return false;
+            } else {
+                window.open("${excelEnvioSeroUrl}?" + form1.serialize())
+            }
+        });
+
+        $("#Sero_PBMC_Excel").on("click", function(){
+            var $validarForm = form1.valid();
+            if (!$validarForm) {
+                $validator.focusInvalid();
+                return false;
+            } else {
+                window.open("${EnvioSeroPbmcExcelUrl}?" + form1.serialize())
+            }
+        });
+
+        $("#Sero_PBMC_PDF").on("click", function(){
+            var $validarForm = form1.valid();
+            if (!$validarForm) {
+                $validator.focusInvalid();
+                return false;
+            } else {
+                window.open("${EnvioSeroPbmcPdfUrl}?" + form1.serialize())
+            }
+        });
+
     });
+</script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 </body>
 </html>

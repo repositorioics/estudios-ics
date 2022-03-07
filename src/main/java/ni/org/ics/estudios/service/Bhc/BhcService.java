@@ -81,6 +81,14 @@ public class BhcService {
         }
     }
 
+    public boolean yaTieneMuestraBhcAnual(int yearActual, Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Bhc b where year(b.fecha_bhc)=:yearActual and b.codigo_participante=:codigo and b.pasive='0' ");
+        query.setParameter("yearActual", yearActual);
+        query.setParameter("codigo", codigo);
+        return query.list().size()>0;
+    }
+
     //Contador Pbmc
     public Integer ContarBhc(Date f1, Date f2){
         Session session = sessionFactory.getCurrentSession();

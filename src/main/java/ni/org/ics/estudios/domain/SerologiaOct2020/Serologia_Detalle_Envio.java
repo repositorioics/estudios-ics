@@ -32,10 +32,8 @@ public class Serologia_Detalle_Envio implements Serializable {
         this.detalle_id = detalle_id;
     }
 
-
     @ManyToOne
-    @JoinColumn(name="ENVIO_MUESTRA_ID", updatable = false, nullable = false, referencedColumnName = "ENVIO_MUESTRA_ID")
-    @ForeignKey(name = "FK_ENVIO_MUESTRA_ID")
+    @JoinColumn(name="ENVIO_MUESTRA_ID", nullable = false)
     public SerologiaEnvio getSerologiaEnvio() {
         return serologiaEnvio;
     }
@@ -46,7 +44,7 @@ public class Serologia_Detalle_Envio implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name="ID_SEROLOGIA", updatable = false, nullable = false, referencedColumnName = "ID_SEROLOGIA" )
+    @JoinColumn(name="ID_SEROLOGIA", nullable = false,referencedColumnName = "ID_SEROLOGIA" )
     @ForeignKey(name = "FK_ID_SEROLOGIA")
     public Serologia getSerologia() {
         return serologia;

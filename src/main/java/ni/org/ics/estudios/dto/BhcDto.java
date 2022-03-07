@@ -23,10 +23,11 @@ public class BhcDto implements Serializable {
     private String codigo_casa_familia;
     private Integer codigo_casa_PDCS;
     private String volumen_bhc_desde_bd;
+    private Date fechaNacimiento;
 
     public BhcDto(){}
 
-    public BhcDto(Integer bhc_id, Integer codigo_participante, String volumen_bhc, String nombreCompleto, Date fecha, String observacion, String edadA, String edadM, String edadD, String estudios, String estado, double edadEnMeses, String codigo_casa_familia, Integer codigo_casa_PDCS, String volumen_bhc_desde_bd) {
+    public BhcDto(Integer bhc_id, Integer codigo_participante, String volumen_bhc, String nombreCompleto, Date fecha, String observacion, String edadA, String edadM, String edadD, String estudios, String estado, double edadEnMeses, String codigo_casa_familia, Integer codigo_casa_PDCS, String volumen_bhc_desde_bd, Date fechaNacimiento) {
         this.bhc_id = bhc_id;
         this.codigo_participante = codigo_participante;
         this.volumen_bhc = volumen_bhc;
@@ -42,6 +43,7 @@ public class BhcDto implements Serializable {
         this.codigo_casa_familia = codigo_casa_familia;
         this.codigo_casa_PDCS = codigo_casa_PDCS;
         this.volumen_bhc_desde_bd = volumen_bhc_desde_bd;
+        this.fechaNacimiento=fechaNacimiento;
     }
 
     public Integer getBhc_id() {
@@ -165,4 +167,11 @@ public class BhcDto implements Serializable {
         this.nombreCompleto = nombreCompleto;
     }
 
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
 }

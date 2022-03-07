@@ -1617,7 +1617,7 @@ public class PdfView extends AbstractPdfView {
                 fecha.setAlignment(Element.ALIGN_RIGHT);
 
                 float y = 650f; //posicion coordenada y en la pagina.. mientras mas disminuye mas se acerca al fin (botton) de la pagina
-                PdfPTable table = new PdfPTable(new float[]{5, 10, 10, 10, 10, 10, 18});
+                PdfPTable table = new PdfPTable(new float[]{5, 10, 10, 6, 6, 15, 20});
                 table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
 
                 PdfPCell cell;
@@ -1702,7 +1702,7 @@ public class PdfView extends AbstractPdfView {
                         table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
                         document.newPage();
                         y = 650f;
-                        table = new PdfPTable(new float[]{5, 10, 10, 10, 10, 10, 18});
+                        table = new PdfPTable(new float[]{5, 10, 10, 6, 6, 15, 20});
                         //init encabezado
 
                         cell = new PdfPCell(new Phrase("N°", mia));
@@ -1742,8 +1742,30 @@ public class PdfView extends AbstractPdfView {
                 table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
                 y = y - table.getTotalHeight() - 10;
 
-                table = new PdfPTable(new float[]{100});
+                table = new PdfPTable(new float[]{12,12,12,12,25});
+                table.setWidthPercentage(98f);
                 table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+                cell = new PdfPCell(new Phrase("Hora recibido: "));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(""));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(2);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase("Temperatura: "));
+                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                cell.setBorder(0);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(""));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(2);
+                table.addCell(cell);
+
+
                 cell = new PdfPCell(new Phrase("Total: " + Detalles_Muestras_Serologia.size(), miaEstudio));
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setBorder(0);
@@ -1816,14 +1838,14 @@ public class PdfView extends AbstractPdfView {
                     writer.setPageEvent(headerFooterReporteEnvio);
 
                     float y = 650f; //posicion coordenada y en la pagina.. mientras mas disminuye mas se acerca al fin (botton) de la pagina
-                    PdfPTable table = new PdfPTable(new float[]{5, 10, 10, 10, 10, 10, 18});
+                    PdfPTable table = new PdfPTable(new float[]{3,4,4,3,3,5,10});
+                    table.setWidthPercentage(98f);
                     table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
                     PdfPCell cell;
                     Paragraph paragraph1 = new Paragraph();
                     addEmptyLine(paragraph1, 1);
                     document.add(paragraph1);
 
-                    table.setWidthPercentage(98f);
                     cell = new PdfPCell(new Phrase("N°", mia));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
@@ -1887,7 +1909,8 @@ public class PdfView extends AbstractPdfView {
                             table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
                             document.newPage();
                             y = 650f;
-                            table = new PdfPTable(new float[]{4,4,4,3,3,5,5});
+                            table = new PdfPTable(new float[]{3,4,4,3,2,5,10});
+                            table.setWidthPercentage(98f);
                             cell = new PdfPCell(new Phrase("N°", mia));
                             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                             table.addCell(cell);
@@ -1915,7 +1938,31 @@ public class PdfView extends AbstractPdfView {
                     table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
                     y = y - table.getTotalHeight() - 10;
 
-                    table = new PdfPTable(new float[]{100});
+
+                    table = new PdfPTable(new float[]{12,12,12,12,25});
+                    table.setWidthPercentage(98f);
+                    table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+                    cell = new PdfPCell(new Phrase("Hora recibido: "));
+                    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cell.setBorder(0);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(""));
+                    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cell.setBorder(2);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase("Temperatura: "));
+                    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    cell.setBorder(0);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase(""));
+                    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cell.setBorder(2);
+                    table.addCell(cell);
+
+
                     table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
                     cell = new PdfPCell(new Phrase("Total: " + serologia_detalle_envioList.size(), miaEstudio));
                     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -1991,7 +2038,7 @@ public class PdfView extends AbstractPdfView {
             writer.setPageEvent(footer);
 
             float y = 650f; //posicion coordenada y en la pagina.. mientras mas disminuye mas se acerca al fin (botton) de la pagina
-            PdfPTable table = new PdfPTable(new float[]{5, 7, 5, 4, 4, 8, 9, 5});
+            PdfPTable table = new PdfPTable(new float[]{3, 4, 4, 3, 3, 8, 9, 3});
             table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
 
 
@@ -2083,7 +2130,7 @@ public class PdfView extends AbstractPdfView {
                     table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
                     document.newPage();
                     y = 650f;
-                    table = new PdfPTable(new float[]{5, 7, 5, 4, 4, 8, 9, 5});
+                    table = new PdfPTable(new float[]{3, 4, 4, 3, 3, 8, 9, 3});
                     /*init tabla*/
                     cell = new PdfPCell(new Phrase("N°", mia));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -2122,7 +2169,31 @@ public class PdfView extends AbstractPdfView {
             table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
             y = y - table.getTotalHeight() - 10;
 
-            table = new PdfPTable(new float[]{100});
+
+            table = new PdfPTable(new float[]{12,12,12,12,25});
+            table.setWidthPercentage(98f);
+            table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+            cell = new PdfPCell(new Phrase("Hora recibido: "));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(""));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(2);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Temperatura: "));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setBorder(0);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(""));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(2);
+            table.addCell(cell);
+
+
             table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
             cell = new PdfPCell(new Phrase("Total: " + pbmc_detalle_envios.size(), miaNormal));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -2161,9 +2232,8 @@ public class PdfView extends AbstractPdfView {
             document.close();
         }
 
-        //document.add(table);
         /*fin tabla*/
-       /* PdfPTable headerRow = new PdfPTable(3);
+       /* PdfPTable headerRow = new PdfPTable(3);  codigo ejemplo;
         headerRow.setKeepTogether(true);
         headerRow.addCell("Date");
         headerRow.addCell("Event");
@@ -2192,7 +2262,7 @@ public class PdfView extends AbstractPdfView {
     }
     //endregion
 
-
+    //region todo: Reporte BHC
     private void ReporteEnvioBhc(Map<String, Object>model, Document document, PdfWriter writer)throws Exception{
         List<Bhc_Detalle_envio> bhc_detalle_envios = (List<Bhc_Detalle_envio>) model.get("allBhc");
 
@@ -2219,9 +2289,9 @@ public class PdfView extends AbstractPdfView {
             writer.setPageEvent(headerFooterReporteEnvio);
 
             float y = 650f; //posicion coordenada y en la pagina.. mientras mas disminuye mas se acerca al fin (botton) de la pagina
-            PdfPTable table = new PdfPTable(new float[]{4,4,4,3,3,5,5});
+            PdfPTable table = new PdfPTable(new float[]{2,3,3,2,2,5,5});
             table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
-            //table.setWidthPercentage(99f);
+            table.setWidthPercentage(98f);
             PdfPCell cell;
 
             cell = new PdfPCell(new Phrase("N°", mia));
@@ -2236,7 +2306,7 @@ public class PdfView extends AbstractPdfView {
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase("EDAD\n Años|Meses", mia));
+            cell = new PdfPCell(new Phrase("EDAD\nAños |Meses", mia));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setColspan(2);
             table.addCell(cell);
@@ -2266,15 +2336,16 @@ public class PdfView extends AbstractPdfView {
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 //edad
-                double d = obj.getBhc().getEdadMeses();
-                Double edad = Math.floor(d / 12);
+                int  d = (int) obj.getBhc().getEdadMeses();
+                int edad = (int) Math.floor(d/12);
 
-                cell = new PdfPCell(new Phrase("" + edad.intValue(), miaNormal));
+                cell = new PdfPCell(new Phrase("" + edad, miaNormal));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
-                Double edadMeses = d % 12;
 
-                cell = new PdfPCell(new Phrase("" + edadMeses.intValue(), miaNormal));
+                int edadMeses = d % 12;
+
+                cell = new PdfPCell(new Phrase("" + edadMeses, miaNormal));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 //estudios
@@ -2290,7 +2361,7 @@ public class PdfView extends AbstractPdfView {
                     table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
                     document.newPage();
                     y = 650f;
-                    table = new PdfPTable(new float[]{4,4,4,3,3,5,5});
+                    table = new PdfPTable(new float[]{3,4,4,3,3,5,5});
                     cell = new PdfPCell(new Phrase("N°", mia));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
@@ -2319,7 +2390,29 @@ public class PdfView extends AbstractPdfView {
             table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
             y = y - table.getTotalHeight() - 10;
 
-            table = new PdfPTable(new float[]{100});
+            table = new PdfPTable(new float[]{12,12,12,12,25});
+            table.setWidthPercentage(98f);
+            table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+            cell = new PdfPCell(new Phrase("Hora recibido: "));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(""));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(2);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Temperatura: "));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setBorder(0);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(""));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(2);
+            table.addCell(cell);
+
             table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
             cell = new PdfPCell(new Phrase("Total: " + bhc_detalle_envios.size(), miaNormal ));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -2358,6 +2451,7 @@ public class PdfView extends AbstractPdfView {
         }
 
     }
+    //endregion
 
     private String getDescripcionCatalogoScan(String codigo,String catroot){
         for (MessageResource rnv : messagerelFam){
