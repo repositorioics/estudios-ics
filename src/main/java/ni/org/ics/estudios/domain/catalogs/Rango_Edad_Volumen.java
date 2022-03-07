@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Table(name = "rango_edad_volumen", catalog = "estudios_ics")
 public class Rango_Edad_Volumen implements Serializable {
 
+
     private Integer rango_id;
     private int edad_meses_minima;
     private int getEdad_meses_maxima;
