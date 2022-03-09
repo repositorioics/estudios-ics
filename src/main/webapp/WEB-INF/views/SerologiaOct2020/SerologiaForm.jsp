@@ -358,7 +358,8 @@
                                       <div class="form-row">
                                           <div class="form-group col-md-12">
                                               <label for="volumen_serologia_desde_bd"><spring:message code="Volumen Sugerido"/></label>
-                                              <input type="text" class="form-control text-center" id="volumen_serologia_desde_bd" name="volumen_serologia_desde_bd" data-toggle="tooltip" data-placement="top" title="Volumen sugerido"  value="${caso.volumen_serologia_desde_bd}" >
+                                              <input type="text" class="form-control text-center" id="volumen_serologia_desde_bd" name="volumen_serologia_desde_bd"
+                                                     data-toggle="tooltip" data-placement="top" title="Volumen sugerido"  value="${caso.volumen_serologia_desde_bd}" readonly="readonly" >
                                               <small id="fechaHelpInline2" class="text-muted"> &nbsp;</small>
                                           </div>
                                       </div>

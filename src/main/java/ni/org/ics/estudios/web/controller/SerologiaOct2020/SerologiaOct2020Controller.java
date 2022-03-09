@@ -141,8 +141,8 @@ public class SerologiaOct2020Controller {
                 } else {
                     estudiosFinales = procesos.getEstudio().trim();
                 }
-
-                Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(edad, "SEROLOGIA", estudiosFinales.trim());
+                int age = edad * 12;
+                Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(age, "SEROLOGIA", estudiosFinales.trim());
                 if (rango!=null){
                     caso.setVolumen_serologia_desde_bd("" + rango.getVolumen());
                     caso.setVolumen_adicional_desde_bd("" + rango.getVolumen_adicional());
@@ -229,7 +229,6 @@ public class SerologiaOct2020Controller {
             this.serologiaService.save_Envio_Serologia(envio);// aqui guardo los datos del envio
 
             if (envio.getIdserologiaenvio()!=null){
-
                 if (ListaSerologiaYaEnviadas.size()>0){
                     for (Serologia obj: ListaSerologiaYaEnviadas){
                         Serologia_Detalle_Envio detalles_envio= new Serologia_Detalle_Envio();
@@ -288,6 +287,7 @@ public class SerologiaOct2020Controller {
                     participanteSeroDto.setFechaNacimiento(participante.getFechaNac());
                     participanteSeroDto.setEstado("Activo");
                     participanteSeroDto.setIdparticipante(participante.getCodigo());
+                    participanteSeroDto.setEs_pbmc(procesos.getPbmc());
                     //edad Meses
                     double d = Double.parseDouble(part1)*12;
                     //Double edad = Math.floor(d/12); Double edadMeses = d % 12;
@@ -388,6 +388,7 @@ public class SerologiaOct2020Controller {
            ,@RequestParam( value = "tiporequest", required=false, defaultValue=""  ) String tiporequest
            ,@RequestParam( value = "edadMeses"  ,required=false,  defaultValue=""  ) String edadMeses
            ,@RequestParam( value = "estado"     ,required=false,  defaultValue=""  ) String estado
+           ,@RequestParam( value = "volumen_serologia_desde_bd",  required=false,  defaultValue=""  ) Integer volumen_serologia_desde_bd
     ) throws Exception {
         try{
             if (volumen.equals("0") || volumen.equals("")){
@@ -421,6 +422,7 @@ public class SerologiaOct2020Controller {
                         sero.setPasive('0');
                         sero.setRecordDate(new Date());
                         sero.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        sero.setVolumen_serologia_desde_bd(volumen_serologia_desde_bd);
                         sero.setParticipante(idParticipante);
                         sero.setCasaCHF(casaCHF);
                         sero.setCasaPDCS(casaPDCS);
@@ -456,6 +458,7 @@ public class SerologiaOct2020Controller {
                 sero.setPasive('0');
                 sero.setRecordDate(new Date());
                 sero.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                sero.setVolumen_serologia_desde_bd(volumen_serologia_desde_bd);
                 sero.setParticipante(idParticipante);
                 sero.setCasaCHF(casaCHF);
                 sero.setCasaPDCS(casaPDCS);
@@ -553,6 +556,7 @@ public class SerologiaOct2020Controller {
         try {
             ArrayList<String> observacionArrayList = new ArrayList<String>();
              obsv = messageResourceService.getCatalogo("CHF_CAT_RAZON_NO_MX");
+            observacionArrayList.add("2 Tubos de 6ml.");
             for (MessageResource m: obsv){
                 observacionArrayList.add(m.getSpanish());
             }

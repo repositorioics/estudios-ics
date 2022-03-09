@@ -26,6 +26,7 @@ public class PbmcDto implements Serializable {
     private Integer codigo_casa_PDCS;
     private String volumen_pbmc_desde_bd;
     private String volumen_adicional_desde_bd;
+    private String es_pbmc;
 
     public PbmcDto() {
     }
@@ -172,5 +173,13 @@ public class PbmcDto implements Serializable {
 
     public void setVolumen_adicional_desde_bd(String volumen_adicional_desde_bd) {
         this.volumen_adicional_desde_bd = volumen_adicional_desde_bd;
+    }
+
+    public String getEs_pbmc() {
+        return es_pbmc;
+    }
+
+    public void setEs_pbmc(String es_pbmc) {
+        this.es_pbmc = es_pbmc;
     }
 }

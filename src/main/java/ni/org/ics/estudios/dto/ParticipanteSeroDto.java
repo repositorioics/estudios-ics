@@ -35,12 +35,13 @@ public class ParticipanteSeroDto implements Serializable {
     private double edadEnMeses;
     private String volumen_serologia_desde_bd;
     private String volumen_adicional_desde_bd;
+    private String es_pbmc;
 
 
     public ParticipanteSeroDto() {
     }
 
-    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, double edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, String estado, Integer est_part,Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, String descripcion, Date fecha, double edadEnMeses, String volumen_serologia_desde_bd, String volumen_adicional_desde_bd) {
+    public ParticipanteSeroDto(String codigo, Integer idSerologia, Integer idparticipante, double volumen, double edadMeses, String nombreCompleto, Integer codigo_casa_PDCS, String codigo_casa_Familia, String edad_year, String edad_meses, String edad_dias, String estado, Integer est_part,Date fechaNacimiento, String edadParticipante, String estudios, ArrayList<String> susEstudios, String nombrepadre, String nombremadre, String nombretutor, String observacion, String descripcion, Date fecha, double edadEnMeses, String volumen_serologia_desde_bd, String volumen_adicional_desde_bd, String es_pbmc) {
         this.codigo = codigo;
         this.idSerologia = idSerologia;
         this.idparticipante = idparticipante;
@@ -67,6 +68,7 @@ public class ParticipanteSeroDto implements Serializable {
         this.edadEnMeses = edadEnMeses;
         this.volumen_serologia_desde_bd = volumen_serologia_desde_bd;
         this.volumen_adicional_desde_bd = volumen_adicional_desde_bd;
+        this.es_pbmc= es_pbmc;
     }
 
     /*Getter & Setter*/
@@ -277,5 +279,13 @@ public class ParticipanteSeroDto implements Serializable {
 
     public void setVolumen_adicional_desde_bd(String volumen_adicional_desde_bd) {
         this.volumen_adicional_desde_bd = volumen_adicional_desde_bd;
+    }
+
+    public String getEs_pbmc() {
+        return es_pbmc;
+    }
+
+    public void setEs_pbmc(String es_pbmc) {
+        this.es_pbmc = es_pbmc;
     }
 }

@@ -47,6 +47,7 @@ var SerologiaMA = function(){
 
             function searchParticipante(){
                 $.getJSON(endPointSero.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
+                    console.log(data);
                     var len = data.length;
                     if(data.msj != undefined || data.msj != null){
                         swal({
@@ -58,6 +59,14 @@ var SerologiaMA = function(){
                         Limpiartxt();
                         $("#fechaNac").val("");
                         $("#edadMeses").val("");
+                    }
+                    if(data.es_pbmc ==='Si'){
+                        swal({
+                            title: "¡Advertencia!",
+                            type: "warning",
+                            text: "Participante es PBMC!",
+                            timer: 2000
+                        });
                     }
                     if(len==0){
                         swal({

@@ -7,6 +7,7 @@ import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.catalogs.Rango_Edad_Volumen;
+import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteSeroDto;
 import ni.org.ics.estudios.dto.SerologiaDto;
 import ni.org.ics.estudios.service.UsuarioService;
@@ -189,22 +190,12 @@ public class SerologiaOct2020Service {
     //todo: obtengo las Serologias Previamente Enviadas entre 2° y 8°**
     public List<Serologia>ObtenerSerologiasEnviadas(Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Serologia s where s.fecha between :fechaInicio and :fechaFin and s.enviado='0' and s.pasive='0' ");
+        Query query = session.createQuery("from Serologia s where s.fecha between :fechaInicio and :fechaFin and s.codigoPbmc=0 and s.enviado='0' and s.pasive='0' ");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         return query.list();
     }
 
-//region Catalogos
-    /*public List<Envio>getAllEnvios(){
-        Session session = sessionFactory.getCurrentSession();
-        Character pasivoNo = '0';
-        Query query = session.createQuery("from  Envio e where e.pasive= :pasivoNo");
-        query.setParameter("pasivoNo",pasivoNo);
-        return query.list();
-    }*/
-
-//endregion
 
     @SuppressWarnings("unchecked")
     public Personal getPersonal() throws Exception {
@@ -293,4 +284,5 @@ public class SerologiaOct2020Service {
         query.setParameter("observacion", '%' + observacion + '%');
         return query.list();
     }
+
 }

@@ -122,7 +122,7 @@ public class BhcController {
                     double d = Double.parseDouble(part1)*12;
                     Double edadMeses = d % 12;
                     bhcDto.setEdadEnMeses(d);
-                    int edad = Integer.parseInt(part1) * 12;
+                    int edad = Integer.parseInt(part1);
                     String estudiosFinales = "";
                     if (estudios.contains("Tcovid")) {
                         String s = estudios;
@@ -132,7 +132,8 @@ public class BhcController {
                     } else {
                         estudiosFinales = procesos.getEstudio().trim();
                     }
-                    Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edad, "BHC", estudiosFinales.trim());
+                    int age = edad * 12;
+                    Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(age, "BHC", estudiosFinales.trim());
                     if (rango!=null){
                         bhcDto.setVolumen_bhc_desde_bd("" + rango.getVolumen());
                     }else{
@@ -214,6 +215,7 @@ public class BhcController {
                 ,@RequestParam( value="volumen",        required=false, defaultValue=""  ) String volumen
                 ,@RequestParam( value="observacion",    required=false, defaultValue=""  ) String observacion
                 ,@RequestParam( value="estudios",       required=false, defaultValue=""  ) String estudios
+                ,@RequestParam( value="volumen_bhc_desde_bd",       required=false, defaultValue=""  ) Integer volumen_bhc_desde_bd
         ) throws Exception {
             try{
                 if (volumen.equals("0") || volumen.equals("")){
@@ -246,6 +248,7 @@ public class BhcController {
                         bhc.setPasive('0');
                         bhc.setRecordDate(new Date());
                         bhc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        bhc.setVolumen_bhc_sugerido(volumen_bhc_desde_bd);
                         bhc.setCodigo_participante(idParticipante);
                         bhc.setCasa_Familia(casaCHF);
                         bhc.setCasa_PDCS(casaPDCS);
@@ -280,6 +283,7 @@ public class BhcController {
                     bhc.setPasive('0');
                     bhc.setRecordDate(new Date());
                     bhc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                    bhc.setVolumen_bhc_sugerido(volumen_bhc_desde_bd);
                     bhc.setCodigo_participante(idParticipante);
                     bhc.setCasa_Familia(casaCHF);
                     bhc.setCasa_PDCS(casaPDCS);
@@ -322,6 +326,7 @@ public class BhcController {
             caso.setFecha(bhc.getFecha_bhc());
             caso.setVolumen_bhc(""+bhc.getVolumen());
             caso.setObservacion(bhc.getObservacion());
+            caso.setVolumen_bhc_desde_bd(""+bhc.getVolumen_bhc_sugerido());
             int edadConverted = (int) (bhc.getEdadMeses()/12);
             caso.setEdadA(""+edadConverted);
             String est_part ="Ingreso";
@@ -411,7 +416,7 @@ public class BhcController {
             Date fhasta = DateUtil.StringToDate(hasta + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
             List<Bhc> ListaBhcYaEnviadas = this.bhcService.ObtenerBhcEnviadas(fdesde, fhasta);
             if (ListaBhcYaEnviadas.size()<=0)
-                return JsonUtil.createJsonResponse("No se encontraron egistros: ".concat(""+ListaBhcYaEnviadas.size()));
+                return JsonUtil.createJsonResponse("No se encontraron registros: ".concat(""+ListaBhcYaEnviadas.size()));
 
             String computerName = InetAddress.getLocalHost().getHostName();
             SerologiaEnvio envio = new SerologiaEnvio();

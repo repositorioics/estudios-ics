@@ -16,12 +16,13 @@
     <jsp:include page="../fragments/headTag.jsp" />
     <spring:url value="/resources/css/jquery-ui.css" var="uiCss" />
     <link href="${uiCss}" rel="stylesheet" type="text/css"/>
+
+    <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
+    <link href="${boot}" rel="stylesheet" type="text/css"/>
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
-    <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
-    <link href="${boot}" rel="stylesheet" type="text/css"/>
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
     <link href="${swalcss}" rel="stylesheet" type="text/css"/>
     <style>
@@ -179,7 +180,7 @@
                                                 <div class="form-inline">
                                                     <div class="input-group mb-2 mr-sm-2">
                                                         <div class="input-group-prepend">
-                                                            <div class="input-group-text"><spring:message code="Volumen" /> <spring:message code="Pbmc" />:</div>
+                                                            <div class="input-group-text"><spring:message code="Volumen" /> <spring:message code="sugerido" /> <spring:message code="Pbmc" />:</div>
                                                         </div>
                                                         <input type="text" class="form-control fondowhite" data-toggle="tooltip" data-placement="top" title="Volumen sugerido Pbmc" name="volumen_pbmc_desde_bd" id="volumen_pbmc_desde_bd" readonly="readonly"  value="${caso.volumen_pbmc_desde_bd}" >
                                                     </div>
@@ -208,7 +209,7 @@
                                                 <div class="form-inline">
                                                     <div class="input-group mb-2 mr-sm-2">
                                                         <div class="input-group-prepend">
-                                                            <div class="input-group-text"><spring:message code="sample" />  <spring:message code="Adicional" /> <spring:message code="Rojo" />:</div>
+                                                            <div class="input-group-text"><spring:message code="Volumen" /> <spring:message code="sugerido" />  <spring:message code="Rojo" /> <spring:message code="Adicional" /> :</div>
                                                         </div>
                                                         <input id="volumen_adicional_desde_bd" data-toggle="tooltip" data-placement="top" title="Volumen sugerido Rojo" name="volumen_adicional_desde_bd" type="text" class="form-control fondowhite" readonly="readonly" value="${caso.volumen_adicional_desde_bd}"/>
                                                     </div>
@@ -219,7 +220,7 @@
                                                         <div class="form-group col-md-12">
                                                             <label for="volumen_rojo_adic"><spring:message code="Volumen" />  <spring:message code="Adicional" />:</label>
                                                             <input type="text"  class="form-control focusNext" id="volumen_rojo_adic" name="volumen_rojo_adic" value="${caso.volumen_rojo_adic}" tabindex="3" placeholder="Volumen Rojo"/>
-                                                            <small id="" class="text-muted"> &nbsp;</small>
+                                                            <small class="text-muted"> &nbsp;</small>
                                                         </div>
                                                 </div>
                                             </div>
@@ -255,10 +256,6 @@
 </div>
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
-
-<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
-<script src="${uiJs}" type="text/javascript"></script>
-
 <c:choose>
     <c:when test="${cookie.eIcsLang.value == null}">
         <c:set var="lenguaje" value="es"/>
@@ -267,7 +264,8 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
-
+<spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
+<script src="${uiJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
 <script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/views/loading-buttons.js" var="loadingButtonsJs" />

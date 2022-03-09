@@ -26,6 +26,7 @@ public class Pbmc extends BaseMetaData implements Serializable{
     private String notas;
     private String casaCHF;
     private Integer casaPDCS;
+    private Integer volumen_pbmc_desde_bd;
 
     /* getter setter */
 
@@ -138,6 +139,15 @@ public class Pbmc extends BaseMetaData implements Serializable{
 
     public void setCasaCHF(String casaCHF) {
         this.casaCHF = casaCHF;
+    }
+
+    @Column(name = "VOLUMEN_SUGERIDO_PBMC", nullable = true)
+    public Integer getVolumen_pbmc_desde_bd() {
+        return volumen_pbmc_desde_bd;
+    }
+
+    public void setVolumen_pbmc_desde_bd(Integer volumen_pbmc_desde_bd) {
+        this.volumen_pbmc_desde_bd = volumen_pbmc_desde_bd;
     }
 
 }

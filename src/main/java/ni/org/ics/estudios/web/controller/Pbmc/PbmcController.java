@@ -88,7 +88,7 @@ public class PbmcController {
             caso.setCodigo_casa_PDCS(pbmc.getCasaPDCS());
             caso.setCodigo_participante(pbmc.getCodigo_participante());
             caso.setEstudios(pbmc.getEstudios());
-            int edadConverter =0;
+            int edad =0;
             caso.setFecha(DateUtil.DateToString(pbmc.getFecha_pbmc(),"dd/MM/yyyy"));
             caso.setVolumen_pbmc(""+pbmc.getVolumen());
             if (pbmc.getPbmc_tiene_serologia()=='1') {
@@ -107,7 +107,7 @@ public class PbmcController {
                 String[] parts = string.split("/");
                 String part1 = parts[0];
                 String part2 = parts[1];
-                edadConverter = Integer.parseInt(part1);
+                edad = Integer.parseInt(part1);
                 caso.setEdadA(part1);
                 caso.setEdadM(part2);
                 procesos = this.participanteProcesosService.getParticipante(pbmc.getCodigo_participante());
@@ -127,7 +127,8 @@ public class PbmcController {
             } else {
                 estudiosFinales = pbmc.getEstudios().trim();
             }
-            Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(edadConverter, "PBMC", estudiosFinales.trim());
+            int age = edad * 12;
+            Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(age, "PBMC", estudiosFinales.trim());
             if (rango!=null){
                 caso.setVolumen_pbmc_desde_bd("" + rango.getVolumen());
                 caso.setVolumen_adicional_desde_bd("" + rango.getVolumen_adicional());
@@ -172,17 +173,15 @@ public class PbmcController {
             ParticipanteProcesos procesos = null;
             PbmcDto participantePbmcDto = new PbmcDto();
             Participante participante = this.participanteService.getParticipanteByCodigo(parametro);
+
             if (participante!=null) {
                 procesos = this.participanteProcesosService.getParticipante(participante.getCodigo());
 
-                if (procesos.getPbmc().equals("No")) {
-                    return JsonUtil.createJsonResponse("Código no aplica para PBMC");
-                }
-
-                if (procesos.getEstPart()==1 & procesos.getEstudio()!="" ){//Participante activo
+                if (procesos.getEstPart()==1 & procesos.getEstudio()!=""){//Participante activo
                 String estudios = (procesos.getEstudio().equals("")) ? "-" : procesos.getEstudio();
                 participantePbmcDto.setEstudios(estudios);
                 participantePbmcDto.setFechaNacimiento(participante.getFechaNac());
+                participantePbmcDto.setEs_pbmc(procesos.getPbmc());
                 String string;
                 string = participante.getEdad();
                 String[] parts = string.split("/");
@@ -282,12 +281,13 @@ public class PbmcController {
             ,@RequestParam( value=  "codigo_casa_familia" ,required=false, defaultValue=""  ) String  codigo_casa_familia
             ,@RequestParam( value=  "idSerologia"         ,required=false, defaultValue=""  ) Integer  idSerologia
             ,@RequestParam( value=  "estado"              ,required=false, defaultValue=""  ) String  estado
+            ,@RequestParam( value=  "volumen_pbmc_desde_bd" ,required=false, defaultValue=""  ) Integer volumen_pbmc_desde_bd
+            ,@RequestParam( value=  "volumen_adicional_desde_bd",required=false, defaultValue=""  ) Integer volumen_adicional_desde_bd
     )throws Exception{
         try{
             Pbmc pbmc = new Pbmc();
             PbmcDto Responsedto = new PbmcDto();
             Integer codecasaP = (codigo_casa_PDCS.equals(""))?0:Integer.parseInt(codigo_casa_PDCS);
-            //Integer casaPDCS  = codecasaP;
             Integer id_serologia = null;
 
 
@@ -317,6 +317,7 @@ public class PbmcController {
                     pbmc.setRecordDate(new Date());
                     pbmc.setEstado('1');
                     pbmc.setPasive('0');
+                    pbmc.setVolumen_pbmc_desde_bd(volumen_pbmc_desde_bd);
                     pbmc.setCodigo_participante(codigo_participante);
                     double EdadEnMeses = Double.parseDouble(edadEnMeses);
                     pbmc.setEdadMeses(EdadEnMeses);
@@ -358,6 +359,7 @@ public class PbmcController {
                             serologia.setFecha(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
                             serologia.setParticipante(codigo_participante);
                             serologia.setVolumen(volumenRojoAdicional);
+                            serologia.setVolumen_serologia_desde_bd(volumen_adicional_desde_bd);
                             serologia.setObservacion(obs);
                             serologia.setDescripcion("Pbmc");
                             this.serologiaService.saveSerologia(serologia);
@@ -390,9 +392,9 @@ public class PbmcController {
                         serologiaToEdit.setFecha(DateUtil.StringToDate(fecha, "dd/MM/yyyy"));
                         serologiaToEdit.setObservacion(obs);
                         if (guardoPbmc)
-                        this.serologiaService.saveSerologia(serologiaToEdit);
+                         this.serologiaService.saveSerologia(serologiaToEdit);
                         else
-                            return JsonUtil.createJsonResponse("Error al Guardar Pbmc.");
+                         return JsonUtil.createJsonResponse("Error al Guardar Pbmc.");
                     }
                 } else {
                     Map<String, String> map = new HashMap<String, String>();

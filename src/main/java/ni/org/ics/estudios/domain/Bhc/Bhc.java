@@ -25,6 +25,7 @@ public class Bhc extends BaseMetaData implements Serializable {
     private String observacion;
     private String casa_Familia;
     private Integer casa_PDCS;
+    private Integer volumen_bhc_sugerido;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -125,5 +126,14 @@ public class Bhc extends BaseMetaData implements Serializable {
 
     public void setCasa_PDCS(Integer casa_PDCS) {
         this.casa_PDCS = casa_PDCS;
+    }
+
+    @Column(name = "VOLUMEN_SUGERIDO_BHC", nullable = true)
+    public Integer getVolumen_bhc_sugerido() {
+        return volumen_bhc_sugerido;
+    }
+
+    public void setVolumen_bhc_sugerido(Integer volumen_bhc_sugerido) {
+        this.volumen_bhc_sugerido = volumen_bhc_sugerido;
     }
 }

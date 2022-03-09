@@ -28,6 +28,7 @@ public class Serologia extends BaseMetaData implements Serializable  {
     private Integer casaPDCS;
     private double edadMeses;
     private Integer codigoPbmc;
+    private Integer volumen_serologia_desde_bd;
 
     //getter and setter
     @Id
@@ -144,7 +145,15 @@ public class Serologia extends BaseMetaData implements Serializable  {
         this.codigoPbmc = codigoPbmc;
     }
 
+    @Column(name = "VOLUMEN_SUGERIDO", nullable = true)
+    public Integer getVolumen_serologia_desde_bd() {
+        return volumen_serologia_desde_bd;
+    }
 
-    //fin setter
+    public void setVolumen_serologia_desde_bd(Integer volumen_serologia_desde_bd) {
+        this.volumen_serologia_desde_bd = volumen_serologia_desde_bd;
+    }
+
+//fin setter
 
 }

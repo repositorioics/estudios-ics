@@ -58,6 +58,14 @@ var processPbmc = function(){
                             window.location.href = parametros.reloadUrl;
                         }, 2000);
                     }
+                    if(data.es_pbmc ==='No'){
+                        swal({
+                            title: "¡Advertencia!",
+                            type: "warning",
+                            text: "Participante no Aplica para PBMC!",
+                            timer: 2000
+                        });
+                    }
                     var len = data.length;
                     if(len==0){
                         swal({
@@ -67,7 +75,6 @@ var processPbmc = function(){
                             timer: 2000
                         });
                     }else {
-                        console.log(data);
                         var estado = data.estado;
                         $("#codigo_participante").val(data.codigo_participante);
                         $("#fechaNac").val(data.fechaNacimiento);
