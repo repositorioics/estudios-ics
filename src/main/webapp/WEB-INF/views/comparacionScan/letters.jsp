@@ -74,30 +74,34 @@
                     <div class="row no-gutters row-bordered">
                         <div class="col-md-12 col-lg-12 col-xl-12">
                             <div class="card-body">
-                                <div class="row">
                                     <table id="lista_cartas2"  class="table table-striped table-bordered dt-responsive" width="100%">
                                         <thead>
                                         <tr>
                                             <th><spring:message code="code"/></th>
                                             <th><spring:message code="fecha"/></th>
                                             <th><spring:message code="usuario"/></th>
-                                            <th><spring:message code="edad_actual"/></th>
-                                            <th><spring:message code="edad_firma"/></th>
-                                            <th><spring:message code="parteA_App"/></th>
-                                            <th><spring:message code="parteA_Car"/></th>
-                                            <th><spring:message code="parteB_App"/></th>
-                                            <th><spring:message code="parteB_Car"/></th>
-                                            <th><spring:message code="parteC_App"/></th>
-                                            <th><spring:message code="parteC_Car"/></th>
-                                            <th><spring:message code="version_App"/></th>
-                                            <th><spring:message code="version_Car"/></th>
+                                            <th><spring:message code="edad_act"/></th>
+                                            <th><spring:message code="edad_fdo"/></th>
+                                            <th><spring:message code="A_App"/></th>
+                                            <th><spring:message code="A_Car"/></th>
+                                            <th><spring:message code="B_App"/></th>
+                                            <th><spring:message code="B_Car"/></th>
+                                            <th><spring:message code="C_App"/></th>
+                                            <th><spring:message code="C_Car"/></th>
+                                            <th><spring:message code="D_App"/></th>
+                                            <th><spring:message code="D_Car"/></th>
+                                            <th><spring:message code="E_App"/></th>
+                                            <th><spring:message code="E_Car"/></th>
+                                            <th><spring:message code="F_App"/></th>
+                                            <th><spring:message code="F_Car"/></th>
+                                            <th><spring:message code="ver_App"/></th>
+                                            <th><spring:message code="ver_Car"/></th>
                                         </tr>
                                         </thead>
                                         <tbody>
 
                                         </tbody>
                                     </table>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -179,9 +183,9 @@
     <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
     <script src="${validateAMJs}" type="text/javascript"></script>
 
-    <spring:url value="/comparacion/getCartasSinDigitar" var="sCartas1Url"/>
-    <spring:url value="/comparacion/getCartasPartes" var="sCartas2Url"/>
-    <spring:url value="/comparacion/getCartasRelFam" var="sCartas3Url"/>
+    <spring:url value="/cartas/comparacion/getCartasSinDigitar" var="sCartas1Url"/>
+    <spring:url value="/cartas/comparacion/getCartasPartes" var="sCartas2Url"/>
+    <spring:url value="/cartas/comparacion/getCartasRelFam" var="sCartas3Url"/>
 
 <script>
     jQuery(document).ready(function() {
@@ -231,6 +235,7 @@
             ]
         });
 
+
         $('#lista_cartas2').DataTable({
             dom: "<'row'<'col-sm-12 col-md-12'B>>" +
                     "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
@@ -273,6 +278,12 @@
                 { data: 'aceptaParteBSc', defaultContent: ""},
                 { data: 'aceptaParteCCc', defaultContent: ""},
                 { data: 'aceptaParteCSc', defaultContent: ""},
+                { data: 'aceptaParteDCc', defaultContent: ""},
+                { data: 'aceptaParteDSc', defaultContent: ""},
+                { data: 'aceptaParteECc', defaultContent: ""},
+                { data: 'aceptaParteEc', defaultContent: ""},
+                { data: 'aceptaParteFCc', defaultContent: ""},
+                { data: 'aceptaParteFSc', defaultContent: ""},
                 { data: 'versionCc', defaultContent: ""},
                 { data: 'versionSc', defaultContent: ""}
             ]

@@ -1,4 +1,4 @@
-package ni.org.ics.estudios.dto;
+package ni.org.ics.estudios.dto.cartas;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ public class DiferenciaParteCartaDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String codigo;
+    private Integer codigo;
     private String fechaFirma;
     private String usuarioRegistro;
     private Integer edadActualMeses;
@@ -21,6 +21,12 @@ public class DiferenciaParteCartaDto implements Serializable {
     private String aceptaParteBSc;
     private String aceptaParteCCc;
     private String aceptaParteCSc;
+    private String aceptaParteDCc;
+    private String aceptaParteDSc;
+    private String aceptaParteECc;
+    private String aceptaParteESc;
+    private String aceptaParteFCc;
+    private String aceptaParteFSc;
     private String aceptaContactoFuturoCc;
     private String aceptaContactoFuturoSc;
     private String asentimientoVerbalCc;
@@ -28,11 +34,11 @@ public class DiferenciaParteCartaDto implements Serializable {
     private String versionCc;
     private String versionSc;
 
-    public String getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -162,5 +168,53 @@ public class DiferenciaParteCartaDto implements Serializable {
 
     public void setVersionSc(String versionSc) {
         this.versionSc = versionSc;
+    }
+
+    public String getAceptaParteDCc() {
+        return aceptaParteDCc;
+    }
+
+    public void setAceptaParteDCc(String aceptaParteDCc) {
+        this.aceptaParteDCc = aceptaParteDCc;
+    }
+
+    public String getAceptaParteDSc() {
+        return aceptaParteDSc;
+    }
+
+    public void setAceptaParteDSc(String aceptaParteDSc) {
+        this.aceptaParteDSc = aceptaParteDSc;
+    }
+
+    public String getAceptaParteECc() {
+        return aceptaParteECc;
+    }
+
+    public void setAceptaParteECc(String aceptaParteECc) {
+        this.aceptaParteECc = aceptaParteECc;
+    }
+
+    public String getAceptaParteESc() {
+        return aceptaParteESc;
+    }
+
+    public void setAceptaParteESc(String aceptaParteESc) {
+        this.aceptaParteESc = aceptaParteESc;
+    }
+
+    public String getAceptaParteFCc() {
+        return aceptaParteFCc;
+    }
+
+    public void setAceptaParteFCc(String aceptaParteFCc) {
+        this.aceptaParteFCc = aceptaParteFCc;
+    }
+
+    public String getAceptaParteFSc() {
+        return aceptaParteFSc;
+    }
+
+    public void setAceptaParteFSc(String aceptaParteFSc) {
+        this.aceptaParteFSc = aceptaParteFSc;
     }
 }

@@ -96,13 +96,13 @@ public class CartaConsentimientoService {
     }
 
 
-    public CartaConsentimiento getCartaConsentimientoByParticipante(Integer codParticipante)
+    public List<CartaConsentimiento> getCartaConsentimientoByParticipante(Integer codParticipante)
     {
         Session session = sessionFactory.getCurrentSession();
-        String sqlQuery = "from CartaConsentimiento where participante.codigo = :codigo ";
+        String sqlQuery = "from CartaConsentimiento where participante.codigo = :codigo and pasive = '0'";
         Query query = session.createQuery(sqlQuery);
 
         query.setParameter("codigo", codParticipante);
-        return (CartaConsentimiento) query.uniqueResult();
+        return query.list();
     }
 }

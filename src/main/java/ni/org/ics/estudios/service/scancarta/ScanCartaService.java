@@ -3,12 +3,14 @@ package ni.org.ics.estudios.service.scancarta;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.*;
 import ni.org.ics.estudios.domain.scancarta.*;
-import ni.org.ics.estudios.dto.scan;
+//import ni.org.ics.estudios.dto.scan;
+import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -897,7 +899,7 @@ public class ScanCartaService {
 
 
     //TODO: --> * METODO PARA CONSULTAR TABLA SCAN * <--
-    public List<scan> getDataScan(int idparticipante){
+    /*public List<scan> getDataScan(int idparticipante){
         Session session = sessionFactory.getCurrentSession();
         //int cons=10;
         String Sql = "from scan s where s.codigo=:idparticipante ";
@@ -912,5 +914,102 @@ public class ScanCartaService {
                     + a.getCons());
         }
         return list;
+    }*/
+
+    /*METODOS PARA OBETENER INFORMACION GENERAL DE CARTAS**/
+
+    public List<InformacionPorEstudioDto> getInformacionPorEstudioDto(Date fechaInicio, Date fechaFin){
+        Session s = sessionFactory.getCurrentSession();
+        Query q = s.createSQLQuery("SELECT  e.NOMBRE as estudio,COUNT(1) AS total " +
+                "FROM scan_participante_carta spc " +
+                "INNER JOIN scan_catalog_version v ON spc.IDVERSION=v.IDVERSION " +
+                "INNER JOIN estudios e ON e.CODIGO=v.CODIGO_ESTUDIO " +
+                "WHERE spc.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin " +
+                "GROUP BY e.NOMBRE WITH ROLLUP");
+        q.setResultTransformer(new AliasToBeanResultTransformer(InformacionPorEstudioDto.class));
+        q.setParameter("fechaInicio", fechaInicio);
+        q.setParameter("fechaFin", fechaFin);
+        return q.list();
     }
+
+    public List<InformacionPorDiaDto> getInformacionPorDiaDto(Date fechaInicio, Date fechaFin){
+        Session s = sessionFactory.getCurrentSession();
+        Query q = s.createSQLQuery("SELECT DATE(cc.FECHA_CARTA) AS dia, COUNT(1) AS total " +
+                "FROM scan_participante_carta cc " +
+                "WHERE cc.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin " +
+                "GROUP BY DATE(cc.FECHA_CARTA) WITH ROLLUP");
+        q.setResultTransformer(new AliasToBeanResultTransformer(InformacionPorDiaDto.class));
+        q.setParameter("fechaInicio", fechaInicio);
+        q.setParameter("fechaFin", fechaFin);
+        return q.list();
+    }
+
+    public List<InformacionPorBarrioDto> getInformacionPorBarrioDto(Date fechaInicio, Date fechaFin){
+        Session s = sessionFactory.getCurrentSession();
+        Query q = s.createSQLQuery("SELECT b.NOMBRE AS barrio, e.NOMBRE AS estudio, v.VERSION AS version, COUNT(1) AS total\n" +
+                "\tFROM scan_participante_carta spc \n" +
+                "\tINNER JOIN participantes p ON spc.CODIGO_PARTICIPANTE=p.CODIGO\n" +
+                "\tINNER JOIN casas c ON p.CODIGO_CASA=c.CODIGO \n" +
+                "\tINNER JOIN barrios b ON c.CODIGO_BARRIO=b.CODIGO\n" +
+                "\tINNER JOIN scan_catalog_version v ON spc.IDVERSION=v.IDVERSION\n" +
+                "\tINNER JOIN estudios e ON e.CODIGO=v.CODIGO_ESTUDIO\n" +
+                "WHERE spc.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin " +
+                "\tGROUP BY b.NOMBRE, v.VERSION ORDER BY b.NOMBRE");
+        q.setResultTransformer(new AliasToBeanResultTransformer(InformacionPorBarrioDto.class));
+        q.setParameter("fechaInicio", fechaInicio);
+        q.setParameter("fechaFin", fechaFin);
+        return q.list();
+    }
+
+    public List<InformacionRangoEdadDto> getInformacionRangoEdadDto(Date fechaInicio, Date fechaFin){
+        Session s = sessionFactory.getCurrentSession();
+        Query q = s.createSQLQuery("     SELECT e.NOMBRE AS estudio, v.VERSION as version,\n" +
+                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 0 AND 5 AND e.codigo != 3) THEN '1. Menor 6M' ELSE\n" +
+                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 6 AND 23 AND e.codigo != 3) THEN '2. De 6M y menor 2A' ELSE \n" +
+                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 24 AND 167 AND e.codigo != 3) THEN '3. De 2A y menor 14A ' ELSE \n" +
+                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) >= 168 AND e.codigo != 3) THEN '4. De 14A a Más' ELSE\n" +
+                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 24 AND 95 AND e.codigo = 3) THEN '1. De 2A y menor 8A ' ELSE \n" +
+                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) >= 95 AND e.codigo = 3) THEN '2. De 8A y menor 18A'\n" +
+                " \t\tEND\n" +
+                " \t\tEND\n" +
+                "      END\n" +
+                "      END\n" +
+                "\t\tEND\n" +
+                "\t\tEND rango, COUNT(1) as total\n" +
+                "     FROM scan_participante_carta spc \n" +
+                "\t\tINNER JOIN scan_catalog_version v ON spc.IDVERSION=v.IDVERSION\n" +
+                "\t\tINNER JOIN estudios e ON e.CODIGO=v.CODIGO_ESTUDIO\n" +
+                "WHERE spc.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin " +
+                "     GROUP BY e.NOMBRE asc, rango asc");
+        q.setResultTransformer(new AliasToBeanResultTransformer(InformacionRangoEdadDto.class));
+        q.setParameter("fechaInicio", fechaInicio);
+        q.setParameter("fechaFin", fechaFin);
+        return q.list();
+    }
+
+    public List<InformacionRecursoDto> getInformacionRecursoDto(Date fechaInicio, Date fechaFin) {
+        Session s = sessionFactory.getCurrentSession();
+        Query q = s.createSQLQuery("select u.NOMBRE_APELLIDO as nombre,\n" +
+                "COALESCE((SELECT count(1) FROM scan_participante_carta a WHERE a.IDPERSONA = u.PERSONA_ID " +
+                "and a.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin GROUP by a.IDPERSONA), 0) as cantidad\n" +
+                "from cat_personal u\n" +
+                "WHERE  u.PERSONA_ID in (SELECT distinct IDPERSONA FROM scan_participante_carta a) ORDER BY cantidad desc");
+        q.setResultTransformer(new AliasToBeanResultTransformer(InformacionRecursoDto.class));
+        q.setParameter("fechaInicio", fechaInicio);
+        q.setParameter("fechaFin", fechaFin);
+        return q.list();
+    }
+        public List<InformacionUsuarioDto> getInformacionUsuarioDto(Date fechaInicio, Date fechaFin){
+            Session s = sessionFactory.getCurrentSession();
+            Query q = s.createSQLQuery("select u.NOMBRE_USUARIO as usuario, u.descripcion as nombre,\n" +
+                    "COALESCE((SELECT count(1) FROM scan_participante_carta a where a.USUARIO_REGISTRO = u.NOMBRE_USUARIO " +
+                    "AND a.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin GROUP by a.USUARIO_REGISTRO), 0) as cantidad\n" +
+                    "from usuarios_sistema u\n" +
+                    "where u.NOMBRE_USUARIO in (SELECT distinct USUARIO_REGISTRO FROM scan_participante_carta a) ORDER BY cantidad desc");
+            q.setResultTransformer(new AliasToBeanResultTransformer(InformacionUsuarioDto.class));
+            q.setParameter("fechaInicio", fechaInicio);
+            q.setParameter("fechaFin", fechaFin);
+            return q.list();
+    }
+
 }

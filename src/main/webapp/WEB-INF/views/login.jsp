@@ -81,7 +81,7 @@
 									<img src="${logo}" alt="<spring:message code="login" />" />
 								</div>
 								<!-- END LOGO -->
-                                <div class="copyright">2016 &copy; <spring:message code="footer"/>.</div>
+                                <div class="copyright">2017 - 2022 &copy; <spring:message code="footer"/>.</div>
                             </div>
                         </div>
                     </div>
