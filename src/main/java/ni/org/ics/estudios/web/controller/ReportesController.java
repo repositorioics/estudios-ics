@@ -11,6 +11,7 @@ import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
+import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.Bhc.BhcService;
 import ni.org.ics.estudios.service.EstudioService;
@@ -411,6 +412,37 @@ public class ReportesController {
          return ReporteCarta;
     }
 
+    @RequestMapping(value = "downloadLettesInfo", method = RequestMethod.GET)
+    public ModelAndView downloadLettesInfo(@RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                       @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception {
+        ModelAndView ReporteEnvio = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        if (fechaInicio != null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin != null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+        List<InformacionPorEstudioDto> porEstudioDtoList = this.scanCartaService.getInformacionPorEstudioDto(dFechaInicio, dFechaFin);
+        List<InformacionPorDiaDto> porDiaDtoList = this.scanCartaService.getInformacionPorDiaDto(dFechaInicio, dFechaFin);
+        List<InformacionPorBarrioDto> porBarrioDtoList = this.scanCartaService.getInformacionPorBarrioDto(dFechaInicio, dFechaFin);
+        List<InformacionRangoEdadDto> porRangoEdadDtoList = this.scanCartaService.getInformacionRangoEdadDto(dFechaInicio, dFechaFin);
+        List<InformacionRecursoDto> porRecursoDtoList = this.scanCartaService.getInformacionRecursoDto(dFechaInicio, dFechaFin);
+        List<InformacionUsuarioDto> porUsuarioDtoList = this.scanCartaService.getInformacionUsuarioDto(dFechaInicio, dFechaFin);
 
+        InformacionCartasDto informacionCartasDto = new InformacionCartasDto();
+        informacionCartasDto.setPorEstudio(porEstudioDtoList);
+        informacionCartasDto.setPorDia(porDiaDtoList);
+        informacionCartasDto.setPorBarrio(porBarrioDtoList);
+        informacionCartasDto.setPorRangoEdad(porRangoEdadDtoList);
+        informacionCartasDto.setPorRecurso(porRecursoDtoList);
+        informacionCartasDto.setPorUsuario(porUsuarioDtoList);
+
+        ReporteEnvio.addObject("fechaInicio", fechaInicio);
+        ReporteEnvio.addObject("fechaFin", fechaFin);
+        ReporteEnvio.addObject("datos", informacionCartasDto);
+        ReporteEnvio.addObject("TipoReporte", Constants.TPR_INFOCARTAS);
+        return ReporteEnvio;
+    }
 
 }

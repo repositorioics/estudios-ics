@@ -73,12 +73,18 @@ public class CorregirTutorController {
     public @ResponseBody
     ResponseEntity<String> buscarParticipante(@RequestParam(value="parametro", required=true ) Integer codigo) throws ParseException {
         logger.debug("buscar participante");
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         Participante participante = this.participanteService.getParticipanteByCodigo(codigo);
+        List<CartaConsentimiento> cartas = this.cartaConsentimientoService.getCartaConsentimientoByParticipante(codigo);
 
         if (participante!=null) {
             ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigo);
-            MessageResource relFam = messageResourceService.getMensajeByCatalogAndCatKey("CP_CAT_RFTUTOR", participante.getRelacionFamiliarTutor());
+            MessageResource relFam = new MessageResource();
+            if (participante.getRelacionFamiliarTutor().equalsIgnoreCase("998"))
+                relFam = messageResourceService.getMensajeByCatalogAndCatKey("CHF_CAT_RFTUTOR", participante.getRelacionFamiliarTutor());
+            else
+                relFam = messageResourceService.getMensajeByCatalogAndCatKey("CP_CAT_RFTUTOR", participante.getRelacionFamiliarTutor());
+
             if (procesos != null && procesos.getEstPart().equals(0))
                 return JsonUtil.createJsonResponse("Participante retirado");
             else {
@@ -91,8 +97,20 @@ public class CorregirTutorController {
                 map.put("nombre2ActTutor", participante.getNombre2Tutor());
                 map.put("apellido1ActTutor", participante.getApellido1Tutor());
                 map.put("apellido2ActTutor", participante.getApellido2Tutor());
-                //map.put("relacionFamActKey", relFam.getCatKey()); aqui está reventando!!
-                //map.put("relacionFamAct", relFam.getSpanish());
+                map.put("relacionFamActKey", relFam.getCatKey());
+                map.put("relacionFamAct", relFam.getSpanish());
+                Map<Integer, Object> map2 = new HashMap<Integer, Object>();
+                for (CartaConsentimiento carta : cartas){
+                    int indice = 0;
+                    Map<String, String> mapCar = new HashMap<String, String>();
+                    mapCar.put("fecha", DateUtil.DateToString(carta.getFechaFirma(), "dd/MM/yyyy"));
+                    mapCar.put("estudio", carta.getTamizaje().getEstudio().getNombre());
+                    mapCar.put("version", carta.getVersion());
+                    mapCar.put("tutor", carta.getNombre1Tutor());
+                    mapCar.put("relacion", carta.getRelacionFamiliarTutor());
+                    map2.put(indice++, mapCar);
+                }
+                map.put("cartas", map2);
             }
         }
         else
@@ -119,7 +137,7 @@ public class CorregirTutorController {
             String claseCarta = CartaConsentimiento.class.getSimpleName();
 
             Participante participante = participanteService.getParticipanteByCodigo(codigoParticipante);
-            CartaConsentimiento cartaConsentimiento = cartaConsentimientoService.getCartaConsentimientoByParticipante(codigoParticipante);
+            //CartaConsentimiento cartaConsentimiento = cartaConsentimientoService.getCartaConsentimientoByParticipante(codigoParticipante);
 
 
             String nombre1ActTutor = participante.getNombre1Tutor();
@@ -137,51 +155,51 @@ public class CorregirTutorController {
             if (StringUtil.sonValoresDiferentes(nombre1ActTutor, nombre1NuevoTutor)) {
 
                 listaCorrecciones.add(fillCorrection(claseParticipante, participante.getCodigo().toString(), "NOMBRE1_TUTOR", nombre1ActTutor, nombre1NuevoTutor, observacion));
-                listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo().toString(), "NOMBRE1_TUTOR", nombre1ActTutor, nombre1NuevoTutor, observacion));
+                //listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo().toString(), "NOMBRE1_TUTOR", nombre1ActTutor, nombre1NuevoTutor, observacion));
 
                 participante.setNombre1Tutor(nombre1NuevoTutor);
-                cartaConsentimiento.setNombre1Tutor(nombre1NuevoTutor);
+                //cartaConsentimiento.setNombre1Tutor(nombre1NuevoTutor);
 
             }
             if (StringUtil.sonValoresDiferentes(nombre2ActTutor, nombre2NuevoTutor)) {
 
                 listaCorrecciones.add(fillCorrection(claseParticipante, participante.getCodigo().toString(), "NOMBRE2_TUTOR", nombre2ActTutor, nombre2NuevoTutor, observacion));
-                listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo(), "NOMBRE2_TUTOR", nombre2ActTutor, nombre2NuevoTutor, observacion));
+                //listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo(), "NOMBRE2_TUTOR", nombre2ActTutor, nombre2NuevoTutor, observacion));
 
                 participante.setNombre2Tutor(nombre2NuevoTutor);
-                cartaConsentimiento.setNombre2Tutor(nombre2NuevoTutor);
+                //cartaConsentimiento.setNombre2Tutor(nombre2NuevoTutor);
 
             }
             if (StringUtil.sonValoresDiferentes(apellido1ActTutor, apellido1NuevoTutor)) {
 
                 listaCorrecciones.add(fillCorrection(claseParticipante, participante.getCodigo().toString(), "APELLIDO1_TUTOR", apellido1ActTutor, apellido1NuevoTutor, observacion));
-                listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo(), "APELLIDO1_TUTOR", apellido1ActTutor, apellido1NuevoTutor, observacion));
+                //listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo(), "APELLIDO1_TUTOR", apellido1ActTutor, apellido1NuevoTutor, observacion));
 
                 participante.setApellido1Tutor(apellido1NuevoTutor);
-                cartaConsentimiento.setApellido1Tutor(apellido1NuevoTutor);
+                //cartaConsentimiento.setApellido1Tutor(apellido1NuevoTutor);
 
             }
             if (StringUtil.sonValoresDiferentes(apellido2ActTutor, apellido2NuevoTutor)) {
 
                 listaCorrecciones.add(fillCorrection(claseParticipante ,participante.getCodigo().toString(), "APELLIDO2_TUTOR", apellido2ActTutor, apellido2NuevoTutor, observacion));
-                listaCorrecciones.add(fillCorrection(claseCarta ,cartaConsentimiento.getCodigo(), "APELLIDO2_TUTOR", apellido2ActTutor, apellido2NuevoTutor, observacion));
+                //listaCorrecciones.add(fillCorrection(claseCarta ,cartaConsentimiento.getCodigo(), "APELLIDO2_TUTOR", apellido2ActTutor, apellido2NuevoTutor, observacion));
 
                 participante.setApellido2Tutor(apellido2NuevoTutor);
-                cartaConsentimiento.setApellido2Tutor(apellido2NuevoTutor);
+                //cartaConsentimiento.setApellido2Tutor(apellido2NuevoTutor);
 
             }
             if (StringUtil.sonValoresDiferentes(relacionFamAct, relacionFamNuevo)) {
 
                 listaCorrecciones.add(fillCorrection(claseParticipante, participante.getCodigo().toString(), "RELACION_FAMILIAR", relacionFamAct, relacionFamNuevo, observacion));
-                listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo(), "RELACION_FAMILIAR", relacionFamAct, relacionFamNuevo, observacion));
+                //listaCorrecciones.add(fillCorrection(claseCarta, cartaConsentimiento.getCodigo(), "RELACION_FAMILIAR", relacionFamAct, relacionFamNuevo, observacion));
 
                 participante.setRelacionFamiliarTutor(relacionFamNuevo);
-                cartaConsentimiento.setRelacionFamiliarTutor(relacionFamNuevo);
+                //cartaConsentimiento.setRelacionFamiliarTutor(relacionFamNuevo);
 
             }
 
             this.participanteService.saveOrUpdateParticipante(participante);
-            this.cartaConsentimientoService.saveOrUpdateCartaConsentimiento(cartaConsentimiento);
+            //this.cartaConsentimientoService.saveOrUpdateCartaConsentimiento(cartaConsentimiento);
             this.correctionsTrailService.saveCorrectionsTrailList(listaCorrecciones);
 
             resultado = String.format(messageResourceService.getMensaje("msg.correction.tutor.success").getSpanish(), codigoParticipante);

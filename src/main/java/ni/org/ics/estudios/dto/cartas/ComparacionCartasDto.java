@@ -1,4 +1,4 @@
-package ni.org.ics.estudios.dto;
+package ni.org.ics.estudios.dto.cartas;
 
 import java.math.BigInteger;
 

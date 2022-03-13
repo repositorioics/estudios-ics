@@ -11,4 +11,5 @@ public class Constants {
     public static final String TPR_ENVIOREPORTEPBCM = "ENVIOREPORTEPBMC";
     public static final String TPR_ENVIOREPORTEPBCMTOEXCEL = "ENVIOREPORTEPBCMTOEXCEL";
     public static final String TPR_ENVIOREPORTEBHC = "ENVIOREPORTEBHC";
+    public static final String TPR_INFOCARTAS = "INFOCARTAS";
 }

@@ -1309,3 +1309,25 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 
 
 /*Fin**/
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.personal.data','Datos Personales','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.registered.letters.app','Cartas Registradas desde la aplicación','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.select.letter.correct','Seleccionar las cartas a corregir','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('corrections','Correcciones','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.correction.tutor','Corregir datos de tutor','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('msg.correction.tutor.success','Tutor del participante %s actualizado exitosamente!!','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('msg.correction.tutor.error','Error al guardar correcciones!!','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.correction.tutor.actual','Información actuales del tutor','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.correction.tutor.new','Información nueva del tutor','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('lbl.correction.observacion','Motivo de correción','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.letters.comparison.1', 'Participantes registrados sin carta digitada','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.letters.comparison.2', 'Diferencias en partes de la carta','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.letters.comparison.3', 'Diferencias de Tutor y Relación Familiar','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.letters.info', 'Informe','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.letters.start.date', 'Fecha Inicio Carta','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.letters.end.date', 'Fecha Fin Carta','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_ANIO_VAC', NULL, NULL, NULL, '1', 0, '0', 'Catalogo años vacuna covid19');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_ANIO_VAC_01', '2021', 'COVID_CAT_ANIO_VAC', NULL, '0', 1, '0', '2021');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_ANIO_VAC_02', '2022', 'COVID_CAT_ANIO_VAC', NULL, '0', 2, '0', '2022');

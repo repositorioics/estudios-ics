@@ -43,19 +43,16 @@
 -->
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/CatalogoVersion/CrearNuevaVersion" htmlEscape="true "/>">
-                                <i class="fa fa-vimeo" aria-hidden="true"></i>
-                                <spring:message code="cat.version" /> </a>
+                                <i class="fa fa-vimeo" aria-hidden="true"></i><spring:message code="cat.version" /> </a>
                         </li>
 
                         <li class="nav-item cartas">
                             <a class="nav-link" href="<spring:url value="/CatalogoParte/CrearNuevaParte/" htmlEscape="true "/>">
-                                <i class="fa fa-product-hunt" aria-hidden="true"></i>
-                                <spring:message code="cat.part" /></a>
+                                <i class="fa fa-product-hunt" aria-hidden="true"></i><spring:message code="cat.part" /></a>
                         </li>
                         <li class="nav-item cartas">
                             <a class="nav-link" href="<spring:url value="/CatalogoVersion/extension/" htmlEscape="true "/>">
-                                <i class="fa fa-eur" aria-hidden="true"></i>
-                                <spring:message code="cat.extension" /></a>
+                                <i class="fa fa-eur" aria-hidden="true"></i><spring:message code="cat.extension" /></a>
                         </li>
                     </ul>
                 </li>
@@ -64,23 +61,19 @@
             <sec:authorize access="hasAnyRole('ROLE_SUPER')">
                 <li class="nav-item nav-dropdown comparison">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-clipboard" aria-hidden="true"></i>
-                        <spring:message code="comparison" /></a>
+                        <i class="fa fa-clipboard" aria-hidden="true"></i><spring:message code="comparison" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/comparacion/bhc" htmlEscape="true "/>">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
-                                <spring:message code="lbl.BHC" /></a>
+                                <i class="fa fa-tint" aria-hidden="true"></i><spring:message code="lbl.BHC" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/comparacion/serologia" htmlEscape="true "/>">
-                                <i class="fa fa-flask" aria-hidden="true"></i>
-                                <spring:message code="lbl.serologia" /></a>
+                                <i class="fa fa-flask" aria-hidden="true"></i><spring:message code="lbl.serologia" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/comparacion/muestra" htmlEscape="true "/>">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
-                                <spring:message code="sample" /></a>
+                                <i class="fa fa-tint" aria-hidden="true"></i><spring:message code="sample" /></a>
                         </li>
                     </ul>
                 </li>
@@ -89,17 +82,21 @@
                 <li class="nav-item nav-dropdown consentimiento">
                     <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-notebook"></i><spring:message code="letters" /></a>
                     <ul class="nav-dropdown-items">
-
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
-                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                <spring:message code="consent" /> </a>
+                                <i class="fa fa-file-text-o" aria-hidden="true"></i><spring:message code="consent" /> </a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/cartas/CartaParticipantTmp" htmlEscape="true "/>">
-                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                <spring:message code="consent" /> <spring:message code="Temporal" /> </a>
+                                <i class="fa fa-file-text-o" aria-hidden="true"></i><spring:message code="consent" /> <spring:message code="Temporal" /> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/cartas/comparacion" htmlEscape="true "/>">
+                                <i class="fa fa-exchange" aria-hidden="true"></i><spring:message code="comparison" /></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/cartas/informacion" htmlEscape="true "/>">
+                                <i class="fa fa-info" aria-hidden="true"></i><spring:message code="lbl.letters.info" /></a>
                         </li>
                     </ul>
                 </li>
@@ -147,13 +144,11 @@
 
             <sec:authorize access="hasRole('ROLE_ADMISION')">
             <li class="nav-item nav-dropdown procesos">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-retweet" aria-hidden="true"></i>
-                    <spring:message code="processes" /></a>
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-retweet" aria-hidden="true"></i><spring:message code="processes" /></a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a class="nav-link" href="<spring:url value="/Registro/BuscarInfor" htmlEscape="true "/>">
-                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
-                            <spring:message code="view" /></a>
+                            <i class="fa fa-newspaper-o" aria-hidden="true"></i><spring:message code="view" /></a>
                     </li>
                 </ul>
             </li>
@@ -172,13 +167,11 @@
 
                 <li class="nav-item nav-dropdown hemodinamica">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-sticky-note-o"  aria-hidden="true"></i>
-                        <spring:message code="Hemodinamica" /></a>
+                        <i class="fa fa-sticky-note-o"  aria-hidden="true"></i><spring:message code="Hemodinamica" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
-                                <i class="fa fa-list"></i>
-                                <spring:message code="List" /></a>
+                                <i class="fa fa-list"></i><spring:message code="List" /></a>
                         </li>
                     </ul>
                 </li>
@@ -202,33 +195,16 @@
                 </li> -->
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-user-times" aria-hidden="true"></i>
-                        <spring:message code="retirement" /></a>
+                        <i class="fa fa-user-times" aria-hidden="true"></i><spring:message code="retirement" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item retiro">
                             <a class="nav-link" href="<spring:url value="/retiro/ListRetiro" htmlEscape="true "/>">
-                                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                                <spring:message code="remove" /></a>
+                                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i><spring:message code="remove" /></a>
                         </li>
                     </ul>
                 </li>
             </sec:authorize>
-
-            <sec:authorize access="hasAnyRole('ROLE_DIG')">
-                <li class="nav-item nav-dropdown comparacion">
-                    <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-clone" aria-hidden="true"></i>
-                        <spring:message code="comparison" /></a>
-                    <ul class="nav-dropdown-items">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<spring:url value="/comparacion/cartas" htmlEscape="true "/>">
-                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                <spring:message code="letters" /></a>
-                        </li>
-                    </ul>
-                </li>
-            </sec:authorize>
-
+<!--
             <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#">
@@ -243,23 +219,20 @@
                 </ul>
             </li>
             </sec:authorize>
-
+            -->
 
         <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-flask text-danger" aria-hidden="true"></i>
-                        <spring:message code="Serologia" /></a>
+                        <i class="fa fa-flask text-danger" aria-hidden="true"></i><spring:message code="Serologia" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/Serologia/listSerologia" htmlEscape="true "/>">
-                                <i class="fa fa-list" aria-hidden="true"></i>
-                                <spring:message code="Listado" /></a>
+                                <i class="fa fa-list" aria-hidden="true"></i><spring:message code="Listado" /></a>
                         </li>
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/Serologia/listEnviosMuestras" htmlEscape="true "/>">
-                                <i class="fa fa-send"></i>
-                                <spring:message code="reports" /> <spring:message code="Envios" /></a>
+                                <i class="fa fa-send"></i><spring:message code="reports" /> <spring:message code="Envios" /></a>
                         </li>
                     </ul>
                 </li>
@@ -268,42 +241,35 @@
             <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Pbmc">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-flask text-pbmc" aria-hidden="true"></i>
-                        <spring:message code="Pbmc" /></a>
+                        <i class="fa fa-flask text-pbmc" aria-hidden="true"></i><spring:message code="Pbmc" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Pbmc/listPbmc" htmlEscape="true "/>">
-                                <i class="fa fa-list" aria-hidden="true"></i>
-                                <spring:message code="List" /> <spring:message code="Pbmc" /></a>
+                                <i class="fa fa-list" aria-hidden="true"></i><spring:message code="List" /> <spring:message code="Pbmc" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Pbmc/listEnviosPbmc" htmlEscape="true "/>">
-                                <i class="fa fa-send"></i>
-                                <spring:message code="reports" /> <spring:message code="Pbmc" /></a>
+                                <i class="fa fa-send"></i><spring:message code="reports" /> <spring:message code="Pbmc" /></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Pbmc/listSeroConPbmc" htmlEscape="true "/>">
-                                <i class="fa fa-send"></i>
-                                <spring:message code="Envios" /> <spring:message code="Pbmc Con Serologia" /></a>
+                                <i class="fa fa-send"></i><spring:message code="Envios" /> <spring:message code="Pbmc Con Serologia" /></a>
                         </li>
                     </ul>
                 </li>
 
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#">
-                            <i class="fa fa-flask text-bhc" aria-hidden="true"></i>
-                            <spring:message code="Bhc" /></a>
+                            <i class="fa fa-flask text-bhc" aria-hidden="true"></i><spring:message code="Bhc" /></a>
                         <ul class="nav-dropdown-items">
                             <li class="nav-item">
                                 <a class="nav-link" href="<spring:url value="/Bhc/list" htmlEscape="true "/>">
-                                    <i class="fa fa-list" aria-hidden="true"></i>
-                                    <spring:message code="List" /></a>
+                                    <i class="fa fa-list" aria-hidden="true"></i><spring:message code="List" /></a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link" href="<spring:url value="/Bhc/EnviadasBhc" htmlEscape="true "/>">
-                                    <i class="fa fa-send"></i>
-                                    <spring:message code="reports" /> <spring:message code="Bhc" /></a>
+                                    <i class="fa fa-send"></i><spring:message code="reports" /> <spring:message code="Bhc" /></a>
                             </li>
                         </ul>
                     </li>
@@ -312,13 +278,11 @@
             <sec:authorize access="hasRole('ROLE_ROOT')">
                 <li class="nav-item nav-dropdown Domicilio">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-home" aria-hidden="true"></i>
-                        <spring:message code="change.address" /></a>
+                        <i class="fa fa-home" aria-hidden="true"></i><spring:message code="change.address" /></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/Domicilio/Listado" htmlEscape="true "/>">
-                                <i class="fa fa-bank" aria-hidden="true"></i>
-                                <spring:message code="address" /></a>
+                                <i class="fa fa-bank" aria-hidden="true"></i><spring:message code="address" /></a>
                         </li>
                     </ul>
                 </li>
