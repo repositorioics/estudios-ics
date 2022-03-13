@@ -68,9 +68,8 @@ var saveOrUpdateBhc = function(){
                         $("#edadMeses").val("");
                         $("#parametro").focus();
                     } else{
-
-                        var hoy=moment();
-                        $("#fechaNac").val(data.fechaNacimiento);
+                        let fecha1Formateada = moment(data.fechaNacimiento).format('YYYY/MM/DD');
+                        $("#fechaNac").val(fecha1Formateada);
                         $("#idParticipante").val(data.codigo_participante);
                         $("#nombreCompleto").val(data.nombreCompleto);
                         $("#estudios").val(data.estudios);
@@ -84,7 +83,6 @@ var saveOrUpdateBhc = function(){
                         $("#observacion").val(data.observacion);
                         $("#estado").val(data.estado);
                         $("#volumen").val("");
-
                     }
                 }).fail(function() {
                     swal({
@@ -137,7 +135,6 @@ var saveOrUpdateBhc = function(){
             });
 
             function Bhc(parametros){
-
                 if($("#estado").val()==="0"){
                     swal({
                         title: "Participante Inactivo!",
@@ -146,7 +143,8 @@ var saveOrUpdateBhc = function(){
                         showCancelButton: true,
                         confirmButtonClass: "btn-warning",
                         confirmButtonText: "Si, Guardar!",
-                        closeOnConfirm: false
+                        closeOnConfirm: false,
+                        closeOnCancel: false
                     }, function(){
                         save(parametros);
                     });
@@ -158,7 +156,8 @@ var saveOrUpdateBhc = function(){
                         showCancelButton: true,
                         confirmButtonClass: "btn-warning",
                         confirmButtonText: "Si, Ingresar!",
-                        closeOnConfirm: false
+                        closeOnConfirm: false,
+                        closeOnCancel: false
                     }, function(){
                         save(parametros);
                     });
@@ -168,10 +167,9 @@ var saveOrUpdateBhc = function(){
             }
 
             function save(parametro){
-                console.log(form1.serialize());
                 var volumen_bhc_desde_bd = parseInt($("#volumen_bhc_desde_bd").val());
                 if($("#volumen").val() != volumen_bhc_desde_bd) {
-                    if(validObservacion()){
+                    if(validObservacion()){+
                     swal({
                             title: "Diferencia en volumen!",
                             text:  "Volúmenes sugerido para Bhc: " + volumen_bhc_desde_bd + "\nDeseas continuar?",
@@ -179,7 +177,8 @@ var saveOrUpdateBhc = function(){
                             showCancelButton: true,
                             confirmButtonClass: "btn-warning",
                             confirmButtonText: "Si, Continuar!",
-                            closeOnConfirm: false
+                            closeOnConfirm: false,
+                            closeOnCancel: false
                         },
                         function () {
                             $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
@@ -214,7 +213,8 @@ var saveOrUpdateBhc = function(){
                                     timer: 2100
                                 });
                             });
-                        });                }
+                        });
+                    }
                 }else{
                     $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
                         if (data.msj != null) {

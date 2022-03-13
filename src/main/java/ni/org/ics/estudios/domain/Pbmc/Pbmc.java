@@ -150,4 +150,10 @@ public class Pbmc extends BaseMetaData implements Serializable{
         this.volumen_pbmc_desde_bd = volumen_pbmc_desde_bd;
     }
 
+
+    @Transient
+    public boolean isEsPositivo() {
+        return this.enviado == '1';
+    }
+
 }

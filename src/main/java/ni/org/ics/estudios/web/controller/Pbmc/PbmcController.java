@@ -585,6 +585,7 @@ public class PbmcController {
         List<MessageResource> obsv =new ArrayList<MessageResource>();
         try {
             ArrayList<String> observacionArrayList = new ArrayList<String>();
+            observacionArrayList.add("2 Tubos de 6ml.");
             obsv = messageResourceService.getCatalogo("CHF_CAT_RAZON_NO_MX");
             for (MessageResource m: obsv){
                 observacionArrayList.add(m.getSpanish());

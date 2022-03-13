@@ -181,7 +181,9 @@
             }
         }
         /*fin*/
-
+        .borderRojo{
+            border: 1px solid #ff0000;
+        }
         span.error {
             display:block;
             visibility:hidden;
@@ -350,7 +352,6 @@
                                       </div>
                                   </div>
 
-
                               <div class="col-md-6">
                               <div class="card">
                                   <div class="card-body">
@@ -358,7 +359,7 @@
                                       <div class="form-row">
                                           <div class="form-group col-md-12">
                                               <label for="volumen_serologia_desde_bd"><spring:message code="Volumen Sugerido"/></label>
-                                              <input type="text" class="form-control text-center" id="volumen_serologia_desde_bd" name="volumen_serologia_desde_bd"
+                                              <input type="text" class="form-control text-center borderRojo" id="volumen_serologia_desde_bd" name="volumen_serologia_desde_bd"
                                                      data-toggle="tooltip" data-placement="top" title="Volumen sugerido"  value="${caso.volumen_serologia_desde_bd}" readonly="readonly" >
                                               <small id="fechaHelpInline2" class="text-muted"> &nbsp;</small>
                                           </div>
@@ -392,12 +393,15 @@
                                   <div class="form-group col-md-12">
                                       <label for="observacion"><spring:message code="observacion" /></label>
                                       <textarea class="form-control" id="observacion" name="observacion" rows="2">${caso.observacion}</textarea>
+                                      <div class="invalid-feedback">
+                                          <spring:message code="Este campo es obligatorio." />
+                                      </div>
                                   </div>
                               </div>
 
                               <div class="form-row">
                                   <div class="col-md-4">
-                                      <button type="submit" class="btn btn-primary btn-block btn-lg">
+                                      <button type="submit" class="btn btn-primary btn-block btn-lg focusNext" tabindex="3">
                                           <i class="fa fa-save"></i>
                                           <spring:message code="save" />
                                       </button>
@@ -468,7 +472,7 @@
         $('#fechaNac').mask("9999-99-99", {placeholder: 'yyyy-MM-dd' });
         actDesact();
         var today = moment().format('YYYY-MM-DD');
-
+        moment.suppressDeprecationWarnings = true;
         $("#fecha").datepicker({
             format: "dd/mm/yyyy",
             todayBtn:true,
@@ -515,6 +519,7 @@
             }
         }
 
+
         document.addEventListener('keypress', function(evt) {
             // Si el evento NO es una tecla Enter
             if (evt.key !== 'Enter') {
@@ -537,10 +542,6 @@
         $("#parametro").focus();
     });
 </script>
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    })
-</script>
+
 </body>
 </html>

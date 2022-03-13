@@ -154,6 +154,7 @@ public class Serologia extends BaseMetaData implements Serializable  {
         this.volumen_serologia_desde_bd = volumen_serologia_desde_bd;
     }
 
+
 //fin setter
 
 }

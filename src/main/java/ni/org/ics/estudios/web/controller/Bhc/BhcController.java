@@ -368,7 +368,7 @@ public class BhcController {
             } else {
                 estudiosFinales = procesos.getEstudio().trim();
             }
-            int edad_val = (int) edadConverted;
+            int edad_val = (int) edadConverted*12;
             Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edad_val, "BHC", estudiosFinales.trim());
             if(rango!=null){
                 caso.setVolumen_bhc_desde_bd("" + rango.getVolumen());

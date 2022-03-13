@@ -23,9 +23,6 @@
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 
-    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
-    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
-
     <style>
         .form-control:disabled, .form-control[readonly] {
             background-color: #eee0;
@@ -35,7 +32,14 @@
         em {
             color: #ff5454;
         }
+        .borderBhc{
+            border: 1px solid #B941E0;
+        }
     </style>
+
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -213,7 +217,7 @@
                                             <div class="card-body">
                                                 <div class="form-group col-md-12">
                                                 <label for="fecha"><spring:message code="volumen" /></label>
-                                                <input type="text" class="form-control text-center" data-toggle="tooltip" data-placement="top" title="Volumen sugerido BHC"
+                                                <input type="text" class="form-control text-center borderBhc" data-toggle="tooltip" data-placement="top" title="Volumen sugerido BHC"
                                                        id="volumen_bhc_desde_bd"
                                                        name="volumen_bhc_desde_bd" readonly="readonly"
                                                        value="${caso.volumen_bhc_desde_bd}" />
@@ -286,7 +290,6 @@
 <jsp:include page="../fragments/corePlugins.jsp" />
 <spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
 <script src="${uiJs}" type="text/javascript"></script>
-
 <c:choose>
     <c:when test="${cookie.eIcsLang.value == null}">
         <c:set var="lenguaje" value="es"/>
@@ -310,9 +313,6 @@
 <spring:url value="/resources/js/libs/jquery.maskedinput.min.js" var="mask" />
 <script type="text/javascript" src="${mask}"></script>
 
-<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
-<script type="text/javascript" src="${sw}"></script>
-
 <spring:url value="/resources/js/libs/mySelect2/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
 
@@ -321,6 +321,9 @@
 
 <spring:url value="/resources/js/libs/bootstrap-datepicker/bootstrap-datepicker.js" var="datepickerPlugin" />
 <script src="${datepickerPlugin}"></script>
+
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
 
 <spring:url value="/resources/js/views/Bhc/bhcForm.js" var="bhcFormJs" />
 <script type="text/javascript" src="${bhcFormJs}"></script>
@@ -335,7 +338,7 @@
             "getObservacionesUrl":"${getObservacionesUrl}"
         }
         saveOrUpdateBhc.init(parametros);
-
+        moment.suppressDeprecationWarnings = true;
         $("#fecha").datepicker({
             format: "dd/mm/yyyy",
             todayBtn:true,

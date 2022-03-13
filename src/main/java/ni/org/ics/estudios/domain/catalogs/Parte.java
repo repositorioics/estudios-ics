@@ -2,10 +2,8 @@ package ni.org.ics.estudios.domain.catalogs;
 
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.audit.Auditable;
-import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by ICS on 14/01/2020.
@@ -38,7 +36,7 @@ public class Parte extends BaseMetaData implements Auditable {
 
     @ManyToOne
     @JoinColumn(name = "IDVERSION", nullable = false)
-    @ForeignKey(name = "FK_VERSION_PARTE")
+    //@ForeignKey(name = "FK_IDVERSION")
     public Version getVersion() {
         return version;
     }

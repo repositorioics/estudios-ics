@@ -25,6 +25,7 @@
     <!-- END DATE PICKER -->
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
     <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
     <style>
         .form-control:disabled, .form-control[readonly] {
             background-color: #eee0;
@@ -34,6 +35,12 @@
         .fondowhite{
             background-color: #fff;
             text-align: center;
+        }
+        .borderPbmc{
+            border: 1px solid #11BDF7;
+        }
+        .borderRojo{
+            border: 1px solid #ff0000;
         }
     </style>
 </head>
@@ -115,12 +122,11 @@
                             </form>
                             <hr/>
                             <form class="form-horizontal" name="save-pbmc-form" id="save-pbmc-form" autocomplete="off">
-                                <div class="form-row" hidden="hidden">
+                                <div class="form-row"   >
                                     <div class="col-md-4">
                                         <label for="codigo_pbmc">codigo_pbmc</label>
                                         <input id="codigo_pbmc" name="codigo_pbmc" type="text" class="form-control" value="${caso.codigo_pbmc}"/>
                                     </div>
-
                                     <div class="col-md-4">
                                         <label for="idSerologia">idSerologia</label>
                                         <input id="idSerologia" name="idSerologia" type="text" class="form-control" value="${caso.id_serologia}"/>
@@ -148,7 +154,6 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-
                                     <div class="form-group col-md-2">
                                         <label for="codigo_participante"><spring:message code="code" /></label>
                                         <input type="text" class="form-control" id="codigo_participante" name="codigo_participante" value="${caso.codigo_participante}" style="text-align: center; font-family: Roboto" readonly/>
@@ -177,12 +182,12 @@
                                     <div class="col-sm-6">
                                         <div class="card">
                                             <div class="card-header">
-                                                <div class="form-inline">
-                                                    <div class="input-group mb-2 mr-sm-2">
+                                                <div class="form-inline float-right">
+                                                    <div class="input-group mb-2 mr-sm-2 borderPbmc">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><spring:message code="Volumen" /> <spring:message code="sugerido" /> <spring:message code="Pbmc" />:</div>
                                                         </div>
-                                                        <input type="text" class="form-control fondowhite" data-toggle="tooltip" data-placement="top" title="Volumen sugerido Pbmc" name="volumen_pbmc_desde_bd" id="volumen_pbmc_desde_bd" readonly="readonly"  value="${caso.volumen_pbmc_desde_bd}" >
+                                                        <input type="text" class="form-control fondowhite borderPbmc" data-toggle="tooltip" data-placement="top" title="Volumen sugerido Pbmc" name="volumen_pbmc_desde_bd" id="volumen_pbmc_desde_bd" readonly="readonly"  value="${caso.volumen_pbmc_desde_bd}" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,11 +212,11 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-inline">
-                                                    <div class="input-group mb-2 mr-sm-2">
+                                                    <div class="input-group mb-2 mr-sm-2 borderRojo">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><spring:message code="Volumen" /> <spring:message code="sugerido" />  <spring:message code="Rojo" /> <spring:message code="Adicional" /> :</div>
                                                         </div>
-                                                        <input id="volumen_adicional_desde_bd" data-toggle="tooltip" data-placement="top" title="Volumen sugerido Rojo" name="volumen_adicional_desde_bd" type="text" class="form-control fondowhite" readonly="readonly" value="${caso.volumen_adicional_desde_bd}"/>
+                                                        <input id="volumen_adicional_desde_bd" data-toggle="tooltip" data-placement="top" title="Volumen sugerido Rojo" name="volumen_adicional_desde_bd" type="text" class="form-control fondowhite borderRojo" readonly="readonly" value="${caso.volumen_adicional_desde_bd}"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -229,12 +234,15 @@
                                     <div class="form-group col-md-12">
                                         <label for="observacion"><spring:message code="observacion" /></label>
                                         <textarea class="form-control" id="observacion" name="observacion" rows="2">${caso.observacion}</textarea>
+                                        <div class="invalid-feedback">
+                                            <spring:message code="Este campo es obligatorio." />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-4">
                                         <button type="submit" class="btn btn-primary btn-block btn-lg focusNext" tabindex="4">
-                                            <i class="fa fa-save"></i>
+                                            <i class="fa fa-save"  aria-hidden="true"></i>
                                             <spring:message code="save" />
                                         </button>
                                     </div>
@@ -310,7 +318,7 @@
         };
         handleDatePickers("${lenguaje}");
         processPbmc.init(parameters);
-
+        moment.suppressDeprecationWarnings = true;
         $("#fecha").datepicker({
             format: "dd/mm/yyyy",
             todayBtn:true,
@@ -352,11 +360,6 @@
         });
 
         $("#parametro").focus();
-    })
-</script>
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
     })
 </script>
 </body>

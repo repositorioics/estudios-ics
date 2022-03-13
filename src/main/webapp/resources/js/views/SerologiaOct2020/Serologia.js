@@ -47,7 +47,6 @@ var SerologiaMA = function(){
 
             function searchParticipante(){
                 $.getJSON(endPointSero.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
-                    console.log(data);
                     var len = data.length;
                     if(data.msj != undefined || data.msj != null){
                         swal({
@@ -82,7 +81,8 @@ var SerologiaMA = function(){
                     } else{
                         console.log(data);
                         $("#idParticipante").val(data.idparticipante);
-                        $("#fechaNac").val(data.fechaNacimiento);
+                        let fecha1Formateada = moment(data.fechaNacimiento).format('YYYY/MM/DD');
+                        $("#fechaNac").val(fecha1Formateada);
                         $("#nombreCompleto").val(data.nombreCompleto);
                         $("#estudios").val(data.estudios);
                         $("#casaCHF").val(data.codigo_casa_Familia);
@@ -126,7 +126,7 @@ var SerologiaMA = function(){
                     volumen:{
                         required:true,
                         number: true,
-                        min:1
+                        min:0
                     }
                 },
                 errorElement: 'em',
@@ -160,7 +160,7 @@ var SerologiaMA = function(){
 
 
             function saveSerologia(urls){
-                if($("#estado").val()===0 || $("#estado")=="") {
+                if($("#estado").val()==="0" || $("#estado")=="") {
                     swal({
                         title: "Desear continuar?",
                         text: "Participante Nuevo Ingreso!",
@@ -178,7 +178,7 @@ var SerologiaMA = function(){
                             swal("Cancelado!", "Operación ha sido cancelada :)", "info");
                         }
                     });
-                }else if($("#estado").val()===3){
+                }else if($("#estado").val()==="3"){
                     swal({
                         title: "Deseas continuar?",
                         text: "Reactivar Participante",
@@ -301,8 +301,10 @@ var SerologiaMA = function(){
                 if($("#observacion").val() == null || $("#observacion").val() == ""){
                     isAllValid = false;
                     $('#observacion').addClass('is-invalid').focus();
-                }
-                else{
+                }else if ($("#observacion").val()=="" && $("#volumen").val()=="12"){
+                    isAllValid = false;
+                    $('#observacion').addClass('is-invalid').focus();
+                }else{
                     $('#observacion').removeClass('is-invalid');
                 }
                 return isAllValid;
@@ -311,12 +313,19 @@ var SerologiaMA = function(){
 
 
             function DifenciaMeses(){
-                debugger;
                 var a = moment();
                 var b = moment($("#fechaNac").val()).format('L');
                 var months = a.diff(b, 'months', true);
                 return months.toFixed(2);
             };
+
+            $("#volumen").on("focusout", function(e){
+                e.preventDefault();
+                debugger;
+                if($(this).val()=="12"){
+                    $("#observacion").val("2 Tubos de 6ml.");
+                }
+            });
 
             function Limpiartxt(){
                 $("#idSerologia").val("");

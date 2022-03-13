@@ -77,7 +77,8 @@ var processPbmc = function(){
                     }else {
                         var estado = data.estado;
                         $("#codigo_participante").val(data.codigo_participante);
-                        $("#fechaNac").val(data.fechaNacimiento);
+                        let fecha1Formateada = moment(data.fechaNacimiento).format('YYYY/MM/DD');
+                        $("#fechaNac").val(fecha1Formateada);
                         $("#estudios").val(data.estudios);
                         $("#edadA").val(data.edadA);
                         $("#edadM").val(data.edadM);
@@ -143,7 +144,7 @@ var processPbmc = function(){
                     volumen_pbmc:{
                         required:true,
                         number: true,
-                        min:1
+                        min:0
                     },
                     volumen_rojo_adic:{
                         number: true,
@@ -205,7 +206,6 @@ var processPbmc = function(){
             function save(parametros){
                 var volumen_pbmc_desde_bd = parseInt($("#volumen_pbmc_desde_bd").val());
                 var volumen_adicional_desde_bd = parseInt($("#volumen_adicional_desde_bd").val());
-
                 if($("#volumen_pbmc").val() != volumen_pbmc_desde_bd || $("#volumen_rojo_adic").val() != volumen_adicional_desde_bd ){
                     if(validObservacion ()) {
                         swal({

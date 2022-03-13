@@ -149,7 +149,7 @@
                                     <td><c:out value="${b.estudios}" /></td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${b.enviado =='0'}">
+                                            <c:when test="${b.enviado=='1'}">
                                                 <h4 class="text-danger text-center">
                                                     <i class="fa fa-check text-success" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Si"></i>
                                                 </h4>
@@ -233,7 +233,7 @@
                                 <div class="col-sm-10">
                                     <button type="submit" class="btn btn-primary btn-lg float-right"> <i class="fa fa-send" aria-hidden="false"></i>
                                         <spring:message code="lbl.dispatch" />
-                                        <spring:message code="sample" /> <spring:message code="Pbmc" />
+                                        <spring:message code="sample" /> <spring:message code="BHC" />
                                     </button>
                                 </div>
                             </div>

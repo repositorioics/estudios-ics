@@ -15,6 +15,7 @@
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
     <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="${boot}" rel="stylesheet" type="text/css"/>
     <spring:url value="/resources/js/libs/data-tables/TableTools/css/dataTables.tableTools.css" var="dtttcss" />
     <link rel="stylesheet" href="${dtttcss}"/>
@@ -86,7 +87,6 @@
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
-
                 <!-- init card -->
                 <div class="">
                 <div class="row">
@@ -98,17 +98,15 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="true">
                                 <span class="d-block d-md-none"><i class="ti-email"></i></span>
-                                <span class="d-none d-md-block"> INBOX</span>
+                                <span class="d-none d-md-block"><spring:message code="List" /> <spring:message code="Serologia" /> <spring:message code="Pbmc" /></span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
                                 <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                                <span class="d-none d-md-block">SENT</span>
+                                <span class="d-none d-md-block"><spring:message code="Form" /> <spring:message code="Envío" /></span>
                             </a>
                         </li>
-
-
                     </ul>
                 </div>
                 <div class="tab-content" id="myTabContent">
@@ -120,12 +118,12 @@
                         <table id="tblSeroConPbmc" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th width="12%"><spring:message code="Fecha" /></th>
-                                <th width="12%"><spring:message code="code" /></th>
-                                <th width="12%"><spring:message code="Volumen" /></th>
-                                <th width="12%"><spring:message code="Estudios" /></th>
-                                <th width="12%"><spring:message code="Descripcion" /></th>
-                                <th width="12%"><spring:message code="Enviado" /></th>
+                                <th class="text-center" width="12%"><spring:message code="Fecha" /></th>
+                                <th class="text-center" width="12%"><spring:message code="code" /></th>
+                                <th class="text-center" width="12%"><spring:message code="Volumen" /></th>
+                                <th class="text-center" width="12%"><spring:message code="Estudios" /></th>
+                                <th class="text-center" width="12%"><spring:message code="Descripcion" /></th>
+                                <th class="text-center" width="12%"><spring:message code="Enviado" /></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -136,13 +134,21 @@
                                     <td><c:out value="${pbmc.volumen}" /></td>
                                     <td><c:out value="${pbmc.estudio}" /></td>
                                     <td><c:out value="${pbmc.descripcion}" /></td>
-                                    <td><c:out value="${pbmc.enviado}" /></td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${pbmc.enviado =='1'}">
+                                                <i class="fa fa-check text-success" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Si"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="fa fa-times text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="No"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
                 </div>
                 <div class="tab-pane fade" id="sent" aria-labelledby="sent-tab" role="tabpanel">
@@ -176,7 +182,6 @@
                                     <input type="text" class="form-control to_date datepicker" id="hasta" name="hasta" data-date-end-date="+0d">
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label" for="numenvio"><spring:message code="lbl.send" /></label>
                                 <div class="col-sm-10">
@@ -188,14 +193,12 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <label for="temperatura" class="col-sm-2 col-form-label"><spring:message code="Temperatura" /></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="temperatura" name="temperatura" minlength="1" maxlength="4"  required="required">
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-10">
@@ -207,16 +210,13 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
                 </div>
                 </div>
                 </div>
                 </div>
                 </div>
-
                 <!-- fin card-->
-
             </div>
         </div>
         <!-- /.conainer-fluid -->
