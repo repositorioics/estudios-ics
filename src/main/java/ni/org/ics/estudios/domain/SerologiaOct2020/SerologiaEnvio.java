@@ -72,5 +72,4 @@ public class SerologiaEnvio extends BaseMetaData implements Auditable {
         return true;
     }
 
-
 }

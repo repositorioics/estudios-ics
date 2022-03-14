@@ -155,6 +155,4 @@ public class Serologia extends BaseMetaData implements Serializable  {
     }
 
 
-//fin setter
-
 }

@@ -52,4 +52,5 @@ public class Bhc_Detalle_envio implements Serializable {
     public void setBhc(Bhc bhc) {
         this.bhc = bhc;
     }
+
 }

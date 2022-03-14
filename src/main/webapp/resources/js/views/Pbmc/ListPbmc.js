@@ -97,9 +97,7 @@ var ListPbmc = function(){
                     });
                 });
             }
-
             /*******************************/
-
         }// fin init
     }//fin return
 }();

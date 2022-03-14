@@ -233,8 +233,6 @@
         }
 
     </style>
-
-
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />

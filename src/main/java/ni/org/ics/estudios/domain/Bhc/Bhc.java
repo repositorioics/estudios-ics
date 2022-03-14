@@ -27,6 +27,7 @@ public class Bhc extends BaseMetaData implements Serializable {
     private Integer casa_PDCS;
     private Integer volumen_bhc_sugerido;
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "BHC_ID", nullable = false)

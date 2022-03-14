@@ -132,7 +132,6 @@ public class SerologiaOct2020Controller {
                 double edadEnMeses = serologia.getEdadMeses();
                 caso.setEdadMeses(edadEnMeses);
 
-
                 if (estudiosParticipante.contains("Tcovid")) {
                     String s = procesos.getEstudio();
                     String[] result = s.split("Tcovid", 2);
@@ -141,7 +140,7 @@ public class SerologiaOct2020Controller {
                 } else {
                     estudiosFinales = procesos.getEstudio().trim();
                 }
-                int age = edad * 12;
+                int age = (int) edad * 12;
                 Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(age, "SEROLOGIA", estudiosFinales.trim());
                 if (rango!=null){
                     caso.setVolumen_serologia_desde_bd("" + rango.getVolumen());

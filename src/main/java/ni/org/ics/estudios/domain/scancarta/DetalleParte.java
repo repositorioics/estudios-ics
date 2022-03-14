@@ -38,7 +38,7 @@ public class  DetalleParte extends BaseMetaData implements Auditable {
 
     @ManyToOne
     @JoinColumn(name = "IDPARTICIPANTECARTA", nullable = false)
-    @ForeignKey(name = "FK_IDPARTICIPANTECARTA")
+    //@ForeignKey(name = "FK_IDPARTICIPANTECARTA")
     public ParticipanteCarta getParticipantecarta() {
         return participantecarta;
     }

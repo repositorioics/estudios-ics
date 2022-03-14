@@ -118,8 +118,6 @@
                                     </form>
                                 </c:otherwise>
                             </c:choose>
-
-
                             <hr/>
                             <form class="form-horizontal" name="save-bhc-form" id="save-bhc-form" autocomplete="off">
                                 <div class="form-row" hidden="hidden">

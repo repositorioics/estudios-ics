@@ -17,7 +17,6 @@ var EnvioPbmcConSerologia = function(){
                 ]
             });
 
-
             //***********************/
             var form1 = $('#envio-allpbmcConSero-form');
             var $validator = form1.validate({
@@ -74,8 +73,6 @@ var EnvioPbmcConSerologia = function(){
             });
 
             function crearEnvioSeroConPbmc() {
-             //   swal("Buen Trabajo", parametros.successLabel, "success");
-
                 swal({
                     title: "Deseas enviar las Muestras...",
                     text: "para generar el Reporte?",
@@ -89,7 +86,7 @@ var EnvioPbmcConSerologia = function(){
                 }, function () {
                     $.post(parametros.sendSerologiaConPbmcUrl, form1.serialize(), function (data) {
                         //debugger;
-                        console.log(data);
+                        //console.log(data);
                         if (data.mensaje != null) {
                             swal("INFORMACIÓN",data.mensaje,"info");
                         }
@@ -97,7 +94,7 @@ var EnvioPbmcConSerologia = function(){
                             location.reload();
                         }, 1300);
                     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        console.info("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown: "+errorThrown)
+                        //console.info("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown: "+errorThrown)
                         swal("Error 500!", "Interno del Servidor!", "error");
                     });
                 });

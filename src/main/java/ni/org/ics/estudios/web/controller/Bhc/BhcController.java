@@ -418,6 +418,7 @@ public class BhcController {
             if (ListaBhcYaEnviadas.size()<=0)
                 return JsonUtil.createJsonResponse("No se encontraron registros: ".concat(""+ListaBhcYaEnviadas.size()));
 
+
             String computerName = InetAddress.getLocalHost().getHostName();
             SerologiaEnvio envio = new SerologiaEnvio();
             envio.setDeviceid(computerName);

@@ -120,7 +120,6 @@ public class BhcService {
         }
     }
 
-
     // todo **  Consulta para llenar el reporte BHC **
     public List<Bhc_Detalle_envio>getBhcDetailsEnvio(Integer nEnvios, Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();

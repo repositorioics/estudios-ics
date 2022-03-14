@@ -205,7 +205,6 @@ var SerologiaMA = function(){
             function saveSerologiaAjax(urls){
                 var volumen = parseInt($("#volumen").val());
                 var volumen_desde_db = parseInt($("#volumen_serologia_desde_bd").val());
-                debugger;
                 var formSerologia = $("#save-Serologia-form");
                 if(volumen!=volumen_desde_db){
                    if(validObservacion()) {
@@ -246,7 +245,7 @@ var SerologiaMA = function(){
                                            $("#parametro").focus().val("");
                                        }
                                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                       console.log("XMLHttpRequest: " + XMLHttpRequest, "textStatus: " + textStatus, "errorThrown:" + errorThrown);
+                                       //console.log("XMLHttpRequest: " + XMLHttpRequest, "textStatus: " + textStatus, "errorThrown:" + errorThrown);
                                        swal({
                                            title: textStatus,
                                            text: errorThrown,
@@ -321,7 +320,6 @@ var SerologiaMA = function(){
 
             $("#volumen").on("focusout", function(e){
                 e.preventDefault();
-                debugger;
                 if($(this).val()=="12"){
                     $("#observacion").val("2 Tubos de 6ml.");
                 }

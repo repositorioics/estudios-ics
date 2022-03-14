@@ -118,12 +118,12 @@
                         <table id="tblSeroConPbmc" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th class="text-center" width="12%"><spring:message code="Fecha" /></th>
+                                <th class="text-center" width="12%"><spring:message code="sample.date" /></th>
                                 <th class="text-center" width="12%"><spring:message code="code" /></th>
-                                <th class="text-center" width="12%"><spring:message code="Volumen" /></th>
-                                <th class="text-center" width="12%"><spring:message code="Estudios" /></th>
-                                <th class="text-center" width="12%"><spring:message code="Descripcion" /></th>
-                                <th class="text-center" width="12%"><spring:message code="Enviado" /></th>
+                                <th class="text-center" width="12%"><spring:message code="volumen" /></th>
+                                <th class="text-center" width="12%"><spring:message code="userstudies" /></th>
+                                <th class="text-center" width="12%"><spring:message code="userdesc" /></th>
+                                <th class="text-center" width="12%"><spring:message code="lbl.envoy" /></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -194,7 +194,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="temperatura" class="col-sm-2 col-form-label"><spring:message code="Temperatura" /></label>
+                                <label for="temperatura" class="col-sm-2 col-form-label"><spring:message code="temp" /></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="temperatura" name="temperatura" minlength="1" maxlength="4"  required="required">
                                 </div>

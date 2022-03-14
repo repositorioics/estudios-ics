@@ -543,6 +543,7 @@ public class PbmcController {
             if (ListPbmcConSerologia.size()<=0)
                 return JsonUtil.createJsonResponse("No se encontraron egistros: ".concat(""+ListPbmcConSerologia.size()));
 
+
             String computerName = InetAddress.getLocalHost().getHostName();
             SerologiaEnvio envio = new SerologiaEnvio();
             envio.setDeviceid(computerName);

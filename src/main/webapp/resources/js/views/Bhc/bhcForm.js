@@ -240,7 +240,7 @@ var saveOrUpdateBhc = function(){
                             $("#parametro").focus().val("");
                         }
                     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
+                        //console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
                         swal({
                             title: textStatus,
                             text: errorThrown,
@@ -282,7 +282,7 @@ var saveOrUpdateBhc = function(){
 
 
             function DifenciaMeses(){
-                debugger;
+                //debugger;
                 var a = moment();
                 var b = moment($("#fechaNac").val()).format('L');
                 var months = a.diff(b, 'months', true);

@@ -53,4 +53,5 @@ public class Pbmc_Detalle_Envio implements Serializable {
     public void setPbmc(Pbmc pbmc) {
         this.pbmc = pbmc;
     }
+
 }

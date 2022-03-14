@@ -5,7 +5,6 @@ var EnviarSerologiasForm = function(){
 
     return {
         init: function(urls){
-
             var table = $("#Lista_Muestra").DataTable({
                 "oLanguage": {
                     "sUrl": urls.dataTablesLang
@@ -26,9 +25,8 @@ var EnviarSerologiasForm = function(){
                 var myUrl = urls.MxNoEnviadasUrl;
                 $.getJSON(myUrl, function(data){
                     var len = data.length;
-                    console.log(data);
+                    //console.log(data);
                     if(data==0){
-                        //toastr.warning("No se encontraron registro","ADVERTENCIA!",{timeOut:6000});
                         swal({
                             title: "¡Serologia!",
                             text: "No se encontraron registro.",
@@ -155,7 +153,6 @@ var EnviarSerologiasForm = function(){
                             location.reload();
                         }, 1300);
                     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        //toastr.error("Error 500 Internal Server", 'EROOR!',{timeOut:6000});
                         swal("Error 500!", "Interno del Servidor!", "error");
                     });
                 });
@@ -187,7 +184,7 @@ var EnviarSerologiasForm = function(){
                     $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
                     $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
                 },
-                submitHandler: function (form) {
+                submitHandler: function () {
                     serologiaPasive();
                 }
             });
@@ -258,7 +255,7 @@ var EnviarSerologiasForm = function(){
                         fechaenvio : $('#fechaEnvio').val(),
                         hora : $('#horaEnvio').val(),
                         nenvios : parseInt($('#nEnvios').val()),
-                        idserologia  :parseInt(id)
+                        idserologia :parseInt(id)
                     };
                     if (muestraForEnvio != null) {
                         var direccion = misUrl.envioUrl; // "/estudios-ics/Serologia/enviarMuestra";
@@ -284,7 +281,6 @@ var EnviarSerologiasForm = function(){
                                     }, 1300);
 
                                 } else {
-                                    //toastr.error("Error al Guardar",{timeOut:6000});
                                     swal({
                                         title: "¡Serologia!",
                                         text: "Error la Guardar",
@@ -293,7 +289,6 @@ var EnviarSerologiasForm = function(){
                                     });
                                 }
                             },error: function(response) {
-                                //toastr.error("Error 500 Internal Server",{timeOut:6000});
                                 swal({
                                     title: "¡ERROR 500!",
                                     text: "Interno del Servidor",

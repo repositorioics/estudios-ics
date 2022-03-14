@@ -46,7 +46,7 @@ var processPbmc = function(){
 
             function searchParticipante(){
                 $.getJSON(parametros.searchPartUrl, { parametro : $('#parametro').val(), ajax : 'true' }, function(data) {
-                    console.log(data);
+                    //console.log(data);
                     if(data.mensaje!=null){
                         swal({
                          title: 'Advertencia!',

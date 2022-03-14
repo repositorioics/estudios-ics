@@ -295,7 +295,7 @@
 
                               <div class="form-row">
                                   <div class="col-md-2">
-                                      <label for="idParticipante"><spring:message code="code" /></label>
+                                      <label for="idParticipante"><spring:message code="code" /> <spring:message code="participant" /></label>
                                       <input type="text" class="form-control" id="idParticipante" name="idParticipante" value="${caso.idparticipante}" readonly/>
                                   </div>
 
@@ -311,16 +311,16 @@
                                   <div class="col-sm-6">
                                       <div class="card">
                                           <div class="card-body">
-                                              <h5 class="card-title"><spring:message code="Casa"/></h5>
+                                              <h5 class="card-title"><spring:message code="ecasa"/></h5>
                                               <div class="form-row">
                                                   <div class="form-group col-md-6">
                                                       <input type="text" class="form-control" name="casaCHF" id="casaCHF" value="${caso.codigo_casa_Familia}" readonly>
-                                                      <small class="text-muted"> <spring:message code="chf.house" /></small>
+                                                      <small class="text-muted"> <spring:message code="ecasa.Family" /></small>
                                                   </div>
 
                                                   <div class="form-group col-md-6">
                                                       <input type="text" class="form-control" name="casaPDCS" id="casaPDCS" value="${caso.codigo_casa_PDCS}" readonly>
-                                                      <small class="text-muted"> <spring:message code="PDCS"/></small>
+                                                      <small class="text-muted"> <spring:message code="ecasa.Pediatric"/></small>
                                                   </div>
                                               </div>
                                           </div>
@@ -330,22 +330,22 @@
                                   <div class="col-sm-6">
                                       <div class="card">
                                           <div class="card-body">
-                                              <h5 class="card-title">Edad del Participante.</h5>
+                                              <h5 class="card-title"><spring:message code="age" /> <spring:message code="participant" />.</h5>
                                               <div class="form-row">
 
                                                   <div class="form-group col-md-4">
                                                       <input type="text" class="form-control" id="edad_year" name="edad_year" value="${caso.edad_year}"  disabled="disabled">
-                                                      <small class="text-muted"> Años.</small>
+                                                      <small class="text-muted"> <spring:message code="lbl.years" />.</small>
                                                   </div>
 
                                                   <div class="form-group col-md-4">
                                                       <input type="text" class="form-control" id="edad_meses" name="edad_meses" value="${caso.edad_meses}"  disabled="disabled">
-                                                      <small  class="text-muted"> Meses.</small>
+                                                      <small  class="text-muted"> <spring:message code="lbl.mounths" />.</small>
                                                   </div>
 
                                                   <div class="form-group col-md-4">
                                                       <input type="text" class="form-control" id="edad_dias" name="edad_dias" value="${caso.edad_dias}"  disabled="disabled">
-                                                      <small class="text-muted"> Dias.</small>
+                                                      <small class="text-muted"> <spring:message code="lbl.days" />.</small>
                                                   </div>
                                               </div>
                                           </div>
@@ -355,10 +355,10 @@
                               <div class="col-md-6">
                               <div class="card">
                                   <div class="card-body">
-                                      <h5 class="card-title">Volumen Sugerido</h5>
+                                      <h5 class="card-title"><spring:message code="volumen" /> <spring:message code="Sugerido"/></h5>
                                       <div class="form-row">
                                           <div class="form-group col-md-12">
-                                              <label for="volumen_serologia_desde_bd"><spring:message code="Volumen Sugerido"/></label>
+                                              <label for="volumen_serologia_desde_bd"><spring:message code="volumen" /> <spring:message code="Sugerido"/></label>
                                               <input type="text" class="form-control text-center borderRojo" id="volumen_serologia_desde_bd" name="volumen_serologia_desde_bd"
                                                      data-toggle="tooltip" data-placement="top" title="Volumen sugerido"  value="${caso.volumen_serologia_desde_bd}" readonly="readonly" >
                                               <small id="fechaHelpInline2" class="text-muted"> &nbsp;</small>
@@ -370,7 +370,7 @@
                               <div class="col-md-6">
                                   <div class="card">
                                       <div class="card-body">
-                                          <h5 class="card-title">Muestra</h5>
+                                          <h5 class="card-title"><spring:message code="sample" /></h5>
                                             <div class="form-row">
                                               <div class="form-group col-md-6">
                                                   <label for="fecha"><spring:message code="lbl.date" /></label>
@@ -394,7 +394,7 @@
                                       <label for="observacion"><spring:message code="observacion" /></label>
                                       <textarea class="form-control" id="observacion" name="observacion" rows="2">${caso.observacion}</textarea>
                                       <div class="invalid-feedback">
-                                          <spring:message code="Este campo es obligatorio." />
+                                          <spring:message code="observacion" /> <spring:message code="lbl.required" />
                                       </div>
                                   </div>
                               </div>

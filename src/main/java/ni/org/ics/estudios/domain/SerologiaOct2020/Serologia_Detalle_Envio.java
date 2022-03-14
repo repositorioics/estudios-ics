@@ -20,7 +20,6 @@ public class Serologia_Detalle_Envio implements Serializable {
     private SerologiaEnvio serologiaEnvio;
     private Serologia serologia;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "DETALLE_ID", nullable = false)

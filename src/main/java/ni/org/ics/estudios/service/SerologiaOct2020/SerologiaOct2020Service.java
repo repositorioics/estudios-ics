@@ -208,7 +208,6 @@ public class SerologiaOct2020Service {
         }
     }
 
-
     public List<SerologiaEnvio> getAllSeroEnviadas()throws Exception{
         try{
             Session session = sessionFactory.getCurrentSession();

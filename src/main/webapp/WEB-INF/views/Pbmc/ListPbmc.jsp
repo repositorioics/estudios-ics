@@ -181,9 +181,6 @@
                         </tbody>
                     </table>
                 </div>
-
-            <!-- Mail list-->
-
             </div>
             </div>
             <div class="tab-pane fade" id="sent" aria-labelledby="sent-tab" role="tabpanel">

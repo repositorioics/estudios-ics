@@ -122,7 +122,7 @@
                             </form>
                             <hr/>
                             <form class="form-horizontal" name="save-pbmc-form" id="save-pbmc-form" autocomplete="off">
-                                <div class="form-row"   >
+                                <div class="form-row" hidden="hidden">
                                     <div class="col-md-4">
                                         <label for="codigo_pbmc">codigo_pbmc</label>
                                         <input id="codigo_pbmc" name="codigo_pbmc" type="text" class="form-control" value="${caso.codigo_pbmc}"/>

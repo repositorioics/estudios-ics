@@ -293,8 +293,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- /.conainer-fluid -->
         </div>
     </div>
 </div>
