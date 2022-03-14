@@ -7,12 +7,30 @@
 <html>
 <head>
     <jsp:include page="../../fragments/headTag.jsp" />
-    <spring:url value="/resources/js/libs/data-tables/TableTools/css/dataTables.tableTools.css" var="dtttcss" />
-    <link rel="stylesheet" href="${dtttcss}"/>
+
+    <!-- datatables-->
+    <spring:url value="/resources/css/dataTables.bootstrap4.min.css" var="bdat4" />
+    <link rel="stylesheet" href="${bdat4}" type="text/css"/>
+
+    <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
+    <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
+
+    <spring:url value="/resources/css/dtresponsive/buttons/buttons.bootstrap.min.css" var="dtbuttons" />
+    <link rel="stylesheet" href="${dtbuttons}" type="text/css"/>
+    <!-- fin datables-->
     <!-- DATE PICKER -->
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
+    <spring:url value="/resources/css/sweetalert2/sweetalert2.min.css" var="sweetalert2" />
+    <link rel="stylesheet" href="${sweetalert2}">
+
+    <style>
+        a.buttons-collection {
+            margin-left: 1em;
+        }
+
+    </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../../fragments/bodyHeader.jsp" />
@@ -56,12 +74,8 @@
                             <br>
                         </div>
                     </div>
-                    <div class="row table-toolbar">
-                        <div class="col-md-12">
-                        </div>
-                    </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-bordered" id="lista_casos">
+                        <table class="table table-hover table-bordered" id="lista_casos" style="width:100%">
                             <thead>
                             <tr>
                                 <th width="10%"><spring:message code="house" /></th>
@@ -74,6 +88,7 @@
                                 <th width="14%"><spring:message code="actions" /></th>
                             </tr>
                             </thead>
+                            <tbody>
                             <c:forEach items="${casos}" var="parti">
                                 <spring:url value="/super/casacaso/editCase/{codigo}"
                                             var="editUrl">
@@ -119,6 +134,7 @@
                                     </td>
                                 </tr>
                             </c:forEach>
+                            </tbody>
                         </table>
                     </div>
                     <br>
@@ -210,16 +226,37 @@
     </c:otherwise>
 </c:choose>
 <!-- GenesisUI main scripts -->
-<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
-<script src="${dataTableJs}" type="text/javascript"></script>
+<!-- datatables-->
+<spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
+<script type="text/javascript" src="${TablesResponsive}"></script>
 
-<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
-<script type="text/javascript" src="${dataTablesBS}"></script>
+<spring:url value="/resources/js/libs/dataTableResponsive/dataTables.bootstrap4.min.js" var="Tablesb4" />
+<script type="text/javascript" src="${Tablesb4}"></script>
 
-<spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
-<script type="text/javascript" src="${dataTablesTT}"></script>
+<spring:url value="/resources/js/libs/dataTableResponsive/dataTables.responsive.min.js" var="TablesResponsive" />
+<script type="text/javascript" src="${TablesResponsive}"></script>
 
-<spring:url value="/resources/js/libs/data-tables/TableTools/swf/copy_csv_xls_pdf.swf" var="dataTablesTTSWF" />
+<spring:url value="/resources/js/libs/dataTableResponsive/responsive.bootstrap4.min.js" var="TResponsiveb4" />
+<script type="text/javascript" src="${TResponsiveb4}"></script>
+
+<spring:url value="/resources/js/libs/dataTableResponsive/buttons/dataTables.buttons.min.js" var="dTButtons" />
+<script type="text/javascript" src="${dTButtons}"></script>
+
+<spring:url value="/resources/js/libs/dataTableResponsive/buttons/buttons.bootstrap.min.js" var="buttonsBT" />
+<script type="text/javascript" src="${buttonsBT}"></script>
+
+<spring:url value="/resources/js/libs/jszip/jszip.min.js" var="buttonsJszip" />
+<script type="text/javascript" src="${buttonsJszip}"></script>
+
+<spring:url value="/resources/js/libs/pdfmake/pdfmake.min.js" var="buttonsPdf" />
+<script type="text/javascript" src="${buttonsPdf}"></script>
+
+<spring:url value="/resources/js/libs/pdfmake/vfs_fonts.js" var="pdfFonts" />
+<script type="text/javascript" src="${pdfFonts}"></script>
+
+<spring:url value="/resources/js/libs/dataTableResponsive/buttons/buttons.html5.min.js" var="buttonsHtml5" />
+<script type="text/javascript" src="${buttonsHtml5}"></script>
+<!-- fin datatables-->
 
 <spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
 <script type="text/javascript" src="${selectJs}"></script>
@@ -248,7 +285,8 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
-
+<spring:url value="/resources/js/libs/sweetalert2/sweetalert2.min.js" var="sweetalert2" />
+<script src="${sweetalert2}"></script>
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
@@ -257,47 +295,32 @@
         handleDatePickers("${lenguaje}");
         $('#etiquetas').select2();
         var table = $('#lista_casos').DataTable({
+            dom:    "<'row'<'col-sm-4'B><'col-sm-4'f><'col-sm-4'l>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                {
+                    extend:'excel',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    }
+                },
+                {
+                    extend:'pdf',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    }
+                }
+            ],
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
-            }
+            },
+            responsive: true,
+            searching: true,
+            paging: true
         });
 
-        var tt = new $.fn.dataTable.TableTools( table, {
-            "sSwfPath": "${dataTablesTTSWF}",
-            "sRowSelect": "single",
-            "aButtons": [
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "${exportar}",
-                    "aButtons": [
-                        {
-                            "sExtends": "csv",
-                            "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4, 5 ]
-                        },
-                        {
-                            "sExtends": "pdf",
-                            "oSelectorOpts": { filter: 'applied', order: 'current' },
-                            "mColumns": [ 0, 1, 2, 3, 4, 5 ],
-                            "sPdfOrientation": "landscape"
-                        }
-                    ]
-                }//,
-                //{"sExtends": "select_all", "sButtonText": "todos"},
-                //{"sExtends": "select_none", "sButtonText": "ninguno"}
-
-            ]
-        } );
-
-        $( tt.fnContainer() ).insertBefore('div.table-toolbar');
-
-        if ("${deshabilitado}"){
-            toastr.error("${recordDisabledLabel}", "${casa}" );
-        }
-        if ("${cerrado}"){
-            toastr.success("${successLabel}", "${casa}" );
-        }
-        $(".desact").click(function(){
+        $("#lista_casos tbody").on("click", ".desact",function(){
             $('#accionUrl').val($(this).data('id').substr(0,$(this).data('id').lastIndexOf("-")));
             $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
             $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("-")+1))+'?</h3>');
@@ -308,7 +331,24 @@
             $('#basic').modal('show');
         });
 
-        $(".salida").click(function(){
+        if ("${deshabilitado}"){
+            Swal.fire({
+                icon: 'success',
+                title: "${casa}",
+                text: "${recordDisabledLabel}",
+                timer: 4000
+            })
+        }
+        if ("${cerrado}"){
+            Swal.fire({
+                icon: 'success',
+                title: "${casa}",
+                text: "${successLabel}",
+                timer: 4000
+            })
+        }
+
+        $("#lista_casos tbody").on("click", ".salida",function(){
             $('#accionUrl').val($(this).data('id'));
             $('#titulo').html('<h2 class="modal-title">'+"${cerrarCaso}"+'</h2>');
             $('#cuerpo').html('');
@@ -405,10 +445,20 @@
                         var registro = JSON.parse(data);
                         console.log(registro);
                         if (registro.codigoCaso === undefined) {
-                            toastr.error(data,"Error",{timeOut: 0});
+                            Swal.fire({
+                                icon: 'error',
+                                title: "${casa}",
+                                text: data,
+                                timer: 4000
+                            })
                         }
                         else {
-                            toastr.success("${successLabel}");
+                            Swal.fire({
+                                icon: 'success',
+                                title: "${casa}",
+                                text: "${successLabel}",
+                                timer: 4000
+                            });
                             window.setTimeout(function () {
                                 window.location.reload();
                             }, 1500);
@@ -416,7 +466,12 @@
                     }
                     , 'text' )
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        toastr.error( "error:" + errorThrown,{timeOut: 0});
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: errorThrown,
+                            timer: 4000
+                        })
                     });
         }
 
@@ -424,89 +479,6 @@
 
     function ejecutarAccion() {
         window.location.href = $('#accionUrl').val();
-    }
-
-    function printSelected() {
-        var oTT = TableTools.fnGetInstance('lista_casos');
-        var aSelectedTrs = oTT.fnGetSelected();
-        var len = aSelectedTrs.length;
-        if (len > 0) {
-            var casas = [];
-            for (var i = 0; i < len; i++) {
-                var codigoCasa = aSelectedTrs[i].cells[0].innerHTML;
-                var fechaSalida = aSelectedTrs[i].cells[4].innerHTML;
-                if (fechaSalida.length>0){
-                    $('#basic').modal('toggle');
-                    toastr.warning("${casoInactivo}");
-                }
-                else {
-                    if (i + 1 < len) {
-                        casas += codigoCasa + ",";
-                    } else {
-                        casas += codigoCasa;
-                    }
-                }
-            }
-            //codesLab = reemplazar(codesLab, ".", "*");
-            //console.log(casas);
-            if(casas.length>0) {
-                getCodesLab(casas);
-            }
-
-        } else {
-            $('#basic').modal('toggle');
-            toastr.warning("${seleccionarCaso}");
-        }
-    }
-
-    function getCodesLab(casas)
-    {
-        var strValores = '';
-        var valores = $('#etiquetas').val();
-        for (var i = 0; i < valores.length; i++) {
-            if (i == 0)
-                strValores = valores[i];
-            else
-                strValores = strValores + ',' + valores[i];
-        }
-        $.getJSON( "${getCodesUrl}"
-                , {casas : casas,
-                    etiquetas : strValores}
-                , function( data )
-                {
-                    var total = data.TOTAL;
-                    var codigosLab="";
-                    for(var indice =0;indice<total;indice++){
-                        if (indice < total-1) {
-                            codigosLab += data["CODIGO"+indice] + ",";
-                        } else {
-                            codigosLab += data["CODIGO"+indice];
-                        }
-                    }
-                    //console.log(codigosLab);
-                    imprimir(codigosLab);
-                }
-        ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                    toastr.error( "error:" + errorThrown,{timeOut: 0});
-                });
-    }
-
-    function imprimir(strBarCodes){
-        $.getJSON("http://localhost:13001/print", {
-            barcodes: strBarCodes,
-            copias: 1,
-            ajax:'false'
-        }, function (data) {
-            console.log(data);
-            $('#basic').modal('toggle');
-            toastr.success("etiquetas impresas");
-        }).fail(function (jqXHR) {
-            console.log(jqXHR);
-            $('#basic').modal('toggle');
-            if (jqXHR.status!=200 && jqXHR.status!=0) {
-                toastr.error("error al imprimir etiquetas","Error",{timeOut: 0});
-            }
-        });
     }
 
 </script>

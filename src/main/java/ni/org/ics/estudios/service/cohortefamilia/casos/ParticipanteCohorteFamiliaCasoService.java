@@ -143,4 +143,16 @@ public class ParticipanteCohorteFamiliaCasoService {
         session.saveOrUpdate(participante);
     }
 
+    /***
+     * Obtiene un participante de monitoreo por el codigod del participante
+     * @param codigo Código de participante
+     * @return ParticipanteCohorteFamiliaCaso
+     */
+    public ParticipanteCohorteFamiliaCaso getParticipanteCohorteFamiliaCasosByCodigoPart(Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from ParticipanteCohorteFamiliaCaso p where p.pasive = '0' and p.codigoCaso.inactiva = '0' and p.participante.participante.codigo  = :codigo");
+        query.setParameter("codigo", codigo);
+        return (ParticipanteCohorteFamiliaCaso)query.uniqueResult();
+    }
+
 }

@@ -18,6 +18,21 @@
     <link href="${uiCss}" rel="stylesheet" type="text/css"/>
 
     <style>
+    .alertas-casos {
+        background-color: #ff5454;
+        display: inline-block;
+        padding: 0.25em 0.4em;
+        font-size: 75%;
+        font-weight: bold;
+        color: #fff;
+        text-align: left;
+    }
+
+    .nav-tabs .nav-link.active{
+        font-size: 1.1rem;
+        background-color: #f3f3f3 !important;
+        border-color: #ddd #ddd #f3f3f3 !important;
+    }
 
        input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
        input[type="text"]{color: #000000; font-family: Roboto
@@ -311,8 +326,8 @@
    <!-- <spring:url value="/resources/css/animate.css" var="anime" />
     <link rel="stylesheet" href="${anime}" type="text/css"/> -->
 
-    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
-    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+    <spring:url value="/resources/css/sweetalert2/sweetalert2.min.css" var="sweetalert2" />
+    <link rel="stylesheet" href="${sweetalert2}">
 
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -375,8 +390,12 @@
                                         <div class="card-header tab-card-header">
                                             <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link" id="one-tab" data-toggle="tab" href="#one" role="tab" aria-controls="One" aria-selected="true">
+                                                    <a class="nav-link active" id="one-tab" data-toggle="tab" href="#one" role="tab" aria-controls="One" aria-selected="true">
                                                         <i class="fa fa-users" aria-hidden="true"></i> Datos del Participante</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="four-tab" data-toggle="tab" href="#four" role="tab" aria-controls="One" aria-selected="true">
+                                                        <i class="fa fa-users" aria-hidden="true"></i> Verificación MA</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="two-tab" data-toggle="tab" href="#two" role="tab" aria-controls="Two" aria-selected="false">
@@ -391,7 +410,6 @@
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active p-3 animate__headShake" id="one" role="tabpanel" aria-labelledby="one-tab">
                                                 <!-- 1er tabs -->
-                                                <!-- Fin 1er tabs-->
                                                 <div class="container">
                                                     <div class="main-body">
                                                         <div class="row gutters-sm">
@@ -431,21 +449,21 @@
                                                                                             <td class="text-left">PaxGene</td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-white" style="background-color: #00dd00; font-size: 15px" id="paxgene2"></span></td>
                                                                                         </tr>
-                                                                                            <!--
+
                                                                                         <tr>
 
                                                                                             <td><button id="btnCodeLineal" class="btn btn-primary float-left" data-toggle="tooltip" data-placement="top" title="Imprimir Lineal">
-                                                                                                <i class="fa fa-barcode" aria-hidden="true"></i>
+                                                                                                <i class="fa fa-barcode"></i>
                                                                                             </button>
                                                                                             </td>
 
                                                                                             <td>
                                                                                                 <button id="btnCodeBidi" class="btn btn-warning float-right" data-toggle="tooltip" data-placement="bottom" title="Imprimir QRCode">
-                                                                                                    <i class="fa fa-print"></i>
+                                                                                                    <i class="fa fa-qrcode"></i>
                                                                                                 </button>
                                                                                             </td>
 
-                                                                                        </tr>-->
+                                                                                        </tr>
                                                                                     </table>
 
                                                                                 </div>
@@ -457,9 +475,39 @@
                                                                 </div>
                                                                 <div class="card card1 mb-3">
                                                                    <div class="card-body">
+                                                                       <h4><span id="alertas" class="alertas-casos"></span></h4>
                                                                        <h5 class="d-flex align-items-center mb-3"><i class="material-icons text-warning mr-2"> <strong>Procesos Pendientes </strong></i> <span id="contador" class="badge badge-primary badge-pill"></span></h5>
 
                                                                        <ul id="myUL" class="list-group mb-3">
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted">Pendiente</small>
+                                                                                   <h6 class="my-0">BHC</h6>
+                                                                               </div>
+                                                                               <h2><span id="bhc-pendiente" class="badge badge-primary badge-pill text-white"></span> </h2>
+                                                                           </li>
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted">Pendiente</small>
+                                                                                   <h6 class="my-0">Serología</h6>
+                                                                               </div>
+                                                                               <h2><span id="serologia-pendiente" class="badge badge-primary badge-pill text-white"></span> </h2>
+                                                                           </li>
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted"> Realizar Encuesta </small>
+                                                                                   <h6 class="my-0"> Casa Cohorte</h6>
+                                                                               </div>
+                                                                               <h2><span id="enc_casa_cohorte" class="badge badge-primary badge-pill text-dark"></span> </h2>
+                                                                           </li>
+
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted">Realizar Encuesta</small>
+                                                                                   <h6 class="my-0"> Casa Familia</h6>
+                                                                               </div>
+                                                                               <h2> <span id="enc_casa_Fam" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                           </li>
                                                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                                                <div>
                                                                                    <small class="text-muted">Realizar encuesta</small>
@@ -473,6 +521,13 @@
                                                                                    <h6 class="my-0">Lactancia Materna</h6>
                                                                                </div>
                                                                                <h2><span id="lact" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                           </li>
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted">Realizar encuesta</small>
+                                                                                   <h6 class="my-0">Cuestionario COVID19</h6>
+                                                                               </div>
+                                                                               <h2><span id="cuest_covid" class="badge badge-primary badge-pill text-dark"></span></h2>
                                                                            </li>
                                                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                                                <div>
@@ -497,37 +552,19 @@
                                                                                </div>
                                                                                <h2><span id="cons_Den" class="badge badge-primary badge-pill text-dark"></span> </h2>
                                                                            </li>
-
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted">Realizar </small>
+                                                                                   <h6 class="my-0">Consentimiento Chf</h6>
+                                                                               </div>
+                                                                               <h2> <span id="cons_chf" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                           </li>
                                                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                                                <div>
                                                                                    <small class="text-muted">Tiene</small>
                                                                                    <h6 class="my-0">Vacunas</h6>
                                                                                </div>
                                                                                <h2><span id="vacuna" class="badge badge-primary badge-pill text-white"></span> </h2>
-                                                                           </li>
-
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted"> Realizar Encuesta </small>
-                                                                                   <h6 class="my-0"> Casa Cohorte</h6>
-                                                                               </div>
-                                                                               <h2><span id="enc_casa_cohorte" class="badge badge-primary badge-pill text-dark"></span> </h2>
-                                                                           </li>
-
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar Encuesta</small>
-                                                                                   <h6 class="my-0"> Casa Familia</h6>
-                                                                               </div>
-                                                                               <h2> <span id="enc_casa_Fam" class="badge badge-primary badge-pill text-dark"></span></h2>
-                                                                           </li>
-
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar Encuesta</small>
-                                                                                   <h6 class="my-0">Casa Seroprevalencia</h6>
-                                                                               </div>
-                                                                               <h2> <span id="enc_casa_sa" class="badge badge-primary badge-pill text-dark"></span></h2>
                                                                            </li>
                                                                        </ul>
                                                                    </div>
@@ -660,6 +697,169 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <!-- Fin 1er tabs-->
+                                            </div>
+                                            <div class="tab-pane fade p-3 animate__headShake" id="four" role="tabpanel" aria-labelledby="four-tab">
+                                                <!-- 1er tabs -->
+                                                <!-- Fin 1er tabs-->
+                                                                    <form name="form_by_nombre" action="#" id="form_verification">
+
+                                                                        <div class="row">
+                                                                            <div class="col-lg-1 col-md-1 col-sm-12">
+                                                                            </div>
+                                                                            <div class="col-lg-10 col-md-10 col-sm-12">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                                        <h4 class="text-capitalize"><spring:message code="Datos Generales" /></h4>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="codigoVeri" class="form-control-label"><spring:message code="lbl.code" /></label>
+                                                                                            <input type="text" class="form-control" id="codigoVeri" name="codigoVeri" value="" readonly />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-8 col-md-8 col-sm-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="nombreVeri" class="form-control-label"><spring:message code="lbl.name" /></label>
+                                                                                            <input type="text" class="form-control" id="nombreVeri" name="nombreVeri" value="" readonly />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="conQuien" class="form-control-label"><spring:message code="Con quién acude:" />
+                                                                                                <span class="required text-danger"> * </span>
+                                                                                            </label>
+                                                                                            <input type="text" class="form-control" id="conQuien" name="conQuien" value=""/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-4 col-md-5 col-sm-6 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label><spring:message code="family.relationship" /> <span class="required text-danger"> * </span></label>
+                                                                                            <select name="relacionFam" id="relacionFam" class="form-control" required>
+                                                                                                <option selected value=""><spring:message code="select" />...</option>
+                                                                                                <c:forEach items="${relFam}" var="rel">
+                                                                                                    <option value="${rel.catKey}">${rel.spanish}</option>
+                                                                                                </c:forEach>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-6 col-md-7 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="otraRelacionFam" class="form-control-label"><spring:message code="Otra relación familiar:" />
+                                                                                                <span class="required text-danger"> * </span>
+                                                                                            </label>
+                                                                                            <input type="text" class="form-control" id="otraRelacionFam" name="otraRelacionFam" disabled value=""/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-2 col-md-5 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label><spring:message code="lbl.assent" /> <span class="required text-danger"> * </span></label>
+                                                                                            <select name="asentimiento" id="asentimiento" class="form-control" required>
+                                                                                                <option selected value=""><spring:message code="select" />...</option>
+                                                                                                <c:forEach items="${SiNoNA}" var="s">
+                                                                                                    <option value="${s.catKey}">${s.catKey} - <spring:message code="${s.spanish}" /></option>
+                                                                                                </c:forEach>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <br>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                                        <h4 class="text-capitalize"><spring:message code="Cambios de Domicilio" /></h4>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="direccion">Nueva Dirección:</label>
+                                                                                            <input type="text" class="form-control focusNext" id="direccion" name="direccion" placeholder="Ingrese la Dirección" tabindex="6"/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="barrioVeri">Barrio:</label>
+                                                                                            <select  class="form-control" name="barrioVeri" id="barrioVeri">
+                                                                                                <option selected value=""><spring:message code="select" />...</option>
+                                                                                                <c:forEach items="${barrios}" var="barrio">
+                                                                                                    <option value="${barrio.codigo}">${barrio.nombre}</option>
+                                                                                                </c:forEach>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                                        <h4 class="text-capitalize"><spring:message code="Contactado" /></h4>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-8 col-md-12 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label>Como fue contactado para asisitir a Muestreo Anual:</label>
+                                                                                            <span class="required text-danger"> * </span>
+                                                                                            <select  class="form-control" name="contactado" id="contactado" required="required" multiple="multiple">
+                                                                                                <c:forEach items="${contactado}" var="s">
+                                                                                                    <option value="${s.catKey}">${s.catKey} - <spring:message code="${s.spanish}" /></option>
+                                                                                                </c:forEach>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="otraFormaContacto" class="form-control-label"><spring:message code="Otra forma de ser contactado:" />
+                                                                                                <span class="required text-danger"> * </span>
+                                                                                            </label>
+                                                                                            <input type="text" class="form-control" id="otraFormaContacto" name="otraFormaContacto" disabled value=""/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                                        <h4 class="text-capitalize"><spring:message code="observacion" /></h4>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="observacion"><spring:message code="observacion" /></label>
+                                                                                            <textarea class="form-control"  id="observacion" name="observacion" placeholder="<spring:message code="observacion" />" rows="3"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-4 col-md-4 col-sm-2"></div>
+                                                                                    <div class="col-lg-2 col-md-2 col-sm-4">
+                                                                                        <div class="form-group">
+                                                                                            <button class="btn btn-success  btn-ladda btn-block btn-lg"
+                                                                                                    type="submit" id="btnSave">
+                                                                                                <i class="fa fa-save" aria-hidden="true"></i> <spring:message code="save" />
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-2 col-md-2 col-sm-4">
+                                                                                        <div class="form-group">
+                                                                                            <button class="btn btn-warning  btn-ladda btn-block btn-lg"
+                                                                                                    type="button" id="btnCancelar">
+                                                                                                <i class="fa fa-ban" aria-hidden="true"></i>
+                                                                                                <spring:message code="cancel" />
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-4 col-md-4 col-sm-2"></div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="col-lg-1 col-md-1 col-sm-12">
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="two" role="tabpanel" aria-labelledby="two-tab">
                                                 <hr>
@@ -852,6 +1052,10 @@
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
+
+<spring:url value="/resources/js/libs/select2.min.js" var="selectJs" />
+<script type="text/javascript" src="${selectJs}"></script>
+
 <spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
 <script src="${validateJs}" type="text/javascript"></script>
 <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
@@ -879,12 +1083,13 @@
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 
-<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
-<script type="text/javascript" src="${sw}"></script>
+<spring:url value="/resources/js/libs/sweetalert2/sweetalert2.min.js" var="sweetalert2" />
+<script src="${sweetalert2}"></script>
 
 <spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
 <script src="${uiJs}" type="text/javascript"></script>
 
+<spring:url value="/Registro/guardar-verificacion" var="saveVeriUrl"/>
 
 <script type="text/javascript">
         $(function () {
@@ -912,6 +1117,12 @@
                 });
             }
         });
+
+        $("#relacionFam").select2();
+        $("#asentimiento").select2();
+        $("#barrioVeri").select2();
+        $("#contactado").select2();
+
         $('#tblVerRetiro tfoot th').each( function () {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
@@ -953,7 +1164,7 @@
                 var id = $('#parametro').val();
                 searchParticipante(id);
             }
-        })
+        });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
                 console.log(data);
@@ -976,10 +1187,31 @@
                         $("#mes").val(fecha[1]);
                         $("#dias").val(fecha[2]);
                         $("#idParticipante").text(data.codigo_participante);
+                    $("#codigoVeri").val(data.codigo_participante);
+
                         $("#idCasa").text(data.codigoCasa);
                         $("#CodigoCasaFamilia").text(data.CodigoCasaFamilia);
                         $("#manzana").text(data.manzana);
                         $("#nombreComplete").text(data.nombreCompletoParticipante);
+                    $("#nombreVeri").val(data.nombreCompletoParticipante);
+                    if (fecha[0] >= 6 && fecha[0] < 18 ) {
+                        $('#asentimiento').val(''); // Select the option with a value of '3'
+                        $('#asentimiento').trigger('change'); // Notify any JS components that the value changed
+                        $("#asentimiento").prop("disabled", false);
+                    } else {
+                        $('#asentimiento').val('3'); // Select the option with a value of '3'
+                        $('#asentimiento').trigger('change'); // Notify any JS components that the value changed
+                        $("#asentimiento").prop("disabled", true);
+                    }
+
+                    if (fecha[0] >= 18 ) {
+                        $("#conQuien").val(data.nombreCompletoParticipante);
+                        $('#relacionFam').val('8').trigger('change');
+                    } else {
+                        $("#conQuien").val();
+                        $('#relacionFam').val('').trigger('change');
+                    }
+
                         $("#sexo").text(data.sexo);
                         $("#fnac").text(data.fechaNac);
                         $("#edad").text(datestring);
@@ -1067,11 +1299,36 @@
                             $("#enc_casa_Fam").text(data.encCHF).removeClass('badge-danger');
                         }
 
-                        if(data.encCasaSa =='Si'){
-                            $("#enc_casa_sa").text(data.encCasaSa).addClass('badge badge-danger badge-pill text-dark');
+                        if(data.consChf =='Si'){
+                            $("#cons_chf").text(data.consChf).addClass('badge badge-danger badge-pill text-dark');
                         }else{
-                            $("#enc_casa_sa").text(data.encCasaSa).removeClass('badge-danger');
+                            $("#cons_chf").text(data.consChf).removeClass('badge-danger');
                         }
+
+                    if(data.cuestCovid !='No'){
+                        $("#cuest_covid").text("Si").addClass('badge badge-danger badge-pill text-dark');
+                    }else{
+                        $("#cuest_covid").text(data.cuestCovid).removeClass('badge-danger');
+                    }
+
+                    if(data.tieneBhc =='No'){
+                        $("#bhc-pendiente").text("Si").addClass('badge badge-danger badge-pill text-dark');
+                    }else{
+                        $("#bhc-pendiente").text("No").removeClass('badge-danger');
+                    }
+
+                    if(data.tieneSerologia =='No'){
+                        $("#serologia-pendiente").text("Si").addClass('badge badge-danger badge-pill text-dark');
+                    }else{
+                        $("#serologia-pendiente").text("No").removeClass('badge-danger');
+                    }
+
+                    if(data.alertas != '' ){
+                        $("#alertas").html(data.alertas).show();
+                    }else{
+                        $("#alertas").hide();
+                    }
+
                         recorrerUL();
                         table.clear().draw( false );
                         var len = data.retiroList.length;
@@ -1142,63 +1399,64 @@
 
         $("#btnCodeLineal").on("click", function(){
             var id = $("#idParticipante").text();
-            swal({
-                title: "Imprimir!",
-                text: "cuantas copias del código: "+100,
-                type: "input",
+            Swal.fire({
+                title: "Imprimir Lineal!",
+                input: 'text',
+                inputLabel: "Número de copias: "+id,
+                inputValue: 1,
+                confirmButtonText: 'Imprimir',
+                cancelButtonText: 'Cancelar',
                 showCancelButton: true,
-                closeOnConfirm: false,
-                inputPlaceholder: "copias"
-            }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError("debes ingresar algo!");
-                    return false
-                }
-                if( isNaN( inputValue ) ){
-                    return false;
-                }
-                if(id != ""){
-                    imprimir(id,inputValue)
-                    swal("Stickers!", "impresos: " + inputValue, "success");
-                }
-            });
+                inputValidator: (value) => {
+                if (!value)
+            {
+                return 'Favor ingresar la cantidad de copias!'
+            } else {
+                imprimir(id,value,'2');
+            }
+        }
+    })
         });
         $("#btnCodeBidi").on("click", function(){
             var id = $("#idParticipante").text();
-            swal({
-                title: "Imprimir!",
-                text: "Número de copias: "+100,
-                type: "input",
+            Swal.fire({
+                title: "Imprimir QR!",
+                input: 'text',
+                inputLabel: "Número de copias: "+id,
+                inputValue: 3,
+                confirmButtonText: 'Imprimir',
+                cancelButtonText: 'Cancelar',
                 showCancelButton: true,
-                closeOnConfirm: false,
-                inputPlaceholder: "copias"
-            }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError("debes ingresar algo!");
-                    return false
+                inputValidator: (value) => {
+                    if (!value)
+                    {
+                        return 'Favor ingresar la cantidad de copias!'
+                    }else {
+                        imprimir(id,value,'3');
+                    }
                 }
-                if( isNaN( inputValue ) ){
-                    return false;
-                }
-                if(id != ""){
-                    imprimir(id,inputValue)
-                    swal("Stickers!", "impresos: " + inputValue, "success");
-                }
-            });
+            })
         });
 
-        function imprimir(strBarCodes,inputValue){
-            var copia = parseInt(inputValue);
-            $.getJSON("http://localhost:13001/print", { barcodes: strBarCodes, copias: copia, ajax:'false' }, function (data) {
+        function imprimir(strBarCodes,inputValue,tipo){
+            $.getJSON("http://localhost:13001/print", { barcodes: strBarCodes+'*'+inputValue+'*'+tipo, ajax:'false' }, function (data) {
                 //console.log(data);
-                toastr.success("etiquetas impresas");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Stickers!',
+                    text: "impresos: " + inputValue,
+                    timer: 2000
+                })
             }).fail(function (jqXHR) {
                 //console.log(jqXHR);
                 if (jqXHR.status!=200 && jqXHR.status!=0) {
-                    toastr.error("error al imprimir etiquetas","Error",{timeOut: 0});
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al imprimir etiquetas!',
+                        timer: 2000
+                    })
                 }
+
             });
         }
 
@@ -1405,6 +1663,151 @@
             }
         });
 
+        /***VERIFICAION****/
+        $("#form_verification").validate({
+            errorElement: 'span', //default input error message container
+            focusInvalid: false,
+            ignore: [],
+            rules:{
+                codigoVeri: {required: true},
+                conQuien: {required: true},
+                relacionFam: {required: true},
+                asentimiento: {required: true},
+                contactado: {required: true},
+                otraRelacionFam: {
+                    required: function () {
+                        var otro = "6";
+                        return  $('#relacionFam').val() === otro;
+                    }
+                },
+                otraFormaContacto: {
+                    required: function () {
+                        var otro = "998";
+                        var relFam = $('#contactado').val();
+                        return  $.inArray(otro, relFam) !== -1
+                    }
+                }
+            },
+            //errorElement: 'em',
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( 'form-control-feedback' );
+                if ( element.prop( 'type' ) === 'checkbox' ) {
+                    error.insertAfter( element.parent( 'label' ) );
+                }if ( element.prop( 'type' ) === 'select-one' ) {
+                    error.insertAfter( element );
+                } else {
+                    error.insertAfter( element ); //cuando no es input-group
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+            },
+            submitHandler: function (form) {
+                guardarVerificacion();
+            }
+        });
+
+        $("#relacionFam").on("change", function(){
+            var valor = $(this).val();
+            console.log(valor);
+            if(valor == "6"){
+                $("#otraRelacionFam").val('').prop("disabled", false).focus();
+            } else {
+                $("#otraRelacionFam").val('').prop("disabled", true);
+            }
+        });
+
+        $("#contactado").on("change", function(){
+            var valor = $(this).val();
+            console.log(valor);
+            if ($.inArray('998', valor) !== -1) {
+                $("#otraFormaContacto").val('').prop("disabled", false);
+                $("#otraFormaContacto").focus();
+            } else {
+                $("#otraFormaContacto").val('').prop("disabled", true);
+            }
+        });
+
+        function guardarVerificacion() {
+            var verificacion = {};
+            verificacion['codigoParticipante'] = $("#codigoVeri").val();
+            verificacion['conQuienAcude'] = $("#conQuien").val();
+            verificacion['relFamAcude'] = $("#relacionFam").val();
+            verificacion['otraRelFamAcude'] = $("#otraRelacionFam").val();
+            verificacion['asentimiento'] = $("#asentimiento").val();
+            verificacion['nuevaDireccion'] = $("#direccion").val();
+            verificacion['codigoBarrio'] = $("#barrioVeri").val();
+            verificacion['otraFormaContacto'] = $("#otraFormaContacto").val();
+            verificacion['observacion'] = $("#observacion").val();
+            var valores = $('#contactado').val();
+            var strValores = '';
+            for (var i = 0; i < valores.length; i++) {
+                if (i == 0)
+                    strValores = +valores[i];
+                else
+                    strValores = strValores + ',' + valores[i];
+            }
+            verificacion['contacto'] = strValores;
+            $.ajax(
+                    {
+                        url: "${saveVeriUrl}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify(verificacion),
+                        contentType: 'application/json',
+                        mimeType: 'application/json',
+                        async: false,
+                        success: function (data) {
+                            if (data.error != undefined && data.error.length > 0) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.error,
+                                    timer: 4000
+                                })
+                            } else {
+                                limpiarCtrlsVerificacion();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: data.mensaje,
+                                    timer: 2000
+                                })
+                            }
+                            //desbloquearUI();
+                        },
+                        error: function (jqXHR) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: jqXHR,
+                                timer: 4000
+                            })
+                        }
+                    });
+        }
+
+        $("#btnCancelar").on("click", function(){
+            limpiarCtrlsVerificacion();
+        });
+
+        function limpiarCtrlsVerificacion() {
+            //$("#codigoVeri").val('');
+            //$("#nombreVeri").val('');
+            $("#conQuien").val('');
+            $('#asentimiento').val('').trigger('change');
+            $('#relacionFam').val('').trigger('change');
+            $('#contactado').val('').trigger('change');
+            $("#otraRelacionFam").val('');
+            $("#direccion").val('');
+            $("#barrioVeri").val('');
+            $("#otraFormaContacto").val('');
+            $("#observacion").val('');
+        }
+        /******FIN VERIFICACION******/
 
         function LimpiarCtrls(){
             $("#idParticipante").text("");
@@ -1428,14 +1831,14 @@
             $("#cons_Den").text("");
             $("#vacuna").text("");
             $("#enc_casa_cohorte").text("");
-            $("#enc_casa_sa").text("");
+            $("#cons_chf").text("");
             $("#jefe").text("");
             $("#padre").text("");
             $("#madre").text("");
             $("#tutor").text("");
             $("#relfam").text("");
             $("#nombreComplete").text("");
-
+            //verificacion
 
         }
 

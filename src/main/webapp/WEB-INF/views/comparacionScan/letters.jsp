@@ -7,13 +7,21 @@
 <head>
 <jsp:include page="../fragments/headTag.jsp" />
 
-    <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
-    <link href="${boot}" rel="stylesheet" type="text/css"/>
+    <!-- datatables-->
+    <spring:url value="/resources/css/dataTables.bootstrap4.min.css" var="bdat4" />
+    <link rel="stylesheet" href="${bdat4}" type="text/css"/>
 
+    <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
+    <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
+
+    <spring:url value="/resources/css/dtresponsive/buttons/buttons.bootstrap.min.css" var="dtbuttons" />
+    <link rel="stylesheet" href="${dtbuttons}" type="text/css"/>
+    <!-- fin datables-->
     <style>
-        div.dt-buttons {
-            float: right !important;
+        a.buttons-collection {
+            margin-left: 1em;
         }
+
     </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -36,21 +44,21 @@
                             <i class="fa fa-database"></i>&nbsp;<strong><spring:message code="lbl.letters.comparison.1" /></strong>
                         </h3>
                     </div>
-                    <div class="row no-gutters row-bordered">
-                        <div class="col-md-12 col-lg-12 col-xl-12">
                             <div class="card-body">
-                                <table id="lista_cartas1"  class="table table-striped table-bordered datatable" width="100%">
+                                <div class="card-block">
+                                <div class="table-responsive">
+                                <table id="lista_cartas1" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                         <tr>
                                             <th><spring:message code="code"/></th>
                                             <th><spring:message code="fecha"/></th>
                                             <th><spring:message code="usuario"/></th>
                                             <th><spring:message code="edad_actual"/></th>
-                                            <th><spring:message code="contacto_futuro"/></th>
+                                            <th><spring:message code="cont_futuro"/></th>
                                             <th><spring:message code="asent"/></th>
-                                            <th><spring:message code="parteA_App"/></th>
-                                            <th><spring:message code="parteB_App"/></th>
-                                            <th><spring:message code="parteC_App"/></th>
+                                            <th><spring:message code="A_App"/></th>
+                                            <th><spring:message code="B_App"/></th>
+                                            <th><spring:message code="C_App"/></th>
                                             <th><spring:message code="quien_firma_App"/></th>
                                             <th><spring:message code="rel_fam_App"/></th>
                                             <th><spring:message code="version"/></th>
@@ -60,9 +68,9 @@
 
                                         </tbody>
                                     </table>
+                                    </div>
+                                 </div>
                             </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="card">
@@ -74,6 +82,8 @@
                     <div class="row no-gutters row-bordered">
                         <div class="col-md-12 col-lg-12 col-xl-12">
                             <div class="card-body">
+                                <div class="card-block">
+                                <div class="table-responsive">
                                     <table id="lista_cartas2"  class="table table-striped table-bordered dt-responsive" width="100%">
                                         <thead>
                                         <tr>
@@ -102,6 +112,8 @@
 
                                         </tbody>
                                     </table>
+                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -116,7 +128,9 @@
                     <div class="row no-gutters row-bordered">
                         <div class="col-md-12 col-lg-12 col-xl-12">
                             <div class="card-body">
-                                <table id="lista_cartas3"  class="table table-striped table-bordered dt-responsive" width="100%">
+                                <div class="card-block">
+                                <div class="table-responsive">
+                                    <table id="lista_cartas3"  class="table table-striped table-bordered dt-responsive" width="100%">
                                         <thead>
                                         <tr>
                                             <th><spring:message code="code"/></th>
@@ -133,6 +147,8 @@
 
                                         </tbody>
                                     </table>
+                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -143,8 +159,6 @@
     </div>
     <jsp:include page="../fragments/bodyFooter.jsp" />
     <jsp:include page="../fragments/corePlugins.jsp" />
-    <spring:url value="/resources/js/app.js" var="App" />
-    <script src="${App}" type="text/javascript"></script>
     <c:choose>
         <c:when test="${cookie.eIcsLang.value == null}">
             <c:set var="lenguaje" value="es"/>
@@ -154,16 +168,37 @@
         </c:otherwise>
     </c:choose>
     <!-- GenesisUI main scripts -->
-    <spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
-    <script src="${dataTableJs}" type="text/javascript"></script>
+    <!-- datatables-->
+    <spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
+    <script type="text/javascript" src="${TablesResponsive}"></script>
 
-    <spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
-    <script type="text/javascript" src="${dataTablesBS}"></script>
+    <spring:url value="/resources/js/libs/dataTableResponsive/dataTables.bootstrap4.min.js" var="Tablesb4" />
+    <script type="text/javascript" src="${Tablesb4}"></script>
 
-    <spring:url value="/resources/js/libs/data-tables/TableTools/js/dataTables.tableTools.js" var="dataTablesTT" />
-    <script type="text/javascript" src="${dataTablesTT}"></script>
+    <spring:url value="/resources/js/libs/dataTableResponsive/dataTables.responsive.min.js" var="TablesResponsive" />
+    <script type="text/javascript" src="${TablesResponsive}"></script>
 
-    <spring:url value="/resources/js/libs/data-tables/TableTools/swf/copy_csv_xls_pdf.swf" var="dataTablesTTSWF" />
+    <spring:url value="/resources/js/libs/dataTableResponsive/responsive.bootstrap4.min.js" var="TResponsiveb4" />
+    <script type="text/javascript" src="${TResponsiveb4}"></script>
+
+    <spring:url value="/resources/js/libs/dataTableResponsive/buttons/dataTables.buttons.min.js" var="dTButtons" />
+    <script type="text/javascript" src="${dTButtons}"></script>
+
+    <spring:url value="/resources/js/libs/dataTableResponsive/buttons/buttons.bootstrap.min.js" var="buttonsBT" />
+    <script type="text/javascript" src="${buttonsBT}"></script>
+
+    <spring:url value="/resources/js/libs/jszip/jszip.min.js" var="buttonsJszip" />
+    <script type="text/javascript" src="${buttonsJszip}"></script>
+
+    <spring:url value="/resources/js/libs/pdfmake/pdfmake.min.js" var="buttonsPdf" />
+    <script type="text/javascript" src="${buttonsPdf}"></script>
+
+    <spring:url value="/resources/js/libs/pdfmake/vfs_fonts.js" var="pdfFonts" />
+    <script type="text/javascript" src="${pdfFonts}"></script>
+
+    <spring:url value="/resources/js/libs/dataTableResponsive/buttons/buttons.html5.min.js" var="buttonsHtml5" />
+    <script type="text/javascript" src="${buttonsHtml5}"></script>
+    <!-- fin datatables-->
 
     <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
         <spring:param name="language" value="${lenguaje}" />
@@ -183,37 +218,26 @@
     <spring:url value="/resources/js/libs/jquery-validation/additional-methods.js" var="validateAMJs" />
     <script src="${validateAMJs}" type="text/javascript"></script>
 
+    <spring:url value="/resources/js/app.js" var="App" />
+    <script src="${App}" type="text/javascript"></script>
+
     <spring:url value="/cartas/comparacion/getCartasSinDigitar" var="sCartas1Url"/>
     <spring:url value="/cartas/comparacion/getCartasPartes" var="sCartas2Url"/>
     <spring:url value="/cartas/comparacion/getCartasRelFam" var="sCartas3Url"/>
 
 <script>
     jQuery(document).ready(function() {
-        $('#lista_cartas1').DataTable({
-            dom: "<'row'<'col-sm-12 col-md-12'B>>" +
-                    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+        var table = $('#lista_cartas1').DataTable({
+            dom:    "<'row'<'col-sm-4'B><'col-sm-4'f><'col-sm-4'l>>" +
                     "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [ 'excel'],
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             },
-            "bFilter": true,
-            "bInfo": true,
-            "bPaginate": true,
-            "bDestroy": true,
-            "responsive": true,
-            "pageLength": 10,
-            "bLengthChange": true,
-            "buttons": [
-                {
-                    extend: 'excel'
-                },
-                {
-                    extend: 'pdfHtml5',
-                    orientation: 'portrait',
-                    pageSize: 'LETTER'
-                }
-            ],
+            responsive: true,
+            searching: true,
+            paging: true,
             "ajax":{
                 url: "${sCartas1Url}", // Change this URL to where your json data comes from
                 type: "GET",
@@ -235,12 +259,10 @@
             ]
         });
 
-
         $('#lista_cartas2').DataTable({
-            dom: "<'row'<'col-sm-12 col-md-12'B>>" +
-                    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+            dom:    "<'row'<'col-sm-4'B><'col-sm-4'f><'col-sm-4'l>>" +
                     "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             },
@@ -254,11 +276,6 @@
             "buttons": [
                 {
                     extend: 'excel'
-                },
-                {
-                    extend: 'pdfHtml5',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL'
                 }
             ],
             "ajax":{
@@ -290,10 +307,9 @@
         });
 
         $('#lista_cartas3').DataTable({
-            dom: "<'row'<'col-sm-12 col-md-12'B>>" +
-                    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+            dom:    "<'row'<'col-sm-4'B><'col-sm-4'f><'col-sm-4'l>>" +
                     "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             "oLanguage": {
                 "sUrl": "${dataTablesLang}"
             },
@@ -307,11 +323,6 @@
             "buttons": [
                 {
                     extend: 'excel'
-                },
-                {
-                    extend: 'pdfHtml5',
-                    orientation: 'portrait',
-                    pageSize: 'LETTER'
                 }
             ],
             "ajax":{
@@ -330,7 +341,9 @@
                 { data: 'relacionFamiliarS', defaultContent: ""}
             ]
         });
+
     });
+
 
     if ($('html').attr('dir') === 'rtl') {
         $('.tooltip-demo [data-placement=right]').attr('data-placement', 'left').addClass('rtled');

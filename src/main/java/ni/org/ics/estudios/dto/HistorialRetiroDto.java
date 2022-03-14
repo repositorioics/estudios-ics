@@ -1,11 +1,6 @@
 package ni.org.ics.estudios.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +39,11 @@ public class HistorialRetiroDto implements Serializable {
     private String consCovid;
     private String consDeng;
     private String consFlu;
+    private String consChf;
+    private String cuestCovid;
+    private String tieneBhc;
+    private String tieneSerologia;
+    private String alertas;
     private List<RetiroDto> retiroList;
 
     public HistorialRetiroDto() {
@@ -295,5 +295,45 @@ public class HistorialRetiroDto implements Serializable {
 
     public void setRetiroList(List<RetiroDto> retiroList) {
         this.retiroList = retiroList;
+    }
+
+    public String getConsChf() {
+        return consChf;
+    }
+
+    public void setConsChf(String consChf) {
+        this.consChf = consChf;
+    }
+
+    public String getCuestCovid() {
+        return cuestCovid;
+    }
+
+    public String getTieneBhc() {
+        return tieneBhc;
+    }
+
+    public void setTieneBhc(String tieneBhc) {
+        this.tieneBhc = tieneBhc;
+    }
+
+    public String getTieneSerologia() {
+        return tieneSerologia;
+    }
+
+    public void setTieneSerologia(String tieneSerologia) {
+        this.tieneSerologia = tieneSerologia;
+    }
+
+    public void setCuestCovid(String cuestCovid) {
+        this.cuestCovid = cuestCovid;
+    }
+
+    public String getAlertas() {
+        return alertas;
+    }
+
+    public void setAlertas(String alertas) {
+        this.alertas = alertas;
     }
 }

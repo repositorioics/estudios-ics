@@ -1331,3 +1331,10 @@ INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUE
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_ANIO_VAC', NULL, NULL, NULL, '1', 0, '0', 'Catalogo años vacuna covid19');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_ANIO_VAC_01', '2021', 'COVID_CAT_ANIO_VAC', NULL, '0', 1, '0', '2021');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('COVID_CAT_ANIO_VAC_02', '2022', 'COVID_CAT_ANIO_VAC', NULL, '0', 2, '0', '2022');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo ubicacion dentro o fuera de casa CHF');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_01', '1', 'CAT_CONTACTADO_MA', NULL, '0', 1, '0', 'Invitación consulta médica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_02', '2', 'CAT_CONTACTADO_MA', NULL, '0', 2, '0', 'Invitación terreno');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_03', '3', 'CAT_CONTACTADO_MA', NULL, '0', 3, '0', 'Llamadas telefónicas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_998', '998', 'CAT_CONTACTADO_MA', NULL, '0', 4, '0', 'Otros');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_04', '4', 'CAT_CONTACTADO_MA', NULL, '0', 5, '0', 'SMS');

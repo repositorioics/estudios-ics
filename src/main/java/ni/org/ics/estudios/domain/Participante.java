@@ -282,7 +282,6 @@ public class Participante extends BaseMetaData implements Auditable {
                     }
                 } else {
                     anios = anioActual - anioInicio - 1;
-                    System.out.println(anios);
                     if (diaInicio > diaActual) {
                         meses = mesActual - mesInicio - 1 + 12;
                         dias = b - (diaInicio - diaActual);

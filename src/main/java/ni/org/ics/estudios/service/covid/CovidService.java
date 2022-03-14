@@ -406,4 +406,11 @@ public class CovidService {
         Query query = session.createQuery("select op from OtrosPositivosCovid op inner join op.candidatoTransmisionCovid19 v where op.pasive = '0' and v.pasive = '0' and v.consentimiento = 'PENDIENTE'");
         return query.list();
     }
+
+    public CandidatoTransmisionCovid19 getCandidatoTransmisionCovid19ByCasaChf(String casaCHF){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from CandidatoTransmisionCovid19 v where v.pasive = '0' and v.consentimiento = 'PENDIENTE' and v.casaCHF = :casaCHF");
+        query.setParameter("casaCHF", casaCHF);
+        return (CandidatoTransmisionCovid19)query.uniqueResult();
+    }
 }

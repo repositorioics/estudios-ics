@@ -230,13 +230,13 @@
 
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                                <h4 class="text-capitalize"><spring:message code="datos_personales" /> <spring:message code="lbl.participant" /></h4>
+                                                <h4 class="text-capitalize"><spring:message code="title.report.file" /></h4>
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <div class="row">
                                                     <div class="col-lg-2 col-md-12 col-sm-12">
                                                         <div class="form-group">
-                                                            <label for="codigo" class="form-control-label"><spring:message code="code" /></label>
+                                                            <label for="codigo" class="form-control-label"><spring:message code="lbl.code" /></label>
                                                             <input type="text" class="form-control" id="codigo" name="codigo"
                                                                    value=""
                                                                    readonly />
@@ -244,7 +244,7 @@
                                                     </div>
                                                     <div class="col-lg-4 col-md-12 col-sm-12">
                                                         <div class="form-group">
-                                                            <label for="nombre" class="form-control-label"><spring:message code="nombre" /></label>
+                                                            <label for="nombre" class="form-control-label"><spring:message code="lbl.name" /></label>
                                                             <input type="text" class="form-control" id="nombre" name="nombre"
                                                                    value=""
                                                                    readonly />
@@ -252,21 +252,21 @@
                                                     </div>
                                                     <div class="col-lg-2 col-md-4 col-sm-6">
                                                         <div class="form-group">
-                                                            <label for="fechanac"><spring:message code="fecha_nacimiento" /></label>
+                                                            <label for="fechanac"><spring:message code="lbl.birthdate" /></label>
                                                             <input type="text" class="form-control" id="fechanac" name="fechanac"
                                                                    value="" readonly />
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-4 col-sm-6">
                                                         <div class="form-group">
-                                                            <label for="edadPart"><spring:message code="edad" /></label>
+                                                            <label for="edadPart"><spring:message code="lbl.age" /></label>
                                                             <input type="text" class="form-control" id="edadPart" name="edadPart" value="" readonly />
                                                         </div>
 
                                                     </div>
                                                     <div class="col-lg-1 col-md-4 col-sm-6">
                                                         <div class="form-group">
-                                                            <label for="sexoPart"><spring:message code="sexo" /></label>
+                                                            <label for="sexoPart"><spring:message code="lbl.gender" /></label>
                                                             <input type="text" class="form-control" id="sexoPart" required name="sexoPart" value="" readonly />
                                                         </div>
 
@@ -274,6 +274,30 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    <div class="row no-gutters row-bordered">
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <h4 class="text-capitalize"><spring:message code="lbl.registered.letters.app" /></h4> <spring:message code="lbl.select.letter.correct" />
+                                        </div>
+                                        <div class="col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-body">
+                                                <table id="lista_cartas"  class="table table-striped table-bordered dt-responsive" width="100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th><spring:message code="fecha"/></th>
+                                                        <th><spring:message code="estudio"/></th>
+                                                        <th><spring:message code="version"/></th>
+                                                        <th><spring:message code="tutor"/></th>
+                                                        <th><spring:message code="relacion_familiar"/></th>
+                                                        <th><spring:message code="corregir"/></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
@@ -426,6 +450,15 @@
         <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
     </c:otherwise>
 </c:choose>
+<spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
+<script src="${dataTableJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/libs/data-tables/DT_bootstrap.js" var="dataTablesBS" />
+<script type="text/javascript" src="${dataTablesBS}"></script>
+
+<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+
 <spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
 <script src="${validateJs}" type="text/javascript"></script>
 
@@ -478,6 +511,52 @@
         ProcesarTutor.init(parametros);
 
         $("#parametro").focus();
+
+        $('#lista_cartas').DataTable({
+            dom: "<'row'<'col-sm-12 col-md-12'B>>" +
+                    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            "oLanguage": {
+                "sUrl": "${dataTablesLang}"
+            },
+            "bFilter": true,
+            "bInfo": true,
+            "bPaginate": true,
+            "bDestroy": true,
+            "responsive": true,
+            "pageLength": 10,
+            "bLengthChange": true,
+            "buttons": [
+                {
+                    extend: 'excel'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'portrait',
+                    pageSize: 'LETTER'
+                }
+            ]
+            /*"ajax":{
+                url: "${sCartas1Url}", // Change this URL to where your json data comes from
+                type: "GET",
+                dataSrc: ""
+            },
+            "columns": [
+                { data: 'codigoParticipante', defaultContent: ""},
+                { data: 'fechaFirma', defaultContent: ""},
+                { data: 'usuarioRegistro', defaultContent: ""},
+                { data: 'edadActual', defaultContent: ""},
+                { data: 'contactoFuturo', defaultContent: ""},
+                { data: 'asentimiento', defaultContent: ""},
+                { data: 'parteA', defaultContent: ""},
+                { data: 'parteB', defaultContent: ""},
+                { data: 'parteC', defaultContent: ""},
+                { data: 'quienFirma', defaultContent: ""},
+                { data: 'relacionFamiliar', defaultContent: ""},
+                { data: 'versionCarta', defaultContent: ""}
+            ]*/
+        });
     });
 </script>
 </body>

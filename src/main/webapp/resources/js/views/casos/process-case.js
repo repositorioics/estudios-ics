@@ -57,14 +57,18 @@ var ProcessCase = function () {
                     }},
                     fif: {required: function () {
                         return $('#fis').val().length <= 0;
-                    }}
-
+                    }},
+                    positivoPor: {
+                        required: true
+                    }
                 },
                 errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
                     error.addClass( 'form-control-feedback' );
                     if ( element.prop( 'type' ) === 'checkbox' ) {
                         error.insertAfter( element.parent( 'label' ) );
+                    } if ( element.prop( 'type' ) === 'select-one' ) {
+                        error.insertAfter( element );
                     } else {
                         //error.insertAfter( element ); //cuando no es input-group
                         error.insertAfter(element.parent('.input-group'));

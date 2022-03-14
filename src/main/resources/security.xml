@@ -16,6 +16,8 @@
         <intercept-url pattern="/super/.*" access="ROLE_SUPER"/>
         <intercept-url pattern="/reportes/.*" access="ROLE_WEB,ROLE_SUPER"/>
         <intercept-url pattern="/hemo/.*" access="ROLE_WEB,ROLE_SUPER" />
+        <intercept-url pattern="/Registro/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION" />
+        <intercept-url pattern="/" access="ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM"/>
         <intercept-url pattern="/.*" access="ROLE_ADMIN"/>
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/loginfailed" />

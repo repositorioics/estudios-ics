@@ -954,7 +954,7 @@ public class ScanCartaService {
                 "\tINNER JOIN scan_catalog_version v ON spc.IDVERSION=v.IDVERSION\n" +
                 "\tINNER JOIN estudios e ON e.CODIGO=v.CODIGO_ESTUDIO\n" +
                 "WHERE spc.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin " +
-                "\tGROUP BY b.NOMBRE, v.VERSION ORDER BY b.NOMBRE");
+                "\tGROUP BY b.NOMBRE, e.NOMBRE, v.VERSION ORDER BY b.NOMBRE");
         q.setResultTransformer(new AliasToBeanResultTransformer(InformacionPorBarrioDto.class));
         q.setParameter("fechaInicio", fechaInicio);
         q.setParameter("fechaFin", fechaFin);
@@ -964,23 +964,24 @@ public class ScanCartaService {
     public List<InformacionRangoEdadDto> getInformacionRangoEdadDto(Date fechaInicio, Date fechaFin){
         Session s = sessionFactory.getCurrentSession();
         Query q = s.createSQLQuery("     SELECT e.NOMBRE AS estudio, v.VERSION as version,\n" +
-                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 0 AND 5 AND e.codigo != 3) THEN '1. Menor 6M' ELSE\n" +
-                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 6 AND 23 AND e.codigo != 3) THEN '2. De 6M y menor 2A' ELSE \n" +
-                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 24 AND 167 AND e.codigo != 3) THEN '3. De 2A y menor 14A ' ELSE \n" +
-                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) >= 168 AND e.codigo != 3) THEN '4. De 14A a Más' ELSE\n" +
-                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 24 AND 95 AND e.codigo = 3) THEN '1. De 2A y menor 8A ' ELSE \n" +
-                "\t  CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) >= 95 AND e.codigo = 3) THEN '2. De 8A y menor 18A'\n" +
-                " \t\tEND\n" +
-                " \t\tEND\n" +
+                " CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 0 AND 5 AND e.codigo != 3) THEN '1. Menor 6M' ELSE\n" +
+                " CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 6 AND 23 AND e.codigo != 3) THEN '2. De 6M y menor 2A' ELSE \n" +
+                " CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 24 AND 167 AND e.codigo != 3) THEN '3. De 2A y menor 14A ' ELSE \n" +
+                " CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) >= 168 AND e.codigo != 3) THEN '4. De 14A a Más' ELSE\n" +
+                " CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) BETWEEN 24 AND 95 AND e.codigo = 3) THEN '1. De 2A y menor 8A ' ELSE \n" +
+                " CASE WHEN (((spc.EDAD_YEAR * 12) + spc.EDAD_MESES) >= 95 AND e.codigo = 3) THEN '2. De 8A y menor 18A'\n" +
+                " END\n" +
+                " END\n" +
                 "      END\n" +
                 "      END\n" +
-                "\t\tEND\n" +
-                "\t\tEND rango, COUNT(1) as total\n" +
+                " END\n" +
+                "END rango, COUNT(1) as total\n" +
                 "     FROM scan_participante_carta spc \n" +
-                "\t\tINNER JOIN scan_catalog_version v ON spc.IDVERSION=v.IDVERSION\n" +
-                "\t\tINNER JOIN estudios e ON e.CODIGO=v.CODIGO_ESTUDIO\n" +
+                "INNER JOIN scan_catalog_version v ON spc.IDVERSION=v.IDVERSION\n" +
+                "INNER JOIN estudios e ON e.CODIGO=v.CODIGO_ESTUDIO\n" +
                 "WHERE spc.FECHA_CARTA BETWEEN :fechaInicio AND :fechaFin " +
-                "     GROUP BY e.NOMBRE asc, rango asc");
+                "GROUP BY e.NOMBRE, v.VERSION, rango \n" +
+                "ORDER BY  e.NOMBRE asc, rango asc");
         q.setResultTransformer(new AliasToBeanResultTransformer(InformacionRangoEdadDto.class));
         q.setParameter("fechaInicio", fechaInicio);
         q.setParameter("fechaFin", fechaFin);

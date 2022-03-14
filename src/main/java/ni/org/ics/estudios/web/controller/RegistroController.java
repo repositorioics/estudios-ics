@@ -1,38 +1,56 @@
 package ni.org.ics.estudios.web.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.Retiros.Retiros;
-import ni.org.ics.estudios.domain.catalogs.Estudio;
+import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
+import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
+import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
+import ni.org.ics.estudios.domain.covid19.CandidatoTransmisionCovid19;
+import ni.org.ics.estudios.domain.covid19.CasoCovid19;
+import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
+import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
+import ni.org.ics.estudios.domain.muestreoanual.DatosVerificacionMA;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.DatosParticipante;
 import ni.org.ics.estudios.dto.HistorialRetiroDto;
 import ni.org.ics.estudios.dto.ParticipantesEnCasa;
 import ni.org.ics.estudios.dto.RetiroDto;
+import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.ParticipanteService;
+import ni.org.ics.estudios.service.cohortefamilia.casos.CasaCohorteFamiliaCasoService;
+import ni.org.ics.estudios.service.cohortefamilia.casos.ParticipanteCohorteFamiliaCasoService;
+import ni.org.ics.estudios.service.covid.CovidService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
+import ni.org.ics.estudios.service.influenzauo1.ParticipanteCasoUO1Service;
+import ni.org.ics.estudios.service.muestreoanual.DatosVerificacionMAService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.service.retiro.RetiroService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
-import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ICS on 17/08/2020.
@@ -60,9 +78,28 @@ public class RegistroController {
     @Resource(name = "RetiroService")
     private RetiroService retiroservice;
 
+    @Resource(name = "participanteCohorteFamiliaCasoService")
+    private ParticipanteCohorteFamiliaCasoService participanteCohorteFamiliaCasoService;
+
+    @Resource(name = "participanteCasoUO1Service")
+    private ParticipanteCasoUO1Service participanteCasoUO1Service;
+
+    @Resource(name = "CovidService")
+    private CovidService covidService;
+
+    @Resource(name = "datosVerificacionMAService")
+    private DatosVerificacionMAService datosVerificacionMAService;
+
     @RequestMapping(value = "/BuscarInfor", method = RequestMethod.GET)
     public String BuscarInfor(Model model)throws Exception{
-
+        List<MessageResource> SiNoNA = messageResourceService.getCatalogo("SCANCARTA");
+        model.addAttribute("SiNoNA", SiNoNA);
+        List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
+        model.addAttribute("relFam", relFam);
+        List<MessageResource> contactado = messageResourceService.getCatalogo("CAT_CONTACTADO_MA");
+        model.addAttribute("contactado", contactado);
+        List<Barrio> barrios = datoshemodinamicaService.getBarrios();
+        model.addAttribute("barrios", barrios);
         return "/Registro/VerRegistro";
     }
 
@@ -123,7 +160,75 @@ public class RegistroController {
             historialDTO.setEstPart(procesos.getEstPart());
             historialDTO.setManzana(participante.getCasa().getManzana());
             historialDTO.setCodigoCasaFamilia(procesos.getCasaCHF());
+            historialDTO.setConsChf(procesos.getConsChf());
+            historialDTO.setCuestCovid(procesos.getCuestCovid());
+            historialDTO.setTieneBhc(procesos.getConmxbhc());
+            historialDTO.setTieneSerologia(procesos.getConmx());
+
             List<RetiroDto>addobj = new ArrayList<RetiroDto>();
+
+            String alerta="";
+//validar convaleciente
+            if (procesos.getConvalesciente().equalsIgnoreCase("Na")) {
+                alerta+= "* Convaleciente con menos de 14 días. No tomar muestra. COMUNICAR AL SUPERVISOR\n ";
+            } else if (procesos.getConvalesciente().equalsIgnoreCase("Si")) {
+                alerta+= "* Convaleciente 14 días o más. COMUNICAR AL SUPERVISOR\n ";
+            }
+
+            if (procesos.getPosZika().matches("Si")) {
+                alerta += "* Fue positivo a ZIKA <br> ";
+            }
+
+            if (procesos.getPosDengue() != null) {
+                alerta += "* "+procesos.getPosDengue() + "<br> ";
+            }
+
+            if (procesos.getPosCovid() != null) {
+                alerta += "* "+procesos.getPosCovid() + "<br> ";
+            }
+
+            /*se recuperan datos se seguimientos activos. Familia, Influensa, covid*/
+            if (procesos.getEstudio().contains("CH Familia")){
+
+                List<ParticipanteCohorteFamiliaCaso> participanteCohorteFamiliaCasos = participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByCasaPos(procesos.getCasaCHF());
+                if (participanteCohorteFamiliaCasos.size()>0) {
+                    MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("CHF_CAT_POSITIVO_POR", participanteCohorteFamiliaCasos.get(0).getPositivoPor());
+                    alerta += "* Casa en seguimiento de Influenza - positivo por: "+(positivoPor != null ? positivoPor.getSpanish(): "-") +
+                            " - Activación: "+DateUtil.CalcularDiferenciaDiasFechas(participanteCohorteFamiliaCasos.get(0).getCodigoCaso().getFechaInicio(), new Date()) + " Dias <br>";
+                }
+            }
+            if (procesos.getEstudio().contains("UO1") || procesos.getEstudio().contains("Influenza")){
+                ParticipanteCasoUO1 participanteCasoUO1 = participanteCasoUO1Service.getCasoActivoParticipante(procesos.getCodigo());
+                if (participanteCasoUO1 != null) {
+                    MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("UO1_CAT_POSITIVO_POR", participanteCasoUO1.getPositivoPor());
+                    alerta += "* Positivo de Influenza - Positivo por: "+(positivoPor != null ? positivoPor.getSpanish(): "-") +
+                            " - Activación: "+DateUtil.CalcularDiferenciaDiasFechas(participanteCasoUO1.getFechaIngreso(), new Date()) + " Dias <br>";
+                }
+            }
+
+            ParticipanteCasoCovid19 participanteCasoCovid19 = covidService.getParticipanteCasoCovid19Pos(procesos.getCodigo());
+            if (participanteCasoCovid19 != null) {
+                MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("COVID_CAT_POSITIVO_POR", participanteCasoCovid19.getPositivoPor());
+                alerta += "* Positivo de SARS - Positivo por: "+(positivoPor != null ? positivoPor.getSpanish(): "-") +
+                        " - Activación: "+DateUtil.CalcularDiferenciaDiasFechas(participanteCasoCovid19.getCodigoCaso().getFechaIngreso(), new Date()) + " Dias <br>";
+            } else {
+                if (procesos.getCasaCHF() != null) {
+                    CasoCovid19 casoCovid19 = covidService.getCasoCovid19ByCasaChf(procesos.getCasaCHF());
+                    if (casoCovid19 != null) {
+                        alerta += "* Casa en seguimiento de SARS" +
+                                " - Activación: "+DateUtil.CalcularDiferenciaDiasFechas(casoCovid19.getFechaIngreso(), new Date()) + " Dias <br>";
+                    } else {
+                        CandidatoTransmisionCovid19 candidatoTransmisionCovid19 = covidService.getCandidatoTransmisionCovid19ByCasaChf(procesos.getCasaCHF());
+                        if (candidatoTransmisionCovid19 != null) {
+                            alerta += "* Casa en seguimiento de SARS" +
+                                    " - consentimiento: "+ candidatoTransmisionCovid19.getConsentimiento() +" <br>";
+                        }
+                    }
+                }
+            }
+
+            historialDTO.setAlertas(alerta);
+
             // Trabajar la Lista del DTO.
             List<Retiros> listRetiroByParticipantId = retiroservice.getListadoRetiroByID(parametro);
             for(Retiros auxiliar : listRetiroByParticipantId){
@@ -275,5 +380,70 @@ public class RegistroController {
         }
     }
 
+    /*******VERIFICACION***/
+
+    @RequestMapping(value = "/guardar-verificacion", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
+    protected void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.debug("Guardando verificacion");
+        String resultado = "";
+        String error = "";
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF8"));
+            String json = br.readLine();
+
+            DatosVerificacionMA datosVerificacionMA = new DatosVerificacionMA();
+
+            //Recuperando Json enviado desde el cliente
+            JsonObject jObjectRespuestas = new Gson().fromJson(json, JsonObject.class);
+            Integer codigoParticipante = jObjectRespuestas.get("codigoParticipante").getAsInt();
+            String conQuienAcude = jObjectRespuestas.get("conQuienAcude").getAsString();
+            String relFamAcude = jObjectRespuestas.get("relFamAcude").getAsString();
+            String otraRelFamAcude = jObjectRespuestas.get("otraRelFamAcude").getAsString();
+            String asentimiento = jObjectRespuestas.get("asentimiento").getAsString();
+            String nuevaDireccion = jObjectRespuestas.get("nuevaDireccion").getAsString();
+            Integer codigoBarrio = null;
+            if (jObjectRespuestas.get("codigoBarrio").getAsString()!= null && !jObjectRespuestas.get("codigoBarrio").getAsString().isEmpty())
+                codigoBarrio =jObjectRespuestas.get("codigoBarrio").getAsInt();
+            String contacto = jObjectRespuestas.get("contacto").getAsString();
+            String otraFormaContacto = jObjectRespuestas.get("otraFormaContacto").getAsString();
+            String observacion = jObjectRespuestas.get("observacion").getAsString();
+
+            datosVerificacionMA.setCodigoParticipante(codigoParticipante);
+            datosVerificacionMA.setConQuienAcude(conQuienAcude);
+            datosVerificacionMA.setRelFamAcude(relFamAcude);
+            datosVerificacionMA.setOtraRelFamAcude(otraRelFamAcude);
+            datosVerificacionMA.setAsentimiento(asentimiento);
+            datosVerificacionMA.setNuevaDireccion(nuevaDireccion);
+            datosVerificacionMA.setCodigoBarrio(codigoBarrio);
+            datosVerificacionMA.setContacto(contacto);
+            datosVerificacionMA.setOtraFormaContacto(otraFormaContacto);
+            datosVerificacionMA.setObservacion(observacion);
+
+            datosVerificacionMA.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+            datosVerificacionMA.setRecordDate(new Date());
+            WebAuthenticationDetails wad  = (WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            String idSesion = wad.getSessionId();
+            String direccionIp = wad.getRemoteAddress();
+            datosVerificacionMA.setDeviceid(idSesion + "-"+ direccionIp);
+            datosVerificacionMA.setEstado('1');
+
+            this.datosVerificacionMAService.saveDatosVerificacionMA(datosVerificacionMA);
+            resultado = String.format("Participante %s verificado exitosamente!!", codigoParticipante);
+
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(),ex);
+            ex.printStackTrace();
+            error = "Sucedió un error al agregar verificación";
+            error=error+". \n "+ex.getMessage();
+        } finally {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("mensaje",resultado);
+            map.put("error",error);
+            String jsonResponse = new Gson().toJson(map);
+            response.getOutputStream().write(jsonResponse.getBytes());
+            response.getOutputStream().close();
+        }
+
+    }
 
 }

@@ -142,7 +142,7 @@
             </li>-->
 
 
-            <sec:authorize access="hasRole('ROLE_ADMISION')">
+            <sec:authorize access="hasAnyRole('ROLE_ROOT,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION')">
             <li class="nav-item nav-dropdown procesos">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-retweet" aria-hidden="true"></i><spring:message code="processes" /></a>
                 <ul class="nav-dropdown-items">
@@ -164,7 +164,6 @@
                         </li>
                     </ul>
                 </li>
-
                 <li class="nav-item nav-dropdown hemodinamica">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-sticky-note-o"  aria-hidden="true"></i><spring:message code="Hemodinamica" /></a>
