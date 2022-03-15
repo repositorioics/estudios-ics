@@ -10,10 +10,10 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -166,7 +166,7 @@ public class ExcelBuilder extends AbstractExcelView {
         response.setContentType("application/octec-stream");
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
         String fechaActual = dateFormat.format(new Date());
-        String fileName = "envio_muestras_CNDR_"+ fechaActual +".xls";
+        String fileName = "envio_Rojo_Adicional_CNDR_"+ fechaActual +".xls";
         response.setHeader("Content-Disposition", "attachment; filename="+ fileName);
         HSSFSheet sheet = workbook.createSheet("Hoja1");
         Font font = workbook.createFont();
