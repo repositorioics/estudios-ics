@@ -434,7 +434,7 @@ public class CovidController {
                         otros.setPositivoPor(positivoPor);
                         otros.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
                         otros.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
-                        String nameComputer = InetAddress.getLocalHost().getHostName();
+                        String nameComputer = "NicaUmich2";
                         otros.setDeviceid(nameComputer);
                         otros.setEstado('1');
                         otros.setPasive('0');

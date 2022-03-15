@@ -267,8 +267,8 @@ public class PbmcController {
         }
     }
 
-    @RequestMapping(value = "GuardarPbmc", method = RequestMethod.POST)
-    public ResponseEntity<String>GuardarSerologia(@RequestParam(value = "codigo_pbmc", required=false, defaultValue="" ) Integer codigo_pbmc
+    @RequestMapping(value = "/GuardarPbmc", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<String> GuardarSerologia(@RequestParam(value = "codigo_pbmc", required=false, defaultValue="" ) Integer codigo_pbmc
             ,@RequestParam( value = "codigo_participante" ,required=false, defaultValue=""  ) Integer codigo_participante
             ,@RequestParam( value = "volumen_pbmc"        ,required=false, defaultValue=""  ) String  volumen_pbmc
             ,@RequestParam( value = "fecha"               ,required=false, defaultValue=""  ) String  fecha
@@ -310,7 +310,7 @@ public class PbmcController {
                 int dateYear = calendar.get(Calendar.YEAR);
                 if (!this.pbmcService.yaTieneMuestraPbmcAnual(dateYear, codigo_participante)) {
                     // METADATA PBMC
-                    String nameComputer = InetAddress.getLocalHost().getHostName();
+                    String nameComputer = "NicaUmich2";
                     String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
                     pbmc.setRecordUser(nombreUsuario);
                     pbmc.setDeviceid(nameComputer);
@@ -413,6 +413,7 @@ public class PbmcController {
             Responsedto.setEdadEnMeses(Double.parseDouble(edadEnMeses));
             return JsonUtil.createJsonResponse(Responsedto);
         }catch (Exception e){
+            e.printStackTrace();
             logger.error(e.getMessage());
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
@@ -422,7 +423,7 @@ public class PbmcController {
 
 
 
-    @RequestMapping( value="closeCase", method=RequestMethod.POST)
+    @RequestMapping( value="/closeCase", method=RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="pbmc_id", required=true ) Integer pbmc_id
                                              ,@RequestParam( value="message_razon", required=true, defaultValue="" ) String message_razon )
     {
@@ -478,7 +479,7 @@ public class PbmcController {
                 return JsonUtil.createJsonResponse("No se encontraron egistros: ".concat(""+ListaPbmcYaEnviadas.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             SerologiaEnvio envio = new SerologiaEnvio();
             envio.setDeviceid(computerName);
             envio.setEstado('1');
@@ -544,7 +545,7 @@ public class PbmcController {
                 return JsonUtil.createJsonResponse("No se encontraron egistros: ".concat(""+ListPbmcConSerologia.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             SerologiaEnvio envio = new SerologiaEnvio();
             envio.setDeviceid(computerName);
             envio.setEstado('1');

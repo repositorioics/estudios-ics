@@ -251,7 +251,7 @@ public class RetiroController {
             obj.setActual(true);
             obj.setEstado('1');
             obj.setPasive('0');
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             obj.setDeviceid(computerName);
             obj.setRecordDate(new Date());
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());

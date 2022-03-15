@@ -135,7 +135,7 @@ public class ParteController {
                 v.setIdversion(idversion);
                 p.setVersion(v);
                 p.setAcepta("false");
-                String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
+                String nameComputer = "NicaUmich2".toUpperCase();
                 p.setDeviceid(nameComputer);
                 p.setEstado('0');
                 p.setPasive('1');
@@ -171,7 +171,7 @@ public class ParteController {
                     v.setIdversion(idversion);
                     p.setVersion(v);
                     p.setAcepta("false");
-                    String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
+                    String nameComputer = "NicaUmich2".toUpperCase();
                     p.setDeviceid(nameComputer);
                     p.setEstado('0');
                     p.setPasive('1');
@@ -224,7 +224,7 @@ public class ParteController {
             }
             p.setPrincipal(princi);
             p.setAcepta("false");
-            String nameComputer = InetAddress.getLocalHost().getHostName();
+            String nameComputer = "NicaUmich2";
             p.setDeviceid(nameComputer);
             p.setEstado('0');
             p.setPasive('1');

@@ -148,7 +148,7 @@ public class CatalogoVersionController {
                 v.setActivo(ac);
                 v.setFecha_version(fecha_version);
                 v.setFecha_format(monthName + ", " + yy);
-                String nameComputer = InetAddress.getLocalHost().getHostName();
+                String nameComputer = "NicaUmich2";
                 v.setDeviceid(nameComputer);
                 v.setEstado('0');
                 v.setPasive('1');
@@ -170,7 +170,7 @@ public class CatalogoVersionController {
                     v.setActivo(ac);
                     v.setFecha_version(fecha_version);
                     v.setFecha_format(monthName + ", " + yy);
-                    String nameComputer = InetAddress.getLocalHost().getHostName();
+                    String nameComputer = "NicaUmich2";
                     v.setDeviceid(nameComputer);
                     v.setEstado('0');
                     v.setPasive('1');
@@ -335,7 +335,7 @@ public class CatalogoVersionController {
                     v.setIdversion(version2);
                     p.setVersion(v);
                     p.setAcepta("false");
-                    String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
+                    String nameComputer = "NicaUmich2".toUpperCase();
                     p.setDeviceid(nameComputer);
                     p.setEstado('0');
                     p.setPasive('1');
@@ -437,7 +437,7 @@ public class CatalogoVersionController {
                                              ,@RequestParam("editando")String editando)throws Exception{
         try{
             Version v = new Version();
-            String nameComputer = InetAddress.getLocalHost().getHostName();
+            String nameComputer = "NicaUmich2";
             Extensiones ext = new Extensiones();
             if (editando.equals("true")){
                 ext.setDeviceid(nameComputer);

@@ -337,7 +337,7 @@ public class CartasController {
                 }else{}
 
                 ParticipanteCarta pc = new ParticipanteCarta();
-                String computerName = InetAddress.getLocalHost().getHostName();
+                String computerName = "NicaUmich2";
                 if (obj != null) {
                     Participante p = new Participante();
                     p.setCodigo(obj.getCodigo());
@@ -568,7 +568,7 @@ public class CartasController {
     ResponseEntity<String> UpdateAll(@RequestBody ParticipanteCartaDto obj) throws Exception {
         try {
             ParticipanteCarta pc = new ParticipanteCarta();
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             if (obj != null) {
                 pc.setIdparticipantecarta(obj.getCodigo());
                 Participante p = new Participante();
@@ -890,7 +890,7 @@ public class CartasController {
                 Extensiones extensiones = new Extensiones();
                 extensiones.setId(idExtension);
                 editObj.setExtensiones(extensiones);
-                String ComputerName = InetAddress.getLocalHost().getHostName();
+                String ComputerName = "NicaUmich2";
                 editObj.setDeviceid(ComputerName);
                 editObj.setEstado('1');
                 editObj.setPasive('0');
@@ -935,7 +935,7 @@ public class CartasController {
                     Extensiones extensiones = new Extensiones();
                     extensiones.setId(idExtension);
                     ext.setExtensiones(extensiones);
-                    String ComputerName = InetAddress.getLocalHost().getHostName();
+                    String ComputerName = "NicaUmich2";
                     ext.setDeviceid(ComputerName);
                     ext.setEstado('1');
                     ext.setPasive('0');
@@ -1167,7 +1167,7 @@ public class CartasController {
                 map.put("msj", "Revisa el Asentiemiento y Tipo de Asentimiento: ");
                 return createJsonResponse(map);
             }
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             int rec = Integer.parseInt(obj.getRecurso());
             String n1, n2, a1, a2;
             boolean asent, contact, test;
@@ -1615,7 +1615,7 @@ public class CartasController {
           ,@RequestParam(value = "person",                       defaultValue = "", required = false) Integer person
           ,@RequestParam(value = "relfam",                       defaultValue = "", required = false) Integer relfam
     ) throws Exception {
-        String computerName = InetAddress.getLocalHost().getHostName();
+        String computerName = "NicaUmich2";
         int id_participante_carta_tmp = Integer.parseInt(participantecartatmp);
         int codigo_extension = Integer.parseInt(idExtension);
 
@@ -1813,7 +1813,7 @@ public class CartasController {
     ResponseEntity<String> saveTmpsToOficial(@RequestBody List<Integer> dataArrayToSend)throws Exception{
 
         try{
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
                 int contador = 0;
             int contadorExtension = 0;
             for (Integer num : dataArrayToSend){// Verificar q todas las q suban sean extensiones q no esten pasive 1

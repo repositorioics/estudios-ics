@@ -228,7 +228,7 @@ public class ComparacionController {
     ) throws Exception {
         try {
             RecepcionSero objSerologia = new RecepcionSero();
-            String ComputerName = InetAddress.getLocalHost().getHostName();
+            String ComputerName = "NicaUmich2";
             final String uuid = UUID.randomUUID().toString().replace("-", "");
             String micodeUUID = ComputerName+"-"+uuid;
 
@@ -389,7 +389,7 @@ public class ComparacionController {
         try {
             MuestraMA o = new MuestraMA();
             MovilInfo movil = new MovilInfo();
-            String ComputerName = InetAddress.getLocalHost().getHostName();
+            String ComputerName = "NicaUmich2";
             movil.setIdInstancia(Integer.valueOf(148));
             movil.setInstancePath(ComputerName);
             String estado;

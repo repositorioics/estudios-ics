@@ -283,7 +283,7 @@ public class CovidCandidatoTransController {
                 Edit_otro.setPositivoPor(positivoPor);
                 Edit_otro.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
                 Edit_otro.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
-                String nameComputer = InetAddress.getLocalHost().getHostName();
+                String nameComputer = "NicaUmich2";
                 Edit_otro.setDeviceid(nameComputer);
                 Edit_otro.setEstado('1');
                 Edit_otro.setPasive('0');
@@ -308,7 +308,7 @@ public class CovidCandidatoTransController {
                         otros.setPositivoPor(positivoPor);
                         otros.setFis(DateUtil.StringToDate(fis, "dd/MM/yyyy"));
                         otros.setFif(DateUtil.StringToDate(fif, "dd/MM/yyyy"));
-                        String nameComputer = InetAddress.getLocalHost().getHostName();
+                        String nameComputer = "NicaUmich2";
                         otros.setDeviceid(nameComputer);
                         otros.setEstado('1');
                         otros.setPasive('0');

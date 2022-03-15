@@ -300,7 +300,7 @@ public class DomicilioController {
                 movil.setUltimoCambio(String.valueOf(new Date()));
                 movil.setStart(String.valueOf(new Date()));
                 movil.setEnd(String.valueOf(new Date()));
-                String nameComputer = InetAddress.getLocalHost().getHostName();
+                String nameComputer = "NicaUmich2";
                 movil.setDeviceid(nameComputer);
                 movil.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
                 movil.setToday(new Date());

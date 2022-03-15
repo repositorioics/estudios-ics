@@ -203,7 +203,7 @@ public class BhcController {
 //endregion
 
         //region todo: guardar bhc
-        @RequestMapping(value = "saveBhc", method = RequestMethod.POST)
+        @RequestMapping(value = "/saveBhc", method = RequestMethod.POST, produces = "application/json")
         public ResponseEntity<String>saveBhc (@RequestParam(value = "bhc_id", required=false, defaultValue="") String bhc_id
                 ,@RequestParam(value = "edadMeses",     required=false, defaultValue="") String edadMeses
                 ,@RequestParam( value="tiporequest",    required=false, defaultValue=""  ) String tiporequest
@@ -234,7 +234,7 @@ public class BhcController {
                     return JsonUtil.createJsonResponse(map);
                 }
                 Bhc bhc = new Bhc();
-                String nameComputer = InetAddress.getLocalHost().getHostName();
+                String nameComputer = "NicaUmich2";
                 if (tiporequest.equals("false")){// Guardar nuevo registro
 
                     Date date = DateUtil.StringToDate(fecha, "dd/MM/yyyy");
@@ -300,6 +300,7 @@ public class BhcController {
                 }
             }
             catch (Exception e){
+                e.printStackTrace();
                 logger.error(e.getMessage());
                 Gson gson = new Gson();
                 String json = gson.toJson(e.toString());
@@ -419,7 +420,7 @@ public class BhcController {
                 return JsonUtil.createJsonResponse("No se encontraron registros: ".concat(""+ListaBhcYaEnviadas.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             SerologiaEnvio envio = new SerologiaEnvio();
             envio.setDeviceid(computerName);
             envio.setEstado('1');
@@ -459,7 +460,7 @@ public class BhcController {
 
 
 
-    @RequestMapping( value="closeCase", method=RequestMethod.POST)
+    @RequestMapping( value="/closeCase", method=RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="bhc_id", required=true ) Integer bhc_id
             , @RequestParam( value="message_razon", required=true, defaultValue="" ) String message_razon ) {
         try{

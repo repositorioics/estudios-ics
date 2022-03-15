@@ -109,7 +109,7 @@ public class PersonalCargoController implements Serializable {
             PersonalCargoDto objDto = new PersonalCargoDto();
             Integer idPersonal = Integer.parseInt(codigoPersonal);
             Personal personalActual = this.personalCargoService.getPersonaById(idPersonal);
-            String nameComputer = InetAddress.getLocalHost().getHostName();
+            String nameComputer = "NicaUmich2";
             if (personalActual == null){//GUARDA NUEVO
                 personalActual = new Personal();
                 personalActual.setIdpersonal(idPersonal);

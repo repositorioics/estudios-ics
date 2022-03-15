@@ -172,7 +172,7 @@ public class SerologiaOct2020Controller {
     ResponseEntity<String> enviarMuestra(@RequestBody SerologiaEnviarDto muestraForEnvio)throws Exception{
         try{
             SerologiaEnvio objToSave = new SerologiaEnvio();
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             objToSave.setDeviceid(computerName);
             objToSave.setEstado('1');
             objToSave.setPasive('0');
@@ -213,7 +213,7 @@ public class SerologiaOct2020Controller {
                 return JsonUtil.createJsonResponse("Registros no encontrados: ".concat(""+ListaSerologiaYaEnviadas.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+            String computerName = "NicaUmich2";
             SerologiaEnvio envio = new SerologiaEnvio();
             envio.setDeviceid(computerName);
             envio.setEstado('1');
@@ -375,8 +375,8 @@ public class SerologiaOct2020Controller {
 //endregion
 
     //region Serologia/GuardarSerologia
-    @RequestMapping(value = "GuardarSerologia", method = RequestMethod.POST)
-    public ResponseEntity<String>GuardarSerologia (@RequestParam(value = "idSerologia", required=false, defaultValue="") String idSerologia
+    @RequestMapping(value = "/GuardarSerologia", method = RequestMethod.POST)
+    public ResponseEntity<String> GuardarSerologia (@RequestParam(value = "idSerologia", required=false, defaultValue="") String idSerologia
            ,@RequestParam( value = "idParticipante", defaultValue="" ) Integer idParticipante
            ,@RequestParam( value = "fecha"      , required=false, defaultValue=""  ) String fecha
            ,@RequestParam( value = "volumen"    , required=false, defaultValue=""  ) String volumen
@@ -406,7 +406,7 @@ public class SerologiaOct2020Controller {
                 return JsonUtil.createJsonResponse(map);
             }
             Serologia sero = new Serologia();
-            String nameComputer = InetAddress.getLocalHost().getHostName();
+            String nameComputer = "NicaUmich2";
             if (tiporequest.equals("false")){// Guardar nuevo registro
 
                 Date date = DateUtil.StringToDate(fecha, "dd/MM/yyyy");
@@ -482,6 +482,7 @@ public class SerologiaOct2020Controller {
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             logger.error(e.getMessage());
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
@@ -527,7 +528,7 @@ public class SerologiaOct2020Controller {
 //endregion
 
 
-    @RequestMapping( value="closeCase", method=RequestMethod.POST)
+    @RequestMapping( value="/closeCase", method=RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="idAccion", required=true ) String idAccion
             , @RequestParam( value="message_razon", required=true, defaultValue="" ) String message_razon ) {
         try{
