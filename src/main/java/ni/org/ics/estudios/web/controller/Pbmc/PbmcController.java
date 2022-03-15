@@ -267,7 +267,7 @@ public class PbmcController {
         }
     }
 
-    @RequestMapping(value = "GuardarPbmc", method = RequestMethod.POST)
+    @RequestMapping(value = "/GuardarPbmc", method = RequestMethod.POST)
     public ResponseEntity<String>GuardarSerologia(@RequestParam(value = "codigo_pbmc", required=false, defaultValue="" ) Integer codigo_pbmc
             ,@RequestParam( value = "codigo_participante" ,required=false, defaultValue=""  ) Integer codigo_participante
             ,@RequestParam( value = "volumen_pbmc"        ,required=false, defaultValue=""  ) String  volumen_pbmc
@@ -332,16 +332,17 @@ public class PbmcController {
                     pbmc.setCasaCHF(codigo_casa_familia);
                     pbmc.setCasaPDCS(codecasaP);
                     boolean lleva_volumen_Rojo;
-                    if (volumen_rojo_adic !="0" || volumen_rojo_adic !=""){
-                        pbmc.setPbmc_tiene_serologia('1');
-                        lleva_volumen_Rojo =true;
-                    }else {
+
+                    if (volumen_rojo_adic.equals("0")){
                         pbmc.setPbmc_tiene_serologia('0');
                         lleva_volumen_Rojo = false;
+                    }else{
+                        pbmc.setPbmc_tiene_serologia('1');
+                        lleva_volumen_Rojo =true;
                     }
 
                     boolean pbmcIsSaved = this.pbmcService.saveOrUpdatePbmc(pbmc);
-                    if (pbmcIsSaved & lleva_volumen_Rojo) {
+                    if (pbmcIsSaved) {
                             Double volumenRojoAdicional = Double.parseDouble(volumen_rojo_adic);
                             Serologia serologia = new Serologia();
                             //METADATA SEROLOGIA_ADICIONAL
@@ -422,7 +423,7 @@ public class PbmcController {
 
 
 
-    @RequestMapping( value="closeCase", method=RequestMethod.POST)
+    @RequestMapping( value="/closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="pbmc_id", required=true ) Integer pbmc_id
                                              ,@RequestParam( value="message_razon", required=true, defaultValue="" ) String message_razon )
     {

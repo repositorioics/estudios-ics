@@ -171,7 +171,7 @@ public class PbmcService {
     //todo: llenar la tabla para el envio de serologia con Pbmc
     public List<Serologia>getPbmcConSerologia(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Serologia s where s.pasive='0' and s.codigoPbmc>0 and s.descripcion='PBMC' and s.enviado='0' order by s.participante asc ");
+        Query query = session.createQuery("from Serologia s where s.pasive='0' and s.codigoPbmc>0 and s.descripcion='PBMC' and s.enviado='0' and s.volumen>0 order by s.participante asc ");
         return query.list();
     }
 
@@ -188,7 +188,7 @@ public class PbmcService {
     //todo: Obtengo las serologia de PBMC con envio en 0 para realizar el envío --> actual
     public List<Serologia> getSerologiaDePbmc( Date f1, Date f2){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Serologia s where s.fecha between :f1 and :f2 and pasive='0' and s.codigoPbmc>0 and s.enviado='0' and s.descripcion='Pbmc'");
+        Query query = session.createQuery("from Serologia s where s.fecha between :f1 and :f2 and pasive='0' and s.codigoPbmc>0 and s.enviado='0' and s.descripcion='Pbmc' and s.volumen>0");
         query.setParameter("f1", f1);
         query.setParameter("f2", f2);
         return query.list();

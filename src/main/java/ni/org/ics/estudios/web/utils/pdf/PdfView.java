@@ -1827,7 +1827,7 @@ public class PdfView extends AbstractPdfView {
                     SerologiaEnvio envio = serologia_detalle_envioList.get(0).getSerologiaEnvio();
                     String f1 = (String) model.get("fechaInicio");
                     String f2 = (String) model.get("fechaFin");
-                    String tipoTubo = "MUESTRA TUBOS SEROLOGIA CON PBMC";
+                    String tipoTubo = "MUESTRA TUBOS SEROLOGIA ADICIONAL.";
                     Date fecha_inicio = DateUtil.StringToDate(f1, "dd/MM/yyyy");
                     Calendar calendar2 = Calendar.getInstance();
                     calendar2.setTime(fecha_inicio);
