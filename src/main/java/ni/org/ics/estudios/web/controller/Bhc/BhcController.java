@@ -120,9 +120,7 @@ public class BhcController {
                     bhcDto.setFechaNacimiento(participante.getFechaNac());
                     //edad Meses
                     double d = Double.parseDouble(part1)*12;
-                    Double edadMeses = d % 12;
                     bhcDto.setEdadEnMeses(d);
-                    int edad = Integer.parseInt(part1);
                     String estudiosFinales = "";
                     if (estudios.contains("Tcovid")) {
                         String s = estudios;
@@ -132,8 +130,9 @@ public class BhcController {
                     } else {
                         estudiosFinales = procesos.getEstudio().trim();
                     }
-                    int age = edad * 12;
-                    Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(age, "BHC", estudiosFinales.trim());
+                    int edadEnMeses = participante.getEdadMeses();
+                    bhcDto.setEdadEnMeses(edadEnMeses);
+                    Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edadEnMeses, "BHC", estudiosFinales.trim());
                     if (rango!=null){
                         bhcDto.setVolumen_bhc_desde_bd("" + rango.getVolumen());
                     }else{
@@ -158,13 +157,13 @@ public class BhcController {
                     bhcDto.setEdadA(part1);
                     bhcDto.setEdadM(part2);
                     bhcDto.setEdadD(part3);
+                    int edadEnMeses = participante.getEdadMeses();
+                    bhcDto.setEdadEnMeses(edadEnMeses);
                     //edad Meses
                     double d = Double.parseDouble(part1)*12;
-                    Double edadMeses = d % 12;
                     bhcDto.setEdadEnMeses(d);
                     bhcDto.setCodigo_participante(participante.getCodigo());
-                    int edad = Integer.parseInt(part1) * 12;
-                    Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edad,"BHC","NULL");
+                    Rango_Edad_Volumen rango = this.bhcService.getRangoEdadByTipoMuestra(edadEnMeses,"BHC","NULL");
                     if (rango!=null){
                         bhcDto.setVolumen_bhc_desde_bd("" + rango.getVolumen());
                     }else{
@@ -203,7 +202,7 @@ public class BhcController {
 //endregion
 
         //region todo: guardar bhc
-        @RequestMapping(value = "saveBhc", method = RequestMethod.POST)
+        @RequestMapping(value = "/saveBhc", method = RequestMethod.POST)
         public ResponseEntity<String>saveBhc (@RequestParam(value = "bhc_id", required=false, defaultValue="") String bhc_id
                 ,@RequestParam(value = "edadMeses",     required=false, defaultValue="") String edadMeses
                 ,@RequestParam( value="tiporequest",    required=false, defaultValue=""  ) String tiporequest

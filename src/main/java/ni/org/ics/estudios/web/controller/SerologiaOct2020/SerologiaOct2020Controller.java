@@ -281,17 +281,20 @@ public class SerologiaOct2020Controller {
                     participanteSeroDto.setEdad_year(part1);
                     participanteSeroDto.setEdad_meses(part2);
                     participanteSeroDto.setEdad_dias(part3);
+                    int edadEnMeses = participante.getEdadMeses();
+                    participanteSeroDto.setEdadEnMeses(edadEnMeses);
+
                     participanteSeroDto.setCodigo_casa_PDCS(participante.getCasa().getCodigo());
                     participanteSeroDto.setCodigo_casa_Familia(procesos.getCasaCHF());
                     participanteSeroDto.setFechaNacimiento(participante.getFechaNac());
                     participanteSeroDto.setEstado("Activo");
                     participanteSeroDto.setIdparticipante(participante.getCodigo());
                     participanteSeroDto.setEs_pbmc(procesos.getPbmc());
+
+
                     //edad Meses
                     double d = Double.parseDouble(part1)*12;
-                    //Double edad = Math.floor(d/12); Double edadMeses = d % 12;
-                    participanteSeroDto.setEdadEnMeses(d);
-                    int edad = Integer.parseInt(part1) * 12;
+                    participanteSeroDto.setEdadEnMeses(edadEnMeses);
                     String estudiosFinales = "";
                     if (estudios.contains("Tcovid")) {
                         String s = estudios;
@@ -301,7 +304,7 @@ public class SerologiaOct2020Controller {
                     } else {
                         estudiosFinales = procesos.getEstudio().trim();
                     }
-                    Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(edad, "SEROLOGIA", estudiosFinales.trim());
+                    Rango_Edad_Volumen rango = this.serologiaService.getRangoEdadByTipoMuestra(edadEnMeses, "SEROLOGIA", estudiosFinales.trim());
                     if (rango!=null){
                         participanteSeroDto.setVolumen_serologia_desde_bd("" + rango.getVolumen());
                         participanteSeroDto.setVolumen_adicional_desde_bd("" + rango.getVolumen_adicional());
@@ -375,7 +378,7 @@ public class SerologiaOct2020Controller {
 //endregion
 
     //region Serologia/GuardarSerologia
-    @RequestMapping(value = "GuardarSerologia", method = RequestMethod.POST)
+    @RequestMapping(value = "/GuardarSerologia", method = RequestMethod.POST)
     public ResponseEntity<String>GuardarSerologia (@RequestParam(value = "idSerologia", required=false, defaultValue="") String idSerologia
            ,@RequestParam( value = "idParticipante", defaultValue="" ) Integer idParticipante
            ,@RequestParam( value = "fecha"      , required=false, defaultValue=""  ) String fecha
