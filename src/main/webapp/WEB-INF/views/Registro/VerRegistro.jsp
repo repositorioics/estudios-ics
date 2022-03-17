@@ -702,7 +702,7 @@
                                             <div class="tab-pane fade p-3 animate__headShake" id="four" role="tabpanel" aria-labelledby="four-tab">
                                                 <!-- 1er tabs -->
                                                 <!-- Fin 1er tabs-->
-                                                                    <form name="form_by_nombre" action="#" id="form_verification">
+                                                                    <form name="form_verification" action="#" id="form_verification">
 
                                                                         <div class="row">
                                                                             <div class="col-lg-1 col-md-1 col-sm-12">
@@ -911,14 +911,14 @@
 
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label for="nombre1">Nombre</label>
-                                                                        <input type="text" class="form-control focusNext" placeholder="Primer Nombre" name="nombre1" id="nombre1" tabindex="1">
+                                                                        <label for="nombre1">Nombre <span class="required">*</span></label>
+                                                                        <input type="text" class="form-control focusNext" placeholder="Primer Nombre" name="nombre1" id="nombre1" required tabindex="1">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label for="apellido1">Apellido</label>
-                                                                        <input type="text" class="form-control focusNext" placeholder="Primer Apellido" name="apellido1" id="apellido1" tabindex="2">
+                                                                        <label for="apellido1">Apellido <span class="required">*</span></label>
+                                                                        <input type="text" class="form-control focusNext" placeholder="Primer Apellido" name="apellido1" id="apellido1" required="" tabindex="2">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-2" style="margin-top: 10px; padding-top: 17px; padding-left: 0px; padding-bottom: 10px">
@@ -1576,7 +1576,7 @@
 
         function getParticipantes(){
             tablaParticipantes.clear().draw( false );
-            var form1 = $('#form_by_nombre');
+            //var form1 = $('#form_by_nombre');
             $.getJSON(parametros.getPartNombreApellido,{nombre1: $("#nombre1").val().trim(), apellido1: $("#apellido1").val().trim()}, function(data){
                 $.each(data, function(key, item){
                     var codigo = (data[key].codigo);

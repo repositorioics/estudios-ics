@@ -220,7 +220,7 @@
             </sec:authorize>
             -->
 
-        <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
+        <sec:authorize access="hasAnyRole('ROLE_SUPER','ROLE_DIG','ROLE_ADMIN','ROLE_CNDR')">
                 <li class="nav-item nav-dropdown Serologia">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-flask text-danger" aria-hidden="true"></i><spring:message code="Serologia" /></a>
@@ -235,9 +235,6 @@
                         </li>
                     </ul>
                 </li>
-        </sec:authorize>
-
-            <sec:authorize access="hasAnyRole('ROLE_DIG','ROLE_ADMIN')">
                 <li class="nav-item nav-dropdown Pbmc">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-flask text-pbmc" aria-hidden="true"></i><spring:message code="Pbmc" /></a>
@@ -273,7 +270,6 @@
                         </ul>
                     </li>
             </sec:authorize>
-
             <sec:authorize access="hasRole('ROLE_ROOT')">
                 <li class="nav-item nav-dropdown Domicilio">
                     <a class="nav-link nav-dropdown-toggle" href="#">

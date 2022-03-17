@@ -46,7 +46,7 @@ public class ComparacionCartasService {
                         "t1.ACEPTA_CONTACTO_FUTURO, COALESCE(t2.ASENTIMIENTO_VERBAL, 'NA') as ASENTIMIENTO_VERBAL, concat(t1.VERSION, '.0') as VERSION " +
                         "FROM cartas_consentimientos t1 inner join tamizajes t2 on t1.CODIGO_TAMIZAJE = t2.CODIGO " +
                         "inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO " +
-                        "where t1.FECHA_FIRMA >=  str_to_date('01/03/2022', '%d/%m/%Y')" +
+                        "where t1.FECHA_FIRMA >=  str_to_date('15/03/2022', '%d/%m/%Y')" + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
                         ") as a, " +
                         "(select t1.CODIGO_PARTICIPANTE, DATE_FORMAT(t1.FECHA_CARTA, '%d-%m-%Y') as FECHA_CARTA," +
                         "( select if(t3.ACEPTA, '1','0') from scan_detalle_parte t3 inner join scan_catalog_parte t2 on t3.IDPARTE = t2.IDPARTE " +
@@ -88,7 +88,7 @@ public class ComparacionCartasService {
         "inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO "+
         "inner join tamizajes t4 on t1.CODIGO_TAMIZAJE = t4.CODIGO "+
         "WHERE (t2.CODIGO_PARTICIPANTE Is Null) " +
-        "and t1.FECHA_FIRMA >=  str_to_date('01/03/2022', '%d/%m/%Y') " +
+        "and t1.FECHA_FIRMA >=  str_to_date('15/03/2022', '%d/%m/%Y') " + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
         "order by t1.CODIGO_PARTICIPANTE");
         query.setResultTransformer(Transformers.aliasToBean(ComparacionCartasDto.class));
         return query.list();

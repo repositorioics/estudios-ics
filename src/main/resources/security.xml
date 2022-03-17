@@ -17,8 +17,10 @@
         <intercept-url pattern="/reportes/.*" access="ROLE_WEB,ROLE_SUPER"/>
         <intercept-url pattern="/hemo/.*" access="ROLE_WEB,ROLE_SUPER" />
         <intercept-url pattern="/Registro/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION" />
-        <intercept-url pattern="/Serologia/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ROOT" />
-        <intercept-url pattern="/" access="ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM"/>
+        <intercept-url pattern="/Serologia/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR" />
+        <intercept-url pattern="/Pbmc/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR" />
+        <intercept-url pattern="/Bhc/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR" />
+        <intercept-url pattern="/" access="ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM,ROLE_CNDR"/>
         <intercept-url pattern="/.*" access="ROLE_ADMIN"/>
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/loginfailed" />

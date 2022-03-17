@@ -290,7 +290,16 @@ public class ComparacionController {
     public String muestra(ModelMap model) throws Exception {
         //List<UserSistema> usuarios =  this.comparasionService.getUsuarios();
         //model.addAttribute("usuarios", usuarios);
-        List<Personal_Cargo> recurso =  this.comparasionService.getRecursos();
+        List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+        String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+        HashSet<Integer> hset =
+                new HashSet<Integer>();
+        List<String> cargosId = Arrays.asList(personId);
+        for (int i = 0; i < cargosId.size(); i++) {
+            int value = Integer.parseInt( cargosId.get(i) );
+            hset.add(value);
+        }
+        List<Personal_Cargo> recurso =  this.comparasionService.getRecursos(hset);
         model.addAttribute("recurso", recurso);
         List<MessageResource> SiNo = messageResourceService.getCatalogo("CHF_CAT_SINO");
         model.addAttribute("SiNo", SiNo);
@@ -314,8 +323,16 @@ public class ComparacionController {
 
             List<MessageResource> SiNo = messageResourceService.getCatalogo("CHF_CAT_SINO");
             model.addAttribute("SiNo", SiNo);
-
-            List<Personal_Cargo> recurso =  this.comparasionService.getRecursos();
+            List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
+            String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
+            HashSet<Integer> hset =
+                    new HashSet<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                hset.add(value);
+            }
+            List<Personal_Cargo> recurso =  this.comparasionService.getRecursos(hset);
             model.addAttribute("recurso", recurso);
 
             model.addAttribute("agregando",false);
@@ -407,7 +424,7 @@ public class ComparacionController {
             movil.setDeviceid(ComputerName);
             movil.setSimserial("111");
             movil.getPhonenumber();
-            movil.setToday(DateUtil.StringToDate(fechaReg, "dd/MM/yyyy HH:mm:ss"));
+            movil.setToday(DateUtil.StringToDate(fechaMx, "dd/MM/yyyy"));
             movil.setUsername(username);
             movil.setRecurso1(Integer.parseInt(recurso1));
             movil.setRecurso2(Integer.parseInt(recurso2));
@@ -417,7 +434,7 @@ public class ComparacionController {
             MuestraId objMuestraId =new MuestraId();
             objMuestraId.setCodigo(codigoMx);
             o.setmId(objMuestraId);
-            objMuestraId.setFechaMuestra(DateUtil.StringToDate(fechaMx, "dd/MM/yyyy"));
+            objMuestraId.setFechaMuestra(DateUtil.StringToDate(fechaReg, "dd/MM/yyyy HH:mm:ss"));
             o.setTerreno(terrenoMx);
 
             if (txtpinchazo.equals("")){

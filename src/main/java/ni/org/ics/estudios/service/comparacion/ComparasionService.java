@@ -24,10 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ICS on 07/01/2021.
@@ -288,11 +285,10 @@ public class ComparasionService {
     }
 
 
-    public List<Personal_Cargo> getRecursos()throws Exception{
+    public List<Personal_Cargo> getRecursos(HashSet<Integer> ids)throws Exception{
         Session session = sessionFactory.getCurrentSession();
-        Integer cargoId[] ={2,3,4};
         Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:cargoId) order by pc.personal.nombreApellido asc ");
-        query.setParameterList("cargoId", cargoId);
+        query.setParameterList("cargoId", ids);
         return query.list();
     }
 
