@@ -1057,7 +1057,7 @@ public class PdfView extends AbstractPdfView {
             document.add(table);
         }
     }
-//endregion
+    //endregion
     //region todo: Reporte  Cartas de Consentimientos
     private void ReporteCarta(Map<String, Object> model, Document document, PdfWriter writer)throws Exception{
         ParticipanteCarta obj= (ParticipanteCarta) model.get("obj");
@@ -1134,7 +1134,6 @@ public class PdfView extends AbstractPdfView {
         table.addCell(cell);
 
         String nom2Madre = "";
-
         if (obj.getParticipante().getNombre2Madre() == null || obj.getParticipante().getNombre2Madre().equals("NA") || obj.getParticipante().getNombre2Madre().equals("")){
             nom2Madre="";
         }else{
@@ -1160,19 +1159,18 @@ public class PdfView extends AbstractPdfView {
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
 
-
         String nomb2Padre = "";
         if(obj.getParticipante().getNombre2Padre() == null || obj.getParticipante().getNombre2Padre().equals("NA") || obj.getParticipante().getNombre2Padre().equals("") ){
             nomb2Padre = "";
         }else{
-            nomb2Padre = obj.getParticipante().getApellido2Padre().toUpperCase();
+            nomb2Padre = obj.getParticipante().getNombre2Padre().toUpperCase();
         }
 
         String apePadre1  = "";
         if (obj.getParticipante().getApellido2Padre() == null || obj.getParticipante().getApellido2Padre().equals("NA") || obj.getParticipante().getApellido2Padre().equals("")){
             apePadre1="";
         }else{
-            apePadre1 =  obj.getParticipante().getNombre2Padre().toUpperCase();
+            apePadre1 =  obj.getParticipante().getApellido2Padre().toUpperCase();
         }
 
         String Padre = obj.getParticipante().getNombre1Padre()+" "+ nomb2Padre + " "+ obj.getParticipante().getApellido1Padre() +" "+ apePadre1;

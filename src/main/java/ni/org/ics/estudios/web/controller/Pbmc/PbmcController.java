@@ -168,7 +168,6 @@ public class PbmcController {
     public @ResponseBody
     ResponseEntity<String> BuscarParticipanteByID(@RequestParam(value = "parametro", required = true) Integer parametro)throws Exception {
         try {
-            String fechaNacimiento="";
             String est_part ="";
             ParticipanteProcesos procesos = null;
             PbmcDto participantePbmcDto = new PbmcDto();
@@ -182,16 +181,15 @@ public class PbmcController {
                 participantePbmcDto.setEstudios(estudios);
                 participantePbmcDto.setFechaNacimiento(participante.getFechaNac());
                 participantePbmcDto.setEs_pbmc(procesos.getPbmc());
-                String string;
-                string = participante.getEdad();
+                String string = participante.getEdad();
                 String[] parts = string.split("/");
                 String part1 = parts[0];
                 String part2 = parts[1];
                 participantePbmcDto.setEdadA(part1);
                 participantePbmcDto.setEdadM(part2);
-                double edad_meses = Double.parseDouble(part1) * 12;
-                participantePbmcDto.setEdadEnMeses(edad_meses);
-                int edad = Integer.parseInt(part1) * 12;
+                int edadEnMeses = participante.getEdadMeses();
+                participantePbmcDto.setEdadEnMeses(edadEnMeses);
+
                 String estudiosFinales = "";
                 if (estudios.contains("Tcovid")) {
                     String s = estudios;
@@ -201,7 +199,7 @@ public class PbmcController {
                 } else {
                     estudiosFinales = procesos.getEstudio().trim();
                 }
-                Rango_Edad_Volumen rango = this.pbmcService.getRangoEdadByTipoMuestra(edad, "PBMC", estudiosFinales.trim());
+                Rango_Edad_Volumen rango = this.pbmcService.getRangoEdadByTipoMuestra(edadEnMeses, "PBMC", estudiosFinales.trim());
                    if (rango!=null){
                        participantePbmcDto.setVolumen_pbmc_desde_bd("" + rango.getVolumen());
                        participantePbmcDto.setVolumen_adicional_desde_bd("" + rango.getVolumen_adicional());
