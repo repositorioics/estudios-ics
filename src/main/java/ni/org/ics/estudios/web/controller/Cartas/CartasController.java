@@ -34,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.security.cert.Extension;
 import java.text.ParseException;
 import java.util.*;
@@ -81,9 +80,7 @@ public class CartasController {
 
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
-            List<Integer> personal = new ArrayList<Integer>();
-            HashSet<Integer> hset =
-                    new HashSet<Integer>();
+            HashSet<Integer> hset = new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
@@ -337,7 +334,7 @@ public class CartasController {
                 }else{}
 
                 ParticipanteCarta pc = new ParticipanteCarta();
-                String computerName = InetAddress.getLocalHost().getHostName();
+                //String computerName = InetAddress.getLocalHost().getHostName();
                 if (obj != null) {
                     Participante p = new Participante();
                     p.setCodigo(obj.getCodigo());
@@ -388,7 +385,7 @@ public class CartasController {
                     pc.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
                     pc.setRecordDate(new Date());
                     pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                    pc.setDeviceid(computerName);
+                    pc.setDeviceid("NicaUmich2");
                     pc.setEstado('1');
                     pc.setPasive('0');
                     scanCartaService.saveOrUpdateScanCarta(pc); // Guarda/Participante-Version
@@ -401,7 +398,7 @@ public class CartasController {
                         dp.setAcepta(parte.isAcepta());
                         pr.setIdparte(parte.getIdparte());
                         dp.setParte(pr);
-                        dp.setDeviceid(computerName);
+                        dp.setDeviceid("NicaUmich2");
                         dp.setRecordDate(new Date());
                         dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         dp.setEstado('1');
@@ -568,7 +565,6 @@ public class CartasController {
     ResponseEntity<String> UpdateAll(@RequestBody ParticipanteCartaDto obj) throws Exception {
         try {
             ParticipanteCarta pc = new ParticipanteCarta();
-            String computerName = InetAddress.getLocalHost().getHostName();
             if (obj != null) {
                 pc.setIdparticipantecarta(obj.getCodigo());
                 Participante p = new Participante();
@@ -619,7 +615,7 @@ public class CartasController {
                 pc.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
                 pc.setRecordDate(new Date());
                 pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                pc.setDeviceid(computerName);
+                pc.setDeviceid("NicaUmich2");
                 pc.setEstado('1');
                 pc.setPasive('0');
                 scanCartaService.saveOrUpdateScanCarta(pc);
@@ -890,8 +886,7 @@ public class CartasController {
                 Extensiones extensiones = new Extensiones();
                 extensiones.setId(idExtension);
                 editObj.setExtensiones(extensiones);
-                String ComputerName = InetAddress.getLocalHost().getHostName();
-                editObj.setDeviceid(ComputerName);
+                editObj.setDeviceid("NicaUmich2");
                 editObj.setEstado('1');
                 editObj.setPasive('0');
                 editObj.setRecordDate(new Date());
@@ -935,8 +930,7 @@ public class CartasController {
                     Extensiones extensiones = new Extensiones();
                     extensiones.setId(idExtension);
                     ext.setExtensiones(extensiones);
-                    String ComputerName = InetAddress.getLocalHost().getHostName();
-                    ext.setDeviceid(ComputerName);
+                    ext.setDeviceid("NicaUmich2");
                     ext.setEstado('1');
                     ext.setPasive('0');
                     ext.setRecordDate(new Date());
@@ -1167,7 +1161,6 @@ public class CartasController {
                 map.put("msj", "Revisa el Asentiemiento y Tipo de Asentimiento: ");
                 return createJsonResponse(map);
             }
-            String computerName = InetAddress.getLocalHost().getHostName();
             int rec = Integer.parseInt(obj.getRecurso());
             String n1, n2, a1, a2;
             boolean asent, contact, test;
@@ -1212,7 +1205,7 @@ public class CartasController {
 
                 temporalForEdit.setEstado('1');
                 temporalForEdit.setPasive('0');
-                temporalForEdit.setDeviceid(computerName);
+                temporalForEdit.setDeviceid("NicaUmich2");
                 temporalForEdit.setRecordDate(new Date());
                 temporalForEdit.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 this.scanCartaService.guardarCartaTMP(temporalForEdit);
@@ -1226,7 +1219,7 @@ public class CartasController {
                            dp.setAcepta(parte.isAcepta());
                            pr.setIdparte(parte.getIdparte());
                            dp.setParte(pr);
-                           dp.setDeviceid(computerName);
+                           dp.setDeviceid("NicaUmich2");
                            dp.setRecordDate(new Date());
                            dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                            dp.setEstado('1');
@@ -1274,7 +1267,7 @@ public class CartasController {
                 temporal.setApellido2testigo(a2);
                 temporal.setRecordDate(new Date());
                 temporal.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                temporal.setDeviceid(computerName);
+                temporal.setDeviceid("NicaUmich2");
                 temporal.setEstado('1');
                 temporal.setPasive('0');
                 this.scanCartaService.guardarCartaTMP(temporal);
@@ -1288,14 +1281,13 @@ public class CartasController {
                         dp.setAcepta(parte.isAcepta());
                         pr.setIdparte(parte.getIdparte());
                         dp.setParte(pr);
-                        dp.setDeviceid(computerName);
+                        dp.setDeviceid("NicaUmich2");
                         dp.setRecordDate(new Date());
                         dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         dp.setEstado('1');
                         dp.setPasive('0');
                         scanCartaService.saveParteCartaTMP(dp);
                     }
-                    //System.out.println("total " + count + " registros.");
                 }
                 return JsonUtil.createJsonResponse(temporal);
             } else {
@@ -1615,7 +1607,6 @@ public class CartasController {
           ,@RequestParam(value = "person",                       defaultValue = "", required = false) Integer person
           ,@RequestParam(value = "relfam",                       defaultValue = "", required = false) Integer relfam
     ) throws Exception {
-        String computerName = InetAddress.getLocalHost().getHostName();
         int id_participante_carta_tmp = Integer.parseInt(participantecartatmp);
         int codigo_extension = Integer.parseInt(idExtension);
 
@@ -1632,7 +1623,7 @@ public class CartasController {
             ExtensionesTmp objToEdit = new ExtensionesTmp();
             int cod = Integer.parseInt(idParticipantExtensiontmp);
             objToEdit.setIdParticipantExtensiontmp(cod);
-            objToEdit.setDeviceid(computerName);
+            objToEdit.setDeviceid("NicaUmich2");
             objToEdit.setRecordDate(new Date());
             objToEdit.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             objToEdit.setEstado('1');
@@ -1666,7 +1657,7 @@ public class CartasController {
             if (!scanCartaService.verificaSiyaTieneExtension(id_participante_carta_tmp, codExtension, fechaExtension)) {
                 try {
                     ExtensionesTmp tmp = new ExtensionesTmp();
-                    tmp.setDeviceid(computerName);
+                    tmp.setDeviceid("NicaUmich2");
                     tmp.setRecordDate(new Date());
                     tmp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                     tmp.setEstado('1');
@@ -1813,8 +1804,7 @@ public class CartasController {
     ResponseEntity<String> saveTmpsToOficial(@RequestBody List<Integer> dataArrayToSend)throws Exception{
 
         try{
-            String computerName = InetAddress.getLocalHost().getHostName();
-                int contador = 0;
+            int contador = 0;
             int contadorExtension = 0;
             for (Integer num : dataArrayToSend){// Verificar q todas las q suban sean extensiones q no esten pasive 1
                 ParticipanteCartaTmp cartaTemporal = this.scanCartaService.getAllParticipanteCartaTmpById(num);
@@ -1834,7 +1824,7 @@ public class CartasController {
                 pc.setFechacarta(cartaTemporal.getFechacarta());
                 pc.setRecordDate(new Date());
                 pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                pc.setDeviceid(computerName);
+                pc.setDeviceid("NicaUmich2");
                 pc.setEstado('1');
                 pc.setPasive('0');
                 pc.setQuienfirma(cartaTemporal.getName1tutor());
@@ -1880,7 +1870,7 @@ public class CartasController {
                         dp.setAcepta(dparte.isAcepta());
                         pr.setIdparte(dparte.getParte().getIdparte());
                         dp.setParte(pr);
-                        dp.setDeviceid(computerName);
+                        dp.setDeviceid("NicaUmich2");
                         dp.setRecordDate(new Date());
                         dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         dp.setEstado('1');
@@ -1896,7 +1886,7 @@ public class CartasController {
                         contadorExtension++;
                         Extensiones catalog_extension = new Extensiones();
                         ParticipanteExtension part_Extension = new ParticipanteExtension();
-                        part_Extension.setDeviceid(computerName);
+                        part_Extension.setDeviceid("NicaUmich2");
                         part_Extension.setRecordDate(new Date());
                         part_Extension.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         part_Extension.setEstado('1');

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -135,8 +134,7 @@ public class ParteController {
                 v.setIdversion(idversion);
                 p.setVersion(v);
                 p.setAcepta("false");
-                String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
-                p.setDeviceid(nameComputer);
+                p.setDeviceid("NicaUmich2");
                 p.setEstado('0');
                 p.setPasive('1');
                 p.setRecordDate(new Date());
@@ -171,8 +169,7 @@ public class ParteController {
                     v.setIdversion(idversion);
                     p.setVersion(v);
                     p.setAcepta("false");
-                    String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
-                    p.setDeviceid(nameComputer);
+                    p.setDeviceid("NicaUmich2");
                     p.setEstado('0');
                     p.setPasive('1');
                     p.setRecordDate(new Date());
@@ -224,8 +221,7 @@ public class ParteController {
             }
             p.setPrincipal(princi);
             p.setAcepta("false");
-            String nameComputer = InetAddress.getLocalHost().getHostName();
-            p.setDeviceid(nameComputer);
+            p.setDeviceid("NicaUmich2");
             p.setEstado('0');
             p.setPasive('1');
             p.setRecordDate(new Date());

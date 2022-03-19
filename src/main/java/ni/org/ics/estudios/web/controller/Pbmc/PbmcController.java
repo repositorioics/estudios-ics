@@ -29,7 +29,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.util.*;
 
 /**
@@ -308,10 +307,10 @@ public class PbmcController {
                 int dateYear = calendar.get(Calendar.YEAR);
                 if (!this.pbmcService.yaTieneMuestraPbmcAnual(dateYear, codigo_participante)) {
                     // METADATA PBMC
-                    String nameComputer = InetAddress.getLocalHost().getHostName();
+
                     String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
                     pbmc.setRecordUser(nombreUsuario);
-                    pbmc.setDeviceid(nameComputer);
+                    pbmc.setDeviceid("NicaUmich2");
                     pbmc.setRecordDate(new Date());
                     pbmc.setEstado('1');
                     pbmc.setPasive('0');
@@ -344,7 +343,7 @@ public class PbmcController {
                             Double volumenRojoAdicional = Double.parseDouble(volumen_rojo_adic);
                             Serologia serologia = new Serologia();
                             //METADATA SEROLOGIA_ADICIONAL
-                            serologia.setDeviceid(nameComputer);
+                            serologia.setDeviceid("NicaUmich2");
                             serologia.setRecordDate(new Date());
                             serologia.setEstado('1');
                             serologia.setPasive('0');
@@ -477,9 +476,9 @@ public class PbmcController {
                 return JsonUtil.createJsonResponse("No se encontraron egistros: ".concat(""+ListaPbmcYaEnviadas.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+
             SerologiaEnvio envio = new SerologiaEnvio();
-            envio.setDeviceid(computerName);
+            envio.setDeviceid("NicaUmich2");
             envio.setEstado('1');
             envio.setPasive('0');
             envio.setRecordDate(new Date());
@@ -543,9 +542,9 @@ public class PbmcController {
                 return JsonUtil.createJsonResponse("No se encontraron egistros: ".concat(""+ListPbmcConSerologia.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+
             SerologiaEnvio envio = new SerologiaEnvio();
-            envio.setDeviceid(computerName);
+            envio.setDeviceid("NicaUmich2");
             envio.setEstado('1');
             envio.setPasive('0');
             envio.setRecordDate(new Date());

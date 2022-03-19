@@ -1,7 +1,9 @@
 package ni.org.ics.estudios.web.controller.Cartas;
 
 import com.google.gson.Gson;
-import ni.org.ics.estudios.domain.catalogs.*;
+import ni.org.ics.estudios.domain.catalogs.Estudio;
+import ni.org.ics.estudios.domain.catalogs.Parte;
+import ni.org.ics.estudios.domain.catalogs.Version;
 import ni.org.ics.estudios.domain.scancarta.Extensiones;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.scancarta.ScanCartaService;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.text.ParseException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ICS on 29/04/2020.
@@ -148,8 +152,7 @@ public class CatalogoVersionController {
                 v.setActivo(ac);
                 v.setFecha_version(fecha_version);
                 v.setFecha_format(monthName + ", " + yy);
-                String nameComputer = InetAddress.getLocalHost().getHostName();
-                v.setDeviceid(nameComputer);
+                v.setDeviceid("NicaUmich2");
                 v.setEstado('0');
                 v.setPasive('1');
                 v.setRecordDate(new Date());
@@ -170,8 +173,7 @@ public class CatalogoVersionController {
                     v.setActivo(ac);
                     v.setFecha_version(fecha_version);
                     v.setFecha_format(monthName + ", " + yy);
-                    String nameComputer = InetAddress.getLocalHost().getHostName();
-                    v.setDeviceid(nameComputer);
+                    v.setDeviceid("NicaUmich2");
                     v.setEstado('0');
                     v.setPasive('1');
                     v.setRecordDate(new Date());
@@ -191,25 +193,6 @@ public class CatalogoVersionController {
             return new ResponseEntity<String>( json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-/*
-    @RequestMapping(value = "/editVersion/{idversion}", method = RequestMethod.GET)
-    public ModelAndView editDetalleHemo(@PathVariable(value = "idversion") Integer idversion, Model model)throws ParseException{
-        ModelAndView modelView = new ModelAndView();
-        try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Version vers = this.scanCartaService.getVersionById(idversion);
-            modelView.addObject("vers",vers);
-            List<Carta> cartas = scanCartaService.getScanCartas();
-            model.addAttribute("cartas",cartas);
-            modelView.setViewName("/CatalogoScanCarta/EditVersion");
-            return modelView;
-        }
-        catch (Exception e){
-            Gson gson = new Gson();
-            String json = gson.toJson(e.toString());
-            return (modelView);
-        }
-    }*/
 
     @RequestMapping(value = "UpdateVersion", method = RequestMethod.POST)
     public ResponseEntity<String> UpdateVersion(@RequestParam( value="idversion", required=true ) String idversion
@@ -335,8 +318,7 @@ public class CatalogoVersionController {
                     v.setIdversion(version2);
                     p.setVersion(v);
                     p.setAcepta("false");
-                    String nameComputer = InetAddress.getLocalHost().getHostName().toUpperCase();
-                    p.setDeviceid(nameComputer);
+                    p.setDeviceid("NicaUmich2");
                     p.setEstado('0');
                     p.setPasive('1');
                     p.setRecordDate(new Date());
@@ -437,10 +419,10 @@ public class CatalogoVersionController {
                                              ,@RequestParam("editando")String editando)throws Exception{
         try{
             Version v = new Version();
-            String nameComputer = InetAddress.getLocalHost().getHostName();
+
             Extensiones ext = new Extensiones();
             if (editando.equals("true")){
-                ext.setDeviceid(nameComputer);
+                ext.setDeviceid("NicaUmich2");
                 ext.setEstado('1');
                 ext.setPasive('0');
                 ext.setRecordDate(new Date());
@@ -454,7 +436,7 @@ public class CatalogoVersionController {
                 this.scanCartaService.saveORupdateExtension(ext);
             }else {
                 if (!this.scanCartaService.CheckequalsExtension(extension,idextension)) {
-                    ext.setDeviceid(nameComputer);
+                    ext.setDeviceid("NicaUmich2");
                     ext.setEstado('1');
                     ext.setPasive('0');
                     ext.setRecordDate(new Date());
@@ -498,8 +480,6 @@ public class CatalogoVersionController {
             return "Not Found!";
         }
     }
-
-
 
     // ** FIN EXTENSION DE LA CARTA **
 

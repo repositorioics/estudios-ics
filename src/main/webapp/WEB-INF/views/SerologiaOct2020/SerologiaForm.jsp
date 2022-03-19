@@ -269,7 +269,7 @@
 
                                   <div class="col-md-4">
                                       <label for="edadMeses">edadMeses</label>
-                                      <input type="text" class="form-control" id="edadMeses" name="edadMeses" value="${caso.edadMeses}"  />
+                                      <input type="text" class="form-control" id="edadMeses" name="edadMeses" value="${caso.edadEnMeses}"  />
                                   </div>
 
                                   <div class="col-md-4">

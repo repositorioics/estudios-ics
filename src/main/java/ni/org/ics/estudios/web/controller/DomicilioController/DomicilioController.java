@@ -5,7 +5,6 @@ import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
-import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.muestreoanual.MovilInfo;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.CambioDomParticipanteDto;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -300,8 +298,8 @@ public class DomicilioController {
                 movil.setUltimoCambio(String.valueOf(new Date()));
                 movil.setStart(String.valueOf(new Date()));
                 movil.setEnd(String.valueOf(new Date()));
-                String nameComputer = InetAddress.getLocalHost().getHostName();
-                movil.setDeviceid(nameComputer);
+                //String nameComputer = InetAddress.getLocalHost().getHostName();
+                movil.setDeviceid("NicaUmich2");
                 movil.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
                 movil.setToday(new Date());
                 movil.setRecurso1(Integer.parseInt(data.getRecurso1()));

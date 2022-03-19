@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -109,7 +108,6 @@ public class PersonalCargoController implements Serializable {
             PersonalCargoDto objDto = new PersonalCargoDto();
             Integer idPersonal = Integer.parseInt(codigoPersonal);
             Personal personalActual = this.personalCargoService.getPersonaById(idPersonal);
-            String nameComputer = InetAddress.getLocalHost().getHostName();
             if (personalActual == null){//GUARDA NUEVO
                 personalActual = new Personal();
                 personalActual.setIdpersonal(idPersonal);
@@ -118,7 +116,7 @@ public class PersonalCargoController implements Serializable {
                 personalActual.setEstado('1');
                 personalActual.setPasive('0');
                 personalActual.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                personalActual.setDeviceid(nameComputer);
+                personalActual.setDeviceid("NicaUmich2");
                 this.personalCargoService.saveOrUpdatePersona(personalActual);
                 //Cargos del Personal
                 Personal_Cargo pc = null;
@@ -136,7 +134,7 @@ public class PersonalCargoController implements Serializable {
                     pc.setEstado('1');
                     pc.setPasive('0');
                     pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                    pc.setDeviceid(nameComputer);
+                    pc.setDeviceid("NicaUmich2");
                     this.personalCargoService.saveOrUpdate(pc);
                     cargoDtos.add(cargosToDto);
                 }
@@ -168,7 +166,7 @@ public class PersonalCargoController implements Serializable {
                         pc.setEstado('1');
                         pc.setPasive('0');
                         pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                        pc.setDeviceid(nameComputer);
+                        pc.setDeviceid("NicaUmich2");
                         this.personalCargoService.saveOrUpdate(pc);
                     }
                 }else{

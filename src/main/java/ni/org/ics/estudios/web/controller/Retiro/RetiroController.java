@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -251,8 +250,7 @@ public class RetiroController {
             obj.setActual(true);
             obj.setEstado('1');
             obj.setPasive('0');
-            String computerName = InetAddress.getLocalHost().getHostName();
-            obj.setDeviceid(computerName);
+            obj.setDeviceid("NicaUmich2");
             obj.setRecordDate(new Date());
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             String estudios = procesos.getEstudio();

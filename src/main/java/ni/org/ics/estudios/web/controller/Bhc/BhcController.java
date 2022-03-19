@@ -28,7 +28,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.util.*;
 
 /**
@@ -118,9 +117,6 @@ public class BhcController {
                     bhcDto.setEstado("" + procesos.getEstPart());
                     bhcDto.setCodigo_participante(participante.getCodigo());
                     bhcDto.setFechaNacimiento(participante.getFechaNac());
-                    //edad Meses
-                    double d = Double.parseDouble(part1)*12;
-                    bhcDto.setEdadEnMeses(d);
                     String estudiosFinales = "";
                     if (estudios.contains("Tcovid")) {
                         String s = estudios;
@@ -233,16 +229,14 @@ public class BhcController {
                     return JsonUtil.createJsonResponse(map);
                 }
                 Bhc bhc = new Bhc();
-                String nameComputer = InetAddress.getLocalHost().getHostName();
                 if (tiporequest.equals("false")){// Guardar nuevo registro
-
                     Date date = DateUtil.StringToDate(fecha, "dd/MM/yyyy");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
                     int dateYear = calendar.get(Calendar.YEAR);
                     if (!this.bhcService.yaTieneMuestraBhcAnual(dateYear, idParticipante)){
                         //Estudios y edades
-                        bhc.setDeviceid(nameComputer);
+                        bhc.setDeviceid("NicaUmich2");
                         bhc.setEstado('1');
                         bhc.setPasive('0');
                         bhc.setRecordDate(new Date());
@@ -277,7 +271,7 @@ public class BhcController {
                 }else{// Editando registro
                     Integer id = Integer.parseInt(bhc_id);
                     bhc.setBhc_id(id);
-                    bhc.setDeviceid(nameComputer);
+                    bhc.setDeviceid("NicaUmich2");
                     bhc.setEstado('1');
                     bhc.setPasive('0');
                     bhc.setRecordDate(new Date());
@@ -418,9 +412,9 @@ public class BhcController {
                 return JsonUtil.createJsonResponse("No se encontraron registros: ".concat(""+ListaBhcYaEnviadas.size()));
 
 
-            String computerName = InetAddress.getLocalHost().getHostName();
+
             SerologiaEnvio envio = new SerologiaEnvio();
-            envio.setDeviceid(computerName);
+            envio.setDeviceid("NicaUmich2");
             envio.setEstado('1');
             envio.setPasive('0');
             envio.setRecordDate(new Date());
