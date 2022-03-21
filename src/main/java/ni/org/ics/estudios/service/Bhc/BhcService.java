@@ -4,10 +4,13 @@ import ni.org.ics.estudios.domain.Bhc.Bhc;
 import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Rango_Edad_Volumen;
+import ni.org.ics.estudios.dto.BhcEnvioDto;
 import ni.org.ics.estudios.service.UsuarioService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -124,6 +127,25 @@ public class BhcService {
     public List<Bhc_Detalle_envio>getBhcDetailsEnvio(Integer nEnvios, Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Bhc_Detalle_envio b where b.serologiaEnvio.fecha between :fechaInicio and :fechaFin and b.serologiaEnvio.idenvio =:nEnvios order by b.bhc.codigo_participante asc ");
+        query.setParameter("fechaInicio", fechaInicio);
+        query.setParameter("fechaFin", fechaFin);
+        query.setParameter("nEnvios", nEnvios);
+        return query.list();
+    }
+
+    public List<BhcEnvioDto> getReporteEnvioBhc(Integer nEnvios, Date fechaInicio, Date fechaFin) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createSQLQuery("select r.CODIGO_PARTICIPANTE as codigo, date(r.FECHA_TOMA) as fecha, r.volumen as volumen, r.observacion as observacion, " +
+                "adn.ADN_DEN as adnDengue, adn.ADN_UO1 as adnUO1, adn.ADN_FLU as adnFlu, adn.ADN_CHF as adnChf, " +
+                "r.USUARIO_REGISTRO as pRecepciona, r.estudio as estudios, " +
+                "floor( r.EDAD_MESES/12) as edadA, r.EDAD_MESES mod 12 as edadM, e.NUMERO_ENVIO as viaje " +
+                "from participantes p inner join bhc_recepcion r on p.CODIGO = r.CODIGO_PARTICIPANTE " +
+                "inner join bhc_detalle_envio de on r.BHC_ID = de.BHC_ID " +
+                "inner join envio_muestras e on de.ENVIO_MUESTRA_ID = e.ENVIO_MUESTRA_ID " +
+                "inner join view_adn_consentimientos adn on adn.codigo = r.CODIGO_PARTICIPANTE " +
+                "where e.FECHA_ENVIO between :fechaInicio and :fechaFin and e.NUMERO_ENVIO = :nEnvios " +
+                "ORDER BY r.CODIGO_PARTICIPANTE asc");
+        query.setResultTransformer(Transformers.aliasToBean(BhcEnvioDto.class));
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);

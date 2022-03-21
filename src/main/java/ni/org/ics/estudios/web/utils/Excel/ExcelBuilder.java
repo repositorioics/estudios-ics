@@ -4,6 +4,7 @@ import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
+import ni.org.ics.estudios.dto.BhcEnvioDto;
 import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -386,7 +387,8 @@ public class ExcelBuilder extends AbstractExcelView {
 
 
     public void buildExcelBhc(Map<String, Object>model, HSSFWorkbook workbook, HttpServletResponse response)throws IOException{
-        List<Bhc_Detalle_envio> bhc_detalle_envios = (List<Bhc_Detalle_envio>) model.get("allBhc");
+        //List<Bhc_Detalle_envio> bhc_detalle_envios = (List<Bhc_Detalle_envio>) model.get("allBhc");
+        List<BhcEnvioDto> bhc_detalle_envios = (List<BhcEnvioDto>) model.get("allBhc");
 
         logger.log(Level.INFO, "construyendo libro de excel para bhc...");
         response.setContentType("application/octec-stream");
@@ -402,6 +404,10 @@ public class ExcelBuilder extends AbstractExcelView {
                 "fecha",
                 "volumen",
                 "observacion",
+                "ADN_DEN",
+                "ADN_UO1",
+                "ADN_FLU",
+                "ADN_CHF",
                 "PRecepciona",
                 "estudio",
                 "edadA",
@@ -421,7 +427,7 @@ public class ExcelBuilder extends AbstractExcelView {
 
         if (bhc_detalle_envios.size()>0){
             //Obtengo el Envio de Pbmc
-            SerologiaEnvio objEnvio= bhc_detalle_envios.get(0).getSerologiaEnvio();
+//            SerologiaEnvio objEnvio= bhc_detalle_envios.get(0).getSerologiaEnvio();
 
             //Cell style for content cells
             font = workbook.createFont();
@@ -450,31 +456,35 @@ public class ExcelBuilder extends AbstractExcelView {
             contentCellStyle.setFont(font);
 
             int rowCount = 1;
-            for (Bhc_Detalle_envio registro: bhc_detalle_envios){
+            for (BhcEnvioDto registro: bhc_detalle_envios){
                 HSSFRow dataRow = sheet.createRow(rowCount++);
-                dataRow.createCell(0).setCellValue(registro.getBhc().getCodigo_participante());
+                dataRow.createCell(0).setCellValue(registro.getCodigo());
                 sheet.autoSizeColumn(0);
-                dataRow.createCell(1).setCellValue(ni.org.ics.estudios.web.utils.DateUtil.DateToString(registro.getBhc().getFecha_bhc(), "dd/MM/yyyy"));
+                dataRow.createCell(1).setCellValue(ni.org.ics.estudios.web.utils.DateUtil.DateToString(registro.getFecha(), "dd/MM/yyyy"));
                 sheet.autoSizeColumn(1);
-                dataRow.createCell(2).setCellValue(registro.getBhc().getVolumen());
+                dataRow.createCell(2).setCellValue(registro.getVolumen());
                 sheet.autoSizeColumn(2);
-                dataRow.createCell(3).setCellValue(registro.getBhc().getObservacion());
+                dataRow.createCell(3).setCellValue(registro.getObservacion());
                 sheet.autoSizeColumn(3);
-                dataRow.createCell(4).setCellValue(registro.getBhc().getRecordUser());
+                dataRow.createCell(4).setCellValue(registro.getAdnDengue());
                 sheet.autoSizeColumn(4);
-                dataRow.createCell(5).setCellValue(registro.getBhc().getEstudios());
+                dataRow.createCell(5).setCellValue(registro.getAdnUO1());
                 sheet.autoSizeColumn(5);
-                Double ageAnios = Math.floor(registro.getBhc().getEdadMeses() / 12);
-                dataRow.createCell(6).setCellValue(ageAnios.intValue());
+                dataRow.createCell(6).setCellValue(registro.getAdnFlu());
                 sheet.autoSizeColumn(6);
-                //edad Meses
-                double d = registro.getBhc().getEdadMeses();
-                Double edadMeses = d % 12;
-                dataRow.createCell(7).setCellValue(edadMeses.intValue());
+                dataRow.createCell(7).setCellValue(registro.getAdnChf());
                 sheet.autoSizeColumn(7);
-                //envio
-                dataRow.createCell(8).setCellValue(registro.getSerologiaEnvio().getIdenvio());
+                dataRow.createCell(8).setCellValue(registro.getpRecepciona());
                 sheet.autoSizeColumn(8);
+                dataRow.createCell(9).setCellValue(registro.getEstudios());
+                sheet.autoSizeColumn(9);
+                dataRow.createCell(10).setCellValue(registro.getEdadA().intValue());
+                sheet.autoSizeColumn(10);
+                dataRow.createCell(11).setCellValue(registro.getEdadM().intValue());
+                sheet.autoSizeColumn(11);
+                //envio
+                dataRow.createCell(12).setCellValue(registro.getViaje());
+                sheet.autoSizeColumn(12);
             } /* fin del for*/
         }else{//No se encontraron registro de Bhc
             CellStyle noDataCellStyle = workbook.createCellStyle();

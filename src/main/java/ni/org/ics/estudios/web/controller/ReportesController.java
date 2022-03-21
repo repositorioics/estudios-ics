@@ -11,6 +11,7 @@ import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
+import ni.org.ics.estudios.dto.BhcEnvioDto;
 import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.Bhc.BhcService;
@@ -357,7 +358,8 @@ public class ReportesController {
 
         ReporteEnvio.addObject("fechaInicio",fechaInicio);
         ReporteEnvio.addObject("fechaFin",fechaFin);
-        List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin);
+        //List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin);
+        List<BhcEnvioDto> allBhc = this.bhcService.getReporteEnvioBhc(nEnvios, dFechaInicio, dFechaFin);
         ReporteEnvio.addObject("allBhc",allBhc);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEBHC);
         return ReporteEnvio;

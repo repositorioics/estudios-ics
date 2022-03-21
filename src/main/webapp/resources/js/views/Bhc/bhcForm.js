@@ -219,7 +219,7 @@ var saveOrUpdateBhc = function(){
                         });
                     }//fin valida observacion
                 }else{
-                    $.post(parametro.saveFormUrl, form1.serialize(), {ajax:true}, function (data) {
+                    $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
                         if (data.msj != null) {
                             swal({
                                 title: "¡ERROR!",
