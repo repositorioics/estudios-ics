@@ -34,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.security.cert.Extension;
 import java.text.ParseException;
 import java.util.*;
@@ -81,9 +80,7 @@ public class CartasController {
 
             List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
             String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
-            List<Integer> personal = new ArrayList<Integer>();
-            HashSet<Integer> hset =
-                    new HashSet<Integer>();
+            HashSet<Integer> hset = new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
                 int value = Integer.parseInt( cargosId.get(i) );
@@ -890,8 +887,7 @@ public class CartasController {
                 Extensiones extensiones = new Extensiones();
                 extensiones.setId(idExtension);
                 editObj.setExtensiones(extensiones);
-                String ComputerName = "NicaUmich2";
-                editObj.setDeviceid(ComputerName);
+                editObj.setDeviceid("NicaUmich2");
                 editObj.setEstado('1');
                 editObj.setPasive('0');
                 editObj.setRecordDate(new Date());
@@ -935,8 +931,7 @@ public class CartasController {
                     Extensiones extensiones = new Extensiones();
                     extensiones.setId(idExtension);
                     ext.setExtensiones(extensiones);
-                    String ComputerName = "NicaUmich2";
-                    ext.setDeviceid(ComputerName);
+                    ext.setDeviceid("NicaUmich2");
                     ext.setEstado('1');
                     ext.setPasive('0');
                     ext.setRecordDate(new Date());

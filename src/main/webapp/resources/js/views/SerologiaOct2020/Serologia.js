@@ -92,7 +92,7 @@ var SerologiaMA = function(){
                         $("#edad_dias").val(data.edad_dias);
                         $("#volumen_adicional_desde_bd").val(data.volumen_adicional_desde_bd);
                         $("#volumen_serologia_desde_bd").val(data.volumen_serologia_desde_bd);
-                        $("#edadMeses").val(DifenciaMeses());
+                        $("#edadMeses").val(data.edadEnMeses);
                         $("#observacion").val(data.observacion);
                         $("#estado").val(data.estado);
                         $("#volumen").val("");
@@ -308,15 +308,6 @@ var SerologiaMA = function(){
                 }
                 return isAllValid;
             }
-
-
-
-            function DifenciaMeses(){
-                var a = moment();
-                var b = moment($("#fechaNac").val()).format('L');
-                var months = a.diff(b, 'months', true);
-                return months.toFixed(2);
-            };
 
             $("#volumen").on("focusout", function(e){
                 e.preventDefault();

@@ -30,7 +30,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.*;
 
@@ -172,8 +171,7 @@ public class SerologiaOct2020Controller {
     ResponseEntity<String> enviarMuestra(@RequestBody SerologiaEnviarDto muestraForEnvio)throws Exception{
         try{
             SerologiaEnvio objToSave = new SerologiaEnvio();
-            String computerName = "NicaUmich2";
-            objToSave.setDeviceid(computerName);
+            objToSave.setDeviceid("NicaUmich2");
             objToSave.setEstado('1');
             objToSave.setPasive('0');
             objToSave.setRecordDate(new Date());
@@ -213,9 +211,8 @@ public class SerologiaOct2020Controller {
                 return JsonUtil.createJsonResponse("Registros no encontrados: ".concat(""+ListaSerologiaYaEnviadas.size()));
 
 
-            String computerName = "NicaUmich2";
             SerologiaEnvio envio = new SerologiaEnvio();
-            envio.setDeviceid(computerName);
+            envio.setDeviceid("NicaUmich2");
             envio.setEstado('1');
             envio.setPasive('0');
             envio.setRecordDate(new Date());
@@ -293,7 +290,6 @@ public class SerologiaOct2020Controller {
 
 
                     //edad Meses
-                    double d = Double.parseDouble(part1)*12;
                     participanteSeroDto.setEdadEnMeses(edadEnMeses);
                     String estudiosFinales = "";
                     if (estudios.contains("Tcovid")) {
@@ -379,7 +375,7 @@ public class SerologiaOct2020Controller {
 
     //region Serologia/GuardarSerologia
     @RequestMapping(value = "/GuardarSerologia", method = RequestMethod.POST)
-    public ResponseEntity<String> GuardarSerologia (@RequestParam(value = "idSerologia", required=false, defaultValue="") String idSerologia
+    public ResponseEntity<String>GuardarSerologia (@RequestParam(value = "idSerologia", required=false, defaultValue="") String idSerologia
            ,@RequestParam( value = "idParticipante", defaultValue="" ) Integer idParticipante
            ,@RequestParam( value = "fecha"      , required=false, defaultValue=""  ) String fecha
            ,@RequestParam( value = "volumen"    , required=false, defaultValue=""  ) String volumen
@@ -531,7 +527,7 @@ public class SerologiaOct2020Controller {
 //endregion
 
 
-    @RequestMapping( value="/closeCase", method=RequestMethod.POST, produces = "application/json")
+    @RequestMapping( value="closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="idAccion", required=true ) String idAccion
             , @RequestParam( value="message_razon", required=true, defaultValue="" ) String message_razon ) {
         try{
@@ -559,7 +555,6 @@ public class SerologiaOct2020Controller {
         try {
             ArrayList<String> observacionArrayList = new ArrayList<String>();
              obsv = messageResourceService.getCatalogo("CHF_CAT_RAZON_NO_MX");
-            observacionArrayList.add("2 Tubos de 6ml.");
             for (MessageResource m: obsv){
                 observacionArrayList.add(m.getSpanish());
             }

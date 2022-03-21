@@ -46,7 +46,6 @@ var processPbmc = function(){
 
             function searchParticipante(){
                 $.getJSON(parametros.searchPartUrl, { parametro : $('#parametro').val(), ajax : 'true' }, function(data) {
-                    //console.log(data);
                     if(data.mensaje!=null){
                         swal({
                          title: 'Advertencia!',
@@ -88,19 +87,10 @@ var processPbmc = function(){
                         $("#codigo_casa_familia").val(data.codigo_casa_familia);
                         $("#volumen_pbmc_desde_bd").val(data.volumen_pbmc_desde_bd);
                         $("#volumen_adicional_desde_bd").val(data.volumen_adicional_desde_bd);
-                        $("#edadEnMeses").val(DifenciaMeses());
+                        $("#edadEnMeses").val(data.edadEnMeses);
                     }
                 });
             }
-
-
-            function DifenciaMeses(){
-                debugger;
-                var a = moment();
-                var b = moment($("#fechaNac").val()).format('L');
-                var months = a.diff(b, 'months', true);
-                return months.toFixed(2);
-            };
 
             function validObservacion (){
                 var isAllValid = true;
@@ -217,29 +207,33 @@ var processPbmc = function(){
                                 confirmButtonText: "Si, Continuar!",
                                 closeOnConfirm: false
                             },
-                            function () {
-                                $.post(parametros.savePbmctUrl, form_Pbmc.serialize(), function (data) {
-                                    if (data.msj != null) {
-                                        swal({
-                                            title: "Advertencia!",
-                                            text: data.msj,
-                                            timer: 2000,
-                                            type: "info"
-                                        });
-                                    } else {
-                                        swal({
-                                            title: "Éxito!",
-                                            text: parametros.successMessage,
-                                            timer: 2000,
-                                            type: "success"
-                                        });
-                                    }
-                                    window.setTimeout(function () {
-                                        window.location.href = parametros.reloadUrl;
-                                    }, 2000);
-                                });
+                            function (isConfirm) {
+                                if(isConfirm) {
+                                    $.post(parametros.savePbmctUrl, form_Pbmc.serialize(), function (data) {
+                                        if (data.msj != null) {
+                                            swal({
+                                                title: "Advertencia!",
+                                                text: data.msj,
+                                                timer: 2000,
+                                                type: "info"
+                                            });
+                                        } else {
+                                            swal({
+                                                title: "Éxito!",
+                                                text: parametros.successMessage,
+                                                timer: 2000,
+                                                type: "success"
+                                            });
+                                        }
+                                        window.setTimeout(function () {
+                                            window.location.href = parametros.reloadUrl;
+                                        }, 2000);
+                                    });
+                                }else {
+                                    swal("Cancelado", "Tu registro está seguro :)", "info");
+                                }
                             });
-                    }
+                    }//fin valida observacion
                 }else{
                     $.post(parametros.savePbmctUrl, form_Pbmc.serialize(), function (data) {
                         //console.log(data);

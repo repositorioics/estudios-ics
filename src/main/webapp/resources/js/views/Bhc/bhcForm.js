@@ -45,7 +45,6 @@ var saveOrUpdateBhc = function(){
             });
             function searchParticipante(parametro){
                 $.getJSON(parametro.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
-                    console.log(data);
                     var len = data.length;
                     if(data.msj != undefined || data.msj != null){
                         swal({
@@ -79,7 +78,7 @@ var saveOrUpdateBhc = function(){
                         $("#edad_meses").val(data.edadM);
                         $("#edad_dias").val(data.edadD);
                         $("#volumen_bhc_desde_bd").val(data.volumen_bhc_desde_bd);
-                        $("#edadMeses").val(DifenciaMeses());
+                        $("#edadMeses").val(data.edadEnMeses);
                         $("#observacion").val(data.observacion);
                         $("#estado").val(data.estado);
                         $("#volumen").val("");
@@ -169,7 +168,7 @@ var saveOrUpdateBhc = function(){
             function save(parametro){
                 var volumen_bhc_desde_bd = parseInt($("#volumen_bhc_desde_bd").val());
                 if($("#volumen").val() != volumen_bhc_desde_bd) {
-                    if(validObservacion()){+
+                    if(validObservacion()){
                     swal({
                             title: "Diferencia en volumen!",
                             text:  "Volúmenes sugerido para Bhc: " + volumen_bhc_desde_bd + "\nDeseas continuar?",
@@ -180,43 +179,47 @@ var saveOrUpdateBhc = function(){
                             closeOnConfirm: false,
                             closeOnCancel: false
                         },
-                        function () {
-                            $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
-                                if (data.msj != null) {
+                        function (isConfirm) {
+                            if(isConfirm) {
+                                $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
+                                    if (data.msj != null) {
+                                        swal({
+                                            title: "¡ERROR!",
+                                            text: data.msj,
+                                            type: "error",
+                                            timer: 2000
+                                        });
+                                        window.setTimeout(function () {
+                                            location.reload(true);
+                                        }, 3000);
+                                    } else {
+                                        swal({
+                                            title: "¡Buen trabajo!",
+                                            text: parametro.successMessage,
+                                            type: 'success',
+                                            timer: 2000
+                                        });
+                                        window.setTimeout(function () {
+                                            window.location.href = parametro.recepcionUrl;
+                                        }, 3000);
+                                        $("#parametro").focus().val("");
+                                    }
+                                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //console.log("XMLHttpRequest: " + XMLHttpRequest, "textStatus: " + textStatus, "errorThrown:" + errorThrown);
                                     swal({
-                                        title: "¡ERROR!",
-                                        text: data.msj,
-                                        type: "error",
-                                        timer: 2000
+                                        title: textStatus,
+                                        text: errorThrown,
+                                        type: 'error',
+                                        timer: 2100
                                     });
-                                    window.setTimeout(function () {
-                                        location.reload(true);
-                                    }, 3000);
-                                } else {
-                                    swal({
-                                        title: "¡Buen trabajo!",
-                                        text: parametro.successMessage,
-                                        type: 'success',
-                                        timer: 2000
-                                    });
-                                    window.setTimeout(function () {
-                                        window.location.href = parametro.recepcionUrl;
-                                    }, 3000);
-                                    $("#parametro").focus().val("");
-                                }
-                            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                console.log("XMLHttpRequest: " + XMLHttpRequest, "textStatus: " + textStatus, "errorThrown:" + errorThrown);
-                                swal({
-                                    title: textStatus,
-                                    text: errorThrown,
-                                    type: 'error',
-                                    timer: 2100
                                 });
-                            });
+                            }else {
+                                swal("Cancelado", "Tu registro está seguro :)", "info");
+                            }
                         });
-                    }
+                    }//fin valida observacion
                 }else{
-                    $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
+                    $.post(parametro.saveFormUrl, form1.serialize(), {ajax:true}, function (data) {
                         if (data.msj != null) {
                             swal({
                                 title: "¡ERROR!",
@@ -279,16 +282,6 @@ var saveOrUpdateBhc = function(){
                 scroll: true,
                 highlight: true
             });
-
-
-            function DifenciaMeses(){
-                //debugger;
-                var a = moment();
-                var b = moment($("#fechaNac").val()).format('L');
-                var months = a.diff(b, 'months', true);
-                return months.toFixed(2);
-            };
-
         }
     }
 }();

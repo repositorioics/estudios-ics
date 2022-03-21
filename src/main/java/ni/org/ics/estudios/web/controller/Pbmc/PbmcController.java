@@ -29,7 +29,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
 import java.util.*;
 
 /**
@@ -265,8 +264,8 @@ public class PbmcController {
         }
     }
 
-    @RequestMapping(value = "/GuardarPbmc", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<String> GuardarSerologia(@RequestParam(value = "codigo_pbmc", required=false, defaultValue="" ) Integer codigo_pbmc
+    @RequestMapping(value = "/GuardarPbmc", method = RequestMethod.POST)
+    public ResponseEntity<String>GuardarSerologia(@RequestParam(value = "codigo_pbmc", required=false, defaultValue="" ) Integer codigo_pbmc
             ,@RequestParam( value = "codigo_participante" ,required=false, defaultValue=""  ) Integer codigo_participante
             ,@RequestParam( value = "volumen_pbmc"        ,required=false, defaultValue=""  ) String  volumen_pbmc
             ,@RequestParam( value = "fecha"               ,required=false, defaultValue=""  ) String  fecha
@@ -421,7 +420,7 @@ public class PbmcController {
 
 
 
-    @RequestMapping( value="/closeCase", method=RequestMethod.POST, produces = "application/json")
+    @RequestMapping( value="/closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="pbmc_id", required=true ) Integer pbmc_id
                                              ,@RequestParam( value="message_razon", required=true, defaultValue="" ) String message_razon )
     {
