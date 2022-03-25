@@ -80,10 +80,22 @@ public class DomicilioService {
              Session session = sessionFactory.getCurrentSession();
              //Query query = session.createQuery("from DatosCoordenadas where participante.codigo =:parametro order by actual desc ");
              //Query query = session.createSQLQuery("from DatosCoordenadas d left join Personal p  on d.recurso1 = p.idPersona where d.participante.codigo = :parametro");
+             /*Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, fecha_reportado, " +
+                     "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d,per.nombre AS NombrePersona,d.OBSERVACION " +
+                     " FROM datos_coordenadas AS d LEFT JOIN Personal AS per ON d.idPersona = per.idpersonal " +
+                     "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro asc");*/
              Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, fecha_reportado, " +
-                     "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d.idPersona,per.nombre AS NombrePersona,d.OBSERVACION " +
-                     " FROM datos_coordenadas AS d LEFT JOIN personal AS per ON d.idPersona = per.idPersona " +
+                     "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d.idPersona,per.NOMBRE_APELLIDO AS NombrePersona,d.OBSERVACION " +
+                     " FROM datos_coordenadas AS d LEFT JOIN cat_personal AS per ON d.idPersona = per.PERSONA_ID " +
                      "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro asc");
+
+             /*Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, d.fecha_reportado, d.CODIGO_BARRIO, " +
+                     "b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio, " +
+                     "d.MANZANA,d.DIRECCION, " +
+                     "per.NOMBRE_APELLIDO AS NombrePersona, " +
+                     "d.OBSERVACION " +
+                     "    FROM datos_coordenadas AS d LEFT JOIN cat_personal AS per ON d.idPersona = per.PERSONA_ID " +
+                     "     INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO AND d.codigo_participante =:parametro ORDER BY d.fecha_registro asc");*/
              query.setParameter("parametro",parametro);
              return query.list();
          }catch (Exception e){

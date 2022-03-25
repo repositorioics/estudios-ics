@@ -94,7 +94,6 @@ var scanCarta = function(){
                             $("#parametro").focus();
                         }else{
                             clearInput();
-                            console.warn(data);
                             $("#codigo").val(data.codigoParticipante);
                             $("#tutor").val(data.nombreTutor);
                             $("#txtNombreCompleto").val(data.nombreCompleto);
@@ -110,7 +109,6 @@ var scanCarta = function(){
                             $("#apellido2Firma").val(data.surname2Tutor);
                             var relfamiliar = parseInt(data.realFam);
                             $("#relfam").val(relfamiliar).trigger('change.select2');
-                            debugger;
                             if(data.menorEdad == true){
                                 $("#asentimiento").select2().val(1).trigger('change.select2');
                                 $("#asentimiento").select2().prop('required', true);
@@ -123,7 +121,6 @@ var scanCarta = function(){
 
                                 $("#tipoasentimiento").prop('required', false);
                                 $("#tipoasentimiento").val(4).trigger('change.select2');
-                                $("#relfam").val(8).trigger('change.select2');
                             }
                             var text = "";
                             switch (data.realFam){

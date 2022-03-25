@@ -217,6 +217,7 @@ public class CartasController {
                     map.put("CFamilia", "");
                 }
                 String edad = participante.getEdad();
+                int EdadEnMeses = participante.getEdadMeses();
                 String[] strs = edad.split("/");
                 int edadyear = Integer.parseInt(strs[0]);
                 objEncontrado.setEdadAnios(edadyear);
@@ -225,7 +226,7 @@ public class CartasController {
                 int edaddias = Integer.parseInt(strs[2]);
                 objEncontrado.setEdadDia(edaddias);
                 boolean menor_edad = false;
-                Integer yearOld = Integer.parseInt(String.valueOf(edadyear));
+                Integer yearOld = EdadEnMeses/12; //Integer.parseInt(String.valueOf(edadyear));
                 if (yearOld >= 6 && yearOld <= 18) {//edad>=10 &&edad<18
                     menor_edad = true;
                 }
