@@ -31,8 +31,8 @@ public class DiferenciaParteCartaDto implements Serializable {
     private String aceptaContactoFuturoSc;
     private String asentimientoVerbalCc;
     private String asentimientoVerbalSc;
-    private String versionCc;
-    private String versionSc;
+    private Integer estudio;
+    private String version;
 
     public Integer getCodigo() {
         return codigo;
@@ -154,22 +154,6 @@ public class DiferenciaParteCartaDto implements Serializable {
         this.asentimientoVerbalSc = asentimientoVerbalSc;
     }
 
-    public String getVersionCc() {
-        return versionCc;
-    }
-
-    public void setVersionCc(String versionCc) {
-        this.versionCc = versionCc;
-    }
-
-    public String getVersionSc() {
-        return versionSc;
-    }
-
-    public void setVersionSc(String versionSc) {
-        this.versionSc = versionSc;
-    }
-
     public String getAceptaParteDCc() {
         return aceptaParteDCc;
     }
@@ -216,5 +200,21 @@ public class DiferenciaParteCartaDto implements Serializable {
 
     public void setAceptaParteFSc(String aceptaParteFSc) {
         this.aceptaParteFSc = aceptaParteFSc;
+    }
+
+    public Integer getEstudio() {
+        return estudio;
+    }
+
+    public void setEstudio(Integer estudio) {
+        this.estudio = estudio;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

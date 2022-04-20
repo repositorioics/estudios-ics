@@ -38,12 +38,13 @@ public class ComparacionCartasService {
                         "a.ACEPTA_PARTE_F as aceptaParteFCc, b.ACEPTA_PARTE_F as aceptaParteFSc,  " +
                         "a.ACEPTA_CONTACTO_FUTURO as aceptaContactoFuturoCc, b.ACEPTA_CONTACTO_FUTURO as aceptaContactoFuturoSc, " +
                         "a.ASENTIMIENTO_VERBAL as asentimientoVerbalCc, b.ASENTIMIENTO_VERBAL as asentimientoVerbalSc, " +
-                        "a.VERSION as versionCc, b.VERSION as versionSc " +
+                        "a.CODIGO_ESTUDIO as estudio, " +
+                        "a.VERSION as version " +
                         "from ( " +
                         "select t1.CODIGO_PARTICIPANTE, DATE_FORMAT(t1.FECHA_FIRMA, '%d-%m-%Y') as FECHA_FIRMA, t1.USUARIO_REGISTRO AS USUARIO_REGISTRO, " +
                         "fn_edad_actual_meses(t3.FECHANAC) as EDAD_ACTUAL_MESES, fn_edad_meses(t3.FECHANAC, t1.FECHA_FIRMA) as EDAD_MESES, " +
                         "t1.ACEPTA_PARTE_A, t1.ACEPTA_PARTE_B, t1.ACEPTA_PARTE_C, t1.ACEPTA_PARTE_D, t1.ACEPTA_PARTE_E, t1.ACEPTA_PARTE_F," +
-                        "t1.ACEPTA_CONTACTO_FUTURO, COALESCE(t2.ASENTIMIENTO_VERBAL, 'NA') as ASENTIMIENTO_VERBAL, concat(t1.VERSION, '.0') as VERSION " +
+                        "t1.ACEPTA_CONTACTO_FUTURO, COALESCE(t2.ASENTIMIENTO_VERBAL, 'NA') as ASENTIMIENTO_VERBAL, concat(t1.VERSION, '.0') as VERSION, t2.CODIGO_ESTUDIO as CODIGO_ESTUDIO " +
                         "FROM cartas_consentimientos t1 inner join tamizajes t2 on t1.CODIGO_TAMIZAJE = t2.CODIGO " +
                         "inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO " +
                         "where t1.FECHA_FIRMA >=  str_to_date('15/03/2022', '%d/%m/%Y')" + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
@@ -62,7 +63,7 @@ public class ComparacionCartasService {
                         "( select if(t3.ACEPTA, '1','0') from scan_detalle_parte t3 inner join scan_catalog_parte t2 on t3.IDPARTE = t2.IDPARTE " +
                         "where t3.IDPARTICIPANTECARTA = t1.IDPARTICIPANTECARTA and  (t2.PARTE = 'F' or t2.PARTE = 'Parte F')) as ACEPTA_PARTE_F, " +
                         "if(t1.CONTACTO_FUTURO, '1','0') as ACEPTA_CONTACTO_FUTURO, if (t1.TIPO_ASENTIMIENTO='1', t1.ASENTIMIENTO, 'NA') as ASENTIMIENTO_VERBAL, " +
-                        "tv.VERSION as VERSION " +
+                        "tv.VERSION as VERSION, tv.CODIGO_ESTUDIO as CODIGO_ESTUDIO " +
                         "from scan_participante_carta t1 inner join scan_catalog_version tv on t1.IDVERSION = tv.IDVERSION) as b " +
                         "where a.CODIGO_PARTICIPANTE = b.CODIGO_PARTICIPANTE and a.FECHA_FIRMA = b.FECHA_CARTA and a.VERSION = b.VERSION " +
                         "and ( " +
@@ -82,11 +83,12 @@ public class ComparacionCartasService {
         Query query = session.createSQLQuery("SELECT t1.CODIGO_PARTICIPANTE as codigoParticipante, DATE_FORMAT(t1.FECHA_FIRMA, '%d-%m-%Y') as fechaFirma, FLOOR(fn_edad_actual_meses(t3.FECHANAC)/12) as edadActual, t1.USUARIO_REGISTRO as usuarioRegistro, "+
                 "t1.ACEPTA_CONTACTO_FUTURO as contactoFuturo, COALESCE(t4.ASENTIMIENTO_VERBAL, '-') as asentimiento, t1.ACEPTA_PARTE_A as parteA, t1.ACEPTA_PARTE_B as parteB, t1.ACEPTA_PARTE_C as parteC, "+
                 "concat(t1.NOMBRE1_TUTOR, IF(t1.NOMBRE2_TUTOR is not null,' ', ''), COALESCE(t1.NOMBRE2_TUTOR,''), ' ', t1.APELLIDO1_TUTOR, IF(t1.APELLIDO2_TUTOR is not null,' ', ''), COALESCE(t1.APELLIDO2_TUTOR, '')) as quienFirma, "+
-        "(select m.es from mensajes m where m.catRoot = 'CP_CAT_RFTUTOR' and m.catKey = t1.RELACION_FAMILIAR) as relacionFamiliar, t1.VERSION as versionCarta "+
+        "(select m.es from mensajes m where m.catRoot = 'CP_CAT_RFTUTOR' and m.catKey = t1.RELACION_FAMILIAR) as relacionFamiliar, t1.VERSION as versionCarta, es.NOMBRE as estudio "+
         "FROM cartas_consentimientos t1 "+
         "left join scan_participante_carta t2 on t1.CODIGO_PARTICIPANTE = t2.CODIGO_PARTICIPANTE "+
-        "inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO "+
+        "inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO " +
         "inner join tamizajes t4 on t1.CODIGO_TAMIZAJE = t4.CODIGO "+
+        "inner join estudios es on t4.CODIGO_ESTUDIO = es.CODIGO "+
         "WHERE (t2.CODIGO_PARTICIPANTE Is Null) " +
         "and t1.FECHA_FIRMA >=  str_to_date('15/03/2022', '%d/%m/%Y') " + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
         "order by t1.CODIGO_PARTICIPANTE");
@@ -101,8 +103,9 @@ public class ComparacionCartasService {
                 "t1.NOMBRE1_TUTOR as nombre1TutorC, coalesce(t1.NOMBRE2_TUTOR, '') as nombre2TutorC, t1.APELLIDO1_TUTOR as apellido1TutorC, coalesce(t1.APELLIDO2_TUTOR, '') as apellido2TutorC, "+
                 "t2.NOMBRE1TUTOR as nombre1TutorS, t2.NOMBRE2TUTOR as nombre2TutorS, t2.APELLIDO1TUTOR as apellido1TutorS, t2.APELLIDO2TUTOR as apellido2TutorS, "+
                 "(select m.es from mensajes m where m.catRoot = 'CP_CAT_RFTUTOR' and m.catKey = t1.RELACION_FAMILIAR) as relacionFamiliarC, "+
-                "(select m.es from mensajes m where m.catRoot = 'CP_CAT_RFTUTOR' and m.catKey = CAST(t2.RELACION_FAMILIAR AS CHAR)) as relacionFamiliarS "+
+                "(select m.es from mensajes m where m.catRoot = 'CP_CAT_RFTUTOR' and m.catKey = CAST(t2.RELACION_FAMILIAR AS CHAR)) as relacionFamiliarS, t1.VERSION as versionCarta, es.NOMBRE as estudio "+
                 "from cartas_consentimientos t1 inner join tamizajes tt on t1.codigo_tamizaje = tt.codigo "+
+                "inner join estudios es on tt.CODIGO_ESTUDIO = es.CODIGO "+
                 "inner join scan_participante_carta t2 "+
                 "on t1.CODIGO_PARTICIPANTE = t2.CODIGO_PARTICIPANTE "+
                 "and date(t1.FECHA_FIRMA) = date(t2.FECHA_CARTA) "+

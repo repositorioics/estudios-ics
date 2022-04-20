@@ -2,9 +2,12 @@ package ni.org.ics.estudios.service.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.RecepcionBHC;
 import ni.org.ics.estudios.domain.muestreoanual.RecepcionBHCId;
+import ni.org.ics.estudios.dto.muestras.RecepcionBHCDto;
+import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,54 +68,60 @@ public class RecepcionBHCService {
 		// Retrieve all
 		return  query.list();
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<RecepcionBHC> getCompBHCSupEstHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select recepcionbhc.codigo, recepcionbhc.fecha_registro, recepcionbhc.lugar, " +
-				"recepcionbhc.volbhc, recepcionbhc.observacion, recepcionbhc.username " +
-				"from recepcionbhc left join muestras on recepcionbhc.codigo = muestras.codigo and recepcionbhc.fecha_bhc = muestras.fecha_registro " +
-				"where ((recepcionbhc.fecha_bhc = :fechaBHC) and " +
-				"(muestras.codigo Is Null or recepcionbhc.fecha_bhc <> muestras.fecha_registro or muestras.tubobhc=0));");
-		query.setTimestamp("fechaBHC", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public List<RecepcionBHC> getCompBHCSupLabHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select recepcionbhc.codigo, recepcionbhc.fecha_registro, recepcionbhc.lugar, " +
-				"recepcionbhc.volbhc, recepcionbhc.observacion, recepcionbhc.username " +
-				"from recepcionbhc left join labbhc on recepcionbhc.codigo = labbhc.codigo and recepcionbhc.fecha_bhc = labbhc.fecha_bhc " +
-				"where ((recepcionbhc.fecha_bhc = :fechaBHC) and (labbhc.codigo Is Null or recepcionbhc.fecha_bhc <> labbhc.fecha_bhc));");
-		query.setTimestamp("fechaBHC", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
+
+    @SuppressWarnings("unchecked")
+    public List<RecepcionBHCDto> getCompBHCSupEstHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select recepcionbhc.codigo as codigo, recepcionbhc.fecha_registro as fecreg, recepcionbhc.lugar as lugar, " +
+                "recepcionbhc.volbhc as volumen, recepcionbhc.observacion as observacion, recepcionbhc.username as username " +
+                "from estudios_ics.recepcionbhc left join estudios_ics.muestras on recepcionbhc.codigo = muestras.codigo and recepcionbhc.fecha_bhc = muestras.fecha_registro " +
+                "where ((recepcionbhc.fecha_bhc = :fechaBHC) and " +
+                "(muestras.codigo Is Null or recepcionbhc.fecha_bhc <> muestras.fecha_registro or muestras.tubobhc=0) " +
+                "and YEAR(recepcionbhc.fecha_bhc) = :anio);");
+        query.setTimestamp("fechaBHC", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(RecepcionBHCDto.class));
+        // Retrieve all
+        return  query.list();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<RecepcionBHCDto> getCompBHCSupLabHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select recepcionbhc.codigo as codigo, recepcionbhc.fecha_registro as fecreg, recepcionbhc.lugar as lugar, " +
+                "recepcionbhc.volbhc as volumen, recepcionbhc.observacion as observacion, recepcionbhc.username as username " +
+                "from estudios_ics.recepcionbhc left join estudios_ics.labbhc on recepcionbhc.codigo = labbhc.codigo and recepcionbhc.fecha_bhc = labbhc.fecha_bhc " +
+                "where ((recepcionbhc.fecha_bhc = :fechaBHC) and " +
+                "(labbhc.codigo Is Null or recepcionbhc.fecha_bhc <> labbhc.fecha_bhc) and YEAR(recepcionbhc.fecha_bhc) = :anio);");
+        query.setTimestamp("fechaBHC", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(RecepcionBHCDto.class));
+        // Retrieve all
+        return  query.list();
+    }
 	
 	/**
 	 * Regresa una RecepcionBHC

@@ -1167,7 +1167,7 @@
         });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                console.log(data);
+                //console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
@@ -1251,64 +1251,64 @@
                         $("#paxgene").val(data.isPaxgene);
                         $("#paxgene2").text(data.isPaxgene);
 
-                        if(data.pesotalla =='Si'){//11979- codigo
+                        if(data.pesotalla != null && data.pesotalla =='Si'){//11979- codigo
                             $("#pyt").text(data.pesotalla).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#pyt").text(data.pesotalla).removeClass('badge-danger');
                         }
 
-                        if(data.lactMat =='Si'){
+                        if(data.lactMat != null && data.lactMat =='Si'){
                             $("#lact").text(data.lactMat).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#lact").text(data.lactMat).removeClass('badge-danger');
                         }
 
-                        if(data.encPart =='Si'){
+                        if(data.encPart != null && data.encPart =='Si'){
                             $("#enc_part").text(data.encPart).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#enc_part").text(data.encPart).removeClass('badge-danger');
                         }
 
-                        if(data.consFlu =='Si'){
+                        if(data.consFlu != null && data.consFlu =='Si'){
                             $("#cons_flu").text(data.consFlu).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#cons_flu").text(data.consFlu).removeClass('badge-danger');
                         }
 
-                        if(data.consDeng =='Si'){
+                        if(data.consDeng != null && data.consDeng =='Si'){
                             $("#cons_Den").text(data.consDeng).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#cons_Den").text(data.consDeng).removeClass('badge-danger');
                         }
 
-                        if(data.vacunas =='Si'){
+                        if(data.vacunas != null && data.vacunas =='Si'){
                             $("#vacuna").text(data.vacunas).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#vacuna").text(data.vacunas).removeClass('badge-danger');
                         }
 
-                        if(data.encCasaCoh =='Si'){
+                        if(data.encCasaCoh != null && data.encCasaCoh =='Si'){
                             $("#enc_casa_cohorte").text(data.encCasaCoh).addClass('badge badge-danger badge-pill text-dark');
                         }else{
                             $("#enc_casa_cohorte").text(data.encCasaCoh).removeClass('badge-danger');
                         }
 
-                        if(data.encCHF =='Si'){
+                        if(data.encCHF != null && data.encCHF =='Si'){
                             $("#enc_casa_Fam").text(data.encCHF).addClass('badge badge-danger badge-pill text-dark');
                         }else{
-                            $("#enc_casa_Fam").text(data.encCHF).removeClass('badge-danger');
+                            $("#enc_casa_Fam").text("No").removeClass('badge-danger');
                         }
 
-                        if(data.consChf =='Si'){
+                        if(data.consChf != null && data.consChf =='Si'){
                             $("#cons_chf").text(data.consChf).addClass('badge badge-danger badge-pill text-dark');
                         }else{
-                            $("#cons_chf").text(data.consChf).removeClass('badge-danger');
+                            $("#cons_chf").text("No").removeClass('badge-danger');
                         }
 
-                    if(data.cuestCovid !='No'){
+                    if(data.cuestCovid != null && data.cuestCovid !='No'){
                         $("#cuest_covid").text("Si").addClass('badge badge-danger badge-pill text-dark');
                     }else{
-                        $("#cuest_covid").text(data.cuestCovid).removeClass('badge-danger');
+                        $("#cuest_covid").text("No").removeClass('badge-danger');
                     }
 
                     if(data.tieneBhc =='No'){

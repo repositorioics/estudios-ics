@@ -4,8 +4,13 @@ import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
+import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.muestreoanual.*;
 import ni.org.ics.estudios.dto.BhcEnvioDto;
+import ni.org.ics.estudios.dto.ComparacionMuestrasDto;
 import ni.org.ics.estudios.dto.cartas.*;
+import ni.org.ics.estudios.dto.muestras.MuestraDto;
+import ni.org.ics.estudios.dto.muestras.RecepcionBHCDto;
 import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -58,6 +63,8 @@ public class ExcelBuilder extends AbstractExcelView {
         } else
         if (reporte.equalsIgnoreCase(Constants.TPR_INFOCARTAS)){
             buildExcelInfoCartas(model, workbook, response);
+        } else if (reporte.equalsIgnoreCase(Constants.TPR_COMPARACION_MX_MA)){
+            buildExcelComparacionMuestrasMA(model, workbook, response);
         }
 	}
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -277,6 +284,7 @@ public class ExcelBuilder extends AbstractExcelView {
     //region todo: Reporte en Excel unicamente de PBMC
     public void buildExcelOnlyPbmc(Map<String, Object>model, HSSFWorkbook workbook, HttpServletResponse response)throws IOException{
         List<Pbmc_Detalle_Envio> pbmc_detalle_envios = (List<Pbmc_Detalle_Envio>) model.get("allPbmc");
+        //List<PbmcHorasToma> horasPbmc = (List<PbmcHorasToma>) model.get("horasPbmc");
 
         logger.log(Level.INFO, "construyendo libro de excel...");
         response.setContentType("application/octec-stream");
@@ -290,6 +298,7 @@ public class ExcelBuilder extends AbstractExcelView {
         String[] headers = new String[]{
                 "CODIGO",
                 "fecha",
+                //"hora",
                 "volumen",
                 "observacion",
                 "PRecepciona",
@@ -313,7 +322,7 @@ public class ExcelBuilder extends AbstractExcelView {
 
         if (pbmc_detalle_envios.size()>0){
             //Obtengo el Envio de Pbmc
-            SerologiaEnvio objEnvio= pbmc_detalle_envios.get(0).getSerologiaEnvio();
+            //SerologiaEnvio objEnvio= pbmc_detalle_envios.get(0).getSerologiaEnvio();
 
             //Cell style for content cells
             font = workbook.createFont();
@@ -762,6 +771,382 @@ public class ExcelBuilder extends AbstractExcelView {
         }
 
         for(int i =0;i<headers6.length;i++){
+            sheet.autoSizeColumn(i);
+        }
+    }
+
+    public void buildExcelComparacionMuestrasMA(Map<String, Object> model, HSSFWorkbook workbook,HttpServletResponse response) throws IOException {
+
+        ComparacionMuestrasDto comparacionMuestrasDto = (ComparacionMuestrasDto) model.get("datos");
+        List<RecepcionBHCDto> bhcSupNoEst = comparacionMuestrasDto.getBhcSupNoEst();
+        List<RecepcionBHCDto> bhcSupNoLab = comparacionMuestrasDto.getBhcSupNoLab();
+        List<MuestraDto> bhcEstnoSup = comparacionMuestrasDto.getBhcEstnoSup();
+        List<MuestraDto> bhcEstnoLab = comparacionMuestrasDto.getBhcEstnoLab();
+        List<LabBHC> bhcLabNoSup = comparacionMuestrasDto.getBhcLabNoSup();
+        List<LabBHC> bhcLabNoEst = comparacionMuestrasDto.getBhcLabNoEst();
+
+        List<RecepcionSero> rojoSupNoEst = comparacionMuestrasDto.getRojoSupervisorNoEst();
+        List<RecepcionSero> rojoSupNoLab = comparacionMuestrasDto.getRojoSupervisorNoLab();
+        List<MuestraDto> rojoEstnoSup = comparacionMuestrasDto.getRojoEstacionesNoSup();
+        List<MuestraDto> rojoEstnoLab = comparacionMuestrasDto.getRojoEstacionesNoLab();
+        List<LabSero> rojoLabNoSup = comparacionMuestrasDto.getRojoLaboratorioNoSup();
+        List<LabSero> rojoLabNoEst = comparacionMuestrasDto.getRojoLaboratorioNoEst();
+
+        List<MuestraDto> pbmcEstnoLab = comparacionMuestrasDto.getPbmcEstnoLab();
+        List<LabPbmc> pbmcLabNoEst = comparacionMuestrasDto.getPbmcLabNoEst();
+
+        logger.log(Level.INFO, "construyendo libro de excel...");
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String fechaActual = dateFormat.format(new Date());
+        String fileName = "diferencias_muestras_" + fechaActual + ".xls";
+
+        response.setContentType("application/octec-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+        Font font = workbook.createFont();
+        font.setFontName("Arial");
+        font.setFontHeight((short) (11 * 20));
+        font.setColor(HSSFColor.BLACK.index);
+        font.setBold(true);
+
+        Font fontContent = workbook.createFont();
+        fontContent.setFontName("Calibri");
+        fontContent.setFontHeight((short) (11 * 20));
+        fontContent.setColor(HSSFColor.BLACK.index);
+
+        Font fontNoData = workbook.createFont();
+        fontNoData.setFontName("Calibri");
+        fontNoData.setFontHeight((short) (11 * 20));
+        fontNoData.setColor(HSSFColor.BLACK.index);
+        fontNoData.setBold(true);
+
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setBorderBottom(BorderStyle.THIN);
+        headerStyle.setBorderTop(BorderStyle.THIN);
+        headerStyle.setBorderLeft(BorderStyle.THIN);
+        headerStyle.setBorderRight(BorderStyle.THIN);
+        headerStyle.setFont(font);
+
+        CellStyle titleStyle = workbook.createCellStyle();
+        titleStyle.setFont(font);
+
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        CreationHelper createHelper = workbook.getCreationHelper();
+        dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy HH:mm:ss"));
+        dateCellStyle.setBorderBottom(BorderStyle.THIN);
+        dateCellStyle.setBorderTop(BorderStyle.THIN);
+        dateCellStyle.setBorderLeft(BorderStyle.THIN);
+        dateCellStyle.setBorderRight(BorderStyle.THIN);
+        dateCellStyle.setFont(fontContent);
+
+        CellStyle contentCellStyle = workbook.createCellStyle();
+        contentCellStyle.setBorderBottom(BorderStyle.THIN);
+        contentCellStyle.setBorderTop(BorderStyle.THIN);
+        contentCellStyle.setBorderLeft(BorderStyle.THIN);
+        contentCellStyle.setBorderRight(BorderStyle.THIN);
+        contentCellStyle.setFont(fontContent);
+
+        CellStyle noDataCellStyle = workbook.createCellStyle();
+        noDataCellStyle.setBorderBottom(BorderStyle.THIN);
+        noDataCellStyle.setBorderTop(BorderStyle.THIN);
+        noDataCellStyle.setBorderLeft(BorderStyle.THIN);
+        noDataCellStyle.setBorderRight(BorderStyle.THIN);
+        noDataCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        noDataCellStyle.setFont(fontNoData);
+
+        int rowCount = 0;
+        HSSFSheet sheet = workbook.createSheet("Tubo BHC");
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Centro de Salud Sócrates Flores"), 0, 5, false, titleStyle);
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Muestreo Anual " + Constants.ANIOMUESTREO + " - Informe de diferencias de muestras (Tubos BHC)"), 0, 5, false, titleStyle);
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Fecha: %s", fechaActual), 0, 5, false, titleStyle);
+
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "1) Tubos BHC del supervisor que no tienen las estaciones", 0, 5, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_SUP);
+        if (bhcSupNoEst.size() > 0) {
+            for (RecepcionBHCDto registro : bhcSupNoEst) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getLugar(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 5, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_SUP.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_SUP.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "2) Tubos BHC del supervisor que no tiene el laboratorio", 0, 5, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_SUP);
+        if (bhcSupNoLab.size() > 0) {
+            for (RecepcionBHCDto registro : bhcSupNoLab) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getLugar(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 5, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_SUP.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_SUP.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "3) Tubos BHC de las estaciones que no tiene el supervisor", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_EST);
+        if (bhcEstnoSup.size() > 0) {
+            for (MuestraDto registro : bhcEstnoSup) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_EST.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "4) Tubos BHC de las estaciones que no tiene el laboratorio", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_EST);
+        if (bhcEstnoLab.size() > 0) {
+            for (MuestraDto registro : bhcEstnoLab) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_EST.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "5) Tubos BHC de laboratorio que no tiene el supervisor", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_LAB);
+        if (bhcLabNoSup.size() > 0) {
+            for (LabBHC registro : bhcLabNoSup) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_LAB.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "6) Tubos BHC de laboratorio que no tienen las estaciones", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_LAB);
+        if (bhcLabNoEst.size() > 0) {
+            for (LabBHC registro : bhcLabNoEst) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_LAB.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        sheet = workbook.createSheet("Tubo Rojo");
+        rowCount = 0;
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Centro de Salud Sócrates Flores"), 0, 5, false, titleStyle);
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Muestreo Anual " + Constants.ANIOMUESTREO + " - Informe de diferencias de muestras (Tubos Rojos)"), 0, 5, false, titleStyle);
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Fecha: %s", fechaActual), 0, 5, false, titleStyle);
+
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "1) Tubos Rojos del supervisor que no tienen las estaciones", 0, 5, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_SUP);
+        if (rojoSupNoEst.size() > 0) {
+            for (RecepcionSero registro : rojoSupNoEst) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getLugar(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 5, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_SUP.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_SUP.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "2) Tubos Rojos del supervisor que no tiene el laboratorio", 0, 5, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_SUP);
+        if (rojoSupNoLab.size() > 0) {
+            for (RecepcionSero registro : rojoSupNoLab) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getLugar(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 5, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_SUP.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_SUP.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "3) Tubos Rojos de las estaciones que no tiene el supervisor", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_EST);
+        if (rojoEstnoSup.size() > 0) {
+            for (MuestraDto registro : rojoEstnoSup) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_EST.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "4) Tubos Rojos de las estaciones que no tiene el laboratorio", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_EST);
+        if (rojoEstnoLab.size() > 0) {
+            for (MuestraDto registro : rojoEstnoLab) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_EST.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "5) Tubos Rojos de laboratorio que no tiene el supervisor", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_LAB);
+        if (rojoLabNoSup.size() > 0) {
+            for (LabSero registro : rojoLabNoSup) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_LAB.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "6) Tubos Rojos de laboratorio que no tienen las estaciones", 0, 4, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_LAB);
+        if (rojoLabNoEst.size() > 0) {
+            for (LabSero registro : rojoLabNoEst) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_LAB.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        sheet = workbook.createSheet("Tubo PBMC");
+        rowCount = 0;
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Centro de Salud Sócrates Flores"), 0, 5, false, titleStyle);
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Muestreo Anual " + Constants.ANIOMUESTREO + " - Informe de diferencias de muestras (Tubos PBMC)"), 0, 5, false, titleStyle);
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), String.format("Fecha: %s", fechaActual), 0, 5, false, titleStyle);
+
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "1) Tubos PBMC de laboratorio que no tienen las estaciones", 0, 5, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_LAB);
+        if (pbmcLabNoEst.size() > 0) {
+            for (LabPbmc registro : pbmcLabNoEst) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFecreg(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getVolumen(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getObservacion(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getUsername(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_LAB.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        rowCount += 2;
+
+        createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "2) Tubos PBMC de las estaciones que no tiene el laboratorio", 0, 5, false, titleStyle);
+        setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_EST);
+        if (pbmcEstnoLab.size() > 0) {
+            for (MuestraDto registro : pbmcEstnoLab) {
+                HSSFRow dataRow = sheet.createRow(rowCount++);
+                setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+            }
+        } else {
+            setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);
+        }
+        for (int i = 0; i < Constants.COLUMNAS_TBL_DIF_MX_LAB.length; i++) {
             sheet.autoSizeColumn(i);
         }
     }

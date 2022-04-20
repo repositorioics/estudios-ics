@@ -2,9 +2,11 @@ package ni.org.ics.estudios.service.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.RecepcionSero;
 import ni.org.ics.estudios.domain.muestreoanual.RecepcionSeroId;
+import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,55 +68,62 @@ public class RecepcionSeroService {
 		// Retrieve all
 		return  query.list();
 	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public List<RecepcionSero> getCompSeroSupEstHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select recepcionsero.codigo, recepcionsero.fecha_registro, recepcionsero.lugar, " +
-				"recepcionsero.volbhc, recepcionsero.observacion, recepcionsero.username " +
-				"from recepcionsero left join muestras on recepcionsero.codigo = muestras.codigo and recepcionsero.fecha_sero = muestras.fecha_registro " +
-				"where ((recepcionsero.fecha_sero = :fechaSero) and " +
-				"(muestras.codigo Is Null or recepcionsero.fecha_sero <> muestras.fecha_registro or muestras.tuborojo=0));");
-		query.setTimestamp("fechaSero", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public List<RecepcionSero> getCompSeroSupLabHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select recepcionsero.codigo, recepcionsero.fecha_registro, recepcionsero.lugar, " +
-				"recepcionsero.volbhc, recepcionsero.observacion, recepcionsero.username " +
-				"from recepcionsero left join labsero on recepcionsero.codigo = labsero.codigo and recepcionsero.fecha_sero = labsero.fecha_sero " +
-				"where ((recepcionsero.fecha_sero  = :fechaSero) and (labsero.codigo Is Null or recepcionsero.fecha_sero <> labsero.fecha_sero));");
-		query.setTimestamp("fechaSero", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
+
+
+    @SuppressWarnings("unchecked")
+    public List<RecepcionSero> getCompSeroSupEstHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select recepcionsero.codigo as codigo, recepcionsero.fecha_registro as fecreg, recepcionsero.lugar as lugar, " +
+                "recepcionsero.volbhc as volumen, recepcionsero.observacion as observacion, recepcionsero.username as username " +
+                "from estudios_ics.recepcionsero left join estudios_ics.muestras on recepcionsero.codigo = muestras.codigo and recepcionsero.fecha_sero = muestras.fecha_registro " +
+                "where ((recepcionsero.fecha_sero = :fechaSero) and " +
+                "(muestras.codigo Is Null or recepcionsero.fecha_sero <> muestras.fecha_registro or muestras.tuborojo=0) " +
+                "and (YEAR(recepcionsero.fecha_sero) = :anio));");
+        query.setTimestamp("fechaSero", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(RecepcionSero.class));
+        // Retrieve all
+        return  query.list();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<RecepcionSero> getCompSeroSupLabHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select recepcionsero.codigo as codigo, recepcionsero.fecha_registro as fecreg, recepcionsero.lugar as lugar, " +
+                "recepcionsero.volbhc as volumen, recepcionsero.observacion as observacion, recepcionsero.username as  username " +
+                "from estudios_ics.recepcionsero left join estudios_ics.labsero on recepcionsero.codigo = labsero.codigo and recepcionsero.fecha_sero = labsero.fecha_sero " +
+                "where ((recepcionsero.fecha_sero  = :fechaSero) and " +
+                "(labsero.codigo Is Null or recepcionsero.fecha_sero <> labsero.fecha_sero) " +
+                "and (YEAR(recepcionsero.fecha_sero) = :anio));");
+        query.setTimestamp("fechaSero", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(RecepcionSero.class));
+        // Retrieve all
+        return  query.list();
+    }
 	
 	
 	/**

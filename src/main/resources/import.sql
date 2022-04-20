@@ -1338,3 +1338,6 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_03', '3', 'CAT_CONTACTADO_MA', NULL, '0', 3, '0', 'Llamadas telefónicas');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_998', '998', 'CAT_CONTACTADO_MA', NULL, '0', 4, '0', 'Otros');
 INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_CONTACTADO_MA_04', '4', 'CAT_CONTACTADO_MA', NULL, '0', 5, '0', 'SMS');
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.differences', 'Diferencias','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.samples.differences', 'Reporte de diferencias en toma de muestra anual del día de hoy','0','0',0);

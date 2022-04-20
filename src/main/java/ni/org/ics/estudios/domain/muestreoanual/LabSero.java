@@ -1,11 +1,9 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Simple objeto de dominio que representa los datos de la toma de muestra
@@ -15,26 +13,38 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "labsero", catalog = "estudios_ics")
-public class LabSero {
+public class LabSero implements Serializable {
 
 	/**
 	 * 
 	 */
-	
-	private LabSeroId labSeroId;
+    private static final long serialVersionUID = 1L;
+    private Integer codigo;
+    private Date fechaRecSero;
 	private Double volumen;
 	private String observacion;
 	private String username;
 	private Date fecreg;
 
-	@EmbeddedId
-	public LabSeroId getLabSeroId() {
-		return labSeroId;
-	}
+    @Id
+    @Column(name = "codigo", nullable = false, length = 5)
+    public Integer getCodigo() {
+        return codigo;
+    }
 
-	public void setLabSeroId(LabSeroId labSeroId) {
-		this.labSeroId = labSeroId;
-	}
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    @Id
+    @Column(name = "fecha_sero", nullable = false)
+    public Date getFechaRecSero() {
+        return fechaRecSero;
+    }
+
+    public void setFechaRecSero(Date fechaRecSero) {
+        this.fechaRecSero = fechaRecSero;
+    }
 
 
 	@Column(name="volsero", nullable = true)
@@ -73,4 +83,22 @@ public class LabSero {
 		this.fecreg = fecreg;
 	}
 
+    public boolean equals(Object other) {
+        if ((this == other))
+            return true;
+        if ((other == null))
+            return false;
+        if (!(other instanceof LabSeroId))
+            return false;
+        LabSeroId castOther = (LabSeroId) other;
+        return (this.getCodigo() == castOther.getCodigo())
+                && (this.getFechaRecSero() == castOther.getFechaRecSero());
+    }
+
+    public int hashCode() {
+        int result = 17;
+        result = 37 * 3 + this.getCodigo();
+        result = 37 * result + Integer.valueOf(this.getFechaRecSero().toString());
+        return result;
+    }
 }

@@ -5,10 +5,12 @@ import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.catalogs.Rango_Edad_Volumen;
+import ni.org.ics.estudios.dto.PbmcHorasToma;
 import ni.org.ics.estudios.service.UsuarioService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +73,24 @@ public class PbmcService {
         query.setParameter("nEnvios", nEnvios);
         return query.list();
     }
+
+    public List<PbmcHorasToma> getHorasPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createSQLQuery("select m.codigo as codigo, date(m.fecha_muestra) as fechaToma, TIME_FORMAT(m.fecha_muestra, '%H:%i:%S') as horaToma, m.hora_pbmc as horaPbmc, m.tuborojo as tuboRojo, m.tuboleu as tuboPbmc " +
+                "from muestras m, pbmc_recepcion p " +
+                "inner join pbmc_detalle_envio de on p.ID_PBMC = de.ID_PBMC " +
+                "inner join envio_muestras e on de.ENVIO_MUESTRA_ID = e.ENVIO_MUESTRA_ID " +
+                "where date(m.fecha_muestra) = date(p.FECHA) and m.codigo = p.CODIGO_PARTICIPANTE " +
+                "and e.NUMERO_ENVIO  = :nEnvios and date(e.FECHA_ENVIO) between :fechaInicio and :fechaFin " +
+                "order by m.codigo asc");
+        query.setParameter("fechaInicio", fechaInicio);
+        query.setParameter("fechaFin", fechaFin);
+        query.setParameter("nEnvios", nEnvios);
+
+        query.setResultTransformer(Transformers.aliasToBean(PbmcHorasToma.class));
+        return query.list();
+    }
+
 
     //region Verificar si existe registro Guardado.
     public boolean ExistePbmc(Date fecha, Integer codigo) throws Exception{

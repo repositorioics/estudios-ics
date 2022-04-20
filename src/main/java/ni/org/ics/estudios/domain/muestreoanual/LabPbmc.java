@@ -1,11 +1,9 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Simple objeto de dominio que representa los datos de la toma de muestra
@@ -15,26 +13,39 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "labpbmc", catalog = "estudios_ics")
-public class LabPbmc {
+public class LabPbmc implements Serializable {
 
 	/**
 	 * 
 	 */
-	
-	private LabPbmcId labPbmcId;
+
+    private static final long serialVersionUID = 1L;
+    private Integer codigo;
+    private Date fechaRecPbmc;
 	private Double volumen;
 	private String observacion;
 	private String username;
 	private Date fecreg;
 
-	@EmbeddedId
-	public LabPbmcId getLabPbmcId() {
-		return labPbmcId;
-	}
+    @Id
+    @Column(name = "codigo", nullable = false, length = 5)
+    public Integer getCodigo() {
+        return codigo;
+    }
 
-	public void setLabPbmcId(LabPbmcId labPbmcId) {
-		this.labPbmcId = labPbmcId;
-	}
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    @Id
+    @Column(name = "fecha_pbmc", nullable = false)
+    public Date getFechaRecPbmc() {
+        return fechaRecPbmc;
+    }
+
+    public void setFechaRecPbmc(Date fechaRecPbmc) {
+        this.fechaRecPbmc = fechaRecPbmc;
+    }
 
 	@Column(name="volpbmc", nullable = true)
 	public Double getVolumen() {
@@ -72,6 +83,23 @@ public class LabPbmc {
 		this.fecreg = fecreg;
 	}
 
+    public boolean equals(Object other) {
+        if ((this == other))
+            return true;
+        if ((other == null))
+            return false;
+        if (!(other instanceof LabPbmcId))
+            return false;
+        LabPbmcId castOther = (LabPbmcId) other;
+        return (this.getCodigo() == castOther.getCodigo())
+                && (this.getFechaRecPbmc() == castOther.getFechaRecPbmc());
+    }
 
+    public int hashCode() {
+        int result = 17;
+        result = 37 * 3 + this.getCodigo();
+        result = 37 * result + Integer.valueOf(this.getFechaRecPbmc().toString());
+        return result;
+    }
 
 }

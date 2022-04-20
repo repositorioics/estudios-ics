@@ -18,6 +18,7 @@ public class ComparacionCartasDto {
     private String parteC;
     private String quienFirma;
     private String relacionFamiliar;
+    private String estudio;
     private String versionCarta;
 
     public Integer getCodigoParticipante() {
@@ -106,6 +107,14 @@ public class ComparacionCartasDto {
 
     public void setRelacionFamiliar(String relacionFamiliar) {
         this.relacionFamiliar = relacionFamiliar;
+    }
+
+    public String getEstudio() {
+        return estudio;
+    }
+
+    public void setEstudio(String estudio) {
+        this.estudio = estudio;
     }
 
     public String getVersionCarta() {

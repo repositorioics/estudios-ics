@@ -61,6 +61,7 @@
                                             <th><spring:message code="C_App"/></th>
                                             <th><spring:message code="quien_firma_App"/></th>
                                             <th><spring:message code="rel_fam_App"/></th>
+                                            <th><spring:message code="estudio"/></th>
                                             <th><spring:message code="version"/></th>
                                         </tr>
                                         </thead>
@@ -104,8 +105,8 @@
                                             <th><spring:message code="E_Car"/></th>
                                             <th><spring:message code="F_App"/></th>
                                             <th><spring:message code="F_Car"/></th>
-                                            <th><spring:message code="ver_App"/></th>
-                                            <th><spring:message code="ver_Car"/></th>
+                                            <th><spring:message code="estudio"/></th>
+                                            <th><spring:message code="version"/></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -141,6 +142,8 @@
                                             <th><spring:message code="quien_firma_Car"/></th>
                                             <th><spring:message code="rel_fam_App"/></th>
                                             <th><spring:message code="rel_fam_Car"/></th>
+                                            <th><spring:message code="estudio_App"/></th>
+                                            <th><spring:message code="version_App"/></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -255,6 +258,7 @@
                 { data: 'parteC', defaultContent: ""},
                 { data: 'quienFirma', defaultContent: ""},
                 { data: 'relacionFamiliar', defaultContent: ""},
+                { data: 'estudio', defaultContent: ""},
                 { data: 'versionCarta', defaultContent: ""}
             ]
         });
@@ -301,8 +305,8 @@
                 { data: 'aceptaParteEc', defaultContent: ""},
                 { data: 'aceptaParteFCc', defaultContent: ""},
                 { data: 'aceptaParteFSc', defaultContent: ""},
-                { data: 'versionCc', defaultContent: ""},
-                { data: 'versionSc', defaultContent: ""}
+                { data: 'estudio', defaultContent: ""},
+                { data: 'version', defaultContent: ""}
             ]
         });
 
@@ -338,7 +342,9 @@
                 { data: 'quienFirmaC', defaultContent: ""},
                 { data: 'quienFirmaS', defaultContent: ""},
                 { data: 'relacionFamiliarC', defaultContent: ""},
-                { data: 'relacionFamiliarS', defaultContent: ""}
+                { data: 'relacionFamiliarS', defaultContent: ""},
+                { data: 'estudio', defaultContent: ""},
+                { data: 'versionCarta', defaultContent: ""}
             ]
         });
 

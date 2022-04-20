@@ -2,9 +2,12 @@ package ni.org.ics.estudios.service.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.MuestraId;
 import ni.org.ics.estudios.domain.muestreoanual.MuestraMA;
+import ni.org.ics.estudios.dto.muestras.MuestraDto;
+import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,118 +90,133 @@ public class MuestraService {
 		// Retrieve all
 		return  query.list();
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<MuestraMA> getCompBHCEstSupHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select muestras.codigo, muestras.fecha_muestra, muestras.pinchazos, muestras.recurso1, muestras.recurso2 " +
-				"from muestras left join recepcionbhc on muestras.codigo = recepcionbhc.codigo and muestras.fecha_registro = recepcionbhc.fecha_bhc " +
-				"where ((muestras.fecha_registro  = :fechaBHC and muestras.tubobhc =1) and (recepcionbhc.codigo Is Null or muestras.fecha_registro <> recepcionbhc.fecha_bhc));");
-		query.setTimestamp("fechaBHC", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<MuestraMA> getCompBHCEstLabHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select muestras.codigo, muestras.fecha_muestra, muestras.pinchazos, muestras.recurso1, muestras.recurso2 " +
-				"from muestras left join labbhc on muestras.codigo = labbhc.codigo and muestras.fecha_registro = labbhc.fecha_bhc " +
-				"where ((muestras.fecha_registro = :fechaBHC and muestras.tubobhc =1) and (labbhc.codigo Is Null or muestras.fecha_registro <> labbhc.fecha_bhc));");
-		query.setTimestamp("fechaBHC", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<MuestraMA> getCompSeroEstSupHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select muestras.codigo, muestras.fecha_muestra, muestras.pinchazos, muestras.recurso1, muestras.recurso2 " +
-				"from muestras left join recepcionsero on muestras.codigo = recepcionsero.codigo and muestras.fecha_registro = recepcionsero.fecha_sero " +
-				"where ((muestras.fecha_registro  = :fechaSero and muestras.tuborojo =1) and (recepcionsero.codigo Is Null or muestras.fecha_registro <> recepcionsero.fecha_sero));");
-		query.setTimestamp("fechaSero", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<MuestraMA> getCompSeroEstLabHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select muestras.codigo, muestras.fecha_muestra, muestras.pinchazos, muestras.recurso1, muestras.recurso2 " +
-				"from muestras left join labsero on muestras.codigo = labsero.codigo and muestras.fecha_registro = labsero.fecha_sero " +
-				"where ((muestras.fecha_registro = :fechaSero and muestras.tuborojo =1) and (labsero.codigo Is Null or muestras.fecha_registro <> labsero.fecha_sero));");
-		query.setTimestamp("fechaSero", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public List<MuestraMA> getCompPbmcEstLabHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select muestras.codigo, muestras.fecha_muestra, muestras.pinchazos, muestras.recurso1, muestras.recurso2 " +
-				"from muestras left join labpbmc on muestras.codigo = labpbmc.codigo  and muestras.fecha_registro = labpbmc.fecha_pbmc " +
-				"where ((muestras.fecha_registro = :fechaPbmc and muestras.tuboleu =1) and (labpbmc.codigo Is Null or muestras.fecha_registro <> labpbmc.fecha_pbmc));");
-		query.setTimestamp("fechaPbmc", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
-	
+
+    @SuppressWarnings("unchecked")
+    public List<MuestraDto> getCompBHCEstSupHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block0
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+                "from estudios_ics.muestras left join estudios_ics.recepcionbhc on muestras.codigo = recepcionbhc.codigo and muestras.fecha_registro = recepcionbhc.fecha_bhc " +
+                "where ((muestras.fecha_registro  = :fechaBHC and muestras.tubobhc =1) and (recepcionbhc.codigo Is Null or muestras.fecha_registro <> recepcionbhc.fecha_bhc) " +
+                "and (YEAR(muestras.fecha_registro) = :anio));");
+        query.setTimestamp("fechaBHC", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(MuestraDto.class));
+        // Retrieve all
+        return  query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<MuestraDto> getCompBHCEstLabHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+                "from estudios_ics.muestras left join estudios_ics.labbhc on muestras.codigo = labbhc.codigo and muestras.fecha_registro = labbhc.fecha_bhc " +
+                "where ((muestras.fecha_registro = :fechaBHC and muestras.tubobhc =1) and (labbhc.codigo Is Null or muestras.fecha_registro <> labbhc.fecha_bhc) " +
+                "and (YEAR(muestras.fecha_registro) = :anio));");
+        query.setTimestamp("fechaBHC", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(MuestraDto.class));
+        // Retrieve all
+        return  query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<MuestraDto> getCompSeroEstSupHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+                "from estudios_ics.muestras left join estudios_ics.recepcionsero on muestras.codigo = recepcionsero.codigo and muestras.fecha_registro = recepcionsero.fecha_sero " +
+                "where ((muestras.fecha_registro  = :fechaSero and muestras.tuborojo =1 and (muestras.tuboLeu is null or muestras.tuboLeu = 0)) and (recepcionsero.codigo Is Null or muestras.fecha_registro <> recepcionsero.fecha_sero) " +
+                "and (YEAR(muestras.fecha_registro) = :anio));");
+        query.setTimestamp("fechaSero", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(MuestraDto.class));
+        // Retrieve all
+        return  query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<MuestraDto> getCompSeroEstLabHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+                "from estudios_ics.muestras left join estudios_ics.labsero on muestras.codigo = labsero.codigo and muestras.fecha_registro = labsero.fecha_sero " +
+                "where ((muestras.fecha_registro = :fechaSero and muestras.tuborojo =1 and (muestras.tuboLeu is null or muestras.tuboLeu = 0)) and (labsero.codigo Is Null or muestras.fecha_registro <> labsero.fecha_sero) " +
+                "and (YEAR(muestras.fecha_registro) = :anio));");
+        query.setTimestamp("fechaSero", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(MuestraDto.class));
+        // Retrieve all
+        return  query.list();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<MuestraDto> getCompPbmcEstLabHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+                "from estudios_ics.muestras left join estudios_ics.labpbmc on muestras.codigo = labpbmc.codigo  and muestras.fecha_registro = labpbmc.fecha_pbmc " +
+                "where ((muestras.fecha_registro = :fechaPbmc and muestras.tuboleu =1) and (labpbmc.codigo Is Null or muestras.fecha_registro <> labpbmc.fecha_pbmc) " +
+                "and (YEAR(muestras.fecha_registro) = :anio));");
+        query.setTimestamp("fechaPbmc", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(MuestraDto.class));
+        // Retrieve all
+        return  query.list();
+    }
+
 	
 	/**
 	 * Regresa todos las Muestras Rojos

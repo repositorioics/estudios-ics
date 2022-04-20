@@ -1,9 +1,11 @@
 package ni.org.ics.estudios.service.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.LabPbmc;
+import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,28 +67,31 @@ public class LabPbmcService {
 		// Retrieve all
 		return  query.list();
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<LabPbmc> getCompPbmcLabEstHoy() {
-		// Retrieve session from Hibernate
-		Session session = sessionFactory.getCurrentSession();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");      
-	    Date dateWithoutTime = null;
-		try {
-			dateWithoutTime = sdf.parse(sdf.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-		// Create a Hibernate query (HQL)
-		Query query = session.createSQLQuery("select labpbmc.codigo, labpbmc.fecha_registro, labpbmc.volpbmc, labpbmc.observacion, labpbmc.username " +
-				"from labpbmc left join muestras on labpbmc.codigo = muestras.codigo and labpbmc.fecha_pbmc = muestras.fecha_registro " +
-				"where ((labpbmc.fecha_pbmc = :fechaRecPbmc) and (muestras.codigo Is Null or labpbmc.fecha_pbmc <> muestras.fecha_registro or muestras.tuboleu=0));");
-		query.setTimestamp("fechaRecPbmc", timeStamp);
-		// Retrieve all
-		return  query.list();
-	}
+
+    @SuppressWarnings("unchecked")
+    public List<LabPbmc> getCompPbmcLabEstHoy() {
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateWithoutTime = null;
+        try {
+            dateWithoutTime = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
+        // Create a Hibernate query (HQL)
+        Query query = session.createSQLQuery("select labpbmc.codigo as codigo, labpbmc.fecha_registro as fecreg, labpbmc.volpbmc as volumen, labpbmc.observacion as observacion, labpbmc.username as username " +
+                "from estudios_ics.labpbmc left join estudios_ics.muestras on labpbmc.codigo = muestras.codigo and labpbmc.fecha_pbmc = muestras.fecha_registro " +
+                "where ((labpbmc.fecha_pbmc = :fechaRecPbmc) and (muestras.codigo Is Null or labpbmc.fecha_pbmc <> muestras.fecha_registro or muestras.tuboleu=0) " +
+                "and (YEAR(labpbmc.fecha_pbmc) = :anio)) order by labpbmc.codigo;");
+        query.setTimestamp("fechaRecPbmc", timeStamp);
+        query.setInteger("anio", Constants.ANIOMUESTREO);
+        query.setResultTransformer(Transformers.aliasToBean(LabPbmc.class));
+        // Retrieve all
+        return  query.list();
+    }
 	
 
 }

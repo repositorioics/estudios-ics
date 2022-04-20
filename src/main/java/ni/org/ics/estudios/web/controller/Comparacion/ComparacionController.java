@@ -500,4 +500,9 @@ public class ComparacionController {
         return new ResponseEntity<String>( json, headers, HttpStatus.CREATED );
     }
 
+    @RequestMapping(value = "reporte-diferencias", method = RequestMethod.GET)
+    public String info(Model model) throws ParseException {
+        return "comparacion/diferencias";
+    }
+
 }

@@ -52,7 +52,7 @@ public class MuestraId implements Serializable {
 
 	@Column(name = "fecha_muestra", nullable = false)
 	public Date getFechaMuestra() {
-		return fechaMuestra;
+            return fechaMuestra;
 	}
 
 	public void setFechaMuestra(Date fechaMuestra) {

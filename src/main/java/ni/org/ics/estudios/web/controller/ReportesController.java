@@ -5,14 +5,18 @@ import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
+import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
-import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.domain.muestreoanual.*;
 import ni.org.ics.estudios.domain.scancarta.DetalleParte;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.dto.BhcEnvioDto;
+import ni.org.ics.estudios.dto.ComparacionMuestrasDto;
 import ni.org.ics.estudios.dto.cartas.*;
+import ni.org.ics.estudios.dto.muestras.MuestraDto;
+import ni.org.ics.estudios.dto.muestras.RecepcionBHCDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.Bhc.BhcService;
 import ni.org.ics.estudios.service.EstudioService;
@@ -20,8 +24,9 @@ import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
+import ni.org.ics.estudios.service.comparacion.ComparasionService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
-import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
+import ni.org.ics.estudios.service.muestreoanual.*;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
 import ni.org.ics.estudios.service.scancarta.ScanCartaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
@@ -79,6 +84,19 @@ public class ReportesController {
 
     @Resource(name = "BhcService")
     private BhcService bhcService;
+
+    @Resource(name="bhcService")
+    private RecepcionBHCService recepcionBHCService;
+    @Resource(name="seroService")
+    private RecepcionSeroService seroService;
+    @Resource(name="muestraMAService")
+    private MuestraService muestraService;
+    @Resource(name="labBhcService")
+    private LabBHCService labBhcService;
+    @Resource(name="labSeroService")
+    private LabSeroService labSeroService;
+    @Resource(name="labPbmcService")
+    private LabPbmcService labPbmcService;
 
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
@@ -236,8 +254,9 @@ public class ReportesController {
 
         List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
         ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
-
-        ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
+        /*List<PbmcHorasToma> horasPbmc = this.pbmcService.getHorasPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("horasPbmc",horasPbmc);
+        */ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
         return ReporteEnvioPbmcPdf;
     }
 
@@ -445,6 +464,37 @@ public class ReportesController {
         ReporteEnvio.addObject("datos", informacionCartasDto);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_INFOCARTAS);
         return ReporteEnvio;
+    }
+
+    @RequestMapping(value = "/diferencias-mx-excel", method = RequestMethod.GET)
+    public ModelAndView excelComparacionMxHoy()
+            throws Exception{
+        ModelAndView modelAndView = new ModelAndView("excelView");
+        ComparacionMuestrasDto comparacionMuestrasDto = new ComparacionMuestrasDto();
+
+        //comparacion de rojos
+        comparacionMuestrasDto.setRojoSupervisorNoEst(seroService.getCompSeroSupEstHoy());
+        comparacionMuestrasDto.setRojoSupervisorNoLab(seroService.getCompSeroSupLabHoy());
+        comparacionMuestrasDto.setRojoEstacionesNoSup(muestraService.getCompSeroEstSupHoy());
+        comparacionMuestrasDto.setRojoEstacionesNoLab(muestraService.getCompSeroEstLabHoy());
+        comparacionMuestrasDto.setRojoLaboratorioNoSup(labSeroService.getCompSeroLabSupHoy());
+        comparacionMuestrasDto.setRojoLaboratorioNoEst(labSeroService.getCompSeroLabEstHoy());
+
+        //comparacion bhc
+        comparacionMuestrasDto.setBhcSupNoEst(recepcionBHCService.getCompBHCSupEstHoy());
+        comparacionMuestrasDto.setBhcSupNoLab(recepcionBHCService.getCompBHCSupLabHoy());
+        comparacionMuestrasDto.setBhcEstnoSup(muestraService.getCompBHCEstSupHoy());
+        comparacionMuestrasDto.setBhcEstnoLab(muestraService.getCompBHCEstLabHoy());
+        comparacionMuestrasDto.setBhcLabNoSup(labBhcService.getCompBHCLabSupHoy());
+        comparacionMuestrasDto.setBhcLabNoEst(labBhcService.getCompBHCLabEstHoy());
+
+        //comparacion pbmc
+        comparacionMuestrasDto.setPbmcLabNoEst(labPbmcService.getCompPbmcLabEstHoy());
+        comparacionMuestrasDto.setPbmcEstnoLab(muestraService.getCompPbmcEstLabHoy());
+
+        modelAndView.addObject("datos", comparacionMuestrasDto);
+        modelAndView.addObject("TipoReporte", Constants.TPR_COMPARACION_MX_MA);
+        return modelAndView;
     }
 
 }

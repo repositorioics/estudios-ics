@@ -1,6 +1,8 @@
 package ni.org.ics.estudios.web.controller.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.*;
+import ni.org.ics.estudios.dto.muestras.MuestraDto;
+import ni.org.ics.estudios.dto.muestras.RecepcionBHCDto;
 import ni.org.ics.estudios.service.muestreoanual.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,10 +157,10 @@ public class MuestrasController {
 	public String fetchComp1JSP(Model model) throws ParseException {
 		logger.debug("Mostrando Muestras en JSP");
 		// Obtiene todos los bhcs llamando al DomainService    	
-		List<RecepcionBHC> bhcSupNoEst = bhcService.getCompBHCSupEstHoy();
-		List<RecepcionBHC> bhcSupNoLab = bhcService.getCompBHCSupLabHoy();
-		List<MuestraMA> bhcEstnoSup = muestraService.getCompBHCEstSupHoy();
-		List<MuestraMA> bhcEstnoLab = muestraService.getCompBHCEstLabHoy();
+		List<RecepcionBHCDto> bhcSupNoEst = bhcService.getCompBHCSupEstHoy();
+		List<RecepcionBHCDto> bhcSupNoLab = bhcService.getCompBHCSupLabHoy();
+		List<MuestraDto> bhcEstnoSup = muestraService.getCompBHCEstSupHoy();
+		List<MuestraDto> bhcEstnoLab = muestraService.getCompBHCEstLabHoy();
 		List<LabBHC> bhcLabNoSup = labBhcService.getCompBHCLabSupHoy();
 		List<LabBHC> bhcLabNoEst = labBhcService.getCompBHCLabEstHoy();
 		// Incluye bhcs de hoy al modelo
@@ -189,8 +191,8 @@ public class MuestrasController {
 		logger.debug("Mostrando Muestras en JSP");
 		List<RecepcionSero> rojoSupNoEst = seroService.getCompSeroSupEstHoy();
 		List<RecepcionSero> rojoSupNoLab = seroService.getCompSeroSupLabHoy();
-		List<MuestraMA> rojoEstnoSup = muestraService.getCompSeroEstSupHoy();
-		List<MuestraMA> rojoEstnoLab = muestraService.getCompSeroEstLabHoy();
+		List<MuestraDto> rojoEstnoSup = muestraService.getCompSeroEstSupHoy();
+		List<MuestraDto> rojoEstnoLab = muestraService.getCompSeroEstLabHoy();
 		List<LabSero> rojoLabNoSup = labSeroService.getCompSeroLabSupHoy();
 		List<LabSero> rojoLabNoEst = labSeroService.getCompSeroLabEstHoy();
 		model.addAttribute("rojosupnoesthoy", rojoSupNoEst);
@@ -216,7 +218,7 @@ public class MuestrasController {
 	@RequestMapping(value = "/comppbmc", method = RequestMethod.GET)
 	public String fetchComp3JSP(Model model) throws ParseException {
 		logger.debug("Mostrando Muestras en JSP");
-		List<MuestraMA> pbmcEstnoLab = muestraService.getCompPbmcEstLabHoy();
+		List<MuestraDto> pbmcEstnoLab = muestraService.getCompPbmcEstLabHoy();
 		List<LabPbmc> pbmcLabNoEst = labPbmcService.getCompPbmcLabEstHoy();
 		model.addAttribute("pbmcestnolabhoy", pbmcEstnoLab);
 		model.addAttribute("pbmclabnoesthoy", pbmcLabNoEst);

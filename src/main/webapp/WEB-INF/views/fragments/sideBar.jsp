@@ -75,6 +75,10 @@
                             <a class="nav-link" href="<spring:url value="/comparacion/muestra" htmlEscape="true "/>">
                                 <i class="fa fa-tint" aria-hidden="true"></i><spring:message code="sample" /></a>
                         </li>
+                            <li class="nav-item differences">
+                            <a class="nav-link" href="<spring:url value="/comparacion/reporte-diferencias" htmlEscape="true "/>">
+                                <i class="fa fa-info" aria-hidden="true"></i><spring:message code="lbl.differences" /></a>
+                        </li>
                     </ul>
                 </li>
             </sec:authorize>
