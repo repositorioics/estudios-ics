@@ -3,6 +3,7 @@ package ni.org.ics.estudios.service.muestreoanual;
 import ni.org.ics.estudios.domain.muestreoanual.MuestraId;
 import ni.org.ics.estudios.domain.muestreoanual.MuestraMA;
 import ni.org.ics.estudios.dto.muestras.MuestraDto;
+import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -44,11 +45,22 @@ public class MuestraService {
 		// Retrieve session from Hibernate
 		Session session = sessionFactory.getCurrentSession();
 		// Create a Hibernate query (HQL)
-		Query query = session.createQuery("FROM MuestraMA");
+		Query query = session.createQuery("FROM MuestraMA mx where mx.mId.fechaMuestra >= to_date('01/03/2022','DD/MM/YYY') ");
 		// Retrieve all
 		return  query.list();
 	}
-	
+
+    public List<MuestraMA> getMuestrasActual() throws ParseException {
+        // Retrieve session from Hibernate
+        Date fechaInicioMuestreo = DateUtil.StringToDate("01/03/2022", "dd/MM/yyyy");
+        Session session = sessionFactory.getCurrentSession();
+        // Create a Hibernate query (HQL)
+        Query query = session.createQuery("FROM MuestraMA mx where mx.mId.fechaMuestra >= :fecha");
+        query.setParameter("fecha", fechaInicioMuestreo);
+        // Retrieve all
+        return  query.list();
+    }
+
 	/**
 	 * Regresa todos las Muestras BHC
 	 * 

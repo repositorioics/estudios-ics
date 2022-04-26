@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -34,9 +35,9 @@ public class MuestraMAController {
      */
     @RequestMapping(value = "muestrasMA", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List<MuestraMA> descargarmuestras() {
+    List<MuestraMA> descargarmuestras() throws ParseException {
         logger.info("Descargando toda la informacion de los datos de las muestras");
-        List<MuestraMA> muestras = muestraService.getMuestras();
+        List<MuestraMA> muestras = muestraService.getMuestrasActual();
         if (muestras == null){
         	logger.debug("Nulo");
         }
