@@ -20,7 +20,11 @@
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
-    <title></title>
+   <style>
+       .form-control-buscar {
+           width: 100%;
+       }
+   </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -57,16 +61,17 @@
                             <br/>
                             <hr/>
                             <div class="table-responsive">
-                                <table id="lista_casos" class="table table-hover table-bordered">
+                                <table id="lista_casos" class="table table-hover table-bordered" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th width="12%"><spring:message code="positive" /></th>
-                                        <th width="12%"><spring:message code="chf.house" /></th>
-                                        <th width="12%"><spring:message code="logindate" /></th>
+                                        <th width="9%"><spring:message code="positive" /></th>
+                                        <th width="7%"><spring:message code="chf.house" /></th>
+                                        <th width="10%"><spring:message code="logindate" /></th>
                                         <th width="12%"><spring:message code="lbl.positive.by" /></th>
-                                        <th width="12%"><spring:message code="FIS" /></th>
-                                        <th width="12%"><spring:message code="fif" /></th>
-                                        <th width="12%"><spring:message code="logoutdate" /></th>
+                                        <th width="9%"><spring:message code="FIS" /></th>
+                                        <th width="9%"><spring:message code="fif" /></th>
+                                        <th width="10%"><spring:message code="logoutdate" /></th>
+                                        <th width="18%"><spring:message code="observacion" /></th>
                                         <th width="16%"><spring:message code="actions" /></th>
                                     </tr>
                                     </thead>
@@ -102,6 +107,7 @@
                                             <td><fmt:formatDate value="${l.fis}" pattern="dd/MM/yyyy" /></td>
                                             <td><fmt:formatDate value="${l.fif}" pattern="dd/MM/yyyy" /></td>
                                             <td><fmt:formatDate value="${l.codigoCaso.fechaInactivo}" pattern="dd/MM/yyyy" /></td>
+                                            <td><c:out value="${l.codigoCaso.observacion}" /></td>
                                             <td align="center">
                                                 <c:choose>
                                                     <c:when test="${l.codigoCaso.inactivo=='1'}">
@@ -141,16 +147,27 @@
                             <input type=hidden id="accionUrl"/>
                             <div id="cuerpo"></div>
                             <form action="#" autocomplete="off" id="close-form" class="form-horizontal">
-                                <div id="dvSalida" class="form-group row">
-                                    <label class="form-control-label col-md-3" for="fechaSalida"><spring:message code="logoutdate" />
-                                            <span class="required">
-                                                 *
-                                            </span>
-                                    </label>
-                                    <div class="input-group col-md-9">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                <div id="dvSalida">
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3" for="fechaSalida"><spring:message code="logoutdate" />
+                                                <span class="required">
+                                                     *
                                                 </span>
-                                        <input name="fechaSalida" id="fechaSalida" class="form-control date-picker" type="text" data-date-end-date="+0d" value="" />
+                                        </label>
+                                        <div class="input-group col-md-9">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                            <input name="fechaSalida" id="fechaSalida" class="form-control date-picker" type="text" data-date-end-date="+0d" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3" for="observacion"><spring:message code="observacion" />
+                                        </label>
+                                        <div class="input-group col-md-9">
+                                                    <span class="input-group-addon"><i class="fa fa-edit"></i>
+                                                    </span>
+                                            <textarea class="form-control"  id="observacion" name="observacion" placeholder="<spring:message code="observacion" />" rows="2"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -170,6 +187,15 @@
 
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
+<c:choose>
+    <c:when test="${cookie.eIcsLang.value == null}">
+        <c:set var="lenguaje" value="es"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
+    </c:otherwise>
+</c:choose>
+
 <!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/libs/jquery.dataTables.js" var="dataTableJs" />
 <script src="${dataTableJs}" type="text/javascript"></script>
@@ -201,14 +227,6 @@
 <script src="${handleDatePickers}"></script>
 <spring:url value="/resources/js/app.js" var="App" />
 <script src="${App}" type="text/javascript"></script>
-<c:choose>
-    <c:when test="${cookie.eIcsLang.value == null}">
-        <c:set var="lenguaje" value="es"/>
-    </c:when>
-    <c:otherwise>
-        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
-    </c:otherwise>
-</c:choose>
 
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
@@ -264,7 +282,7 @@
         });
         function processCase(){
             $.post( "${closeUrl}"
-                    , {codigo: $('#accionUrl').val(), fechaInactivo: $('#fechaSalida').val()}
+                    , {codigo: $('#accionUrl').val(), fechaInactivo: $('#fechaSalida').val(), observacion: $('#observacion').val()}
                     , function( data )
                     {
                         var registro = JSON.parse(data);
@@ -290,12 +308,16 @@
         $('#lista_casos thead tr').clone(true).appendTo( '#lista_casos thead' );
         $('#lista_casos thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table.column(i).search( this.value ).draw();
-                }
-            });
+            if (title != 'Acciones') {
+                $(this).html('<input type="text" placeholder="Buscar '+title+'" class="form-control-buscar" />');
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i).search(this.value).draw();
+                    }
+                });
+            } else {
+                $(this).html('');
+            }
         });
 
     });

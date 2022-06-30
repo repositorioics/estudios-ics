@@ -197,12 +197,14 @@ public class ParticipanteCasoUO1Controller {
     @RequestMapping( value="closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="codigo", required=true ) String codigo
             , @RequestParam( value="fechaDesactivacion", required=true, defaultValue="" ) String fechaDesactivacion
+            , @RequestParam( value="observacion", required=false, defaultValue="" ) String observacion
     )
     {
         try{
             ParticipanteCasoUO1 casaCasoExistente = this.participanteCasoUO1Service.getCasoByCodigo(codigo);
             if (casaCasoExistente!=null) {
                 casaCasoExistente.setFechaDesactivacion(DateUtil.StringToDate(fechaDesactivacion, "dd/MM/yyyy"));
+                casaCasoExistente.setObservacion(observacion);
                 casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setRecordDate(new Date());
                 casaCasoExistente.setActivo("0");

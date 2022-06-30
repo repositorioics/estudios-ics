@@ -1,12 +1,17 @@
 package ni.org.ics.estudios.api;
 
+import com.google.common.base.Predicate;
 import com.google.gson.Gson;
+import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.HojaConsulta.*;
 import ni.org.ics.estudios.dto.RangosFrecuenciasCardiacas;
 import ni.org.ics.estudios.dto.RangosPresion;
+import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.hc.ActualizacionHojaConsultaService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
+import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
+import ni.org.ics.estudios.web.utils.FilterLists;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -33,6 +39,9 @@ public class expose {
 
     @Resource(name = "actualizacionHojaConsultaService")
     private ActualizacionHojaConsultaService actualizacionHojaConsultaService;
+
+    @Resource(name = "participanteProcesosService")
+    private ParticipanteProcesosService participanteProcesosService;
 
     /* Obtener los Rangos de Presión y Frecuencias Cardiacas */
     @RequestMapping(value = "/rangos-presion-frecuencias", method = RequestMethod.GET, produces = "application/json")
@@ -111,17 +120,41 @@ public class expose {
     public @ResponseBody
     List<HCConsentimientoDto> getConsentimientos() {
         try {
-            logger.info("Descargando toda la informacion de los consentimientos de cada participante para el sistema hoja de consulta digital");
-            List<HCConsentimientoDto> respuestaList = actualizacionHojaConsultaService.getConsentimientosFromNewScan();
-            respuestaList.addAll(actualizacionHojaConsultaService.getConsentimientosFromOldScan());
-            if (respuestaList == null) {
-                logger.debug("Nulo");
+            List<HCConsentimientoDto> respuestaList = new ArrayList<HCConsentimientoDto>();
+            List<HCTipoConsentimientoDto> tiposConsentimientos = actualizacionHojaConsultaService.getTiposConsentimientos();
+            List<ParticipanteProcesos> participanteProcesos = this.participanteProcesosService.getParticipantesProcesos();
+            for(ParticipanteProcesos pp : participanteProcesos ){
+                if (pp.getEstudio()!= null && pp.getEstudio()!=null) {
+                    String[] arrayString = pp.getEstudio().split("  ");
+                    for (String estudio : arrayString) {
+                        HCTipoConsentimientoDto tipoCon = getTipoConsentimiento(tiposConsentimientos, estudio.trim());
+                        if (tipoCon != null) {
+                            HCConsentimientoDto consentimientoDto = new HCConsentimientoDto();
+                            consentimientoDto.setCodigo(pp.getCodigo());
+                            consentimientoDto.setRetirado(false);
+                            consentimientoDto.setFecha(new Date());
+                            consentimientoDto.setCons(BigInteger.valueOf(tipoCon.getCons()));
+                            respuestaList.add(consentimientoDto);
+                        }
+                    }
+                }
             }
             return respuestaList;
         }catch (Exception ex){
             ex.printStackTrace();
             return null;
         }
+    }
+
+    private HCTipoConsentimientoDto getTipoConsentimiento(List<HCTipoConsentimientoDto> tiposConsentimientos, final String descripcion){
+        Predicate<HCTipoConsentimientoDto> predicate = new Predicate<HCTipoConsentimientoDto>() {
+            @Override
+            public boolean apply(HCTipoConsentimientoDto tpconsentimientos) {
+                return tpconsentimientos.getDescCons()!=null && tpconsentimientos.getDescCons().equals(descripcion);
+            }
+        };
+        Collection<HCTipoConsentimientoDto> resultado = FilterLists.filter(tiposConsentimientos, predicate);
+        return resultado.size()>0?resultado.iterator().next():null;
     }
 
     /**

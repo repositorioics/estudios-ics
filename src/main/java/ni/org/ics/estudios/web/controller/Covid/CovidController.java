@@ -287,20 +287,22 @@ public class CovidController {
     @RequestMapping( value="closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="codigo", required=true ) String codigo
             , @RequestParam( value="fechaInactivo", required=true, defaultValue="" ) String fechaInactivo
+            , @RequestParam( value="observacion", required=false, defaultValue="" ) String observacion
     )
     {
         try{
             CasoCovid19 casoExistente = this.covidService.getCasoCovid19ByCodigo(codigo);
             if (casoExistente!=null) {
                 Date dFechaInactivo = DateUtil.StringToDate(fechaInactivo, "dd/MM/yyyy");
+                //quitar vigencia a las extensiones de la carta o cartas de Tcovid de familia que puedan tener activas los participantes
+                this.scanCartaService.quitarVigenciaCartaTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
+                this.scanCartaService.quitarVigenciaExtensionTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
                 casoExistente.setFechaInactivo(dFechaInactivo);
+                casoExistente.setObservacion(observacion);
                 //casoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 //casoExistente.setRecordDate(new Date());
                 casoExistente.setInactivo("1");
                 this.covidService.saveOrUpdateCasoCovid19(casoExistente);
-                //quitar vigencia a las extensiones de la carta o cartas de Tcovid de familia que puedan tener activas los participantes
-                this.scanCartaService.quitarVigenciaCartaTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
-                this.scanCartaService.quitarVigenciaExtensionTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
             }
             return JsonUtil.createJsonResponse(casoExistente);
         }

@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -93,9 +94,13 @@ public class ActualizacionHojaConsultaService {
                 "( select if(t3.ACEPTA, 1,0) from scan_detalle_parte t3 inner join scan_catalog_parte t2 on t3.IDPARTE = t2.IDPARTE " +
                 "where t3.IDPARTICIPANTECARTA = t1.IDPARTICIPANTECARTA and  (t2.PARTE = 'F' or t2.PARTE = 'Parte F')) as parteF, " +
                 "(select m.es from mensajes m where m.catRoot = 'CAT_CASOS_INDICE_MIEMBRO' and m.catKey = t1.ES_CASO_INDICE_O_MIEMBRO) as tipoPartTrans, " +
-                "'' as reactivacion, t1.FECHA_REGISTRO as ahora " +
+                "'' as reactivacion, t1.FECHA_REGISTRO as ahora, " +
+                "CAST((select CASE when count(1) > 0 then 1 ELSE 0 END from documentacion_retiro_data re " +
+                "where re.CODIGO_PARTICIPANTE = t1.CODIGO_PARTICIPANTE " +
+                "and re.ESTUDIO_RETIRADO = tc.desc_cons " +
+                "and date(re.FECHA_RETIRO) >= date(t1.FECHA_CARTA))as UNSIGNED) as retirado " +
                 "from scan_participante_carta t1 inner join scan_catalog_version tv on t1.IDVERSION = tv.IDVERSION, tipo_consentimiento tc " +
-                "where tc.estudio = tv.CODIGO_ESTUDIO and t1.PASIVO = '0'");
+                "where tc.estudio = tv.CODIGO_ESTUDIO and t1.PASIVO = '0'").addScalar("retirado", StandardBasicTypes.BOOLEAN);
         query.setResultTransformer(Transformers.aliasToBean(HCConsentimientoDto.class));
         return query.list();
     }

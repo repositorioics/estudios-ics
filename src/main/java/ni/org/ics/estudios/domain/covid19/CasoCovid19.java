@@ -27,6 +27,7 @@ public class CasoCovid19 extends BaseMetaData implements Auditable {
 	private String inactivo;
 	private Date fechaInactivo;
     private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
+    private String observacion;
     
 	@Id
     @Column(name = "CODIGO_CASO", length = 36, nullable = false)
@@ -86,7 +87,17 @@ public class CasoCovid19 extends BaseMetaData implements Auditable {
         this.fechaRecibido = fechaRecibido;
     }
 
-	@Override
+    @JsonIgnore
+    @Column(name = "OBSERVACION", nullable = true, length = 100)
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    @Override
 	public String toString(){
 		return codigoCaso + "-" + fechaIngreso;
 	}

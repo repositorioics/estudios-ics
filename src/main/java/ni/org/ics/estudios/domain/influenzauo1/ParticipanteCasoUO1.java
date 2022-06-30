@@ -3,6 +3,7 @@ package ni.org.ics.estudios.domain.influenzauo1;
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.audit.Auditable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class ParticipanteCasoUO1 extends BaseMetaData implements Auditable {
 	private Date fechaIngreso;
 	private Date fechaDesactivacion;
     private Date fis;
+    private String observacion;
 	
     
 	@Id
@@ -105,7 +107,17 @@ public class ParticipanteCasoUO1 extends BaseMetaData implements Auditable {
         this.fis = fis;
     }
 
-	@Override
+    @JsonIgnore
+    @Column(name = "OBSERVACION", nullable = true, length = 100)
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    @Override
 	public String toString(){
 		return participante.getCodigo().toString();
 	}

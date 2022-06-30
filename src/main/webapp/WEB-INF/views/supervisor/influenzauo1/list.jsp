@@ -61,17 +61,18 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-bordered" id="lista_casos">
+                        <table class="table table-hover table-bordered" id="lista_casos" style="width:100%">
                             <thead>
                             <tr>
                                 <th width="9%"><spring:message code="code" /></th>
-                                <th width="9%"><spring:message code="house" /></th>
-                                <th width="14%"><spring:message code="logindate" /></th>
+                                <th width="7%"><spring:message code="house" /></th>
+                                <th width="10%"><spring:message code="logindate" /></th>
                                 <th width="12%"><spring:message code="lbl.positive.by" /></th>
-                                <th width="14%"><spring:message code="FIS" /></th>
-                                <th width="14%"><spring:message code="fif" /></th>
-                                <th width="14%"><spring:message code="logoutdate" /></th>
-                                <th width="14%"><spring:message code="actions" /></th>
+                                <th width="10%"><spring:message code="FIS" /></th>
+                                <th width="10%"><spring:message code="fif" /></th>
+                                <th width="10%"><spring:message code="logoutdate" /></th>
+                                <th width="18%"><spring:message code="observacion" /></th>
+                                <th width="14%" align="center"><spring:message code="actions" /></th>
                             </tr>
                             </thead>
                             <c:forEach items="${casos}" var="parti">
@@ -97,6 +98,7 @@
                                     <td><fmt:formatDate value="${parti.fis}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.fif}" pattern="dd/MM/yyyy" /></td>
                                     <td><fmt:formatDate value="${parti.fechaDesactivacion}" pattern="dd/MM/yyyy" /></td>
+                                    <td><c:out value="${parti.observacion}" /></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${parti.activo=='0'}">
@@ -131,16 +133,27 @@
                             <input type=hidden id="accionUrl"/>
                             <div id="cuerpo"></div>
                             <form action="#" autocomplete="off" id="close-form" class="form-horizontal">
-                                <div id="dvSalida" class="form-group row">
-                                    <label class="form-control-label col-md-3" for="fechaSalida"><spring:message code="logoutdate" />
-                                            <span class="required">
-                                                 *
-                                            </span>
-                                    </label>
-                                    <div class="input-group col-md-9">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                <div id="dvSalida">
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3" for="fechaSalida"><spring:message code="logoutdate" />
+                                                <span class="required">
+                                                     *
                                                 </span>
-                                        <input name="fechaSalida" id="fechaSalida" class="form-control date-picker" type="text" data-date-end-date="+0d" value="" />
+                                        </label>
+                                        <div class="input-group col-md-9">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                            <input name="fechaSalida" id="fechaSalida" class="form-control date-picker" type="text" data-date-end-date="+0d" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3" for="observacion"><spring:message code="observacion" />
+                                        </label>
+                                        <div class="input-group col-md-9">
+                                                    <span class="input-group-addon"><i class="fa fa-edit"></i>
+                                                    </span>
+                                            <textarea class="form-control"  id="observacion" name="observacion" placeholder="<spring:message code="observacion" />" rows="2"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -316,7 +329,7 @@
         function processCase()
         {
             $.post( "${closeUrl}"
-                    , {codigo: $('#accionUrl').val(), fechaDesactivacion: $('#fechaSalida').val()}
+                    , {codigo: $('#accionUrl').val(), fechaDesactivacion: $('#fechaSalida').val(), observacion: $('#observacion').val()}
                     , function( data )
                     {
                         var registro = JSON.parse(data);

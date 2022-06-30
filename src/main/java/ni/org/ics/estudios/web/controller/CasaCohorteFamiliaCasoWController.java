@@ -160,12 +160,14 @@ public class CasaCohorteFamiliaCasoWController {
     @RequestMapping( value="closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="codigo", required=true ) String codigo
             , @RequestParam( value="fechaInactiva", required=true, defaultValue="" ) String fechaInactiva
+            , @RequestParam( value="observacion", required=false, defaultValue="" ) String observacion
     )
     {
         try{
             CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasosByCodigo(codigo);
             if (casaCasoExistente!=null) {
                 casaCasoExistente.setFechaInactiva(DateUtil.StringToDate(fechaInactiva, "dd/MM/yyyy"));
+                casaCasoExistente.setObservacion(observacion);
                 casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setRecordDate(new Date());
                 casaCasoExistente.setInactiva("1");

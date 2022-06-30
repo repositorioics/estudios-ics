@@ -7,6 +7,7 @@ import ni.org.ics.estudios.domain.audit.Auditable;
 import ni.org.ics.estudios.domain.cohortefamilia.CasaCohorteFamilia;
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 /**
@@ -26,7 +27,7 @@ public class CasaCohorteFamiliaCaso extends BaseMetaData implements Auditable {
 	private Date fechaInicio;
 	private String inactiva;
 	private Date fechaInactiva;
-	
+    private String observacion;
     
 	@Id
     @Column(name = "CODIGO_CASO", length = 50, nullable = false)
@@ -77,7 +78,17 @@ public class CasaCohorteFamiliaCaso extends BaseMetaData implements Auditable {
 		this.fechaInactiva = fechaInactiva;
 	}
 
-	@Override
+    @JsonIgnore
+    @Column(name = "OBSERVACION", nullable = true, length = 100)
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    @Override
 	public String toString(){
 		return casa.getCodigoCHF() + "-" + fechaInicio;
 	}
