@@ -4,9 +4,12 @@ import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
+import ni.org.ics.estudios.dto.muestras.MxDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.ParticipanteService;
+import ni.org.ics.estudios.service.covid.CovidService;
 import ni.org.ics.estudios.service.influenzauo1.ParticipanteCasoUO1Service;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
@@ -44,6 +47,9 @@ public class ParticipanteCasoUO1Controller {
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
 
+    @Resource(name = "CovidService")
+    private CovidService covidService;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String obtenerCasos(Model model) throws ParseException {
         logger.debug("Mostrando casos monitoreo intensivo en JSP");
@@ -79,8 +85,16 @@ public class ParticipanteCasoUO1Controller {
     public @ResponseBody
     ResponseEntity<String> buscarParticipante(@RequestParam(value="participantCode", required=true ) Integer codigo) throws ParseException {
         logger.debug("buscar participante para positivo UO1");
-            Participante participante = this.participanteService.getParticipanteByCodigo(codigo);
+        String alerta = "";
+        Integer dias;
+        List<MxDto>muestraMenorA30Dia     = null;
+        List<MxDto>Chf_muestraMenorA30Dia = null;
+        Participante participante = this.participanteService.getParticipanteByCodigo(codigo);
             if (participante!=null) {
+
+                MessageResource intervalDias = messageResourceService.getMensaje("CAT_INTERVAL_DIAS_MX_30");
+                dias = Integer.parseInt(intervalDias.getSpanish());
+
                 ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(codigo);
                 if (procesos != null && procesos.getEstPart().equals(0))
                     return JsonUtil.createJsonResponse("Participante retirado");
@@ -94,11 +108,61 @@ public class ParticipanteCasoUO1Controller {
 
                 if (procesos != null && procesos.getEstudio().contains("CH Familia"))
                     return JsonUtil.createJsonResponse("Participante pertenece a Cohorte de Familia, no se puede registrar como positivo");
+
+
+                //Si contiene uo1 o influenza
+                if (procesos.getEstudio().contains("UO1") || procesos.getEstudio().contains("Influenza")){
+                    ParticipanteCasoUO1 participanteCasoUO1 = participanteCasoUO1Service.getCasoActivoParticipante(procesos.getCodigo());
+                    if (participanteCasoUO1==null){
+                        List<MxDto>casoIn30Day = this.participanteCasoUO1Service.getCasoUO1Ultimo30Day(codigo,dias);
+                        if (casoIn30Day.size()>0){
+                            alerta += "► <strong>Positivo de Influenza</strong>- en los ultimos <strong>" + dias + "</strong> días. ";
+                            alerta += "\t Inicio:  <strong>"+ DateUtil.DateToString(casoIn30Day.get(0).getFechaInicio(),"dd/MM/yyyy") +"</strong> finalizo: <strong>"+ DateUtil.DateToString(casoIn30Day.get(0).getFechaInactiva(),"dd/MM/yyyy")+"</strong><br>";
+                            alerta += "\t Tiempo transcurrido despúes de haber finalizado el caso: <strong>" + casoIn30Day.get(0).getDiasInactiva() + "</strong> días.";
+                        }
+                    }
+                    if (participanteCasoUO1 != null) {
+                        MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("UO1_CAT_POSITIVO_POR", participanteCasoUO1.getPositivoPor());
+                        alerta += "* Positivo de Influenza - Positivo por: "+(positivoPor != null ? positivoPor.getSpanish(): "-") +
+                                " - Activación: "+DateUtil.CalcularDiferenciaDiasFechas(participanteCasoUO1.getFechaIngreso(), new Date()) + " Dias <br>";
+                    }
+                    muestraMenorA30Dia     = this.covidService.getMuestrasTomaMinor30Days(codigo, dias);
+                    Chf_muestraMenorA30Dia = this.covidService.getChfMuestraToma2Minor30Days(codigo,dias);
+
+                    if (procesos != null){
+                        //validar convaleciente
+                        if (procesos.getConvalesciente().equalsIgnoreCase("Na")) {
+                            alerta+= "* Convaleciente con menos de 14 días. No tomar muestra. COMUNICAR AL SUPERVISOR\n ";
+                        } else if (procesos.getConvalesciente().equalsIgnoreCase("Si")) {
+                            alerta+= "* Convaleciente 14 días o más. COMUNICAR AL SUPERVISOR\n ";
+                        }
+
+                        if (procesos.getPosZika().matches("Si")) {
+                            alerta += "* Fue positivo a ZIKA <br> ";
+                        }
+
+                        if (procesos.getPosDengue() != null) {
+                            alerta += "* "+procesos.getPosDengue() + "<br> ";
+                        }
+
+                        if (procesos.getPosCovid() != null) {
+                            alerta += "* "+procesos.getPosCovid() + "<br> ";
+                        }
+                    }
+                }
+
             }
             else
                 return JsonUtil.createJsonResponse("No se encontró participante según el código ingresado");
 
-        return JsonUtil.createJsonResponse(participante);
+
+        ParticipanteBusquedaDto participanteDto = new ParticipanteBusquedaDto();
+        participanteDto.setCodigo(participante.getCodigo());
+        participanteDto.setCasaPediatrica(participante.getCasa().getCodigo());
+        participanteDto.setAlertas(alerta);
+        participanteDto.setMuestras(muestraMenorA30Dia);
+        participanteDto.setChf_muestras(Chf_muestraMenorA30Dia);
+        return JsonUtil.createJsonResponse(participanteDto);
     }
 
     @RequestMapping( value="saveCase", method=RequestMethod.POST)

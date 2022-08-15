@@ -1,6 +1,10 @@
 package ni.org.ics.estudios.dto;
 
+import ni.org.ics.estudios.dto.muestras.MxDto;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParticipanteBusquedaDto implements Serializable {
 
@@ -11,6 +15,12 @@ public class ParticipanteBusquedaDto implements Serializable {
     private String subEstudios;
     private Integer estado;
     private String validacion;
+    /**/
+    private String alertas;
+    private String intervalo;
+    private List<MxDto> muestras = new ArrayList<MxDto>();
+    private List<MxDto>chf_muestras = new ArrayList<MxDto>();
+    private String sweetAlerta;
 
     public Integer getCodigo() {
         return codigo;
@@ -66,5 +76,45 @@ public class ParticipanteBusquedaDto implements Serializable {
 
     public void setValidacion(String validacion) {
         this.validacion = validacion;
+    }
+
+    public String getIntervalo() {
+        return intervalo;
+    }
+
+    public void setIntervalo(String intervalo) {
+        this.intervalo = intervalo;
+    }
+
+    public List<MxDto> getMuestras() {
+        return muestras;
+    }
+
+    public void setMuestras(List<MxDto> muestras) {
+        this.muestras = muestras;
+    }
+
+    public List<MxDto> getChf_muestras() {
+        return chf_muestras;
+    }
+
+    public void setChf_muestras(List<MxDto> chf_muestras) {
+        this.chf_muestras = chf_muestras;
+    }
+
+    public String getAlertas() {
+        return alertas;
+    }
+
+    public void setAlertas(String alertas) {
+        this.alertas = alertas;
+    }
+
+    public String getSweetAlerta() {
+        return sweetAlerta;
+    }
+
+    public void setSweetAlerta(String sweetAlerta) {
+        this.sweetAlerta = sweetAlerta;
     }
 }

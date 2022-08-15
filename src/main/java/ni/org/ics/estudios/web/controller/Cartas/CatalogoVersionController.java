@@ -121,6 +121,7 @@ public class CatalogoVersionController {
             , @RequestParam(value = "editando", required = true) String editando
             , @RequestParam(value = "fecha_version", required = true) String fecha_version
             , @RequestParam(value = "fecha_format", required = true) String fecha_format
+            , @RequestParam(value = "contatoFuturo", required = false) String contatoFuturo
     )throws Exception{
         try {
 
@@ -145,6 +146,17 @@ public class CatalogoVersionController {
                     ac = true;
                 }
                 v.setActivo(ac);
+
+                 /*contatoFuturo*/
+                boolean contact_futuro = false;
+                if (contatoFuturo == null || contatoFuturo.equals(null) || contatoFuturo.equals("off")) {
+                    contact_futuro = false;
+                } else {
+                    contact_futuro = true;
+                }
+                v.setTiene_contacto_futuro(contact_futuro);
+                /*fin contatoFuturo*/
+
                 v.setFecha_version(fecha_version);
                 v.setFecha_format(monthName + ", " + yy);
                 String nameComputer = "NicaUmich2";
@@ -167,6 +179,15 @@ public class CatalogoVersionController {
                         ac = true;
                     }
                     v.setActivo(ac);
+                      /*contatoFuturo*/
+                    boolean contact_futuro = false;
+                    if (contatoFuturo == null || activo.equals(null) || activo.equals("off")) {
+                        contact_futuro = false;
+                    } else {
+                        contact_futuro = true;
+                    }
+                    v.setTiene_contacto_futuro(contact_futuro);
+                /*fin contatoFuturo*/
                     v.setFecha_version(fecha_version);
                     v.setFecha_format(monthName + ", " + yy);
                     v.setDeviceid("NicaUmich2");
@@ -211,10 +232,11 @@ public class CatalogoVersionController {
 
     @RequestMapping(value = "UpdateVersion", method = RequestMethod.POST)
     public ResponseEntity<String> UpdateVersion(@RequestParam( value="idversion", required=true ) String idversion
-            ,@RequestParam( value="idcarta", required=true ) Integer idcarta
+    ,@RequestParam( value="idcarta", required=true ) Integer idcarta
     ,@RequestParam( value="version", required=true ) String version
     ,@RequestParam( value="fecha_version", required=true ) String fecha_version
-    ,@RequestParam( value="activo", required=false ) String activo){
+    ,@RequestParam( value="activo", required=false ) String activo
+    ,@RequestParam(value = "contatoFuturo", required = false) String contatoFuturo){
         try{
             Version v = new Version();
             String[] words = fecha_version.split("-");
@@ -239,6 +261,15 @@ public class CatalogoVersionController {
             }
             //v.setActivo(ac);
             //v.setFecha_version(DateUtil.StringToDate(fecha_version,"dd//MM/yyyy"));
+             /*contatoFuturo*/
+            boolean contact_futuro = false;
+            if (contatoFuturo == null || activo.equals(null) || activo.equals("off")) {
+                contact_futuro = false;
+            } else {
+                contact_futuro = true;
+            }
+            v.setTiene_contacto_futuro(contact_futuro);
+                /*fin contatoFuturo*/
             v.setFecha_format(monthName + ", " + yy);
             v.setDeviceid("Server");
             v.setEstado('0');

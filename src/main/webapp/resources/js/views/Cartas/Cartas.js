@@ -220,9 +220,10 @@ var scanCarta = function(){
                 ObtenerVersion(parametroII);
             });
             function ObtenerVersion(parametros){
-                var idcarta = document.getElementById('carta').value;
                 var $version = $('#version');
+                var idcarta = document.getElementById('carta').value;
                 $.getJSON(parametros.VersionCartatUrl, { idcarta : idcarta,   ajax : 'true'  }, function(data) {
+                    var respons = JSON.parse(JSON.stringify(data));
                     $version.empty();
                     var len = data.objV.length;
                     if(len == 0){
@@ -238,7 +239,7 @@ var scanCarta = function(){
             }
 
             $("#version").on("change", function(){
-                //debugger;
+                var cur_value = $(this).val();
                 $("#partes").select2("val", "");
                 $("#partes").select2().empty();
                 $("#principal").val('');
@@ -253,8 +254,31 @@ var scanCarta = function(){
                     $("#DivPartes").show(1000);
                     $("#partes").empty();
                     ObtenerParte(parametroII);
+                    if(cur_value != null) {
+                        ContactoFuture(parametroII);
+                    }else{
+                        $("#contactoFuturo").select2().val('').trigger("change");
+                        $('#contactoFuturo option[value="2"]').prop('disabled',false);
+                    }
                 }
             });//fin
+
+            function ContactoFuture(parametros){
+                var idcarta = document.getElementById('carta').value;
+                $.getJSON(parametros.VersionCartatUrl, { idcarta : idcarta,   ajax : 'true'  }, function(data) {
+                    var respons = JSON.parse(JSON.stringify(data));
+                    if (respons.objV[0].tiene_contacto_futuro){
+                        $("#contactoFuturo").select2().val('1').trigger("change").prop('disabled',false);
+                        $("#contactoFuturo").prop('required','required');
+                        $('#contactoFuturo option[value="2"]').prop('disabled',true);
+                    }else{
+                        $('#contactoFuturo option[value="2"]').prop('disabled',false);
+                        $("#contactoFuturo").select2().val('2').trigger("change");
+                        $("#contactoFuturo").select2().prop('disabled',true);
+                    }
+                });
+            }
+
             var bandera = false;
             $("#partes").change(function (e) {
                 if (e.added != null){
@@ -360,7 +384,7 @@ var scanCarta = function(){
                         person: parseInt($("#person").val().trim()),
                         fechacarta: $("#fechacarta").val(),
                         proyecto: $("#proyecto").val(),
-                        contactoFuturo: ($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
+                        contactoFuturo: $("#contactoFuturo").val(), //($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
                         testigopresente: ($('input:checkbox[name=chktestigo]').prop('checked') == true) ? '1' : '0',
                         nombre1testigo: $("#nombre1Testigo").val().trim(),
                         nombre2testigo: $("#nombre2Testigo").val().trim(),
@@ -425,8 +449,15 @@ var scanCarta = function(){
                     isAllValid = false;
                 }else{
                     $('#proyecto').removeClass('is-invalid');
-
                 }
+
+                if($("#contactoFuturo").val()=="" || $("#contactoFuturo").val()== null){
+                    $('#contactoFuturo').addClass('is-invalid');
+                    isAllValid = false;
+                }else{
+                    $('#contactoFuturo').removeClass('is-invalid');
+                }
+
                 if($("#person").val()=="" || $("#person").val()== null){
                     isAllValid = false;
                     $('#person').addClass('is-invalid');
@@ -459,7 +490,7 @@ var scanCarta = function(){
                     dataType: "JSON",
                     contentType:'application/json;charset=utf-8',
                     success: function(response){
-                        console.log(response);
+                        //console.log(response);
                         if(response.msj != null){
                             swal({
                                 title: "Advertencia!",
@@ -469,7 +500,6 @@ var scanCarta = function(){
                                 timer: 2000
                             });
                         }else{
-                            clearInput();
                             swal({
                                 title: "Buen trabajo!",
                                 text: direct.successmessage,

@@ -133,13 +133,33 @@ public class RetiroService {
         return obj;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Razones_Retiro> getlistaDeRazonRetiroPorIdGrupo(Integer idgrupo)throws Exception{
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Query query  =  session.createQuery("from Razones_Retiro rr where rr.grupoid=:idgrupo order by rr.motivo asc");
+            query.setParameter("idgrupo",idgrupo);
+            return (List<Razones_Retiro>) query.list();
+        }catch (Exception e){
+            throw e;
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    public List<Razones_Retiro> getlistaDeRazonRetiro()throws Exception{
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Query query  =  session.createQuery("from Razones_Retiro rr order by rr.motivo asc");
+            return (List<Razones_Retiro>) query.list();
+        }catch (Exception e){
+            throw e;
+        }
+    }
 
     //Obtener Supervisor y Directora.
     @SuppressWarnings("unchecked")
     public List<Personal_Cargo> getSupervisor(List<Integer> ids)throws Exception {
         Session session = sessionFactory.getCurrentSession();
-        //List<Integer> cargoId  = ids;
         Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:ids) and pc.pasive='0' ");
         query.setParameterList("ids",ids);
         return query.list();
@@ -150,7 +170,6 @@ public class RetiroService {
     @SuppressWarnings("unchecked")
     public List<Personal_Cargo> getSupervisorAndDigitador(List<Integer> ids)throws Exception {
         Session session = sessionFactory.getCurrentSession();
-        //Integer  cargoId [] = { 2, 3, 6, 7 };
         Query query = session.createQuery("from Personal_Cargo pc where pc.cargo.idcargo in (:ids) and pc.pasive='0' ");
         query.setParameterList("ids",ids);
         return query.list();

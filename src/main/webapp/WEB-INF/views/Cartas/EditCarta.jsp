@@ -397,6 +397,17 @@
                                     </div>
                                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
+                                            <!-- init test principal -->
+                                            <div class="row" hidden="hidden">
+                                                <ul id="ul_Items">
+                                                    <ol>
+                                                        <c:forEach items="${select2}" var="p">
+                                                            <li data-id="${p.iddetalle}" class="${p.idparticipantecarta}" id="${p.idparte}" aria-disabled="${p.locked}" value="${p.acepta}">${p.nombreparte}</li>
+                                                        </c:forEach>
+                                                    </ol>
+                                                </ul>
+                                            </div>
+                                            <!-- fin test principal -->
                                             <div class="media">
                                                 <div class="media-body">
                                                     <div class="row">
@@ -499,6 +510,7 @@
                                                 <div class="media-body">
                                                     <form action="#" id="form-scan" class="needs-validation" autocomplete="off" novalidate role="form" data-toggle="validator" method="post" accept-charset="utf-8">
                                                     <div class="row">
+
                                                         <div class="col-md-12"></div>
 
                                                         <div class="col-md-2">
@@ -561,63 +573,30 @@
 
 
                                                         <div class="col-md-4">
-                                                            <div class="table-responsive-sm">
-                                                                <table id="tblDetalleParte" class="table table-hover table-striped table-bordered table-sm" style="width: 100%;">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th scope="col" class="text-center">iddetalle</th>
-                                                                    <th scope="col" class="text-center">idparticipantecarta</th>
-                                                                    <th scope="col" class="text-center"><spring:message code="Letter.Parts" /></th>
-                                                                    <th scope="col" class="text-center">IdParte</th>
-                                                                    <th scope="col" class="text-center"><spring:message code="lbl.ok" /></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <c:forEach items="${dp}" var="d">
-                                                                        <tr>
-                                                                            <td>${d.iddetalle}</td>
-                                                                            <td>${d.participantecarta.idparticipantecarta}</td>
-                                                                            <td class="text-center">${d.parte.parte}</td>
-                                                                            <td>${d.parte.idparte}</td>
-                                                                            <c:choose>
-                                                                                <c:when test="${d.acepta eq 'true'}">
-                                                                                    <td align="center">
-                                                                                        <c:if test="${d.parte.principal eq 'true'}">
-                                                                                            <input type="checkbox" class="filter-ck" id="${d.iddetalle}" checked="checked" disabled="disabled"/>
-                                                                                        </c:if>
-                                                                                        <c:if test="${d.parte.principal eq 'false'}">
-                                                                                            <input type="checkbox" class="filter-ck" id="${d.iddetalle}" checked="checked" />
-                                                                                        </c:if>
-                                                                                    </td>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <td align="center">
-                                                                                        <input type="checkbox" class="filter-ck" id="${d.iddetalle}" />
-                                                                                    </td>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </tr>
-                                                                    </c:forEach>
-                                                                </tbody>
-                                                            </table>
-                                                            </div>
-                                                            <%--   <div class="form-group">
+                                                            <div class="col-md-12">
+                                                            <div class="form-group">
                                                                    <label for="partes"><spring:message code="Letter.Parts" />:</label>
                                                                    <span class="required text-danger"> * </span>
-                                                                   <select class="form-control form-control-sm select2-multiple" multiple id="partes" name="partes"/>
-                                                                 <%-- <c:forEach items="${dp}" var="d">
-                                                                           <c:choose>
-                                                                               <c:when test="${d.acepta eq 'true'}">
-                                                                                   <option selected value="${d.parte.idparte}">${d.parte.parte}</option>
-                                                                               </c:when>
-                                                                               <c:otherwise>
-                                                                                   <option value="${d.parte.idparte}">${d.parte.parte}</option>
-                                                                               </c:otherwise>
-                                                                           </c:choose>
-                                                                       </c:forEach>
-                                                                   </select>
+                                                                       <select class="form-control form-control-sm select2-multiple" multiple id="partes" name="partes"/>
+                                                                          <c:forEach items="${dp}" var="d">
+                                                                               <c:choose>
+                                                                                   <c:when test="${d.acepta eq 'true'}">
+                                                                                       <c:if test="${d.parte.principal eq 'true'}">
+                                                                                            <option data-id="${d.iddetalle}" id="${d.participantecarta.idparticipantecarta}" selected value="${d.parte.idparte}">${d.parte.parte}</option>
+                                                                                       </c:if>
+                                                                                       <c:if test="${d.parte.principal eq 'false'}">
+                                                                                            <option data-id="${d.iddetalle}" id="${d.participantecarta.idparticipantecarta}" selected value="${d.parte.idparte}">${d.parte.parte}</option>
+                                                                                       </c:if>
+                                                                                   </c:when>
+                                                                                   <c:otherwise>
+                                                                                       <option data-id="${d.iddetalle}" id="${d.participantecarta.idparticipantecarta}" value="${d.parte.idparte}">${d.parte.parte}</option>
+                                                                                   </c:otherwise>
+                                                                               </c:choose>
+                                                                           </c:forEach>
+                                                                       </select>
                                                                    <span class="error"><spring:message code="lbl.required" /></span>
-                                                               </div>--%>
+                                                               </div>
+                                                             </div>
                                                         </div>
 
                                                         <div class="col-md-3">
@@ -665,44 +644,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
-                                                        <%-- <div class="col-md-6">
-
-                                                             <div class="form-group">
-                                                                 <div class="form-check mt-4">
-                                                                     <c:choose>
-                                                                         <c:when test="${obj.asentimiento eq true}">
-                                                                             <input class="form-check-input" type="checkbox" id="asentimiento" name="asentimiento" checked="checked">
-                                                                         </c:when>
-                                                                         <c:otherwise>
-                                                                             <input class="form-check-input" type="checkbox" id="asentimiento" name="asentimiento">
-                                                                         </c:otherwise>
-                                                                     </c:choose>
-                                                                     <label class="form-check-label" for="asentimiento">
-                                                                         <spring:message code="Asentimiento" />
-                                                                     </label>
-                                                                 </div>
-                                                             </div>
-                                                         <div class="form-group">
-                                                                 <label for="asentimiento"><spring:message code="lbl.assent" /> </label>
-                                                                 <span class="required text-danger"> * </span>
-                                                                 <select name="asentimiento" id="asentimiento" class="form-control form-control-sm">
-                                                                     <option selected value=""><spring:message code="select" />...</option>
-                                                                     <c:forEach items="${scanca}" var="sc">
-                                                                         <c:choose>
-                                                                             <c:when test="${sc.catKey eq obj.asentimiento}">
-                                                                                 <option selected value="${sc.catKey}"> <spring:message code="${sc.spanish}" />  </option>
-                                                                             </c:when>
-                                                                             <c:otherwise>
-                                                                                 <option value="${sc.catKey}"> <spring:message code="${sc.spanish}" />  </option>
-                                                                             </c:otherwise>
-                                                                         </c:choose>
-                                                                     </c:forEach>
-                                                                 </select>
-                                                                 <span class="error"><spring:message code="lbl.assent" /><spring:message code="lbl.required" /></span>
-                                                             </div>
-                                                         </div>--%>
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -836,7 +777,28 @@
                                                                         </div>
                                                             </div>
 
-                                                            <div class="col-md-2">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="contactoFuturo">
+                                                                        <spring:message code="lbl.Accept.future.contact" />
+                                                                    </label>
+                                                                    <select name="contactoFuturo" id="contactoFuturo" class="form-control" required="required">
+                                                                        <option selected value=""><spring:message code="select" />...</option>
+                                                                        <c:forEach items="${contactoFuturo}" var="c">
+                                                                            <c:choose>
+                                                                                <c:when test="${c.catKey eq obj.contactoFuturo}">
+                                                                                    <option selected value="${c.catKey}">${c.spanish}</option>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <option value="${c.catKey}">${c.catKey} - <spring:message code="${c.spanish}" /></option>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:forEach>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <%--<div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <div class="form-check mt-4 text-center">
                                                                         <c:choose>
@@ -852,7 +814,7 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div>--%>
 
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
@@ -1034,6 +996,39 @@
             "listUrl"           : "${listUrl}"
         };
 
+        var list = [];
+        armarParte();
+        function armarParte(){
+            $("#ul_Items ol li").each(function(index, value){
+                var self=$(this);
+                var partDetalleItem = {
+                    iddetalle: self.attr('data-id'),
+                    id: self.attr('id'),
+                    parte: self.text(),
+                    acepta: self.attr('value'),
+                    principal: self.attr('aria-disabled')
+                };
+                list.push(partDetalleItem);
+            });
+        }
+
+        $("#partes").on("select2-removing", function(e) {
+            debugger;
+            var partName;
+            for(var i=0; i<list.length; i++){
+                partName="";
+                if(list[i].principal=='true') {
+                    partName = list[i].parte;
+                    console.log("parte: "+ list[i].parte +" acepta: " + list[i].acepta +" principal: "+ list[i].principal);
+                }
+                if (e.choice.text === partName) {
+                    e.preventDefault();
+                    $(this).select2("close");
+                }
+            }
+
+        });
+
         var table2 = $("#tblDetalleParte").DataTable({
             searching  : false,
             paging     : false,
@@ -1063,6 +1058,7 @@
         $("#version").select2();
         $("#person").select2();
         $("#relfam").select2();
+        $("#contactoFuturo").select2();
         $("#asentimiento").select2();
         $("#tipoasentimiento").select2();
         $("#proyecto").select2();
@@ -1195,6 +1191,7 @@
             if($("#asentimiento").val() == "" || $("#asentimiento").val() == null){
                 isAllValid = false;
                 $('#asentimiento').addClass('is-invalid');
+                return;
             }else{
                 $('#asentimiento').removeClass('is-invalid');
             }
@@ -1202,8 +1199,17 @@
             if($("#tipoasentimiento").val() == "" || $("#tipoasentimiento").val() == null){
                 isAllValid = false;
                 $('#tipoasentimiento').addClass('is-invalid');
+                return;
             }else{
                 $('#tipoasentimiento').removeClass('is-invalid');
+            }
+
+            if($("#contactoFuturo").val() == "" || $("#contactoFuturo").val() == null){
+                isAllValid = false;
+                $('#contactoFuturo').addClass('is-invalid');
+                return;
+            }else{
+                $('#contactoFuturo').removeClass('is-invalid');
             }
 
 
@@ -1228,19 +1234,17 @@
             }
                 if(isValidItem){
                     var MyArrayPartes=[];
-                    $("#tblDetalleParte tbody tr").each(function(){
-                        var currentRow = $(this);
-                        var col0_value = table2.row( this ).data()[0];
-                        var col1_value = table2.row(this).data()[1];
-                        var col3_value = table2.row(this).data()[3];
-                        var col4_value = currentRow.find(":checkbox").prop("checked");
-                        var obj={};
-                        obj.iddetalle = parseInt(col0_value);
-                        obj.idparticipantecarta = parseInt(col1_value);
-                        obj.idparte = parseInt( col3_value );
-                        obj.acepta = col4_value;
-                        obj.locked =  false;
-                        MyArrayPartes.push(obj);
+                    $("#partes option").each(function(index, element) {
+                        debugger;
+                        if($(this).attr('data-id')!=null || $(this).attr('data-id') !=undefined) {
+                            var obj = {};
+                            obj.iddetalle = $(this).attr('data-id'),
+                                    obj.idparte = $(this).val(),
+                                    obj.acepta = element.selected,
+                                    obj.idparticipantecarta = $(this).attr('id'),
+                                    obj.locked = false;
+                            MyArrayPartes.push(obj);
+                        }
                     });
                     var text = $("#person option:selected").html();
                     var separador ="-";
@@ -1258,7 +1262,7 @@
                         person: parseInt($("#person").val().trim()),
                         fechacarta: $("#fechacarta").val(),
                         proyecto: $("#proyecto").val(),
-                        contactoFuturo: ($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
+                        contactoFuturo: $("#contactoFuturo").val().trim(), //($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
                         testigopresente: ($('input:checkbox[name=chktestigo]').prop('checked') == true) ? '1' : '0',
                         nombre1testigo: $("#nombre1Testigo").val().trim(),
                         nombre2testigo: $("#nombre2Testigo").val().trim(),
@@ -1383,7 +1387,6 @@
         ObtenerParte(parametros);
         var elementos2=[];
         function ObtenerParte(parametros){
-            debugger;
             var idversion = document.getElementById('version').value;
             var $version = $('#version');
             var $ele = $("#partes");
@@ -1427,7 +1430,6 @@
         testCheckbox();
 
         $("#chktestigo").on("click", function(){
-            debugger;
             var status = ($(this).is(':checked')) ? 'checked' : 'unchecked';
             if(status == 'checked'){
                 $("#selectt").fadeIn("slow");

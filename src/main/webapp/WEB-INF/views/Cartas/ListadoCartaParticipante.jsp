@@ -242,6 +242,11 @@
             border-bottom: 5px solid #fff
         }
         /*fin*/
+        .form-control-feedback {
+            margin-top: 0.25rem;
+            width: 15%;
+            text-align: right;
+        }
     </style>
     <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
     <link href="${swalcss}" rel="stylesheet" type="text/css"/>
@@ -280,12 +285,6 @@
                                 <span class="d-none d-md-block"> <spring:message code="letters" /> </span>
                             </a>
                         </li>
-                        <%--<li class="nav-item">
-                            <a class="nav-link" id="sent-tab" data-toggle="tab" aria-controls="sent" href="#sent" role="tab" aria-selected="false">
-                                <span class="d-block d-md-none"><i class="ti-export"></i></span>
-                                <span class="d-none d-md-block"><spring:message code="Tcovid" /> </span>
-                            </a>
-                        </li>--%>
                     </ul>
                 </div>
                 <div class="tab-content" id="myTabContent">
@@ -304,18 +303,16 @@
                             </a>
                         </div>
                         <div class="card-body">
-                            <div class="container col-sm-8 col-md-8 col-lg-8">
-                                <form action="#" autocomplete="off" id="select-participante-form" class="form-horizontal">
+                            <div class="container">
+                                <form action="#" autocomplete="off" name="select-participante-form" id="select-participante-form" class="form-horizontal" novalidate="novalidate">
                                     <div class="form-group row">
-                                        <label class="form-control-label col-md-2" for="username"><spring:message code="participant.code" />
-                                            <span class="required">*</span>
-                                        </label>
-                                        <div class="input-group col-md-10">
+                                        <div class="input-group col-md-12">
                                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                            <input id="parametro" name="parametro" type="text" value="" class="form-control"/>
-                                            <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
-                                                <i class="fa fa-search" aria-hidden="true"></i>
-                                                <spring:message code="search" />
+                                            <input id="parametro" name="parametro" type="text" placeholder="<spring:message code="participant.code" />" class="form-control">
+                                            <button id="buscar" type="submit" class="btn btn-success btn-ladda ladda-button" data-style="expand-right"><span class="ladda-label">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                             <spring:message code="search" />
+                                        </span><span class="ladda-spinner"></span>
                                             </button>
                                         </div>
                                     </div>
@@ -535,8 +532,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <span aria-hidden="true">&times;</span> Cerrar</button>
-                        <button type="button" class="btn btn-primary"> <i class="fa fa-save" aria-hidden="true"></i> Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <span aria-hidden="true">&times;</span> <spring:message code="lbl.close" /></button>
+                        <button type="button" class="btn btn-primary"> <i class="fa fa-save" aria-hidden="true"></i> <spring:message code="save" /></button>
                     </div>
                 </div>
             </div>

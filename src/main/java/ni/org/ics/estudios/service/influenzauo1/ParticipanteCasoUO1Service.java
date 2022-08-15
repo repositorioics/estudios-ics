@@ -1,9 +1,12 @@
 package ni.org.ics.estudios.service.influenzauo1;
 
+import ni.org.ics.estudios.domain.Tamizaje;
 import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
+import ni.org.ics.estudios.dto.muestras.MxDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +50,18 @@ public class ParticipanteCasoUO1Service {
         query.setParameter("codigo", codigo);
         return (ParticipanteCasoUO1)query.uniqueResult();
     }
-
-
+    //region todo: buscar caso menor de 30
+    public List<MxDto>getCasoUO1Ultimo30Day(Integer codigo, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT upc.CODIGO_PARTICIPANTE as codigoParticipante, upc.ACTIVO as estado, upc.FECHA_INGRESO as fechaInicio,upc.FECHA_DESACTIVACION as fechaInactiva, " +
+                " coalesce(DATEDIFF(date_add(CURDATE(),interval 1 day),cast(upc.FECHA_DESACTIVACION AS DATE)),'0') as diasInactiva " +
+                " FROM uo1_participantes_casos upc " +
+                " WHERE cast(upc.FECHA_DESACTIVACION as date) BETWEEN DATE_SUB(CURDATE(), INTERVAL :intervalo DAY) AND CURDATE() AND upc.CODIGO_PARTICIPANTE =:codigo and upc.pasivo='0'";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("intervalo", intervalo);
+        query.setParameter("codigo", codigo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+    //endregion
 }

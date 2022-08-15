@@ -83,13 +83,14 @@ public class ScanCartaService {
         query.setParameter("nameUser",nameUser);
         return query.list();
     }
-    public List<Carta> getCartaActiva(){
+
+    /*public List<Carta> getCartaActiva(){
         Session session = sessionFactory.getCurrentSession();
         String verdadera = "true";
         Query query = session.createQuery("from Carta c where c.activo= :verdadera order by carta");
         query.setParameter("verdadera",verdadera);
         return query.list();
-    }
+    }*/
 
     public List<Estudio>getEstudios(){
         Session session = sessionFactory.getCurrentSession();
@@ -231,12 +232,12 @@ public class ScanCartaService {
         query.setParameter("idparte",idparte);
         return (Parte) query.uniqueResult();
     }
-    public List<Parte> getParteByVersionId(Integer idversion){
+    /*public List<Parte> getParteByVersionId(Integer idversion){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Parte where version.idversion= :idversion");
         query.setParameter("idversion",idversion);
         return  query.list();
-    }
+    }*/
 
     public void DesHabilitarParte(Integer idparte){
         Session session = sessionFactory.getCurrentSession();
@@ -276,11 +277,11 @@ public class ScanCartaService {
         return query.list();
 
     }
-    public List<Parte>getParteList(){
+    /*public List<Parte>getParteList(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Parte order by parte asc");
         return query.list();
-    }
+    }*/
 
     @SuppressWarnings("unchecked")
     public ParticipanteCarta getCartasParticipante(Integer parametro) throws Exception {
@@ -356,12 +357,12 @@ public class ScanCartaService {
         }
     }
 
-    public List<Parte> getParteParticipante(Integer idparticipantecarta){
+    /*public List<Parte> getParteParticipante(Integer idparticipantecarta){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from DetalleParte  where participantecarta.idparticipantecarta = :idparticipantecarta");
         query.setParameter("idparticipantecarta",idparticipantecarta);
         return  query.list();
-    }
+    }*/
 
     public List<DetalleParte>getDetalleParteList(Integer idParticipanteCarta){
         Session session = sessionFactory.getCurrentSession();
@@ -463,13 +464,13 @@ public class ScanCartaService {
     }
 
     //METODO PARA OBTENER LA LISTA DE LOS DETALLES
-    @SuppressWarnings("unchecked")
+    /*@SuppressWarnings("unchecked")
     public List<DetalleParte>getDetalleByIdParticipanteCarta(Integer idparticipantecarta)throws Exception{
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from DetalleParte dp  where dp.participantecarta.id=:idparticipantecarta order by dp.iddetalle asc");
         query.setParameter("idparticipantecarta", idparticipantecarta);
         return query.list();
-    }
+    }*/
 
     public List<Extensiones>getExtension(Integer idversion)throws Exception {
         try{
@@ -500,11 +501,13 @@ public class ScanCartaService {
         session.saveOrUpdate(scanCarta);
     }
 
+    @Transactional
     public void saveParteCarta(DetalleParte detalle){
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(detalle);
     }
 
+    @Transactional
     public void saveORupdateExtension(Extensiones extensiones){
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(extensiones);
@@ -615,11 +618,11 @@ public class ScanCartaService {
         return (ParticipanteCartaTmp) query.uniqueResult();
     }
 
-    public List<DetalleParteTmp>getDetalleParteTmp()throws Exception{
+    /*public List<DetalleParteTmp>getDetalleParteTmp()throws Exception{
        Session session = sessionFactory.getCurrentSession();
        Query query = session.createQuery("from DetalleParteTmp tm order by tm.id asc ");
        return query.list();
-    }
+    }*/
 
     public List<DetalleParteTmp>getDetalleParteTmpById(int id)throws Exception{
         Session session = sessionFactory.getCurrentSession();
@@ -1012,5 +1015,36 @@ public class ScanCartaService {
             q.setParameter("fechaFin", fechaFin);
             return q.list();
     }
+
+
+    /**
+     * Verifica si el participante tiene carta de consentimiento en el corriente año de Muestreo Anual
+      * @param anio -> ingreso de la carta.
+     * @param codigo_participante -> codigo del participante
+     * @param estudio -> codigo del Estudio
+     * @param versionName -> Nombre de Version de la Carta a Verificar
+     * @return
+     * @throws Exception
+     */
+    public boolean siTieneCartaMA(int anio, int codigo_participante, int estudio, String versionName)throws Exception{
+        boolean result = false;
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            String sql = "from ConsentimientoView v where year(v.fecha_carta)=:anio and v.codigo_participante=:codigo_participante and v.codigo_estudio=:estudio";
+            Query query= session.createQuery("select v.fecha_carta, v.codigo_participante, v.codigo_estudio, v.version from ConsentimientoView v " +
+                    "   where year(v.fecha_carta)=:anio and v.codigo_participante=:codigo_participante " +
+                    " and v.codigo_estudio=:estudio and v.version=:versionName");
+            query.setParameter("anio",anio);
+            query.setParameter("codigo_participante", codigo_participante);
+            query.setParameter("estudio",estudio);
+            query.setParameter("versionName",versionName);
+            result = query.list().size()>0;
+            return result;}
+        catch (Exception e){
+            result=false;
+            throw e;
+        }
+    }
+    /**/
 
 }

@@ -3,16 +3,23 @@ package ni.org.ics.estudios.web.controller.Covid;
 import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.CartaConsentimiento;
 import ni.org.ics.estudios.domain.Participante;
+import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.covid19.CandidatoTransmisionCovid19;
+import ni.org.ics.estudios.domain.covid19.CasoCovid19;
 import ni.org.ics.estudios.domain.covid19.OtrosPositivosCovid;
 import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
+import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
+import ni.org.ics.estudios.dto.muestras.MxDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.CartaConsentimientoService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.ParticipanteService;
+import ni.org.ics.estudios.service.cohortefamilia.casos.ParticipanteCohorteFamiliaCasoService;
 import ni.org.ics.estudios.service.covid.CovidService;
+import ni.org.ics.estudios.service.influenzauo1.ParticipanteCasoUO1Service;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
@@ -53,6 +60,12 @@ public class CovidCandidatoTransController {
 
     @Resource(name = "participanteProcesosService")
     private ParticipanteProcesosService participanteProcesosService;
+
+    @Resource(name = "participanteCohorteFamiliaCasoService")
+    private ParticipanteCohorteFamiliaCasoService participanteCohorteFamiliaCasoService;
+
+    @Resource(name = "participanteCasoUO1Service")
+    private ParticipanteCasoUO1Service participanteCasoUO1Service;
 
     @Resource(name="cartaConsentimientoService")
     private CartaConsentimientoService cartaConsentimientoService;
@@ -152,33 +165,148 @@ public class CovidCandidatoTransController {
     @RequestMapping(value = "searchParticipant", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     ResponseEntity<String> buscarParticipante(@RequestParam(value="participantCode", required=true ) Integer codigo) throws ParseException {
+        MessageResource intervalDias = messageResourceService.getMensaje("CAT_INTERVAL_DIAS_MX_30");
+        Integer dias = Integer.parseInt(intervalDias.getSpanish());
+        String alerta = "";
+        ParticipanteProcesos procesos = null;
         ParticipanteBusquedaDto participante = covidService.getDatosParticipanteByCodigo(codigo);
-        if (participante!=null){
+        if (participante != null) {
+            procesos = this.participanteProcesosService.getParticipante(codigo);
             if (!participante.getSubEstudios().contains("2")) {
                 List<CartaConsentimiento> cartaConsentimientos = this.cartaConsentimientoService.getCartaConsCovidCPByCodParticipante(codigo);
-                for(CartaConsentimiento carta : cartaConsentimientos){
-                    if (carta.getAceptaParteD().equalsIgnoreCase("0")) return JsonUtil.createJsonResponse("Participante no acepto particiar en el estudio, el día "+DateUtil.DateToString(carta.getFechaFirma(), "dd/MM/yyyy"));
+                for (CartaConsentimiento carta : cartaConsentimientos) {
+                    if (carta.getAceptaParteD().equalsIgnoreCase("0"))
+                        return JsonUtil.createJsonResponse("Participante no acepto particiar en el estudio, el día " + DateUtil.DateToString(carta.getFechaFirma(), "dd/MM/yyyy"));
                 }
                 participante.setValidacion("Participante aún no ha sido enrolado, recuerde llenar consentimiento");
             }
 
             ParticipanteCasoCovid19 participanteCaso = covidService.getParticipanteCasoCovid19Pos(codigo);
+            /*inicio busqueda de caso en los ultimos 30 dias*/
+            if (participanteCaso == null) {
+                List<MxDto> casoUltimo30dias = this.covidService.getInforTransmisionCovidUltimo30Day(codigo, dias);
+                if (casoUltimo30dias.size() > 0) {
+                    String fecha1 = (casoUltimo30dias.get(0).getFechaInactiva() == null) ? " - " : DateUtil.DateToString(casoUltimo30dias.get(0).getFechaInactiva(), "dd/MM/yyyy");
+                    alerta += " ► <strong>Positivo de SARS.</strong> - En los ultimos <strong>" + dias + "</strong>";
+                    alerta += " Inició el: <strong>" + DateUtil.DateToString(casoUltimo30dias.get(0).getFechaInicio(), "dd/MM/yyyy") + ".</strong> Finalizó el: <strong>" + fecha1 + ".</strong><br>";
+                    alerta += "\t Tiempo transcurrido despúes de haber finalizado el caso: <strong>" + casoUltimo30dias.get(0).getDiasInactiva() + "</strong> días.<br>";
+                }
+            }
+            /*fin */
+
             if (participante.getEstudios().equalsIgnoreCase("Dengue"))
                 return JsonUtil.createJsonResponse("Participante pertenece cohorte Dengue");
             if (!participante.getEstudios().contains("CH Familia"))
                 return JsonUtil.createJsonResponse("Participante no pertenece Cohorte Familia");
-            if (participanteCaso!=null){
-                if (participanteCaso.getCodigoCaso().getCasa()!=null)
-                    return JsonUtil.createJsonResponse("Participante se encuentra activo como positivo en la casa: "+participanteCaso.getCodigoCaso().getCasa().getCodigoCHF());
-                else
+            if (participanteCaso != null) {
+                if (participanteCaso.getCodigoCaso().getCasa() != null) {
+                    return JsonUtil.createJsonResponse("Participante se encuentra activo como positivo en la casa: " + participanteCaso.getCodigoCaso().getCasa().getCodigoCHF());
+                } else {
                     return JsonUtil.createJsonResponse("Participante se encuentra activo como positivo");
+                }
             }
             boolean casoCovid19 = this.covidService.getCasoEsActivo(participante.getCasaFamilia());
             if (casoCovid19)
                 return JsonUtil.createJsonResponse("Participante activo en Casa de Familia: ".concat(participante.getCasaFamilia()));
             if (participante.getEstado().equals(0))
                 return JsonUtil.createJsonResponse("Participante retirado");
-        }else return JsonUtil.createJsonResponse("No se encontró participante según el código ingresado");
+        } else return JsonUtil.createJsonResponse("No se encontró participante según el código ingresado");
+
+        if (procesos != null) {
+            //validar convaleciente
+            if (procesos.getConvalesciente().equalsIgnoreCase("Na")) {
+                alerta += "* Convaleciente con menos de 14 días. No tomar muestra. COMUNICAR AL SUPERVISOR\n ";
+            } else if (procesos.getConvalesciente().equalsIgnoreCase("Si")) {
+                alerta += "* Convaleciente 14 días o más. COMUNICAR AL SUPERVISOR\n ";
+            }
+
+            if (procesos.getPosZika().matches("Si")) {
+                alerta += "* Fue positivo a ZIKA <br> ";
+            }
+
+            if (procesos.getPosDengue() != null) {
+                alerta += "* " + procesos.getPosDengue() + "<br> ";
+            }
+
+            if (procesos.getPosCovid() != null) {
+                alerta += "* " + procesos.getPosCovid() + "<br> ";
+            }
+
+            List<MxDto> ultimoCasoIn30Day = this.covidService.getInforUltimoCasoIn30Day(codigo, dias);
+            /*se recuperan datos se seguimientos activos. Familia, Influensa, covid*/
+            if (procesos.getEstudio().contains("CH Familia")) {
+                List<ParticipanteCohorteFamiliaCaso> participanteCohorteFamiliaCasos = participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByCasaPos(procesos.getCasaCHF());
+                if (participanteCohorteFamiliaCasos.size() > 0) {
+                    MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("CHF_CAT_POSITIVO_POR", participanteCohorteFamiliaCasos.get(0).getPositivoPor());
+                    alerta += "* Casa en seguimiento de Influenza - positivo por: " + (positivoPor != null ? positivoPor.getSpanish() : "-") +
+                            " - Activación: " + DateUtil.CalcularDiferenciaDiasFechas(participanteCohorteFamiliaCasos.get(0).getCodigoCaso().getFechaInicio(), new Date()) + " Dias <br>";
+                }
+            }
+            if (procesos.getEstudio().contains("UO1") || procesos.getEstudio().contains("Influenza")) {
+                ParticipanteCasoUO1 participanteCasoUO1 = participanteCasoUO1Service.getCasoActivoParticipante(procesos.getCodigo());
+                if (participanteCasoUO1 == null) {
+                    List<MxDto> ultimoCasoUO1In30Days = this.participanteCasoUO1Service.getCasoUO1Ultimo30Day(codigo, dias);
+                    if (ultimoCasoUO1In30Days.size() > 0) {
+                        String fecha1 = (ultimoCasoUO1In30Days.get(0).getFechaInactiva() == null) ? " - " : DateUtil.DateToString(ultimoCasoUO1In30Days.get(0).getFechaInactiva(), "dd/MM/yyyy");
+                        alerta += " ► <strong>Positivo de Influenza,</strong> - en los ultimos <strong>" + dias + "</strong> días.";
+                        alerta += " Inició el: <strong>" + DateUtil.DateToString(ultimoCasoUO1In30Days.get(0).getFechaInicio(), "dd/MM/yyyy") + ".</strong> Finalizó el: <strong>" + fecha1 + ".</strong><br>";
+                        alerta += "\t Tiempo transcurrido despúes de haber finalizado el caso: <strong>" + ultimoCasoUO1In30Days.get(0).getDiasInactiva() + "</strong> días.";
+                    }
+                }
+                if (participanteCasoUO1 != null) {
+                    MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("UO1_CAT_POSITIVO_POR", participanteCasoUO1.getPositivoPor());
+                    alerta += "* Positivo de Influenza - Positivo por: " + (positivoPor != null ? positivoPor.getSpanish() : "-") +
+                            " - Activación: " + DateUtil.CalcularDiferenciaDiasFechas(participanteCasoUO1.getFechaIngreso(), new Date()) + " Dias <br>";
+                }
+            }
+
+            ParticipanteCasoCovid19 participanteCasoCovid19 = covidService.getParticipanteCasoCovid19Pos(procesos.getCodigo());
+            if (participanteCasoCovid19 == null) {
+                if (ultimoCasoIn30Day.size() > 0) {
+                    String fecha1 = (ultimoCasoIn30Day.get(0).getFechaInactiva() == null) ? " - " : DateUtil.DateToString(ultimoCasoIn30Day.get(0).getFechaInactiva(), "dd/MM/yyyy");
+                    alerta += " ► <strong>Positivo de SARS.</strong> - En los ultimos <strong>" + dias + "</strong> días en Casa Cohorte de Familia: <strong>" + ultimoCasoIn30Day.get(0).getCasaFam() + "</strong>";
+                    alerta += " Inició el: <strong>" + DateUtil.DateToString(ultimoCasoIn30Day.get(0).getFechaInicio(), "dd/MM/yyyy") + ".</strong> Finalizó el: <strong>" + fecha1 + ".</strong><br>";
+                    alerta += "\t Tiempo transcurrido despúes de haber finalizado el caso: <strong>" + ultimoCasoIn30Day.get(0).getDiasInactiva() + "</strong> días.";
+                }
+            }
+            if (participanteCasoCovid19 != null) {
+                MessageResource positivoPor = messageResourceService.getMensajeByCatalogAndCatKey("COVID_CAT_POSITIVO_POR", participanteCasoCovid19.getPositivoPor());
+                alerta += "* Positivo de SARS - Positivo por: " + (positivoPor != null ? positivoPor.getSpanish() : "-") +
+                        " - Activación: " + DateUtil.CalcularDiferenciaDiasFechas(participanteCasoCovid19.getCodigoCaso().getFechaIngreso(), new Date()) + " Dias <br>";
+            } else {
+                if (procesos.getCasaCHF() != null) {
+                    CasoCovid19 casoCovid19 = covidService.getCasoCovid19ByCasaChf(procesos.getCasaCHF());
+                    if (casoCovid19 != null) {
+                        alerta += "* Casa en seguimiento de SARS" +
+                                " - Activación: " + DateUtil.CalcularDiferenciaDiasFechas(casoCovid19.getFechaIngreso(), new Date()) + " Dias <br>";
+                    } else {
+                        CandidatoTransmisionCovid19 candidatoTransmisionCovid19 = covidService.getCandidatoTransmisionCovid19ByCasaChf(procesos.getCasaCHF());
+                        if (candidatoTransmisionCovid19 != null) {
+                            alerta += "* Casa en seguimiento de SARS" +
+                                    " - consentimiento: " + candidatoTransmisionCovid19.getConsentimiento();
+                        }
+                    }
+                }
+            }
+        }
+        participante.setIntervalo(intervalDias.getSpanish());
+        participante.setAlertas(alerta);
+
+        if(procesos.getEstudio().contains("CH Familia")){
+            // chf_muestras
+            List<MxDto> getallFamily = this.covidService.getCasaFamiliaEnCh_MuestraMinor30Days(procesos.getCasaCHF(), dias);
+            participante.setChf_muestras(getallFamily);
+            //muestras
+            List<MxDto> getAllMuestra = this.covidService.getMuestraMenor30DaysByCasaFam(procesos.getCasaCHF(), dias);
+            participante.setMuestras(getAllMuestra);
+        }else{
+            List<MxDto> muestras = this.covidService.getMuestrasTomaMinor30Days(codigo,dias);
+            participante.setMuestras(muestras);
+
+            List<MxDto> chf_muestras = this.covidService.getChfMuestraToma2Minor30Days(codigo,dias);
+            participante.setChf_muestras(chf_muestras);
+        }
+        participante.setIntervalo(intervalDias.getSpanish());
         return JsonUtil.createJsonResponse(participante);
     }
 

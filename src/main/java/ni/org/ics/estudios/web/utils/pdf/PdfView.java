@@ -7,8 +7,11 @@ import com.lowagie.text.pdf.*;
 import com.lowagie.text.pdf.draw.LineSeparator;
 import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
+import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
+import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
@@ -42,10 +45,10 @@ public class PdfView extends AbstractPdfView {
     List<MessageResource> messagellenado = new ArrayList<MessageResource>();
     List<MessageResource> messagepulso = new ArrayList<MessageResource>();
     List<MessageResource> messagediuresis = new ArrayList<MessageResource>();
-    /*ReporteCarta
-    List<MessageResource> messagerelFam = new ArrayList<MessageResource>();
-
-    List<MessageResource>messagescancarta = new ArrayList<MessageResource>();*/
+    // Reporte Retiro
+    List<MessageResource> message_causa_retiro = new ArrayList<MessageResource>();
+    List<MessageResource> coordinador = new ArrayList<MessageResource>();
+    // Reporte Cartas de Consentimiento
     List<MessageResource> messageproyecto = new ArrayList<MessageResource>();
     @Override
     protected void buildPdfDocument(
@@ -66,6 +69,9 @@ public class PdfView extends AbstractPdfView {
         }
         if (model.get("TipoReporte").equals(Constants.TPR_ENVIOREPORTE)){
             ReporteEnvio(model, document, writer);
+        }
+        if (model.get("TipoReporte").equals(Constants.TPR_REPORTERETIRO)){
+            ReporteRetiro(model, document, writer);
         }
         if (model.get("TipoReporte").equals(Constants.TPR_ENVIOREPORTEPBCM)){
             ReporteEnvioPbmc(model, document, writer);
@@ -1451,7 +1457,7 @@ public class PdfView extends AbstractPdfView {
         cell.setBorder(0);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(cell);
-        boolean contact = obj.getContactoFuturo();
+        boolean contact = obj.getContactoFuturo().equals("1")?true:false;
 
         if (contact){
             cell = new PdfPCell(new Phrase("Aceptó",mia));
@@ -1569,6 +1575,524 @@ public class PdfView extends AbstractPdfView {
         }
         return "-";
     }
+
+
+    //region todo: Reporte Retiro estudios_ics
+    private void ReporteRetiro(Map<String, Object> model, Document document, PdfWriter writer)throws Exception {
+        Retiros retiros = (Retiros) model.get("retiros");
+        message_causa_retiro = (List<MessageResource>) model.get("causas_retiros");
+        coordinador = (List<MessageResource>) model.get("coordinador_estudio");
+        messagerelFam = (List<MessageResource>) model.get("relFam");
+        Personal p = (Personal) model.get("personal");
+        Personal supervisor = (Personal) model.get("supervisor");
+        List<Razones_Retiro> razonesRetiroList = (List<Razones_Retiro>) model.get("listaDerazones");
+
+        /* init razones por grupos*/
+        List<Razones_Retiro> razon_gupo_1 = (List<Razones_Retiro>) model.get("listaDeRazonesGrupo_1");
+        List<Razones_Retiro> razon_gupo_2 = (List<Razones_Retiro>) model.get("listaDeRazonesGrupo_2");
+        List<Razones_Retiro> razon_gupo_3 = (List<Razones_Retiro>) model.get("listaDeRazonesGrupo_3");
+        List<Razones_Retiro> razon_gupo_4 = (List<Razones_Retiro>) model.get("listaDeRazonesGrupo_4");
+        /* fin razones por grupos*/
+
+        Font respuesta_negritas = new Font(Font.COURIER, 10, Font.BOLDITALIC);
+        Font miaNormal = new Font(Font.COURIER, 12, Font.NORMAL);
+        Font letra_pequena = new Font(Font.COURIER, 10, Font.NORMAL, Color.black);
+        Font notas_pequena = new Font(Font.COURIER, 8, Font.ITALIC, Color.black);
+        Font notas_pequena_subrayada = new Font(Font.COURIER, 8, Font.UNDERLINE, Color.black);
+
+        document.newPage();
+        document.open();
+
+        //region todo Encabezado
+        Paragraph encabezado = new Paragraph("INSTITUTO DE CIENCIAS SOSTENIBLES.", FontFactory.getFont("COURIER", 18, java.awt.Font.BOLD, Color.black));
+        encabezado.setAlignment(Element.ALIGN_CENTER);
+        document.add(encabezado);
+        Paragraph encabezado2 = new Paragraph("DOCUMENTACIÓN DE PARTICIPANTES RETIRADOS DEL ESTUDIO " + retiros.getEstudioretirado().toUpperCase() +".", FontFactory.getFont("COURIER", 14, java.awt.Font.ITALIC));
+        encabezado2.setAlignment(Element.ALIGN_CENTER);
+        document.add(encabezado2);
+
+
+        LineSeparator ls1 = new LineSeparator();
+        ls1.setLineWidth(0.5f);
+        document.add(new Chunk(ls1));
+
+        PdfPTable table = new PdfPTable(new float[]{35, 50});
+        table.setWidthPercentage(98f);
+        PdfPCell cell;
+        cell = new PdfPCell(new Phrase("Tipo de estudio del que se retira: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(retiros.getEstudioretirado(), respuesta_negritas));
+        cell.setBorder(2);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{29, 65});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Nombre del Participante: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        String nombreParticipante = retiros.getParticipante().getNombre1();
+        if (retiros.getParticipante().getNombre2() != null)
+            nombreParticipante = nombreParticipante + " " + retiros.getParticipante().getNombre2().toUpperCase();
+        nombreParticipante = nombreParticipante + " " + retiros.getParticipante().getApellido1().toUpperCase();
+        if (retiros.getParticipante().getApellido2() != null)
+            nombreParticipante = nombreParticipante + " " + retiros.getParticipante().getApellido2().toUpperCase();
+
+        cell = new PdfPCell(new Phrase(nombreParticipante, respuesta_negritas));
+        cell.setBorder(2);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        document.add(table);
+
+
+        table = new PdfPTable(new float[]{25, 10, 20, 20});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Código del Participante: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(retiros.getParticipante().getCodigo().toString(), respuesta_negritas));
+        cell.setBorder(2);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase("Fecha del Retiro: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase(DateUtil.DateToString(retiros.getFecharetiro(), "dd/MM/yyyy"), respuesta_negritas));
+        cell.setBorder(2);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        document.add(table);
+
+
+        //tutor
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Padre o tutor con quien habia comunicación sobre el retiro: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{10, 35, 15, 30});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Nombre: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase(retiros.getParticipante().getTutor(), respuesta_negritas));
+        cell.setBorder(2);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase("Parentesco: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        String relafam = this.getDescripcionCatalogoScan(retiros.getRelfam().toString(), "CAT_RF_TUTOR");
+        cell = new PdfPCell(new Phrase(relafam, respuesta_negritas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(2);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Personal del estudio con quien se ha comunicado el participante y/o el padre del participante: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{10, 40, 10, 15});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Nombre: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase(p.getNombreApellido(), respuesta_negritas));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(2);
+        table.addCell(cell);
+        document.add(table);
+
+
+        cell = new PdfPCell(new Phrase("Código: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase(retiros.getPersonadocumenta().toString(), respuesta_negritas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(2);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Personal del estudio que llena el documento: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{10, 40, 10, 15});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Nombre: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase(supervisor.getNombreApellido(), respuesta_negritas));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(2);
+        table.addCell(cell);
+        document.add(table);
+
+
+        cell = new PdfPCell(new Phrase("Código: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase(retiros.getMedicosupervisor().toString(), respuesta_negritas));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(2);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Causas por la que no desea continuar participación: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("A. Decisión del padre o tutor: \n", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+//endregion
+
+        /* INICION CAUSAS DEL RETIRO */
+        int fila_1 = 0;
+        for (Razones_Retiro loop : razon_gupo_1) {
+            table = new PdfPTable(new float[]{5, 7, 80});
+            fila_1++;
+            cell = new PdfPCell(new Phrase("" + fila_1 + ".", letra_pequena));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                cell = new PdfPCell(new Phrase("X", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            } else {
+                cell = new PdfPCell(new Phrase("", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            }
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                Paragraph parrafo_descripcion = new Paragraph(new Phrase(loop.getDescripcion()+": ", letra_pequena));
+                Chunk otros_motivos = new Chunk(retiros.getOtrosmotivo(), notas_pequena_subrayada);
+                parrafo_descripcion.add(otros_motivos);
+                cell = new PdfPCell(parrafo_descripcion);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+            }else{
+                cell = new PdfPCell(new Phrase(loop.getDescripcion(), letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+            }
+        }// fin grupo 1
+
+        // inicio grupo 2
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("B. Por Decisión nuestra: \n", miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        int fila_2 = 0;
+        for (Razones_Retiro loop : razon_gupo_2) {
+            table = new PdfPTable(new float[]{5, 7, 80});
+            fila_2++;
+            cell = new PdfPCell(new Phrase("" + fila_2 + ".", letra_pequena));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                cell = new PdfPCell(new Phrase("X", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            } else {
+                cell = new PdfPCell(new Phrase("", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            }
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                Paragraph parrafo_descripcion = new Paragraph(new Phrase(loop.getDescripcion()+": ", letra_pequena));
+                Chunk otros_motivos = new Chunk(retiros.getOtrosmotivo(), notas_pequena_subrayada);
+                parrafo_descripcion.add(otros_motivos);
+                cell = new PdfPCell(parrafo_descripcion);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+            }else {
+                cell = new PdfPCell(new Phrase(loop.getDescripcion(), letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+            }
+        }// fin grupo
+
+        // inicio grupo 3
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("C. Por tiempo de Expiración de participación: \n", miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+        int fila_3 = 0;
+        for (Razones_Retiro loop : razon_gupo_3) {
+            table = new PdfPTable(new float[]{5, 7, 80});
+            fila_3++;
+            cell = new PdfPCell(new Phrase("" + fila_3 + ".", letra_pequena));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                cell = new PdfPCell(new Phrase("X", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            } else {
+                cell = new PdfPCell(new Phrase("", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            }
+            cell = new PdfPCell(new Phrase(loop.getDescripcion(), letra_pequena));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
+
+        }//fin grupo 3
+
+        // inicio grupo 4
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("D. Por tiempo de Expiración de participación: \n", miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+        int fila_4 = 0;
+        for (Razones_Retiro loop : razon_gupo_4) {
+            table = new PdfPTable(new float[]{5, 7, 80});
+            fila_4++;
+            cell = new PdfPCell(new Phrase("" + fila_4 + ".", letra_pequena));
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            table.addCell(cell);
+            document.add(table);
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                cell = new PdfPCell(new Phrase("X", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            } else {
+                cell = new PdfPCell(new Phrase("", letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(2);
+                table.addCell(cell);
+                document.add(table);
+            }
+            if (loop.getMotivo().equals(retiros.getMotivo())) {
+                Paragraph parrafo_descripcion = new Paragraph(new Phrase(loop.getDescripcion()+": ", letra_pequena));
+                Chunk otros_motivos = new Chunk(retiros.getOtrosmotivo(), notas_pequena_subrayada);
+                String dateFallecido = (DateUtil.DateToString(retiros.getFechafallecido(),"dd/MM/yyyy")==null)?"":" Fecha Fallecido: "+ DateUtil.DateToString(retiros.getFechafallecido(),"dd/MM/yyyy");
+                Chunk fecha_fallecido = new Chunk(dateFallecido, notas_pequena_subrayada);
+                parrafo_descripcion.add(otros_motivos);
+                parrafo_descripcion.add(fecha_fallecido);
+                cell = new PdfPCell(parrafo_descripcion);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+            }else {
+                cell = new PdfPCell(new Phrase(loop.getDescripcion(), letra_pequena));
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell.setBorder(0);
+                table.addCell(cell);
+                document.add(table);
+            }
+        }
+        /* FIN CAUSAS DEL RETIRO */
+
+        /* ENTREGO CARNET */
+        table = new PdfPTable(new float[]{7, 3, 7, 3, 7});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Entregó carnet: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+
+        String loEntrego = "";
+        if (retiros.getDevolviocarnet() == '1') {
+            loEntrego = "X";
+            cell = new PdfPCell(new Phrase(loEntrego, respuesta_negritas));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBorder(2);
+            table.addCell(cell);
+        } else {
+            loEntrego = "";
+            cell = new PdfPCell(new Phrase(loEntrego, respuesta_negritas));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBorder(2);
+            table.addCell(cell);
+        }
+
+        cell = new PdfPCell(new Phrase("Si", miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        if (retiros.getDevolviocarnet() == '0') {
+            loEntrego = "X";
+            cell = new PdfPCell(new Phrase(loEntrego, respuesta_negritas));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBorder(2);
+            table.addCell(cell);
+        } else {
+            loEntrego = "";
+            cell = new PdfPCell(new Phrase(loEntrego, respuesta_negritas));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBorder(2);
+            table.addCell(cell);
+        }
+
+        cell = new PdfPCell(new Phrase("No", miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        String para1 = "\n";
+        Paragraph paragraph1 = new Paragraph(para1);
+        document.add(paragraph1);
+        table = new PdfPTable(new float[]{10, 40});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Observación: ", letra_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase(retiros.getObservaciones(), notas_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{90});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("Check lista de procedimientos para niños retirados antes de poner este formulario en carpeta del participante: ", notas_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        table = new PdfPTable(new float[]{50,50});
+        table.setWidthPercentage(98f);
+        cell = new PdfPCell(new Phrase("__ Señala el retiro en la base de datos y bloquear los datos de la persona en la base de datos." +
+                "\n__ Confirme la revisón (sello y firma) de\n" +
+                " "+ coordinador.get(0).getSpanish() , notas_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        cell = new PdfPCell(new Phrase("__ Ponga el original de esta hoja en el expediente de respaldo.", notas_pequena));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        table.addCell(cell);
+        document.add(table);
+
+        String para0="\n";
+        Paragraph paragraph0 = new Paragraph(para0);
+        document.add(paragraph0);
+
+        table = new PdfPTable(new float[]{40,20,40});
+        table.setTotalWidth(document.getPageSize().getRight() - document.getPageSize().getLeft(84));
+        cell = new PdfPCell(new Phrase(coordinador.get(0).getSpanish() +"\n Coordinadora ",miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(1);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("",miaNormal));
+        cell.setBorder(0);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Padre o Tutor",miaNormal));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(1);
+        table.addCell(cell);
+        document.add(table);
+
+        document.close();
+    }
+    //endregion
 
     //region Reporte Envio de Muestras SEROLOGIA
         private void ReporteEnvio(Map<String, Object> model, Document document, PdfWriter writer)throws Exception{
