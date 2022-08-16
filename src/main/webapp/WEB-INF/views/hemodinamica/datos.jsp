@@ -336,13 +336,13 @@
                                     <div class="form-group col-md-6">
                                         <label for="peso">Peso(kg):</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control num focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
+                                        <input type="text" class="form-control focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="talla">Talla(cm):</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control num focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
+                                        <input type="text" class="form-control focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
                                     </div>
 
                                     <div class="form-group col-sm-4">
@@ -671,9 +671,9 @@
 
         $("#fie").prop("disabled", true);
 
-        $('.num').keyup(function (){
+        /*$('.num').keyup(function (){
             this.value = (this.value + '').replace(/[^0-9]/g, '');
-        });
+        });*/
 
 
         var getDate = function(input){
