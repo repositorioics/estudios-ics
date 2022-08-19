@@ -351,8 +351,8 @@
                                     <span class="required text-danger"> * </span>
                                     <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="16">
                                         <option selected value=""><spring:message code="select" />...</option>
-                                        <c:forEach items="${personaValida}" var="person">
-                                            <option value="${person.catKey}">${person.spanish}</option>
+                                        <c:forEach items="${person}" var="person">
+                                            <option value="${person.personal.idpersonal}">${person.personal.idpersonal} - ${person.personal.nombreApellido}</option>
                                         </c:forEach>
                                     </select>
                                 </div>

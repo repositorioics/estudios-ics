@@ -3,6 +3,8 @@ package ni.org.ics.estudios.service.hemodinanicaService;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
+import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.dto.RangosFrecuenciasCardiacas;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -193,7 +196,22 @@ public class DatoshemodinamicaService {
         }else {
             return false;
         }
+    }
 
+    @SuppressWarnings("unchecked")
+    public List<Personal_Cargo>getPersonal(HashSet<Integer> ids){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Personal_Cargo p where p.cargo.idcargo in (:ids) and p.pasive ='0' ");
+        query.setParameterList("ids",ids);
+        return query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Personal getPersonalById(Integer codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Personal p where p.idpersonal=:codigo");
+        query.setParameter("codigo",codigo);
+        return (Personal) query.uniqueResult();
     }
 
 

@@ -154,7 +154,6 @@ var datosHemo = function(){
             });
 
             $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
-                debugger;
                 if ( $("#nombre").val() =="") {
                     $("#smartwizard").smartWizard("goToStep", 0);
                     toastr.error("Ingresa código del Participante!",{timeOut:5000});
@@ -181,7 +180,9 @@ var datosHemo = function(){
                         toastr.error("Seleccione el Recurso!", {timeOut: 5000});
                         return false;
                     }
+                    $("#peso").focus();
                 }
+
             });
             $("#btnObtenerRango").on("click", function(){
                 GetRange();
@@ -266,6 +267,7 @@ var GuardarDinamica = function(){
                     telefono :{
                         pattern: /^\+?[0-9]*\.?[0-9]+$/,
                         maxlength: 8,
+                        minlength: 8,
                         digits: true},
                     edad:{required: true},
                     peso:{required:true,
@@ -306,14 +308,6 @@ var GuardarDinamica = function(){
                     $.notify("Peso es requerido", 'error');
                     isValidData = false;
                     $("#peso").focus();
-                    return false;
-                }
-
-                if($("#telefono").val() != ""){
-                    if($("#telefono").val().length > 8 || $("#telefono").val().length < 8)
-                    $.notify("Teléfono acepta 8 digitos", 'error');
-                    isValidData = false;
-                    $("#telefono").focus();
                     return false;
                 }
 
@@ -361,10 +355,14 @@ var GuardarDinamica = function(){
                 //fin valid
                 if (isValidData) {
                     $.post(dir.saveHemoUrl, form1.serialize(), function (data) {
-                        toastr.success(dir.successmessage, "success",{timeOut:6000});
-                     window.setTimeout(function () {
-                     window.location.href = dir.ListadoUrl;
-                     }, 1400);
+                        console.log(data);
+                        debugger;
+                        if (data.idDatoHemo != undefined){
+                            toastr.success(dir.successmessage, "success", {timeOut: 6000});
+                        window.setTimeout(function () {
+                            window.location.href = dir.adddetailsUrl + "/" + data.idDatoHemo;
+                        }, 1300);
+                    }
                      }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                      toastr.error("Interno del Servidor!","ERROR", {timeOut: 6000});
                      });
