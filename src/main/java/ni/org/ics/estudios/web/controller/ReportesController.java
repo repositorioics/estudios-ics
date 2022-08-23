@@ -6,6 +6,8 @@ import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.entomologia.CuestionarioHogar;
+import ni.org.ics.estudios.domain.entomologia.CuestionarioHogarPoblacion;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.*;
@@ -25,6 +27,7 @@ import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.comparacion.ComparasionService;
+import ni.org.ics.estudios.service.entomologia.CuestionarioHogarService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.*;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
@@ -44,6 +47,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -98,6 +102,8 @@ public class ReportesController {
     @Resource(name="labPbmcService")
     private LabPbmcService labPbmcService;
 
+    @Resource(name = "cuestionarioHogarService")
+    private CuestionarioHogarService cuestionarioHogarService;
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -495,6 +501,35 @@ public class ReportesController {
         modelAndView.addObject("datos", comparacionMuestrasDto);
         modelAndView.addObject("TipoReporte", Constants.TPR_COMPARACION_MX_MA);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "downloadEntoInfo", method = RequestMethod.GET)
+    public ModelAndView downloadEntoInfo(@RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                           @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception {
+        ModelAndView reporteDatosEntomologia = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        Date dFechaFin = null;
+        List<CuestionarioHogar> cuestionarios = new ArrayList<CuestionarioHogar>();
+        List<CuestionarioHogarPoblacion> poblacion = new ArrayList<CuestionarioHogarPoblacion>();
+
+        if ((fechaInicio != null && !fechaInicio.isEmpty()) && (fechaFin != null && !fechaFin.isEmpty())) {
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+            dFechaFin = DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+            cuestionarios = this.cuestionarioHogarService.getCuestionariosHogarByRangoFechas(dFechaInicio, dFechaFin);
+            poblacion = this.cuestionarioHogarService.getCuestionariosHogarPobByRangoFechas(dFechaInicio, dFechaFin);
+        } else {
+            cuestionarios = this.cuestionarioHogarService.getCuestionariosHogar();
+            poblacion = this.cuestionarioHogarService.getCuestionariosHogarPoblacion();
+        }
+
+        reporteDatosEntomologia.addObject("fechaInicio", fechaInicio);
+        reporteDatosEntomologia.addObject("fechaFin", fechaFin);
+        reporteDatosEntomologia.addObject("cuestionarios", cuestionarios);
+        reporteDatosEntomologia.addObject("poblacion", poblacion);
+        reporteDatosEntomologia.addObject("TipoReporte", Constants.TPR_ENTO);
+
+        return reporteDatosEntomologia;
     }
 
 }

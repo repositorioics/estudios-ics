@@ -287,6 +287,19 @@
                 </li>
             </sec:authorize>
 
+            <sec:authorize access="hasRole('ROLE_ENTO')">
+                <li class="nav-item nav-dropdown cuestionarios">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="fa fa-bug" aria-hidden="true"></i><spring:message code="lbl.ento" /></a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/ento/informacion" htmlEscape="true "/>">
+                                <i class="fa fa-flag-checkered" aria-hidden="true"></i><spring:message code="lbl.letters.info" /></a>
+                        </li>
+                    </ul>
+                </li>
+            </sec:authorize>
+
             <li class="nav-item">
                 <a class="nav-link" href="<spring:url value="/logout" htmlEscape="true" />"><i class="icon-lock"></i><spring:message code="logout" /></a>
             </li>
