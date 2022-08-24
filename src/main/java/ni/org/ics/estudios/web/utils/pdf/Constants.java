@@ -13,6 +13,7 @@ public class Constants {
     public static final String TPR_ENVIOREPORTEPBCM = "ENVIOREPORTEPBMC";
     public static final String TPR_ENVIOREPORTEPBCMTOEXCEL = "ENVIOREPORTEPBCMTOEXCEL";
     public static final String TPR_ENVIOREPORTEBHC = "ENVIOREPORTEBHC";
+    public static final String TPR_REPORTERETIRO = "RETIROREPORTE";
     public static final String TPR_INFOCARTAS = "INFOCARTAS";
     public static final int ANIOMUESTREO = Calendar.getInstance().get(Calendar.YEAR);
     public static final String TPR_COMPARACION_MX_MA = "COMPARACION_MX_MA";

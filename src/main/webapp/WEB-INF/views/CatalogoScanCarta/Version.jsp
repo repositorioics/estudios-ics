@@ -398,6 +398,25 @@
                             </div>
                         </div>
                         <br/>
+                        <div class="form-group row">
+                            <label for="activo" class="col-sm-2 col-form-label text-right"></label>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <c:choose>
+                                        <c:when test="${caso.tiene_contacto_futuro eq true }">
+                                            <input type="checkbox" class="form-check-input" checked="checked" id="contatoFuturo" name="contatoFuturo">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="checkbox" class="form-check-input" id="contatoFuturo" name="contatoFuturo">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <label class="form-check-label" for="contatoFuturo">
+                                        <spring:message code="Contacto Futuro?" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
 
                         <div class="row">
                             <div class="col-md-2"></div>
@@ -444,6 +463,7 @@
                     <th data-hide="phone,tablet" class="text-center"><spring:message code="Carta" /></th>
                     <th data-hide="phone,tablet" class="text-center"><spring:message code="Versión" /></th>
                     <th data-hide="phone,tablet" class="text-center"><spring:message code="Activo" /></th>
+                    <th data-hide="phone,tablet" class="text-center"><spring:message code="Contacto Futuro" /></th>
                     <th data-hide="phone,tablet" class="text-center"><spring:message code="actions" /></th>
                     <sec:authorize access="hasRole('ROLE_WEB')">
                         <th data-hide="phone,tablet" class="text-center"><spring:message code="Opcion" /></th>
@@ -524,6 +544,14 @@
                         <td class="text-center">${v.version}</td>
                         <c:choose>
                             <c:when test="${v.activo eq true}">
+                                <td class="text-center"> <span class="badge badge-success"><spring:message code="SI" /></span></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td class="text-center"> <span class="badge badge-danger"><spring:message code="NO" /></span></td>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${v.tiene_contacto_futuro eq true}">
                                 <td class="text-center"> <span class="badge badge-success"><spring:message code="SI" /></span></td>
                             </c:when>
                             <c:otherwise>

@@ -75,6 +75,10 @@ public class CartasController {
             List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
             model.addAttribute("relFam", relFam);
 
+            //contactoFuturo
+            List<MessageResource> contactoFuturo = messageResourceService.getCatalogo("CAT_SCANWEB_CONTACT_FUTURO");
+            model.addAttribute("contactoFuturo", contactoFuturo);
+
             List<MessageResource> TipoCaso = messageResourceService.getCatalogo("CAT_CASOS_INDICE_MIEMBRO");// esto para covid
             model.addAttribute("TipoCaso", TipoCaso);
 
@@ -110,13 +114,16 @@ public class CartasController {
         List<MessageResource> relFam = messageResourceService.getCatalogo("CP_CAT_RFTUTOR");
         model.addAttribute("relFam", relFam);
 
+        //contactoFuturo: No todas las cartas tiene contacto futuro
+        List<MessageResource> contactoFuturo = messageResourceService.getCatalogo("CAT_SCANWEB_CONTACT_FUTURO");
+        model.addAttribute("contactoFuturo", contactoFuturo);
+
         List<MessageResource> TipoCaso = messageResourceService.getCatalogo("CAT_CASOS_INDICE_MIEMBRO");// esto para covid
         model.addAttribute("TipoCaso", TipoCaso);
 
         List<MessageResource> obtenerPersonal = messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_CARTAEXTENSION");
         String[] personId = obtenerPersonal.get(0).getSpanish().split(",");
-        HashSet<Integer> hset =
-                new HashSet<Integer>();
+        HashSet<Integer> hset = new HashSet<Integer>();
         List<String> cargosId = Arrays.asList(personId);
         for (int i = 0; i < cargosId.size(); i++) {
             int value = Integer.parseInt( cargosId.get(i) );
@@ -162,6 +169,20 @@ public class CartasController {
         List<MessageResource> SiNoNA = messageResourceService.getCatalogo("SCANCARTA");
         model.addAttribute("SiNoNA", SiNoNA);
         List<DetalleParte> dp = scanCartaService.getDetalleParteList(idCartaParticipante);
+        List<String> principales= new ArrayList<String>();
+        List<ParteDto>select2 = new ArrayList<ParteDto>();
+        for(DetalleParte detalleParte: dp){
+           ParteDto dto = new ParteDto();
+            dto.setIdparte(detalleParte.getParte().getIdparte());
+            dto.setNombreparte(detalleParte.getParte().getParte());
+            dto.setAcepta(detalleParte.getAcepta());
+            dto.setLocked(detalleParte.getParte().isPrincipal());
+            if (detalleParte.getParte().isPrincipal()){
+                principales.add(detalleParte.getParte().getParte());
+            }
+            select2.add(dto);
+        }
+        model.addAttribute("select2", select2);
         model.addAttribute("dp", dp);
         model.addAttribute("obj", obj);
         return "/Cartas/EditCarta";
@@ -195,7 +216,6 @@ public class CartasController {
         UnicodeEscaper escaper = UnicodeEscaper.above(127);
         return escaper.translate(jsonResponse);
     }
-
 
     //Realiza búsqueda de participante para agregar una nuevo Cartas en el FORMULARIO
     @RequestMapping(value = "/searchParticipant", method = RequestMethod.GET, produces = "application/json")
@@ -317,101 +337,214 @@ public class CartasController {
         }
     }
 
-    //Metodo para Guardar la Version/Participante
+    //region todo: Metodo para Guardar la Version/Participante
     @RequestMapping(value = "/saveScanCarta", method = RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<String> saveScanCarta(@RequestBody ParticipanteCartaDto obj) {
         try {
-            Version v = new Version();
-            if (!scanCartaService.SiExisteParticipanteCarta(obj.getVersion(), obj.getCodigo(), obj.getFechacarta())) {
-                if (obj.getAsentimiento().equals("") && obj.getTipoasentimiento() == null){
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("msj", "Especifica el Tipo de Asentimiento");
-                    return createJsonResponse(map);
-                }else if(obj.getAsentimiento().equals("1") && obj.getTipoasentimiento() == 3){
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("msj", "Revisa el Tipo de Asentimiento");
-                    return createJsonResponse(map);
-                }else{}
+            Version v = this.scanCartaService.getVersionById(obj.getVersion());
+            int estudio = v.getEstudio().getCodigo();
+            String versionName = v.getVersion();
+            Date date = DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            int dateYear = calendar.get(Calendar.YEAR);
 
-                ParticipanteCarta pc = new ParticipanteCarta();
-                String computerName = "NicaUmich2";
-                if (obj != null) {
-                    Participante p = new Participante();
-                    p.setCodigo(obj.getCodigo());
-                    pc.setParticipante(p);
-                    v= this.scanCartaService.getVersionById(obj.getVersion());
-                    pc.setVersion(v);
-                    pc.setRelfam(obj.getRelfam());
-                    pc.setAsentimiento(obj.getAsentimiento());
-                    pc.setTipoasentimiento(obj.getTipoasentimiento());
-                    if (v.getEstudio().getCodigo()==6 && obj.getEsIndiceOrMiembro()==0){
+            if(obj.getVersion()==4){
+                if (!scanCartaService.SiExisteParticipanteCarta(obj.getVersion(), obj.getCodigo(), obj.getFechacarta())) {
+                    if (obj.getContactoFuturo() == "") {
                         Map<String, String> map = new HashMap<String, String>();
-                        map.put("msj", "Revisa el caso!");
+                        map.put("msj", "Contacto futuro no puede ser vacío!");
                         return createJsonResponse(map);
                     }
-                    if (v.getEstudio().getCodigo()==6){
-                        pc.setEsIndiceOrMiembro(obj.getEsIndiceOrMiembro());
-                        pc.setVigente(true);
-                    }else{
-                        pc.setEsIndiceOrMiembro(0);//NA(No Aplica)
+
+                    if (obj.getEsIndiceOrMiembro() == null) {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("msj", "Tipo caso no puede ser vacío!");
+                        return createJsonResponse(map);
                     }
 
-                    pc.setQuienfirma(obj.getNombfirma().toUpperCase());
-                    String name2Tutor = (obj.getNombre2Firma() != null) ? obj.getNombre2Firma().toUpperCase() : "";
-                    pc.setNombre2Firma(name2Tutor);
-                    pc.setApellido1Firma(obj.getApellido1Firma().toUpperCase());
-                    String ape2Tutor = (obj.getApellido2Firma() != null) ? obj.getApellido2Firma().toUpperCase() : "";
-                    pc.setApellido2Firma(ape2Tutor);
-                    Personal person = this.scanCartaService.getPersonalById(obj.getPerson());
-                    pc.setPersonal(person);
-                    pc.setProyecto(obj.getProyecto());
-                    boolean cf = (obj.getContactoFuturo().equals("1")) ? true : false;
-                    pc.setContactoFuturo(cf);
-                    boolean testigo = obj.getTestigopresente().equals('1') ? true : false;
-                    pc.setTestigopresent(testigo);
-                    String name1Testigo = (obj.getNombre1testigo() != null) ? obj.getNombre1testigo().toUpperCase() : "";
-                    pc.setNombre1testigo(name1Testigo);
-                    String name2Testigo = (obj.getNombre2testigo() != null) ? obj.getNombre2testigo().toUpperCase() : "";
-                    pc.setNombre2testigo(name2Testigo);
-                    String ape1Testigo = (obj.getApellido1testigo() != null) ? obj.getApellido1testigo().toUpperCase() : "";
-                    pc.setApellido1testigo(ape1Testigo);
-                    String ape2Testigo = (obj.getApellido2testigo() != null) ? obj.getApellido2testigo().toUpperCase() : "";
-                    pc.setApellido2testigo(ape2Testigo);
-                    String obs = (obj.getObservacion() != null) ? obj.getObservacion().toUpperCase() : "";
-                    pc.setObservacion(obs);
-                    pc.setEdadyears(obj.getEdadyears());
-                    pc.setEdadmeses(obj.getEdadmeses());
-                    pc.setEdaddias(obj.getEdaddias());
-                    pc.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
-                    pc.setRecordDate(new Date());
-                    pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                    pc.setDeviceid(computerName);
-                    pc.setEstado('1');
-                    pc.setPasive('0');
-                    scanCartaService.saveOrUpdateScanCarta(pc); // Guarda/Participante-Version
-                }
-                if (obj.getParte() != null) {// Guarda las Version-Partes
-                    Parte pr = new Parte();
-                    for (ParteDto parte : obj.getParte()) {
-                        DetalleParte dp = new DetalleParte();
-                        dp.setParticipantecarta(pc);//
-                        dp.setAcepta(parte.isAcepta());
-                        pr.setIdparte(parte.getIdparte());
-                        dp.setParte(pr);
-                        dp.setDeviceid(computerName);
-                        dp.setRecordDate(new Date());
-                        dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                        dp.setEstado('1');
-                        dp.setPasive('0');
-                        scanCartaService.saveParteCarta(dp);
+                    ParticipanteCarta pc = new ParticipanteCarta();
+                    String computerName = "NicaUmich2";
+                    if (obj != null) {
+                        Participante p = new Participante();
+                        p.setCodigo(obj.getCodigo());
+                        pc.setParticipante(p);
+                        v = this.scanCartaService.getVersionById(obj.getVersion());
+                        pc.setVersion(v);
+                        pc.setRelfam(obj.getRelfam());
+                        pc.setAsentimiento(obj.getAsentimiento());
+                        pc.setTipoasentimiento(obj.getTipoasentimiento());
+                        if (v.getEstudio().getCodigo() == 6 && obj.getEsIndiceOrMiembro() == 0) {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("msj", "Revisa el caso!");
+                            return createJsonResponse(map);
+                        }
+                        if (v.getEstudio().getCodigo() == 6) {
+                            pc.setEsIndiceOrMiembro(obj.getEsIndiceOrMiembro());
+                            pc.setVigente(true);
+                        } else {
+                            pc.setEsIndiceOrMiembro(0);//NA(No Aplica)
+                        }
+
+                        pc.setQuienfirma(obj.getNombfirma().toUpperCase());
+                        String name2Tutor = (obj.getNombre2Firma() != null) ? obj.getNombre2Firma().toUpperCase() : "";
+                        pc.setNombre2Firma(name2Tutor);
+                        pc.setApellido1Firma(obj.getApellido1Firma().toUpperCase());
+                        String ape2Tutor = (obj.getApellido2Firma() != null) ? obj.getApellido2Firma().toUpperCase() : "";
+                        pc.setApellido2Firma(ape2Tutor);
+                        Personal person = this.scanCartaService.getPersonalById(obj.getPerson());
+                        pc.setPersonal(person);
+                        pc.setProyecto(obj.getProyecto());
+                        //boolean cf = (obj.getContactoFuturo().equals("1")) ? true : false;
+                        pc.setContactoFuturo(obj.getContactoFuturo());
+                        boolean testigo = obj.getTestigopresente().equals('1') ? true : false;
+                        pc.setTestigopresent(testigo);
+                        String name1Testigo = (obj.getNombre1testigo() != null) ? obj.getNombre1testigo().toUpperCase() : "";
+                        pc.setNombre1testigo(name1Testigo);
+                        String name2Testigo = (obj.getNombre2testigo() != null) ? obj.getNombre2testigo().toUpperCase() : "";
+                        pc.setNombre2testigo(name2Testigo);
+                        String ape1Testigo = (obj.getApellido1testigo() != null) ? obj.getApellido1testigo().toUpperCase() : "";
+                        pc.setApellido1testigo(ape1Testigo);
+                        String ape2Testigo = (obj.getApellido2testigo() != null) ? obj.getApellido2testigo().toUpperCase() : "";
+                        pc.setApellido2testigo(ape2Testigo);
+                        String obs = (obj.getObservacion() != null) ? obj.getObservacion().toUpperCase() : "";
+                        pc.setObservacion(obs);
+                        pc.setEdadyears(obj.getEdadyears());
+                        pc.setEdadmeses(obj.getEdadmeses());
+                        pc.setEdaddias(obj.getEdaddias());
+                        pc.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
+                        pc.setRecordDate(new Date());
+                        pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        pc.setDeviceid(computerName);
+                        pc.setEstado('1');
+                        pc.setPasive('0');
+                        scanCartaService.saveOrUpdateScanCarta(pc); // Guarda/Participante-Version
                     }
+                    if (obj.getParte() != null) {// Guarda las Version-Partes
+                        Parte pr = new Parte();
+                        for (ParteDto parte : obj.getParte()) {
+                            DetalleParte dp = new DetalleParte();
+                            dp.setParticipantecarta(pc);//
+                            dp.setAcepta(parte.isAcepta());
+                            pr.setIdparte(parte.getIdparte());
+                            dp.setParte(pr);
+                            dp.setDeviceid(computerName);
+                            dp.setRecordDate(new Date());
+                            dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                            dp.setEstado('1');
+                            dp.setPasive('0');
+                            scanCartaService.saveParteCarta(dp);
+                        }
+                    }
+                    return createJsonResponse(pc);
+                }else {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("msj", "Registro ya Existe!");
+                    return createJsonResponse(map);
                 }
-                return createJsonResponse(pc);
-            } else {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("msj", "Registro ya existe.");
-                return createJsonResponse(map);
+
+            }else {
+                //region todo: valid year carta
+
+                if (!this.scanCartaService.siTieneCartaMA(dateYear, obj.getCodigo(), estudio, versionName)) {
+                    if (obj.getAsentimiento().equals("") && obj.getTipoasentimiento() == null) {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("msj", "Especifica el Tipo de Asentimiento");
+                        return createJsonResponse(map);
+                    } else if (obj.getAsentimiento().equals("1") && obj.getTipoasentimiento() == 3) {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("msj", "Revisa el Tipo de Asentimiento");
+                        return createJsonResponse(map);
+                    } else {
+                    }
+
+                    if (obj.getContactoFuturo() == "") {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("msj", "Contacto futuro no puede ser vacío!");
+                        return createJsonResponse(map);
+                    }
+
+                    ParticipanteCarta pc = new ParticipanteCarta();
+                    String computerName = "NicaUmich2";
+                    if (obj != null) {
+                        Participante p = new Participante();
+                        p.setCodigo(obj.getCodigo());
+                        pc.setParticipante(p);
+                        v = this.scanCartaService.getVersionById(obj.getVersion());
+                        pc.setVersion(v);
+                        pc.setRelfam(obj.getRelfam());
+                        pc.setAsentimiento(obj.getAsentimiento());
+                        pc.setTipoasentimiento(obj.getTipoasentimiento());
+                        if (v.getEstudio().getCodigo() == 6 && obj.getEsIndiceOrMiembro() == 0) {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("msj", "Revisa el caso!");
+                            return createJsonResponse(map);
+                        }
+                        if (v.getEstudio().getCodigo() == 6) {
+                            pc.setEsIndiceOrMiembro(obj.getEsIndiceOrMiembro());
+                            pc.setVigente(true);
+                        } else {
+                            pc.setEsIndiceOrMiembro(0);//NA(No Aplica)
+                        }
+
+                        pc.setQuienfirma(obj.getNombfirma().toUpperCase());
+                        String name2Tutor = (obj.getNombre2Firma() != null) ? obj.getNombre2Firma().toUpperCase() : "";
+                        pc.setNombre2Firma(name2Tutor);
+                        pc.setApellido1Firma(obj.getApellido1Firma().toUpperCase());
+                        String ape2Tutor = (obj.getApellido2Firma() != null) ? obj.getApellido2Firma().toUpperCase() : "";
+                        pc.setApellido2Firma(ape2Tutor);
+                        Personal person = this.scanCartaService.getPersonalById(obj.getPerson());
+                        pc.setPersonal(person);
+                        pc.setProyecto(obj.getProyecto());
+                        //boolean cf = (obj.getContactoFuturo().equals("1")) ? true : false;
+                        pc.setContactoFuturo(obj.getContactoFuturo());
+                        boolean testigo = obj.getTestigopresente().equals('1') ? true : false;
+                        pc.setTestigopresent(testigo);
+                        String name1Testigo = (obj.getNombre1testigo() != null) ? obj.getNombre1testigo().toUpperCase() : "";
+                        pc.setNombre1testigo(name1Testigo);
+                        String name2Testigo = (obj.getNombre2testigo() != null) ? obj.getNombre2testigo().toUpperCase() : "";
+                        pc.setNombre2testigo(name2Testigo);
+                        String ape1Testigo = (obj.getApellido1testigo() != null) ? obj.getApellido1testigo().toUpperCase() : "";
+                        pc.setApellido1testigo(ape1Testigo);
+                        String ape2Testigo = (obj.getApellido2testigo() != null) ? obj.getApellido2testigo().toUpperCase() : "";
+                        pc.setApellido2testigo(ape2Testigo);
+                        String obs = (obj.getObservacion() != null) ? obj.getObservacion().toUpperCase() : "";
+                        pc.setObservacion(obs);
+                        pc.setEdadyears(obj.getEdadyears());
+                        pc.setEdadmeses(obj.getEdadmeses());
+                        pc.setEdaddias(obj.getEdaddias());
+                        pc.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
+                        pc.setRecordDate(new Date());
+                        pc.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        pc.setDeviceid(computerName);
+                        pc.setEstado('1');
+                        pc.setPasive('0');
+                        scanCartaService.saveOrUpdateScanCarta(pc); // Guarda/Participante-Version
+                    }
+                    if (obj.getParte() != null) {// Guarda las Version-Partes
+                        Parte pr = new Parte();
+                        for (ParteDto parte : obj.getParte()) {
+                            DetalleParte dp = new DetalleParte();
+                            dp.setParticipantecarta(pc);//
+                            dp.setAcepta(parte.isAcepta());
+                            pr.setIdparte(parte.getIdparte());
+                            dp.setParte(pr);
+                            dp.setDeviceid(computerName);
+                            dp.setRecordDate(new Date());
+                            dp.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                            dp.setEstado('1');
+                            dp.setPasive('0');
+                            scanCartaService.saveParteCarta(dp);
+                        }
+                    }
+                    return createJsonResponse(pc);
+                } else {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("msj", "Registro ya Existe!");
+                    return createJsonResponse(map);
+                }
+                //endregion
             }
         } catch (Exception e) {
             Gson gson = new Gson();
@@ -419,6 +552,7 @@ public class CartasController {
             return new ResponseEntity<String>(json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //endregion
 
     /* Buscar Listado por Codigo Participante */
     @RequestMapping(value = "/ListadoCartaParticipant", method = RequestMethod.GET)
@@ -465,30 +599,6 @@ public class CartasController {
     }
 
     //TODO:  BUSCAR participante en scan
-    /*@RequestMapping(value = "/GetScanCartas", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<scanDto> GetScanCartas(@RequestParam(value = "parametro", required = true) Integer parametro)
-      throws ParseException {
-        List<scanDto> scanDtoList = new ArrayList<scanDto>();
-        try {
-            List<scan> scanList = this.scanCartaService.getDataScan(parametro); //query a la tabla scan
-            for (scan s: scanList){
-                scanDto objScanDto = new scanDto();
-                objScanDto.setFecha(DateUtil.DateToString(s.getFecha(),"dd/MM/yyyy"));
-                objScanDto.setCodigo(s.getCodigo());
-                objScanDto.setCons(s.getCons());
-                objScanDto.setAsentimiento(s.getAsentimiento());
-                objScanDto.setParteA(1);
-                objScanDto.setParteB(s.getParteB());
-                objScanDto.setParteC(s.getParteC());
-                objScanDto.setParteD(s.getParteD());
-                scanDtoList.add(objScanDto);
-            }
-            return scanDtoList;
-        }catch (Exception e){
-            return scanDtoList;
-        }
-    }*/
-
     @RequestMapping(value = "/saveCartaDeScan", method = RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<String> saveCartaDeScan(@RequestParam(value = "codigo", defaultValue = "") Integer codigo
@@ -572,8 +682,7 @@ public class CartasController {
                 Participante p = new Participante();
                 p.setCodigo(obj.getIdparticipante());
                 pc.setParticipante(p);
-                Version v = new Version();
-                v= this.scanCartaService.getVersionById(obj.getVersion());
+                Version v = this.scanCartaService.getVersionById(obj.getVersion());
                 pc.setVersion(v);
                 boolean asentimiento = (obj.getAsentimiento().equals("")) ? false : true;
                 pc.setAsentimiento(obj.getAsentimiento());
@@ -600,7 +709,7 @@ public class CartasController {
                 pc.setPersonal(person);
                 pc.setProyecto(obj.getProyecto());
                 boolean cf = (obj.getContactoFuturo().equals("1")) ? true : false;
-                pc.setContactoFuturo(cf);
+                pc.setContactoFuturo(obj.getContactoFuturo());
                 boolean testigo = obj.getTestigopresente().equals("1") ? true : false;
                 pc.setTestigopresent(testigo);
                 pc.setNombre1testigo(obj.getNombre1testigo().toUpperCase());
@@ -624,7 +733,9 @@ public class CartasController {
             }
             if (obj.getParte() != null) {
                 for (ParteDto dto : obj.getParte()) {
-                    this.scanCartaService.ActualizarAcepta(dto.getIddetalle(), dto.isAcepta());
+                    if(dto.getIddetalle()!=null) {
+                        this.scanCartaService.ActualizarAcepta(dto.getIddetalle(), dto.isAcepta());
+                    }
                 }
             }
             return createJsonResponse(pc);
@@ -954,9 +1065,6 @@ public class CartasController {
         }
     }
 
-
-
-
     //region CARTAS TEMPORALES
 
     //Metodo para crear una Nueva Carta Temporal /CatalogoCarta/CartaParticipantTmp
@@ -1185,7 +1293,7 @@ public class CartasController {
                 String ap2 = (obj.getApellido2Firma() == "") ? "" : obj.getApellido2Firma().toUpperCase();
                 temporalForEdit.setSurname2tutor(ap2);
                 contact = (obj.getContactoFuturo().equals("")) ? false : true;
-                temporalForEdit.setContactoFuturo(contact);
+                temporalForEdit.setContactoFuturo(obj.getContactoFuturo());
                 temporalForEdit.setProyecto(obj.getProyecto());
                 temporalForEdit.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
                 temporalForEdit.setObservacion(obj.getObservacion());
@@ -1254,7 +1362,7 @@ public class CartasController {
                 String ap2 = (obj.getApellido2Firma() == "") ? "" : obj.getApellido2Firma().toUpperCase();
                 temporal.setSurname2tutor(ap2);
                 contact = (obj.getContactoFuturo().equals("0")) ? false : true;
-                temporal.setContactoFuturo(contact);
+                temporal.setContactoFuturo(obj.getContactoFuturo());
                 temporal.setProyecto(obj.getProyecto());
                 temporal.setFechacarta(DateUtil.StringToDate(obj.getFechacarta(), "dd/MM/yyyy"));
                 temporal.setObservacion(obj.getObservacion());
@@ -1291,7 +1399,6 @@ public class CartasController {
                         dp.setPasive('0');
                         scanCartaService.saveParteCartaTMP(dp);
                     }
-                    //System.out.println("total " + count + " registros.");
                 }
                 return JsonUtil.createJsonResponse(temporal);
             } else {
@@ -1863,7 +1970,8 @@ public class CartasController {
                 }else{
                  pc.setEsIndiceOrMiembro(0);
                 }
-                pc.setContactoFuturo(cartaTemporal.isContactoFuturo());
+
+                pc.setContactoFuturo(cartaTemporal.getContactoFuturo());
                 pc.setAsentimiento(cartaTemporal.getAsentimiento());
                 contador++;
                 scanCartaService.saveOrUpdateScanCarta(pc);

@@ -486,13 +486,13 @@
                                         <label for="personaValida">Valorado Por:</label>
                                         <select name="personaValida" id="personaValida" required class="form-control focusNext" tabindex="17">
                                             <option selected value=""><spring:message code="select" />...</option>
-                                            <c:forEach items="${personaValida}" var="person">
+                                            <c:forEach items="${person}" var="person">
                                                 <c:choose>
-                                                    <c:when test="${person.catKey eq objDet.personaValida}">
-                                                        <option selected value="${person.catKey}"><spring:message code="${person.spanish}" /></option>
+                                                    <c:when test="${person.personal.idpersonal eq objDet.personaValida}">
+                                                        <option selected value="${person.personal.idpersonal}"><spring:message code="${person.personal.idpersonal}" /> - <spring:message code="${person.personal.nombreApellido}" /></option>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <option value="${person.catKey}"><spring:message code="${person.spanish}" /></option>
+                                                        <option value="${person.personal.idpersonal}"><spring:message code="${person.personal.idpersonal}" /> - <spring:message code="${person.personal.nombreApellido}" /></option>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </c:forEach>

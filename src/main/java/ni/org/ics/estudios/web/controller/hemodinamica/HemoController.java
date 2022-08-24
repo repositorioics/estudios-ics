@@ -3,6 +3,8 @@ package ni.org.ics.estudios.web.controller.hemodinamica;
 import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
+import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
@@ -13,6 +15,7 @@ import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
+import ni.org.ics.estudios.web.utils.JsonUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +33,9 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -102,10 +108,23 @@ public class HemoController {
             List<MessageResource> llenadoCapilar = messageResourceService.getCatalogo("LLENADOCAPILAR");
             model.addAttribute("llenadoCapilar", llenadoCapilar);
             model.addAttribute("idDatoHemo", idDatoHemo);
+
+            List<MessageResource>obtenerMedicos = this.messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_HEMODINAMICA");
+            String[] personId = obtenerMedicos.get(0).getSpanish().split(",");
+            HashSet<Integer> hset = new HashSet<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                hset.add(value);
+            }
+            List<Personal_Cargo> person = this.datoshemodinamicaService.getPersonal(hset);
+            model.addAttribute("person", person);
+
             List<MessageResource> personaValida = messageResourceService.getCatalogo("PERSONAVALIDA");
+            model.addAttribute("personaValida", personaValida);
+
             List<MessageResource> diuresis = messageResourceService.getCatalogo("DIURESIS");
             model.addAttribute("diuresis", diuresis);
-            model.addAttribute("personaValida", personaValida);
             DatosHemodinamica h = datoshemodinamicaService.getbyId(idDatoHemo);
             List<HemoDetalle> contParams = datoshemodinamicaService.NumeroHemoDet(idDatoHemo);
             model.addAttribute("h",h);
@@ -165,7 +184,7 @@ public class HemoController {
     public @ResponseBody
     String BuscarResultado(@RequestParam(value = "idHemoDetalle") String idHemoDetalle)  throws ParseException {
         Map<String, String> map = new HashMap<String, String>();
-        Map<String, Object> model = new HashMap<String, Object>();
+        //Map<String, Object> model = new HashMap<String, Object>();
         HemoDetalle obj = datoshemodinamicaService.getByHemoDetalleId(idHemoDetalle);
         map.put("pa", obj.getPa());
         map.put("pd", obj.getPd());
@@ -177,8 +196,12 @@ public class HemoController {
         map.put("sa", obj.getSa());
         messagediuresis = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getDiuresis(),"DIURESIS");
         map.put("diuresis",getDescripcionCatalogo(obj.getDiuresis(),"DIURESIS"));
-        messagePersonaValida = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getPersonaValida(),"PERSONAVALIDA");
-        map.put("personaValida", getDescripcionCatalogo2(obj.getPersonaValida(),"PERSONAVALIDA"));
+
+        Integer personalID = Integer.parseInt(obj.getPersonaValida());
+        Personal personal = this.datoshemodinamicaService.getPersonalById(personalID);
+        map.put("personaValida", personal.getIdpersonal().toString() +" - "+ personal.getNombreApellido());
+        //messagePersonaValida = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getPersonaValida(),"PERSONAVALIDA");
+        //map.put("personaValida", getDescripcionCatalogo2(obj.getPersonaValida(),"PERSONAVALIDA"));
         map.put("densidadU", (obj.getDensidadUrinaria() != null ? obj.getDensidadUrinaria():"-"));
         String jsonResponse;
         jsonResponse = new Gson().toJson(map);
@@ -276,12 +299,6 @@ public class HemoController {
         /* Guardar datos Hemodinamica 29/05/2019 - first save */
         @RequestMapping(value="addHemodinamica", method=RequestMethod.POST)
         public ResponseEntity<String>addHemodinamica(
-                //  @RequestParam( value="asc", required=true ) double asc
-                //, @RequestParam( value="imc", required=true ) double imc
-                //, @RequestParam( value="IMCdetallado", required=true ) String IMCdetallado
-                //, @RequestParam( value="municipio", required=true ) String municipio
-                //, @RequestParam( value="silais", required=true ) String silais
-                //, @RequestParam( value="uSalud",  required=true ) String uSalud
                   @RequestParam( value="direccion", required=true ) String direccion
                 , @RequestParam( value="edad", required=true ) String edad
                 , @RequestParam( value="fecha", required=true ) String fecha
@@ -334,7 +351,10 @@ public class HemoController {
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             obj.setRecordDate(new Date());
             obj.setFie(DateUtil.StringToDate(fie, "dd/MM/yyyy"));
-            obj.setDiasenf(diasenf);
+            if (validarFecha(fie) && validarFecha(fconsulta)) {
+                int dias_enfermo = (int) calculateDays(DateUtil.StringToDate(fie, "dd/MM/yyyy"), DateUtil.StringToDate(fconsulta, "dd/MM/yyyy"));
+                obj.setDiasenf(dias_enfermo);
+            }
             obj.setSdMin(sdMin);
             obj.setSdMed(sdMed);
             obj.setSdMax(sdMax);
@@ -359,7 +379,27 @@ public class HemoController {
             String json = gson.toJson(e.toString());
             return  new ResponseEntity<String>( json, HttpStatus.CREATED);
         }
-}
+    }
+
+    public static boolean validarFecha(String fecha) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+            formatoFecha.setLenient(false);
+            formatoFecha.parse(fecha);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static long calculateDays(Date dateBeforeString1, Date dateAfterString2) {
+        String f1 = DateUtil.DateToString(dateBeforeString1, "yyyy-MM-dd");
+        String f2 = DateUtil.DateToString(dateAfterString2, "yyyy-MM-dd");
+        LocalDate dateBefore = LocalDate.parse(f1);
+        LocalDate dateAfter = LocalDate.parse(f2);
+        long noOfDaysBetween = ChronoUnit.DAYS.between(dateBefore, dateAfter);
+        return noOfDaysBetween + 1;
+    }
 
     /* Modificar datos Hemodinamica */
     /*@RequestMapping(value = "UpdateHemodinamica/{idDatoHemo}", method = RequestMethod.PUT)
@@ -371,12 +411,6 @@ public class HemoController {
             , @RequestParam( value="edad", required=true ) String edad
             , @RequestParam( value="fecha", required=true ) String fecha
             , @RequestParam( value="fconsulta", required=true ) String fconsulta
-            //, @RequestParam( value="imc", required=true ) double imc
-            //, @RequestParam( value="asc", required=true ) double asc
-            //, @RequestParam( value="IMCdetallado", required=true ) String IMCdetallado
-            //, @RequestParam( value="municipio", required=true ) String municipio
-            //, @RequestParam( value="uSalud",  required=true ) String uSalud
-            //, @RequestParam( value="silais", required=true ) String silais
             , @RequestParam( value="expediente", required=true ) String nExpediente
             , @RequestParam( value="peso", required=true ) String peso
             , @RequestParam( value="sector", required=true ) String sector
@@ -426,7 +460,10 @@ public class HemoController {
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             obj.setRecordDate(new Date());
             obj.setFie(DateUtil.StringToDate(fie,"dd/MM/yyyy"));
-            obj.setDiasenf(diasenf);
+            if (validarFecha(fie) && validarFecha(fconsulta)) {
+                int dias_enfermo = (int) calculateDays(DateUtil.StringToDate(fie, "dd/MM/yyyy"), DateUtil.StringToDate(fconsulta, "dd/MM/yyyy"));
+                obj.setDiasenf(dias_enfermo);
+            }
             obj.setSdMin(sdMin);
             obj.setSdMed(sdMed);
             obj.setSdMax(sdMax);
@@ -460,7 +497,6 @@ public class HemoController {
         return imc;
     }
     public double getAreaSupCorp(String peso, double talla){
-        //Area de Superficie Corporal (Haycock)
         double p = Double.parseDouble(peso);
         return  Math.sqrt((p * talla) / 3600);
     }
@@ -510,8 +546,21 @@ public class HemoController {
             modelView.addObject("clasificacion", clasificacion);
             List<MessageResource> llenadoCapilar = messageResourceService.getCatalogo("LLENADOCAPILAR");
             modelView.addObject("llenadoCapilar", llenadoCapilar);
+            List<MessageResource>obtenerMedicos = this.messageResourceService.getCatalogo("CAT_SELECCIONAR_PERSONAL_HEMODINAMICA");
+            String[] personId = obtenerMedicos.get(0).getSpanish().split(",");
+            HashSet<Integer> hset = new HashSet<Integer>();
+            List<String> cargosId = Arrays.asList(personId);
+            for (int i = 0; i < cargosId.size(); i++) {
+                int value = Integer.parseInt( cargosId.get(i) );
+                hset.add(value);
+            }
+            List<Personal_Cargo> person = this.datoshemodinamicaService.getPersonal(hset);
+            modelView.addObject("person", person);
+
+
             List<MessageResource> personaValida = messageResourceService.getCatalogo("PERSONAVALIDA");
             modelView.addObject("personaValida", personaValida);
+
             List<MessageResource> diuresis = messageResourceService.getCatalogo("DIURESIS");
             modelView.addObject("diuresis", diuresis);
             modelView.setViewName("/hemodinamica/formEditDetalle");

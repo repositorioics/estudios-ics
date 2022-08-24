@@ -15,24 +15,23 @@ var RealizarRetiro = function(){
                         required: true,
                         maxlength: 5
                     }
-                },
-                errorPlacement: function (error, element) {
+                },errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
-                    error.addClass('form-control-feedback');
-                    if (element.prop('type') === 'checkbox') {
-                        error.insertAfter(element.parent('label'));
+                    error.addClass( 'form-control-feedback' );
+                    if ( element.prop( 'type' ) === 'checkbox' ) {
+                        error.insertAfter( element.parent( 'label' ) );
                     } else {
                         //error.insertAfter( element ); //cuando no es input-group
                         error.insertAfter(element.parent('.input-group'));
                     }
                 },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass('form-control-danger').removeClass('form-control-success');
-                    $(element).parents('.form-group').addClass('has-danger').removeClass('has-success');
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                    $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
                 },
                 unhighlight: function (element, errorClass, validClass) {
-                    $(element).addClass('form-control-success').removeClass('form-control-danger');
-                    $(element).parents('.form-group').addClass('has-success').removeClass('has-danger');
+                    $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                    $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
                 },
                 submitHandler: function (form) {
                     search();
@@ -41,9 +40,8 @@ var RealizarRetiro = function(){
 
             function search() {
                 $.getJSON(params.BuscarParticipanteUrl, form1.serialize(), function (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.mensaje != undefined) {
-                            //$.notify(data.mensaje, "error");
                             toastr.warning(data.mensaje,{timeout:1500});
                             $("#smartwizard").smartWizard("goToStep", 0);
                             $('#smartwizard').smartWizard("reset");
@@ -69,7 +67,6 @@ var RealizarRetiro = function(){
                         }
                     }
                 ).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        //$.notifiy(errorThrown,'error');
                         toastr.error(errorThrown,{timeout:1000});
                         $('#smartwizard').smartWizard("reset");
                     });
@@ -253,11 +250,9 @@ var GuardarRetiro = function(){
 
             function processRetiro() {
                 var jqxhr = $.post( p.savePartRetiradoUrl, form2.serialize(), function( data ){
-                    $('#page-loader').fadeIn('slow');
                 }).done(function() {
                     toastr.success(p.successmessage);
                     window.setTimeout(function(){
-                        $('#page-loader').fadeOut('slow');
                         location.reload(true);
                     }, 1500);
                     $("#smartwizard").smartWizard("goToStep", 0);

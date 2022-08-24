@@ -216,6 +216,11 @@
     #parametro-error {
         margin-right: 759px;
     }
+    .form-control-feedback {
+        margin-top: 0.25rem;
+        width: 16%;
+        text-align: center;
+    }
 </style>
 <spring:url value="/resources/css/sweetalert.css" var="swalcss"/>
 <link href="${swalcss}" rel="stylesheet" type="text/css"/>
@@ -295,27 +300,25 @@
             <div class="media">
                 <div class="media-body">
                     <div class="container">
-                        <form action="#" autocomplete="off" id="select-participante-form" name="select-participante-form" class="form-horizontal">
-                            <div class="form-group row">
-                                <label class="form-control-label col-md-2 text-right" for="username"><spring:message code="participant.code" />
-                                    <span class="required">*</span>
-                                </label>
-                                <div class="input-group col-md-10">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input id="parametro" name="parametro" type="text" value="" class="form-control"/>
-                                    <button id="buscar" type="submit" class="btn btn-success btn-ladda" data-style="expand-right">
-                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                        <spring:message code="search" />
-                                    </button>
+                            <form action="#" autocomplete="off" name="select-participante-form" id="select-participante-form" class="form-horizontal" novalidate="novalidate">
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input id="parametro" name="parametro" type="text" placeholder="<spring:message code="participant.code" />" class="form-control">
+                                        <button id="buscar" type="submit" class="btn btn-success btn-ladda ladda-button" data-style="expand-right"><span class="ladda-label">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                             <spring:message code="search" />
+                                        </span><span class="ladda-spinner"></span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
                     </div>
                     <hr/>
 
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label> <spring:message code="code" />:</label>
+                            <label> <spring:message code="participant.code" />:</label>
                             <input type="text" class="form-control form-control-sm" name="codigo" id="codigo" disabled/>
                             <span class="error"><spring:message code="code" /> <spring:message code="lbl.required" /></span>
                         </div>
@@ -387,7 +390,7 @@
             <div class="media">
                 <div class="media-body">
                     <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
-                    <div class="row"  hidden="hidden">
+                    <div class="row"   >
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="principal">principal</label>
@@ -555,7 +558,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="relfam"><spring:message code="family.relationship" /> </label>
                                     <span class="required text-danger"> * </span>
@@ -571,8 +574,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
-
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="tipoCaso"><spring:message code="cases" />: </label>
                                     <select name="tipoCaso" id="tipoCaso" class="form-control">
@@ -585,36 +587,43 @@
                                         <spring:message code="cases" /> <spring:message code="lbl.required" />
                                     </div>
                                 </div>
-
-
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <div class="form-check mt-4 text-center">
+                                        <label for="contactoFuturo">
+                                            <spring:message code="lbl.Accept.future.contact" />
+                                        </label>
+                                        <select name="contactoFuturo" id="contactoFuturo" class="form-control" required>
+                                            <option selected value=""><spring:message code="select" />...</option>
+                                            <c:forEach items="${contactoFuturo}" var="c">
+                                                <option value="${c.catKey}">${c.catKey} - <spring:message code="${c.spanish}" /></option>
+                                            </c:forEach>
+                                        </select>
+                                    <div class="invalid-feedback">
+                                        <spring:message code="lbl.Accept.future.contact" /> <spring:message code="lbl.required" />
+                                    </div>
+                                   <%-- <div class="form-check mt-4 text-center">
                                         <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo">
                                         <label class="form-check-label" for="contactoFuturo">
                                             <spring:message code="lbl.Accept.future.contact" />
                                         </label>
-                                    </div>
-                                </div>
-                               <%-- <p> <h5 class="text-primary" style="font-family: Roboto"><spring:message code="lbl.Accept.future.contact" /></h5> </p>
-                                <p><input type="checkbox" name="contactoFuturo" id="contactoFuturo"  class="lcs_check" autocomplete="off" /></p>--%>
+                                    </div>--%>
                             </div>
-                            <div class="col-md-2">
+                            <br/>
+                            <input type="text" name="aptoCovid" id="aptoCovid" hidden="hidden" disabled/>
+                        </div>
+
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <div class="form-check mt-4 text-center">
+                                    <div class="form-check mt-4 text-center pt-2">
                                         <input class="form-check-input chktestigo" type="checkbox" id="chkTestigo" name="chkTestigo">
                                         <label class="form-check-label" for="chkTestigo">
                                             <spring:message code="lbl.witness.present" />
                                         </label>
                                     </div>
                                 </div>
-                               <%-- <p> <h5 class="text-primary" style="font-family: Roboto"><spring:message code="lbl.witness.present" /></h5> </p>
-                                <p><input type="checkbox" id="chktestigo" name="chktestigo"  class="lcs_check chktestigo" autocomplete="off" /></p>--%>
                             </div>
-                            <br/>
-                            <input type="text" name="aptoCovid" id="aptoCovid" hidden="hidden" disabled/>
                         </div>
 
                         <div id="selectt" style="display: none">
@@ -626,7 +635,6 @@
                                         <input type="text" class="form-control onlytext focusNext" tabindex="5" id="nombre1Testigo" name="nombre1Testigo" />
                                         <span class="error"><spring:message code="first.name" /> <spring:message code="lbl.required" />.</span>
                                     </div>
-
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -753,10 +761,6 @@
 
 <spring:url value="/resources/js/libs/smartWizard/jquery.smartWizard.js" var="jqsw"/>
 <script type="application/javascript" src="${jqsw}"></script>
-<%--
-<spring:url value="/resources/js/libs/lc_switch.js" var="lc" />
-<script type="text/javascript" src="${lc}"></script>--%>
-
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {
@@ -780,7 +784,6 @@
 </script>
 
 <script type="text/javascript">
-
     $(document).ready(function(){
         $(".collapse.show").each(function(){
             $(this).siblings(".card-header").find(".btn i").addClass("fa-minus-circle").removeClass("fa-plus-circle");
@@ -815,6 +818,7 @@
         $("#version").select2();
         $("#person").select2();
         $("#relfam").select2();
+        $("#contactoFuturo").select2();
         $("#proyecto").select2();
         $("#asentimiento").select2();
         $("#tipoasentimiento").select2();

@@ -97,7 +97,6 @@ var SearchCartaParticipant = function () {
                 table.clear().draw( false );
                 tblScanParticipant.clear().draw( false );
                 Buscarcp(parametros);
-                //BuscarEnScan(parametros);
             }
 
         });// fin validate
@@ -112,9 +111,7 @@ var SearchCartaParticipant = function () {
         }*/
 
         function Buscarcp(dir){
-            debugger;
             $.getJSON(dir.GetCartasParticipanteUrl,{parametro : $('#parametro').val(), ajax : 'true' },function(data){
-                //console.log(data);
                 var len = data.length;
                 if(len == 0){
                     toastr.warning("No se encontró información de: "+'<strong>' + $('#parametro').val() +'</strong>',{timeOut: 5000});
@@ -148,7 +145,7 @@ var SearchCartaParticipant = function () {
                             '<div class="btn-group">'+
                             '<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Acción</button>'+
                             '<div class="dropdown-menu dropdown-menu-right">'+
-                            '<a class="dropdown-item2 btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book text-warning" aria-hidden="true"></i>  Reporte</a>' +
+                            '<a class="dropdown-item2 btnReporte" data-id="' + data[i].idParticipanteCarta + '"><i class="fa fa-book text-warning" aria-hidden="true"></i>Reporte</a>' +
                             '</div> ' + '</div>';
                         table.row.add([
                             id,
@@ -218,10 +215,8 @@ var SearchCartaParticipant = function () {
             VerPartes(id);
         });
         function VerPartes(id){
-            debugger;
-
             $.getJSON(urls.searchPartesUrl, { idparticipantecarta : id,   ajax : 'true'  }, function(data){
-                console.log(data);
+                //console.log(data);
                 table2.clear().draw( false );
                 var len = data.length;
                         for(var i=0; i < len; i++){
@@ -260,9 +255,6 @@ var SearchCartaParticipant = function () {
 
             });
             verExtensiones(id);
-            //recorrer();
-            //$('#exampleModalxl').modal('show')
-
         });
 
       function recorrer(){
@@ -373,9 +365,9 @@ var SearchCartaParticipant = function () {
             ActualizarPartesPrincipales(arrData);
         });
         function myFunctionAlert() {
-            $('#mialerta').fadeIn(1000);
+                $('#mialerta').fadeIn(1000);
             setTimeout(function() {
-            $('#mialerta').fadeOut(1000);
+                $('#mialerta').fadeOut(1000);
             }, 5000);
         }
         function ActualizarPartesPrincipales(arrData){

@@ -1,8 +1,10 @@
 package ni.org.ics.estudios.service.covid;
 
+import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.covid19.*;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
+import ni.org.ics.estudios.dto.muestras.MxDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -413,4 +415,96 @@ public class CovidService {
         query.setParameter("casaCHF", casaCHF);
         return (CandidatoTransmisionCovid19)query.uniqueResult();
     }
+
+    //region todo: busqueda en tabla muestras y chf_muestras tomas <= a 30 dias  m.codigo=:codigo
+
+    public List<MxDto>getMuestrasTomaMinor30Days(Integer codigo, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT m.codigo as codigoParticipante, date_format(m.fecha_registro, '%d/%m/%Y    ') as fechaRegistro, date_format(m.fecha_muestra, '%d/%m/%Y %H:%i:%S') as fechaToma, m.username as usuario, m.terreno as terreno, " +
+                " coalesce(m.tuborojo, '0') as tuboRojo, coalesce(m.tuboleu, '0') as tuboPbmc, coalesce(m.tubobhc,'0') as tuboBhc, coalesce(m.est_actuales, '-') as estudiosActuales" +
+                " FROM muestras m " +
+                " WHERE cast(m.fecha_muestra as DATE) BETWEEN DATE_SUB(curdate(), INTERVAL :intervalo DAY) AND curdate() AND m.codigo=:codigo ";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo", codigo);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+
+    // query en la Chf_muestra
+    public List<MxDto>getChfMuestraToma2Minor30Days(Integer codigo, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT mf.codigo_participante as  codigoParticipante, date_format(mf.fecha_registro, '%d/%m/%Y %H:%i:%S') as fechaRegistro, date_format(mf.fecha_recibido, '%d/%m/%Y') as fechaToma, mf.volumen as volumen," +
+                " mf.proposito as proposito, mf.tipo_tubo as tipoTubo, mf.tipo_muestra as tipoMuestra, mf.TOMAMX_SN as muestraTomada ,mf.razon_notoma as razonNoToma," +
+                " coalesce(mf.CODIGO_MX,'-') as codLabMuestra" +
+                " FROM chf_muestras mf " +
+                " WHERE cast(mf.fecha_recibido as date) between DATE_SUB(curdate(), INTERVAL :intervalo DAY) AND curdate() AND mf.codigo_participante=:codigo and mf.PASIVO='0' ";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo", codigo);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+
+    // query en la tabla Chf_muestra por casa de familia
+    public List<MxDto>getCasaFamiliaEnCh_MuestraMinor30Days(String casaFam, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql ="SELECT mf.codigo_participante as codigoParticipante,date_format(mf.fecha_registro, '%d/%m/%Y %H:%i:%S') as fechaRegistro, date_format(mf.fecha_recibido, '%d/%m/%Y') as fechaToma,coalesce(mf.volumen,0.0) as volumen," +
+                " mf.proposito as proposito, mf.tipo_tubo as tipoTubo, mf.tipo_muestra as tipoMuestra, mf.TOMAMX_SN as muestraTomada ,mf.razon_notoma as razonNoToma," +
+                " coalesce(mf.CODIGO_MX,'-') as codLabMuestra" +
+                " from chf_participante_cohorte_familia pf inner join chf_muestras mf ON pf.CODIGO_PARTICIPANTE=mf.CODIGO_PARTICIPANTE inner join participantes_procesos pp on pf.CODIGO_PARTICIPANTE= pp.codigo" +
+                " WHERE cast(mf.fecha_recibido, as DATE) between DATE_SUB(curdate(), INTERVAL :intervalo DAY) AND curdate() AND pf.CODIGO_CASA_CHF IN (:casaFam) and pp.est_part=1 and mf.pasivo='0' ";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("casaFam",casaFam);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+
+    //query en la tabla muestra por casa de familia si pertenece a cohorte de familia
+    public List<MxDto>getMuestraMenor30DaysByCasaFam(String casaFam, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT m.codigo as codigoParticipante,date_format(m.fecha_muestra, '%d/%m/%Y %H:%i:%S') as fechaRegistro, date_format(m.fecha_muestra, '%d/%m/%Y') as fechaToma, m.username as usuario, m.terreno as terreno, " +
+                " coalesce(m.tuborojo, '0') as tuboRojo, coalesce(m.tuboleu, '0') as tuboPbmc, coalesce(m.tubobhc,'0') as tuboBhc, coalesce(m.est_actuales, '-') as estudiosActuales" +
+                " FROM chf_participante_cohorte_familia pf INNER JOIN muestras m ON pf.CODIGO_PARTICIPANTE=m.codigo " +
+                " INNER JOIN participantes_procesos pp ON pf.CODIGO_PARTICIPANTE=pp.codigo " +
+                " WHERE cast(m.fecha_muestra as date) BETWEEN DATE_SUB(curdate(), INTERVAL :intervalo DAY) AND curdate() AND pp.est_part=1 AND pf.CODIGO_CASA_CHF = :casaFam";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("casaFam", casaFam);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+
+    //Ultimo caso FLU
+    public List<MxDto>getInforUltimoCasoIn30Day(Integer codigo, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT cc.FECHA_INICIO as fechaInicio, " +
+                " cc.FECHA_INACTIVA as fechaInactiva, " +
+                " cc.INACTIVA as enfermo,cc.CODIGO_CASA_CHF as casaFam, " +
+                " coalesce(DATEDIFF(date_add(CURDATE(),interval 1 day),cast(cc.FECHA_INACTIVA AS DATE)),'0') as diasInactiva " +
+                " FROM chf_casas_casos cc JOIN chf_participantes_casos pc ON cc.CODIGO_CASO=pc.CODIGO_CASO " +
+                " WHERE cast(cc.FECHA_INACTIVA as date) BETWEEN DATE_SUB(CURDATE(), INTERVAL :intervalo DAY) AND CURDATE() AND pc.CODIGO_PARTICIPANTE =:codigo and cc.pasivo='0' and pc.PASIVO='0' ";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("intervalo", intervalo);
+        query.setParameter("codigo", codigo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+
+    //Ultimo caso COVID
+    public List<MxDto>getInforTransmisionCovidUltimo30Day(Integer codigo, Integer intervalo){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT cpc.CODIGO_PARTICIPANTE as codigoParticipante, if(cc.CODIGO_CASA_CHF IS NULL,'-',cc.CODIGO_CASA_CHF) AS casaFam, cc.FECHA_INGRESO as fechaInicio, cc.FECHA_INACTIVO as fechaInactiva, " +
+                " cc.INACTIVO as estado, cpc.ENFERMO as enfermo, " +
+                " coalesce (DATEDIFF(date_add(CURDATE(),interval 1 day),cast(cc.FECHA_INACTIVO AS DATE)),'0') as diasInactiva " +
+                " FROM covid_casos cc inner JOIN covid_participantes_casos cpc ON cc.CODIGO_CASO=cpc.CODIGO_CASO" +
+                " WHERE cast(cc.FECHA_INACTIVO as date) BETWEEN DATE_SUB(CURDATE(), INTERVAL :intervalo DAY) AND CURDATE() and cpc.CODIGO_PARTICIPANTE=:codigo";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo",codigo);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(MxDto.class));
+        return query.list();
+    }
+    //endregion
 }

@@ -23,6 +23,7 @@ public class Version extends BaseMetaData implements Auditable{
     private String fecha_version;
     private String fecha_format;
     private boolean activo;
+    private boolean tiene_contacto_futuro;
 
     @Id
     @Column(name = "IDVERSION", nullable = false, length = 6)
@@ -80,6 +81,15 @@ public class Version extends BaseMetaData implements Auditable{
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    @Column(name = "TIENE_CONTACTO_FUTURO", nullable = true)
+    public boolean isTiene_contacto_futuro() {
+        return tiene_contacto_futuro;
+    }
+
+    public void setTiene_contacto_futuro(boolean tiene_contacto_futuro) {
+        this.tiene_contacto_futuro = tiene_contacto_futuro;
     }
 
     @Override

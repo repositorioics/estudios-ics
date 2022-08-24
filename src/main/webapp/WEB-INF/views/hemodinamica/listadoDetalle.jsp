@@ -299,8 +299,19 @@
 
 <jsp:include page="../fragments/bodyFooter.jsp" />
 <jsp:include page="../fragments/corePlugins.jsp" />
-<!-- GenesisUI main scripts -->
 
+<spring:url value="/resources/js/app.js" var="App" />
+<script src="${App}" type="text/javascript"></script>
+<c:choose>
+    <c:when test="${cookie.eIcsLang.value == null}">
+        <c:set var="lenguaje" value="es"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="lenguaje" value="${cookie.eIcsLang.value}"/>
+    </c:otherwise>
+</c:choose>
+
+<!-- GenesisUI main scripts -->
 <spring:url value="/resources/js/libs/dataTableResponsive/jquery.dataTables.min.js" var="TablesResponsive" />
 <script type="text/javascript" src="${TablesResponsive}"></script>
 
@@ -313,106 +324,33 @@
 <spring:url value="/resources/js/libs/dataTableResponsive/responsive.bootstrap4.min.js" var="TResponsiveb4" />
 <script type="text/javascript" src="${TResponsiveb4}"></script>
 
+<spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+
 <spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
 <script type="text/javascript" src="${sw}"></script>
 
-<spring:url value="/resources/js/app.js" var="App" />
-<script src="${App}" type="text/javascript"></script>
 
 <script>
-    var table;
-
     $(document).ready(function(){
-        table = $("#tblHistorial").dataTable({
+       var table = $("#tblHistorial").dataTable({
             responsive: true,
-            "language": {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            },"columnDefs": [
-                {
+            "oLanguage": {
+                "sUrl": "${dataTablesLang}"
+            },"columnDefs": [{
                     "targets": [0],
                     "visible": false,
                     "searchable": false
-                }
-            ]
+              }]
         });
+
         $('#tblHistorial tbody').on('click', '.btnView', function () {
             var id = $(this).data('id');
             ver(id);
         });
+
     });
-
-    /*$(function(){
-        table = $("#tblHistorial").dataTable({
-            responsive: true,
-            "language": {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            }
-        });
-        $('[data-toggle="tooltip"]').tooltip();
-
-
-
-        $(".viewResponse").on("click", function(){
-            console.log($(this).data('id'));
-            $.getJSON("${searchResultUrl}", { idHemoDetalle : $(this).data('id'),   ajax : 'true'  }, function(data){
-                $("#exampleModal").modal("show");
-                console.log(data);
-                $("#pa").text(data.pa);
-                $("#pp").text(data.pp);
-                $("#pam").text(data.pam);
-                $("#fcardi").text(data.fcardi);
-                $("#fr").text(data.fr);
-                $("#tc").text(data.tc);
-                $("#sa").text(data.sa);
-                $("#diuresis").text(data.diuresis);
-                $("#densidadU").text(data.densidadU);
-            })
-        });
-
-
-    });*/
 
     function ver(id){
         $.getJSON("${searchResultUrl}", { idHemoDetalle : id,   ajax : 'true'  }, function(data){

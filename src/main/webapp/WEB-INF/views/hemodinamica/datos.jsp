@@ -224,7 +224,9 @@
             </li>
         </ol>
         <spring:url value="/hemo/addHemodinamica" var="saveHemoUrl"/>
+        <spring:url value="/hemo/adddetails" var="adddetailsUrl"/>
         <spring:url value="/hemo/listado2" var="ListadoUrl"/>
+        <spring:url value="/hemo/listDetailsHemo" var="listDetailsHemoUrl"/>
         <spring:url value="/hemo/GetRange" var="GetRangeUrl"/>
         <c:set var="successMessage"><spring:message code="process.success" /></c:set>
         <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
@@ -317,7 +319,7 @@
 
                                             <div class="form-group col-sm-12">
                                                 <label for="telefono">Teléfono:</label>
-                                                <input type="text" class="form-control num focusNext" id="telefono" name="telefono" placeholder="Número de telefono" tabindex="1">
+                                                <input type="text" class="form-control num focusNext" id="telefono" name="telefono" maxlength="8" minlength="8" placeholder="Número de telefono" tabindex="1">
                                             </div>
 
                                         </div>
@@ -336,13 +338,13 @@
                                     <div class="form-group col-md-6">
                                         <label for="peso">Peso(kg):</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control num focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
+                                        <input type="text" class="form-control focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="talla">Talla(cm):</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control num focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
+                                        <input type="text" class="form-control focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
                                     </div>
 
                                     <div class="form-group col-sm-4">
@@ -634,12 +636,14 @@
             }
         });
         var endPoint = {
-            saveHemoUrl: "${saveHemoUrl}",
-            ListadoUrl:"${ListadoUrl}",
-            GetRangeUrl:"${GetRangeUrl}",
-            searchPartUrl: "${searchPartUrl}",
-            notFound: "${notFound}",
-            successmessage      : "${successMessage}"
+            notFound       : "${notFound}",
+            ListadoUrl     : "${ListadoUrl}",
+            saveHemoUrl    : "${saveHemoUrl}",
+            GetRangeUrl    : "${GetRangeUrl}",
+            searchPartUrl  : "${searchPartUrl}",
+            successmessage : "${successMessage}",
+            adddetailsUrl  : "${adddetailsUrl}",
+            listDetailsHemoUrl : "${listDetailsHemoUrl}"
         };
         datosHemo.init(endPoint);
         GuardarDinamica.init(endPoint);

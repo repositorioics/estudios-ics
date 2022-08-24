@@ -32,7 +32,7 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     private String apellido1Firma;
     private String apellido2Firma;
     private String proyecto;
-    private boolean contactoFuturo;
+    private String contactoFuturo;
     private String observacion;
     private Integer tipoasentimiento;
 
@@ -171,11 +171,11 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
         this.proyecto = proyecto;
     }
     @Column(name = "CONTACTO_FUTURO", nullable = true)
-    public boolean getContactoFuturo() {
+    public String getContactoFuturo() {
         return contactoFuturo;
     }
 
-    public void setContactoFuturo(boolean contactoFuturo) {
+    public void setContactoFuturo(String contactoFuturo) {
         this.contactoFuturo = contactoFuturo;
     }
 
@@ -195,11 +195,6 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
-    }
-
-    @Transient
-    public boolean isEsContacto() {
-        return this.contactoFuturo == true;
     }
 
     @Column(name="TESTIGO_PRESENT")

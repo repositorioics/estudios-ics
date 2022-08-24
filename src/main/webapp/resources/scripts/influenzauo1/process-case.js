@@ -3,6 +3,46 @@ var ProcessCaseUO1 = function () {
     return {
         //main function to initiate the module
         init: function (parametros) {
+            /*tablas Muestras y chf_muestra*/
+            var muestra  = $('#tblMuestra').DataTable({
+                "oLanguage": {
+                    "sUrl": parametros.dataTablesLang
+                }
+            });
+            var chf_muestra  = $('#tblChfMuestra').DataTable({
+                "oLanguage": {
+                    "sUrl": parametros.dataTablesLang
+                }
+            });
+            $('#tblMuestra thead tr').clone(true).appendTo( '#tblMuestra thead' );
+            $('#tblMuestra thead tr:eq(1) th').each( function (i) {
+                var title = $(this).text();
+                if (title != 'Acciones') {
+                    $(this).html('<input type="text" placeholder="Buscar '+title+'" class="form-control-buscar" />');
+                    $('input', this).on('keyup change', function () {
+                        if (muestra.column(i).search() !== this.value) {
+                            muestra.column(i).search(this.value).draw();
+                        }
+                    });
+                } else {
+                    $(this).html('');
+                }
+            });
+            $('#tblChfMuestra thead tr').clone(true).appendTo( '#tblChfMuestra thead' );
+            $('#tblChfMuestra thead tr:eq(1) th').each( function (i) {
+                var title = $(this).text();
+                if (title != 'Acciones') {
+                    $(this).html('<input type="text" placeholder="Buscar '+title+'" class="form-control-buscar" />');
+                    $('input', this).on('keyup change', function () {
+                        if (chf_muestra.column(i).search() !== this.value) {
+                            chf_muestra.column(i).search(this.value).draw();
+                        }
+                    });
+                } else {
+                    $(this).html('');
+                }
+            });
+            /* Fin Table */
 
             var form1 = $('#search-participant-form');
             form1.validate({
@@ -34,9 +74,200 @@ var ProcessCaseUO1 = function () {
                     $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
                 },
                 submitHandler: function (form) {
+                    muestra.clear().draw( false );
+                    chf_muestra.clear().draw( false );
                     search();
                 }
             });
+
+            $("#numMuestra").text("0/0");
+            $("#numCHFMuestra").text("0/0");
+            function search() {
+                $("#numDiasCHFMuestra").text('0');
+                $("#numDiasMuestra").text('0');
+                $.getJSON( parametros.searchUrl , form1.serialize() , function( data )   {
+                        console.log(data);
+                        if (data.mensaje != undefined) {
+                            toastr.error(data.mensaje,"Error",{timeOut: 0});
+                            $("#codigoCasa").val("");
+                            $("#codigoParticipante").val("");
+                            $("#alertas").hide();
+                            $("#msgAlert").hide();
+                            $("#tblMuestra").DataTable().clear().draw();
+                            $("#tblChfMuestra").DataTable().clear().draw();
+                            $("#numMuestra").text("0/0");
+                            $("#numCHFMuestra").text("0/0");
+                        }
+                        else {
+                            $("#codigoCasa").val(data.casaPediatrica);
+                            $("#codigoParticipante").val(data.codigo);
+                            if(data.alertas != '' ){
+                                $("#alertas").html(data.alertas).show();
+                                $("#msgAlert").show();
+                            }else{
+                                $("#alertas").hide();
+                                $("#msgAlert").hide();
+                            }
+
+                            if(data.muestras.length ==0 && data.chf_muestras.length ==0 ){
+                                $("#numMuestra").text("0/0");
+                                $("#numCHFMuestra").text("0/0");
+                            }
+                            var contadorMuestraByCodigo = 0;
+                            var contadorChf_MuestraByCodigo = 0;
+                            $.each(data.muestras, function(index, element){
+                                if(element.codigoParticipante === data.codigo){
+                                    contadorMuestraByCodigo++;
+                                }
+                                muestra.row.add([
+                                    element.codigoParticipante,
+                                    element.fechaRegistro,
+                                    element.fechaToma,
+                                    element.terreno,
+                                    element.usuario,
+                                    element.tuboRojo,
+                                    element.tuboPbmc,
+                                    element.tuboBhc,
+                                    element.estudiosActuales
+                                ]).draw(false);
+                            });
+                            $("#numMuestra").text(contadorMuestraByCodigo+"/"+data.muestras.length);
+                            $("#numDiasMuestra").text(data.intervalo);
+                            $("#numDiasCHFMuestra").text(data.intervalo);
+
+                            // 1= Muestreo anual, 2= Muestra enfermo, 3= Muestra transmision (MI), 4= UO1 Positivo, 5= UO1 Vacuna
+                            $.each(data.chf_muestras, function(index, element){
+                                if(element.codigoParticipante === data.codigo){
+                                    contadorChf_MuestraByCodigo++;
+                                }
+                                $("#numCHFMuestra").text(contadorChf_MuestraByCodigo+"/"+data.chf_muestras.length);
+                                var proposito = "";
+                                switch (element.proposito){
+                                    case "1":
+                                        proposito = "Muestreo anual";
+                                        break;
+                                    case "2":
+                                        proposito = "Muestra enfermo";
+                                        break;
+                                    case "3":
+                                        proposito="Muestra transmision (MI)";
+                                        break;
+                                    case "4":
+                                        proposito ="UO1 Positivo";
+                                        break;
+                                    case "5":
+                                        proposito ="UO1 Vacuna";
+                                        break;
+                                    default:
+                                        proposito = "Desconocido";
+                                }
+                                //1=Rojo, 2=BHC, 3=PBMC, 4=Medio, 5=MEM, 9=SM
+                                var tipoTubo='';
+                                switch (element.tipoTubo){
+                                    case "1":
+                                        tipoTubo = "Rojo";
+                                        break;
+                                    case "2":
+                                        tipoTubo="BHC";
+                                        break;
+                                    case "3":
+                                        tipoTubo="PBMC";
+                                        break;
+                                    case "4":
+                                        tipoTubo="Medio";
+                                        break;
+                                    case "5":
+                                        tipoTubo="MEM";
+                                        break;
+                                    case "9":
+                                        tipoTubo="SM";
+                                        break;
+                                    default :
+                                        tipoTubo="Desconocido";
+                                }
+                                //1=Sangre, 2=Hisopado Faringeo, 3=Hisopado Nasal, 4=Hisopado Nasal y Faringeo, 5=Lavado Nasal, 9=Sin muestra
+                                var tipoMx='';
+                                switch (element.tipoMuestra){
+                                    case "1":
+                                        tipoMx="Sangre";
+                                        break;
+                                    case "2":
+                                        tipoMx="Hisopado Faringeo";
+                                        break;
+                                    case "3":
+                                        tipoMx="Hisopado Nasal";
+                                        break;
+                                    case "4":
+                                        tipoMx="Hisopado Nasal y Faringeo";
+                                        break;
+                                    case "5":
+                                        tipoMx="Lavado Nasal";
+                                        break;
+                                    case "9":
+                                        tipoMx="Sin muestra";
+                                        break;
+                                    default :
+                                        tipoMx="Desconocido";
+                                }
+                                //1=Muestra dificil, 2=Se descanalizó, 3=Se pinchó mas de 2 veces, 4=Padre/niño no aceptó tomar muestra, 5=Padre o tutor despues de pinchadazo no desea que se le tome mx al niño, 998=Otra razon
+                                var razonNotomaMx ="";
+                                switch (element.razonNoToma){
+                                    case "1":
+                                        razonNotomaMx="Muestra dificil";
+                                        break;
+                                    case "2":
+                                        razonNotomaMx="Se descanalizó";
+                                        break;
+                                    case "3":
+                                        razonNotomaMx="Se pinchó mas de 2 veces";
+                                        break;
+                                    case "4":
+                                        razonNotomaMx="Padre/niño no aceptó tomar muestra";
+                                        break;
+                                    case "5":
+                                        razonNotomaMx="Padre o tutor despues de pinchadazo no desea que se le tome mx al niño";
+                                        break;
+                                    case "998":
+                                        razonNotomaMx="Otra razon";
+                                        break;
+                                    default :
+                                        razonNotomaMx="-"
+                                }
+                                var mxTomada = '';
+                                switch (element.muestraTomada){
+                                    case "0":
+                                        mxTomada = "No";
+                                        break;
+                                    case "1":
+                                        mxTomada = "Si";
+                                        break;
+                                    default :"-";
+                                }
+                                chf_muestra.row.add([
+                                    element.codigoParticipante,
+                                    element.fechaRegistro,
+                                    element.fechaToma,
+                                    element.volumen,
+                                    element.codLabMuestra,
+                                    tipoTubo,
+                                    proposito,
+                                    tipoMx,
+                                    mxTomada,
+                                    razonNotomaMx
+                                ]).draw(false);
+                            });
+                        }
+                    }
+                ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                    toastr.error( "error:" + errorThrown);
+                        $("#tblMuestra").DataTable().clear().draw();
+                        $("#tblChfMuestra").DataTable().clear().draw();
+                        $("#alertas").hide();
+                        $("#msgAlert").hide();
+                        $("#numMuestra").text("0/0");
+                        $("#numCHFMuestra").text("0/0");
+                });
+            }
 
             var form2 = $('#enterform');
             form2.validate({
@@ -96,26 +327,6 @@ var ProcessCaseUO1 = function () {
                 }
             });
 
-            function search()
-            {
-                $.getJSON( parametros.searchUrl , form1.serialize() , function( data )   {
-                        //registro = JSON.parse(data);
-                        console.log(data);
-                        if (data.mensaje != undefined) {
-                            toastr.error(data.mensaje,"Error",{timeOut: 0});
-                            $("#codigoCasa").val("");
-                            $("#codigoParticipante").val("");
-                        }
-                        else {
-                            $("#codigoCasa").val(data.casa.codigo);
-                            $("#codigoParticipante").val(data.codigo);
-                        }
-                    }
-                ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                        toastr.error( "error:" + errorThrown);
-                    });
-            }
-
             function saveCaseUO1()
         	{
         	    $.post( parametros.saveUrl
@@ -139,26 +350,7 @@ var ProcessCaseUO1 = function () {
                         toastr.error("error:" + errorThrown);
         		  		});
         	}
-            
-    	    
-    	    $(document).on('keypress','form input',function(event)
-    		{                
-    		    event.stopImmediatePropagation();
-    		    if( event.which == 13 )
-    		    {
-    		        event.preventDefault();
-    		        var $input = $('form input');
-    		        if( $(this).is( $input.last() ) )
-    		        {
-    		            //Time to submit the form!!!!
-    		            //alert( 'Hooray .....' );
-    		        }
-    		        else
-    		        {
-    		            $input.eq( $input.index( this ) + 1 ).focus();
-    		        }
-    		    }
-    		});
+
         }
     };
 

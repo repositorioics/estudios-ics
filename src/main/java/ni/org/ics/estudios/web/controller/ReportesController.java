@@ -2,9 +2,12 @@ package ni.org.ics.estudios.web.controller;
 
 import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
+import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
+import ni.org.ics.estudios.domain.catalogs.Personal;
+import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.entomologia.CuestionarioHogar;
 import ni.org.ics.estudios.domain.entomologia.CuestionarioHogarPoblacion;
@@ -31,6 +34,7 @@ import ni.org.ics.estudios.service.entomologia.CuestionarioHogarService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.*;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
+import ni.org.ics.estudios.service.retiro.RetiroService;
 import ni.org.ics.estudios.service.scancarta.ScanCartaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.pdf.Constants;
@@ -102,6 +106,9 @@ public class ReportesController {
     @Resource(name="labPbmcService")
     private LabPbmcService labPbmcService;
 
+    /* Instancia de mi Servicio Retiro */
+    @Resource(name = "RetiroService")
+    private RetiroService retiroService;
     @Resource(name = "cuestionarioHogarService")
     private CuestionarioHogarService cuestionarioHogarService;
 
@@ -531,5 +538,37 @@ public class ReportesController {
 
         return reporteDatosEntomologia;
     }
+
+    //region todo Reporte Retiro estudios_ics /reportes/reporteRetiro
+    @RequestMapping(value = "/reporteRetiro", method = RequestMethod.GET)
+    public ModelAndView retiro(@RequestParam(value="parametro", required=false ) Integer parametro)
+            throws Exception{
+        ModelAndView ReporteRetiro = new ModelAndView("pdfView");
+        List<MessageResource> causas_retiros = messageResourceService.getCatalogo("CAT_CAUSAS_RETIROS");
+        ReporteRetiro.addObject("causas_retiros", causas_retiros);
+        List<MessageResource> coordinador_estudio = messageResourceService.getCatalogo("CAT_COORDINADOR_ESTUDIO");
+        ReporteRetiro.addObject("coordinador_estudio", coordinador_estudio);
+        List<MessageResource> relFam = messageResourceService.getCatalogo("CAT_RF_TUTOR");
+        ReporteRetiro.addObject("relFam", relFam);
+        Retiros retiros = this.retiroService.getRetiroByID(parametro);
+        ReporteRetiro.addObject("retiros", retiros);
+        Personal personal = this.retiroService.getSupervisorById(retiros.getPersonadocumenta());
+        ReporteRetiro.addObject("personal", personal);
+        Personal supervisor = this.retiroService.getSupervisorById(retiros.getMedicosupervisor());
+        ReporteRetiro.addObject("supervisor", supervisor);
+        List<Razones_Retiro> listaDerazones = this.retiroService.getlistaDeRazonRetiro();
+        ReporteRetiro.addObject("listaDerazones", listaDerazones);
+        List<Razones_Retiro> listaDeRazonesGrupo_1 = this.retiroService.getlistaDeRazonRetiroPorIdGrupo(1);
+        ReporteRetiro.addObject("listaDeRazonesGrupo_1", listaDeRazonesGrupo_1);
+        List<Razones_Retiro> listaDeRazonesGrupo_2 = this.retiroService.getlistaDeRazonRetiroPorIdGrupo(2);
+        ReporteRetiro.addObject("listaDeRazonesGrupo_2", listaDeRazonesGrupo_2);
+        List<Razones_Retiro> listaDeRazonesGrupo_3 = this.retiroService.getlistaDeRazonRetiroPorIdGrupo(3);
+        ReporteRetiro.addObject("listaDeRazonesGrupo_3", listaDeRazonesGrupo_3);
+        List<Razones_Retiro> listaDeRazonesGrupo_4 = this.retiroService.getlistaDeRazonRetiroPorIdGrupo(4);
+        ReporteRetiro.addObject("listaDeRazonesGrupo_4", listaDeRazonesGrupo_4);
+        ReporteRetiro.addObject("TipoReporte", Constants.TPR_REPORTERETIRO);
+        return ReporteRetiro;
+    }
+    //endregion
 
 }
