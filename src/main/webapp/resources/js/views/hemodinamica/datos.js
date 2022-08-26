@@ -56,6 +56,7 @@ var datosHemo = function(){
 
             function searchParticipante(){
                 $.getJSON(Urls.searchPartUrl, { parametro : $('#parametro').val(),   ajax : 'true'  }, function(data) {
+                    console.log(data);
                     var len = data.length;
                     if(len==0){
                         toastr.error("Código no encontrado!","ERROR",{timeOut:6000});
@@ -265,7 +266,7 @@ var GuardarDinamica = function(){
                     },
                     expediente:{required: true},
                     telefono :{
-                        pattern: /^\+?[0-9]*\.?[0-9]+$/,
+                        //pattern: /^\+?[0-9]*\.?[0-9]+$/,
                         maxlength: 8,
                         minlength: 8,
                         digits: true},

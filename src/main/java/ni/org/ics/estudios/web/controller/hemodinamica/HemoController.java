@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -196,12 +197,9 @@ public class HemoController {
         map.put("sa", obj.getSa());
         messagediuresis = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getDiuresis(),"DIURESIS");
         map.put("diuresis",getDescripcionCatalogo(obj.getDiuresis(),"DIURESIS"));
-
         Integer personalID = Integer.parseInt(obj.getPersonaValida());
         Personal personal = this.datoshemodinamicaService.getPersonalById(personalID);
         map.put("personaValida", personal.getIdpersonal().toString() +" - "+ personal.getNombreApellido());
-        //messagePersonaValida = messageResourceService.getMensajeByCatalogAndCatKeys(obj.getPersonaValida(),"PERSONAVALIDA");
-        //map.put("personaValida", getDescripcionCatalogo2(obj.getPersonaValida(),"PERSONAVALIDA"));
         map.put("densidadU", (obj.getDensidadUrinaria() != null ? obj.getDensidadUrinaria():"-"));
         String jsonResponse;
         jsonResponse = new Gson().toJson(map);
@@ -507,24 +505,18 @@ public class HemoController {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-    /*Obtiene por Id de una lista/tabla de registro*/
+
+    // ** Vista para Editar un Carta **
     @RequestMapping(value = "/edithemo/{idDatoHemo}",method = RequestMethod.GET)
-    public ModelAndView edithemo(@PathVariable(value="idDatoHemo" ) String idDatoHemo){
-        ModelAndView modeliew = new ModelAndView();
-        Map<String, String> map = new HashMap<String, String>();/* esta funcion es para mapear un objeto */
+    public String edithemo(@PathVariable(value = "idDatoHemo") String idDatoHemo, Model model) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             DatosHemodinamica obj = datoshemodinamicaService.getbyId(idDatoHemo);
-            modeliew.addObject("obj", obj);
+            model.addAttribute("obj", obj);
             List<Barrio> barrios = datoshemodinamicaService.getBarrios();
-            modeliew.addObject("barrios", barrios);
-            map.put("barrio",obj.getParticipante().getCasa().getBarrio().getCodigo().toString());
-            modeliew.setViewName("/hemodinamica/formedit");
-            return modeliew;
+            model.addAttribute("barrios",barrios);
+            return "/hemodinamica/formedit";
         }catch (Exception e){
-            Gson gson = new Gson();
-            String json = gson.toJson(e.toString());
-            return (modeliew);
+            return  "404";
         }
     }
 
@@ -533,7 +525,6 @@ public class HemoController {
     public ModelAndView editDetalleHemo(@PathVariable(value = "idHemoDetalle") String idHemoDetalle)throws ParseException{
         ModelAndView modelView = new ModelAndView();
         try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             HemoDetalle objDet = datoshemodinamicaService.getByHemoDetalleId(idHemoDetalle);
             modelView.addObject("objDet",objDet);
             List<MessageResource> nivelConciencia = messageResourceService.getCatalogo("NIVELCONCIENCIA");
@@ -551,16 +542,13 @@ public class HemoController {
             HashSet<Integer> hset = new HashSet<Integer>();
             List<String> cargosId = Arrays.asList(personId);
             for (int i = 0; i < cargosId.size(); i++) {
-                int value = Integer.parseInt( cargosId.get(i) );
+                int value = Integer.parseInt( cargosId.get(i));
                 hset.add(value);
             }
             List<Personal_Cargo> person = this.datoshemodinamicaService.getPersonal(hset);
             modelView.addObject("person", person);
-
-
             List<MessageResource> personaValida = messageResourceService.getCatalogo("PERSONAVALIDA");
             modelView.addObject("personaValida", personaValida);
-
             List<MessageResource> diuresis = messageResourceService.getCatalogo("DIURESIS");
             modelView.addObject("diuresis", diuresis);
             modelView.setViewName("/hemodinamica/formEditDetalle");
@@ -580,9 +568,7 @@ public class HemoController {
             ,@RequestParam( value="hora", required=true ) String hora
             ,@RequestParam( value="nivelConciencia", required=true ) String nivelConciencia
             ,@RequestParam( value="pa", required=true ) String pa
-            //,@RequestParam( value="pp", required=true ) String pp
             ,@RequestParam( value="pd", required=true ) String pd
-            //,@RequestParam( value="pam", required=true ) String pam
             ,@RequestParam( value="fc", required=true ) String fc
             ,@RequestParam( value="fr", required=true ) String fr
             ,@RequestParam( value="tc" ) String tc
@@ -596,7 +582,6 @@ public class HemoController {
             ,@RequestParam( value="idDatoHemo", required=true) String idDatoHemo
             ,@RequestParam( value="impreso", required=false ) Boolean impreso
             ,@RequestParam( value="dx" ) String dx
-
     ){
         try{
             if (!datoshemodinamicaService.SiExisteHemo(idDatoHemo, DateUtil.StringToDate(fecha, "dd/MM/yyyy"), hora)) {
@@ -645,8 +630,7 @@ public class HemoController {
             Gson gson = new Gson();
             Map<String, String> map = new HashMap<String, String>();
             map.put("msj", e.toString() );
-            //String json = gson.toJson(e.toString());
-            return   createJsonResponse(map); // new ResponseEntity<String>( json, HttpStatus.CREATED);
+            return   createJsonResponse(map);
         }
     }
     /* --  fin -- */
@@ -660,8 +644,6 @@ public class HemoController {
             ,@RequestParam( value="nivelConciencia", required=true ) String nivelConciencia
             ,@RequestParam( value="pa", required=true ) String pa
             ,@RequestParam( value="pd", required=true ) String pd
-            //,@RequestParam( value="pp", required=true ) String pp
-            //,@RequestParam( value="pam", required=true ) String pam
             ,@RequestParam( value="fc", required=true ) String fc
             ,@RequestParam( value="fr", required=true ) String fr
             ,@RequestParam( value="tc" ) String tc

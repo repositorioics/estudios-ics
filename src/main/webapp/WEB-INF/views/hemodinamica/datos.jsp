@@ -26,9 +26,6 @@
     <spring:url value="/resources/css/bootstrap.min.css" var="boot" />
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 
-<%-- <spring:url value="/resources/css/animate.css" var="anime" />
-    <link rel="stylesheet" href="${anime}" type="text/css"/> --%>
-
     <style>
          input[type="text"]:read-only:not([read-only="false"]) { color: #000000; background-color: #ffffff; font-family: Roboto }
          input[type="text"]{color: #000000; font-family: Roboto}
@@ -198,15 +195,77 @@
                  width: 25em;
              }
          }
+
+
+
+/*         body {
+             margin: 0;
+             padding-top: 40px;
+             color: #2e323c;
+             background: #f5f6fa;
+             position: relative;
+             height: 100%;
+         }*/
+         .account-settings .user-profile {
+             margin: 0 0 1rem 0;
+             padding-bottom: 1rem;
+             text-align: center;
+         }
+         .account-settings .user-profile .user-avatar {
+             margin: 0 0 1rem 0;
+         }
+         .account-settings .user-profile .user-avatar img {
+             width: 90px;
+             height: 90px;
+             -webkit-border-radius: 100px;
+             -moz-border-radius: 100px;
+             border-radius: 100px;
+         }
+         .account-settings .user-profile h5.user-name {
+             margin: 0 0 0.5rem 0;
+         }
+         .account-settings .user-profile h6.user-email {
+             margin: 0;
+             font-size: 0.8rem;
+             font-weight: 400;
+             color: #9fa8b9;
+         }
+         .account-settings .about {
+             margin: 2rem 0 0 0;
+             text-align: center;
+         }
+         .account-settings .about h5 {
+             margin: 0 0 15px 0;
+             color: #007ae1;
+         }
+         .account-settings .about p {
+             font-size: 0.825rem;
+         }
+         .form-control {
+             border: 1px solid #cfd1d8;
+             -webkit-border-radius: 2px;
+             -moz-border-radius: 2px;
+             border-radius: 2px;
+             font-size: .825rem;
+             background: #ffffff;
+             color: #2e323c;
+         }
+
+         .card {
+             background: #ffffff;
+             -webkit-border-radius: 5px;
+             -moz-border-radius: 5px;
+             border-radius: 5px;
+             border: 0;
+             margin-bottom: 1rem;
+         }
+
     </style>
     <jsp:include page="../fragments/headTag.jsp" />
-
-    <spring:url value="/resources/css/smartWizardCss/smarthWizardCss.css" var="smw" />
+   <%-- <spring:url value="/resources/css/smartWizardCss/smarthWizardCss.css" var="smw" />
     <link href="${smw}" rel="stylesheet" type="text/css"/>
     <spring:url value="/resources/css/smartWizardCss/smart_wizard_theme_arrows.min.css" var="smwtheme" />
-    <link href="${smwtheme}" rel="stylesheet" type="text/css"/>
-
-    <title>Hemodinámica</title>
+    <link href="${smwtheme}" rel="stylesheet" type="text/css"/>--%>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -219,7 +278,7 @@
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i> <a href="<spring:url value="/hemo/listado2/" htmlEscape="true "/>"><spring:message code="List" /></a>
                 <i class="fa fa-angle-right"></i><a href="<spring:url value="/hemo/create/" htmlEscape="true "/>">
-                    <spring:message code="Hemodinámica" />
+                <spring:message code="hemodynamics" />
                 </a>
             </li>
         </ol>
@@ -235,157 +294,70 @@
                     <div class="card text-black-50 animate__animated animate__zoomIn">
                         <div class="card-header">
                             <h5 class="text-gray-dark" style="font-family: Roboto">
-                                <i class="fa fa-search" aria-hidden="true"></i>   <spring:message code="Búscar Participante" /></h5>
+                                <i class="fa fa-search" aria-hidden="true"></i> <spring:message code="search" /> <spring:message code="participant" /> </h5>
                         </div>
                         <div class="card-block">
-                        <div class="container col-sm-12 col-md-12 col-lg-12">
-                        <!-- SmartWizard html -->
-                        <div id="smartwizard">
-
-                            <ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-1">
-                                        <i class="fa fa-search" aria-hidden="false"></i> <strong>Búscar</strong> <br>Participante.
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#step-2">
-                                        <i class="fa fa-calculator" aria-hidden="true"></i>
-                                        <strong>Cálculos</strong> <br/>Peso y Talla.
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content">
-                                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
-                                    <br/>
-                                    <br/>
-                                    <div class="container  col-sm-12 col-md-12 col-lg-12">
-                                        <spring:url value="/hemo/searchParticipant" var="searchPartUrl"/>
-                                        <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal">
-                                            <div class="row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-12">
-                                                    <label>Código del Participante</label>
-                                                    <input type="text" class="form-control" placeholder="Ingrese el código" id="parametro" name="parametro">
-                                                    <div id="gendererror" class="text-danger"></div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <form action="#" class="form-horizontal" id="save-hemo-form" method="post" autocomplete="off" name="save-hemo-form" role="form">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <h4 class="text-capitalize" style="font-family: Roboto">Datos Personales.</h4>
-                                            </div>
-                                                <div hidden="hidden" class="form-group col-sm-12">
-                                                    <label for="idParticipante">Participante:</label>
-                                                    <input type="text" name="idParticipante" id="idParticipante" placeholder="Código del Participante" readonly class="form-control"/>
-                                                </div>
-
-                                            <div class="form-group col-sm-6">
-                                                <label for="nombre">Nombre:</label>
-                                                <input type="text" class="form-control" placeholder="Nombre del Participante" id="nombre" required readonly>
-                                            </div>
-
-
-                                            <div class="form-group col-sm-3">
-                                                <label for="fecha">Fecha de Nacimiento:</label>
-                                                <input type="text" id="fecha" name="fecha" readonly class="form-control" />
-                                            </div>
-
-                                            <div class="form-group col-sm-3">
-                                                <label for="expediente">Expediente:</label>
-                                                <span class="required text-danger"> * </span>
-                                                <input type="text" class="form-control" id="expediente" name="expediente" readonly  placeholder="Número de Expediente">
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label for="sector">Sector:</label>
-                                                <span class="required text-danger"> * </span>
-                                                <select name="sector" id="sector" name="sector" class="form-control" required="required">
-                                                    <option selected value=""><spring:message code="select" />...</option>
-                                                    <c:forEach items="${barrios}" var="barrio">
-                                                        <option value="${barrio.codigo}">${barrio.nombre}</option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-8">
-                                                <label for="direccion">Dirección de Participante :</label>
-                                                <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ingrese la dirección"/>
-                                            </div>
-
-                                            <div id="bar" class="form-group col-sm-12" style="display: none">
-                                                <label for="barrioF">Barrio:</label>
-                                                <input type="text" class="form-control" id="barrioF" name="barrioF" style="text-transform:uppercase" />
-                                            </div>
-
-                                            <div class="form-group col-sm-12">
-                                                <label for="telefono">Teléfono:</label>
-                                                <input type="text" class="form-control num focusNext" id="telefono" name="telefono" maxlength="8" minlength="8" placeholder="Número de telefono" tabindex="1">
-                                            </div>
-
+                            <div class="container">
+                                <spring:url value="/hemo/searchParticipant" var="searchPartUrl"/>
+                                <form action="#" id="select-participante-form" name="select-participante-form" autocomplete="off" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-12">
+                                            <label><spring:message code="participant.code" /></label>
+                                            <input type="text" class="form-control" placeholder="<spring:message code="participant.code" />" id="parametro" name="parametro">
+                                            <div id="gendererror" class="text-danger"></div>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
-                                <br/>
-                                    <div class="container  col-sm-12 col-md-12 col-lg-12">
-
-                                           <div class="row">
-
-                                    <div class="col-sm-12">
-                                        <h4 class="text-capitalize" style="font-family: Roboto">Cálculos</h4>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label for="peso">Peso(kg):</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label for="talla">Talla(cm):</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
-                                    </div>
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="numParametro">Parametros:</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control num focusNext pos-params" name="numParametro"  id="numParametro" placeholder="Cantidad de Parámetros" tabindex="4">
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="fconsulta">Fecha Consulta:</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta" data-date-end-date="+0d" required tabindex="5"/>
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="fie">Fecha Inicio de Enfermedad:</label>
-                                        <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="6" data-date-end-date="+0d"/>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <div id="positivoerror" class="text-danger"></div>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <p class="text-center">
-                                                        <br/>
-                                                        <input type="radio" id="chkpositivo0" value="0" name="chkpositivo" class="custom-control-input">
-                                                        <label class="custom-control-label" for="chkpositivo0">Negativo.</label>
-                                                    </p>
-                                                </div>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <p class="text-center">
-                                                        <br/>
-                                                        <input type="radio" id="chkpositivo1" value="1" name="chkpositivo" class="custom-control-input">
-                                                        <label class="custom-control-label" for="chkpositivo1">Positivo.</label>
-                                                    </p>
-                                                </div>
-                                            </div>
+                                </form>
+                                <hr/>
+                                <!-- init change -->
+                                <form action="#" class="form-horizontal" id="save-hemo-form" method="post" autocomplete="off" name="save-hemo-form" role="form">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h4 class="text-capitalize" style="font-family: Roboto"><spring:message code="lbl.personal.data" /></h4>
                                         </div>
+                                        <div hidden="hidden" class="form-group col-sm-12">
+                                            <label for="idParticipante"><spring:message code="participant" /></label>
+                                            <input type="text" name="idParticipante" id="idParticipante" placeholder="Código del Participante" readonly class="form-control"/>
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="nombre"><spring:message code="entityName" /></label>
+                                            <input type="text" class="form-control" placeholder="Nombre del Participante" id="nombre" required readonly>
+                                        </div>
+
+                                        <div class="form-group col-sm-3">
+                                            <label for="fecha"><spring:message code="lbl.birthdate" /></label>
+                                            <input type="text" id="fecha" name="fecha" readonly class="form-control" />
+                                        </div>
+
+                                        <div class="form-group col-sm-3">
+                                            <label for="expediente"><spring:message code="expCS" /></label>
+                                            <span class="required text-danger"> * </span>
+                                            <input type="text" class="form-control" id="expediente" name="expediente" readonly  placeholder="Número de Expediente">
+                                        </div>
+
+                                        <div class="form-group col-sm-4">
+                                            <label for="sector"><spring:message code="lbl.neighborhood" /></label>
+                                            <span class="required text-danger"> * </span>
+                                            <select name="sector" id="sector" name="sector" class="form-control" required="required">
+                                                <option selected value=""><spring:message code="select" />...</option>
+                                                <c:forEach items="${barrios}" var="barrio">
+                                                    <option value="${barrio.codigo}">${barrio.nombre}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-8">
+                                            <label for="direccion"><spring:message code="lbl.address" /></label>
+                                            <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ingrese la dirección"/>
+                                        </div>
+
+                                        <div id="bar" class="form-group col-sm-12" style="display: none">
+                                            <label for="barrioF"><spring:message code="out.of.sector" /></label>
+                                            <input type="text" class="form-control" id="barrioF" name="barrioF" style="text-transform:uppercase" />
+                                        </div>
+
                                     </div>
+                                    <!-- init Hidden  -->
                                     <div class="row">
                                         <div hidden="hidden">
                                             <div class="form-group col-sm-6">
@@ -456,9 +428,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="collapse" id="collapseExample">
@@ -520,35 +489,85 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> <!-- Fin Hidden  -->
-                                    <hr/>
+                                    </div>
+                                    <!-- Fin Hidden  -->
+                                    <div class="row">
+
+                                        <div class="form-group col-sm-4">
+                                            <label for="telefono"><spring:message code="lbl.phone" /></label>
+                                            <input type="text" class="form-control num focusNext" id="telefono" name="telefono" maxlength="8" minlength="8" placeholder="Número de telefono" tabindex="1">
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="peso"><spring:message code="Weight" />(kg):</label>
+                                            <span class="required text-danger"> * </span>
+                                            <input type="text" class="form-control focusNext"  name="peso" id="peso" placeholder="Peso" tabindex="2">
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="talla"><spring:message code="Size" />(cm):</label>
+                                            <span class="required text-danger"> * </span>
+                                            <input type="text" class="form-control focusNext" name="talla"  id="talla" placeholder="Talla" tabindex="3">
+                                        </div>
+
+                                        <div class="form-group col-sm-4">
+                                            <label for="numParametro"><spring:message code="Parameters" /></label>
+                                            <span class="required text-danger"> * </span>
+                                            <input type="text" class="form-control num focusNext pos-params" name="numParametro"  id="numParametro" placeholder="Cantidad de Parámetros" tabindex="4">
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="fconsulta"><spring:message code="dateAdded" /> <spring:message code="Query" /></label>
+                                            <span class="required text-danger"> * </span>
+                                            <input type="text" class="form-control focusNext" id="fconsulta" name="fconsulta" data-date-end-date="+0d" required tabindex="5"/>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="fie"><spring:message code="fi" /> <spring:message code="illness" /></label>
+                                            <span class="required text-danger"> * </span>
+                                            <input type="text" class="form-control focusNext" id="fie" name="fie" required tabindex="6" data-date-end-date="+0d"/>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="form-group col-sm-12">
+                                                    <div id="positivoerror" class="text-danger"></div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <p class="text-center">
+                                                            <br/>
+                                                            <input type="radio" id="chkpositivo0" value="0" name="chkpositivo" class="custom-control-input">
+                                                            <label class="custom-control-label" for="chkpositivo0"><spring:message code="Negative" /></label>
+                                                        </p>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <p class="text-center">
+                                                            <br/>
+                                                            <input type="radio" id="chkpositivo1" value="1" name="chkpositivo" class="custom-control-input">
+                                                            <label class="custom-control-label" for="chkpositivo1"><spring:message code="positive" /></label>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
-                                         <div class="row">
-                                             <div class="form-group col-md-4">
-                                                 <button type="submit" id="btnSave" class="btn btn-info btn-block btn-lg" tabindex="17">
-                                                     <i class="fa fa-save"></i> Guardar</button>
-                                             </div>
-                                             <div class="form-group col-md-4">
-                                             </div>
-                                             <div class="form-group col-md-4">
-                                                 <a class="btn btn-warning btn-block btn-lg" tabindex="18" href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
-                                                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-                                                     <spring:message code="Cancelar" /></a>
-                                             </div>
-                                         </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-4">
+                                                <button type="submit" id="btnSave" class="btn btn-info btn-block btn-lg" tabindex="17">
+                                                    <i class="fa fa-save"></i> <spring:message code="save" /></button>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <a class="btn btn-warning btn-block btn-lg" tabindex="18" href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
+                                                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                                                    <spring:message code="cancel" /></a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    </form>
-                                    </div>
-
-                                    </div>
-                                </div>
+                                </form>
+                                <!-- fin change -->
                             </div>
-                        </div>
-                        <br /> &nbsp;
-                        <!-- FIN SmartWizard html -->
-
-
-                          </div>
                       </div>
                   </div>
               </div>
@@ -625,16 +644,6 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#smartwizard').smartWizard({
-            selected: 0,
-            theme: 'arrows',
-            justified: true,
-            darkMode: true,
-            lang: {  // Language variables
-                next: 'Sig',
-                previous: 'Prev'
-            }
-        });
         var endPoint = {
             notFound       : "${notFound}",
             ListadoUrl     : "${ListadoUrl}",

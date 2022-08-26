@@ -453,7 +453,7 @@ public class CovidService {
                 " mf.proposito as proposito, mf.tipo_tubo as tipoTubo, mf.tipo_muestra as tipoMuestra, mf.TOMAMX_SN as muestraTomada ,mf.razon_notoma as razonNoToma," +
                 " coalesce(mf.CODIGO_MX,'-') as codLabMuestra" +
                 " from chf_participante_cohorte_familia pf inner join chf_muestras mf ON pf.CODIGO_PARTICIPANTE=mf.CODIGO_PARTICIPANTE inner join participantes_procesos pp on pf.CODIGO_PARTICIPANTE= pp.codigo" +
-                " WHERE cast(mf.fecha_recibido, as DATE) between DATE_SUB(curdate(), INTERVAL :intervalo DAY) AND curdate() AND pf.CODIGO_CASA_CHF IN (:casaFam) and pp.est_part=1 and mf.pasivo='0' ";
+                " WHERE cast(mf.fecha_recibido as DATE) between DATE_SUB(curdate(), INTERVAL :intervalo DAY) AND curdate() AND pf.CODIGO_CASA_CHF IN (:casaFam) and pp.est_part=1 and mf.pasivo='0' ";
         Query query = session.createSQLQuery(sql);
         query.setParameter("casaFam",casaFam);
         query.setParameter("intervalo", intervalo);
