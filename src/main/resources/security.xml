@@ -15,13 +15,14 @@
         <intercept-url pattern="/api/v1/.*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/chf/editarcaso/.*" access="ROLE_SUPER"/>
         <intercept-url pattern="/super/.*" access="ROLE_SUPER"/>
-        <intercept-url pattern="/reportes/.*" access="ROLE_WEB,ROLE_SUPER"/>
+        <intercept-url pattern="/reportes/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ENTO"/>
         <intercept-url pattern="/hemo/.*" access="ROLE_WEB,ROLE_SUPER" />
         <intercept-url pattern="/Registro/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION" />
         <intercept-url pattern="/Serologia/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR" />
         <intercept-url pattern="/Pbmc/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR" />
         <intercept-url pattern="/Bhc/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR" />
-        <intercept-url pattern="/" access="ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM,ROLE_CNDR"/>
+        <intercept-url pattern="/" access="ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM,ROLE_CNDR,ROLE_ENTO"/>
+        <intercept-url pattern="/ento/.*" access="ROLE_ENTO"/>
         <intercept-url pattern="/.*" access="ROLE_ADMIN"/>
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/loginfailed" />

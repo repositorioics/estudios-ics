@@ -9,6 +9,8 @@ import ni.org.ics.estudios.domain.catalogs.Estudio;
 import ni.org.ics.estudios.domain.catalogs.Personal;
 import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.entomologia.CuestionarioHogar;
+import ni.org.ics.estudios.domain.entomologia.CuestionarioHogarPoblacion;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.*;
@@ -28,6 +30,7 @@ import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.comparacion.ComparasionService;
+import ni.org.ics.estudios.service.entomologia.CuestionarioHogarService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.*;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
@@ -48,6 +51,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +109,8 @@ public class ReportesController {
     /* Instancia de mi Servicio Retiro */
     @Resource(name = "RetiroService")
     private RetiroService retiroService;
+    @Resource(name = "cuestionarioHogarService")
+    private CuestionarioHogarService cuestionarioHogarService;
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -320,7 +326,7 @@ public class ReportesController {
         return ReporteEnvioPbmcPdf;
     }
 
-    //region todo: PDF PBMC con serologia ******
+    //todo: PDF PBMC con serologia ******
     @RequestMapping(value = "/EnvioSeroPbmcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioSeroPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                            @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
@@ -342,7 +348,7 @@ public class ReportesController {
         ReporteEnvioSeroPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
         return ReporteEnvioSeroPbmcPdf;
     }
-    //endregion
+    //fin reporte PBMC
 
     //region todo Reporte BHC
     @RequestMapping(value = "/EnvioBhcPdf", method = RequestMethod.GET)
@@ -413,7 +419,7 @@ public class ReportesController {
         return pdfHemodinamic;
     }
 
-    //region todo: Este controlador devuelve archivo ScanCarta
+    /* Este controlador devuelve archivo ScanCarta */
     @RequestMapping(value = "/ReporteCarta", method = RequestMethod.GET)
     public ModelAndView ReporteCarta(@RequestParam(value = "idparticipantecarta", required = true)Integer idparticipantecarta)
         throws  Exception{
@@ -439,7 +445,6 @@ public class ReportesController {
         ReporteCarta.addObject("TipoReporte", Constants.TPR_REPORTECARTA);
          return ReporteCarta;
     }
-    //endregion
 
     @RequestMapping(value = "downloadLettesInfo", method = RequestMethod.GET)
     public ModelAndView downloadLettesInfo(@RequestParam(value="fechaInicio", required=false ) String fechaInicio,
@@ -503,6 +508,35 @@ public class ReportesController {
         modelAndView.addObject("datos", comparacionMuestrasDto);
         modelAndView.addObject("TipoReporte", Constants.TPR_COMPARACION_MX_MA);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "downloadEntoInfo", method = RequestMethod.GET)
+    public ModelAndView downloadEntoInfo(@RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                           @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception {
+        ModelAndView reporteDatosEntomologia = new ModelAndView("excelView");
+        Date dFechaInicio = null;
+        Date dFechaFin = null;
+        List<CuestionarioHogar> cuestionarios = new ArrayList<CuestionarioHogar>();
+        List<CuestionarioHogarPoblacion> poblacion = new ArrayList<CuestionarioHogarPoblacion>();
+
+        if ((fechaInicio != null && !fechaInicio.isEmpty()) && (fechaFin != null && !fechaFin.isEmpty())) {
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+            dFechaFin = DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+            cuestionarios = this.cuestionarioHogarService.getCuestionariosHogarByRangoFechas(dFechaInicio, dFechaFin);
+            poblacion = this.cuestionarioHogarService.getCuestionariosHogarPobByRangoFechas(dFechaInicio, dFechaFin);
+        } else {
+            cuestionarios = this.cuestionarioHogarService.getCuestionariosHogar();
+            poblacion = this.cuestionarioHogarService.getCuestionariosHogarPoblacion();
+        }
+
+        reporteDatosEntomologia.addObject("fechaInicio", fechaInicio);
+        reporteDatosEntomologia.addObject("fechaFin", fechaFin);
+        reporteDatosEntomologia.addObject("cuestionarios", cuestionarios);
+        reporteDatosEntomologia.addObject("poblacion", poblacion);
+        reporteDatosEntomologia.addObject("TipoReporte", Constants.TPR_ENTO);
+
+        return reporteDatosEntomologia;
     }
 
     //region todo Reporte Retiro estudios_ics /reportes/reporteRetiro

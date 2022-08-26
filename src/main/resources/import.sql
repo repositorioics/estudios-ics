@@ -1341,3 +1341,152 @@ INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden
 
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.differences', 'Diferencias','0','0',0);
 INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.samples.differences', 'Reporte de diferencias en toma de muestra anual del día de hoy','0','0',0);
+
+/*ENTOMOLOGIA*/
+INSERT INTO roles (rol) VALUES ('ROLE_ENTO');
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'ROLE_ENTO', 'Entomologia - Equipo Harold','0','0',0);
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P01', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Quién está contestando éste cuestionario');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P01_01', '1', 'ENTO_CAT_P01', NULL, '0', 1, '0', 'Persona jefa de hogar');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P01_02', '2', 'ENTO_CAT_P01', NULL, '0', 2, '0', 'Tutor');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P01_03', '3', 'ENTO_CAT_P01', NULL, '0', 3, '0', 'Persona Jefa de hogar y Tutor');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P01_998', '998', 'ENTO_CAT_P01', NULL, '0', 4, '0', 'Otro');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Cuál es su último año aprobado');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03_01', '1', 'ENTO_CAT_P03', NULL, '0', 1, '0', 'Ninguno/no estudio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03_02', '2', 'ENTO_CAT_P03', NULL, '0', 2, '0', 'Primaria incompleta');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03_03', '3', 'ENTO_CAT_P03', NULL, '0', 3, '0', 'Primaria Completa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03_04', '4', 'ENTO_CAT_P03', NULL, '0', 4, '0', 'Secundaria incompleta');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03_05', '5', 'ENTO_CAT_P03', NULL, '0', 5, '0', 'Secundaria completa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P03_06', '6', 'ENTO_CAT_P03', NULL, '0', 6, '0', 'Universidad');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P04', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Cuánto tiempo tienen de vivir en este barrio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P04_01', '1', 'ENTO_CAT_P04', NULL, '0', 1, '0', '5 años o menos');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P04_02', '2', 'ENTO_CAT_P04', NULL, '0', 2, '0', 'De 6 a 10 años');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P04_03', '3', 'ENTO_CAT_P04', NULL, '0', 3, '0', 'De 11 a 20 años');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P04_04', '4', 'ENTO_CAT_P04', NULL, '0', 4, '0', 'De 21 a 30 años');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P04_05', '5', 'ENTO_CAT_P04', NULL, '0', 5, '0', 'Más de 30 años');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P12', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia quien les ha visitado para enseñarles como buscar y eliminar las larvas o clavitos de los zancudos');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P12_01', '1', 'ENTO_CAT_P12', NULL, '0', 1, '0', 'MINSA');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P12_02', '2', 'ENTO_CAT_P12', NULL, '0', 2, '0', 'Trabajadores de la salud');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P12_03', '3', 'ENTO_CAT_P12', NULL, '0', 3, '0', 'Brigadista de Salud del barrio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P12_04', '4', 'ENTO_CAT_P12', NULL, '0', 4, '0', 'Líderes del barrio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P12_998', '998', 'ENTO_CAT_P12', NULL, '0', 5, '0', 'Otro (Especificar)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P15', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Cada cuánto tiempo buscan y eliminan criaderos de zancudos aquí en su casa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P15_01', '1', 'ENTO_CAT_P15', NULL, '0', 1, '0', 'Entre 1-7 días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P15_02', '2', 'ENTO_CAT_P15', NULL, '0', 2, '0', '8 días o más');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Qué hace falta en esta casa para evitar los criaderos de zancudos');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_01', '1', 'ENTO_CAT_P17', NULL, '0', 1, '0', 'Nada');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_02', '2', 'ENTO_CAT_P17', NULL, '0', 2, '0', 'Fumigación');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_03', '3', 'ENTO_CAT_P17', NULL, '0', 3, '0', 'Abate');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_04', '4', 'ENTO_CAT_P17', NULL, '0', 4, '0', 'BTI');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_05', '5', 'ENTO_CAT_P17', NULL, '0', 5, '0', 'Cipermetrina');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_06', '6', 'ENTO_CAT_P17', NULL, '0', 6, '0', 'Tiempo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_07', '7', 'ENTO_CAT_P17', NULL, '0', 7, '0', 'Limpieza/Aseo');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_08', '8', 'ENTO_CAT_P17', NULL, '0', 8, '0', 'No sé');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P17_998', '998', 'ENTO_CAT_P17', NULL, '0', 9, '0', 'Otro (Escribir)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Qué productos compraron');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_01', '1', 'ENTO_CAT_P19', NULL, '0', 1, '0', 'Plagatox');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_02', '2', 'ENTO_CAT_P19', NULL, '0', 2, '0', 'Baygón / Raid / aerosol');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_03', '3', 'ENTO_CAT_P19', NULL, '0', 3, '0', 'Cipermetrina / Veneno');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_04', '4', 'ENTO_CAT_P19', NULL, '0', 4, '0', 'Gas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_05', '5', 'ENTO_CAT_P19', NULL, '0', 5, '0', 'Cloro');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_06', '6', 'ENTO_CAT_P19', NULL, '0', 6, '0', 'Repelentes de mosquito para piel');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_07', '7', 'ENTO_CAT_P19', NULL, '0', 7, '0', 'No sabe');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P19_998', '998', 'ENTO_CAT_P19', NULL, '0', 8, '0', 'Otro (Escribir)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Cuánto gastaron');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_01', '1', 'ENTO_CAT_P20', NULL, '0', 1, '0', 'C$1 - 50 Córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_02', '2', 'ENTO_CAT_P20', NULL, '0', 2, '0', 'C$51 – 100 córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_03', '3', 'ENTO_CAT_P20', NULL, '0', 3, '0', 'C$101- 150 Córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_04', '4', 'ENTO_CAT_P20', NULL, '0', 4, '0', 'C$151 – 200 córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_05', '5', 'ENTO_CAT_P20', NULL, '0', 5, '0', 'C$201 – 250 córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_06', '6', 'ENTO_CAT_P20', NULL, '0', 6, '0', 'C$251 – 300 córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_07', '7', 'ENTO_CAT_P20', NULL, '0', 7, '0', 'C$301 – 500 córdobas');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P20_08', '8', 'ENTO_CAT_P20', NULL, '0', 8, '0', 'C$ Más de 500 córdobas');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P21', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Cuándo fue la última vez que el MINSA visitó su casa para aplicar BTI en sus recipientes con agua y Cuándo fue la última vez que el MINSA fumigó su casa');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P21_01', '1', 'ENTO_CAT_P21', NULL, '0', 1, '0', 'Entre 1 - 7 días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P21_02', '2', 'ENTO_CAT_P21', NULL, '0', 2, '0', 'Entre 8 - 15 días');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P21_03', '3', 'ENTO_CAT_P21', NULL, '0', 3, '0', 'Entre 16 - 30');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P21_04', '4', 'ENTO_CAT_P21', NULL, '0', 4, '0', 'Más de 30 días');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P23', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Qué tanto riesgo hay en su casa de enfermar por el virus del dengue');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P23_01', '1', 'ENTO_CAT_P23', NULL, '0', 1, '0', 'No hay');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P23_02', '2', 'ENTO_CAT_P23', NULL, '0', 2, '0', 'Poco');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P23_03', '3', 'ENTO_CAT_P23', NULL, '0', 3, '0', 'Moderado');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P23_04', '4', 'ENTO_CAT_P23', NULL, '0', 4, '0', 'Alto');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P23_05', '5', 'ENTO_CAT_P23', NULL, '0', 5, '0', 'Muy alto');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P25', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Cada cuánto se les va el agua');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P25_01', '1', 'ENTO_CAT_P25', NULL, '0', 1, '0', 'Todos los días / Diario');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P25_02', '2', 'ENTO_CAT_P25', NULL, '0', 2, '0', 'Dia de por medio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P25_998', '998', 'ENTO_CAT_P25', NULL, '0', 3, '0', 'Otro (Describir)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Qué hacen con la basura del hogar');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27_01', '1', 'ENTO_CAT_P27', NULL, '0', 1, '0', 'Se la lleva el camión recolector');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27_02', '2', 'ENTO_CAT_P27', NULL, '0', 2, '0', 'La queman');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27_03', '3', 'ENTO_CAT_P27', NULL, '0', 3, '0', 'La tiran al predio baldío');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27_04', '4', 'ENTO_CAT_P27', NULL, '0', 4, '0', 'La tiran al cauce');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27_05', '5', 'ENTO_CAT_P27', NULL, '0', 5, '0', 'La entierran');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P27_998', '998', 'ENTO_CAT_P27', NULL, '0', 6, '0', 'Otro (Describir)');
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P30', NULL, NULL, NULL, '1', 0, '0', 'Catalogo entomologia Qué acciones realizaron');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P30_01', '1', 'ENTO_CAT_P30', NULL, '0', 1, '0', 'Plan Calache');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P30_02', '2', 'ENTO_CAT_P30', NULL, '0', 2, '0', 'Jornada limpieza');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('ENTO_CAT_P30_998', '998', 'ENTO_CAT_P30', NULL, '0', 3, '0', 'Otro');
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.ento', 'Entomología','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.ento.start.date', 'Fecha Inicio Cuestionario','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ( 'lbl.ento.end.date', 'Fecha Fin Cuestionario','0','0',0);
+/*FIN ENTOMOLOGIA*/
+
+/*Lizandro.. agosto 2022*/
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCANWEB_CONTACT_FUTURO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo CARTAS CONTACTO FUTURO');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCANWEB_CONTACT_FUTURO_00', '0', 'CAT_SCANWEB_CONTACT_FUTURO', NULL, '0', 0, '0', 'No');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCANWEB_CONTACT_FUTURO_01', '1', 'CAT_SCANWEB_CONTACT_FUTURO', NULL, '0', 1, '0', 'Si');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SCANWEB_CONTACT_FUTURO_03', '2', 'CAT_SCANWEB_CONTACT_FUTURO', NULL, '0', 2, '0', 'No Aplica');
+
+
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_COORDINADOR_ESTUDIO', NULL, NULL, NULL, '1', 0, '0', 'Catalogo coordinador de Estudio');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_COORDINADOR_GKuan', '1', 'CAT_COORDINADOR_ESTUDIO', NULL, '0', 1, '0', 'Dra. Guillermina Kuan.');
+
+-- intervalo de dias
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTERVAL_DIAS_MX', NULL, NULL, NULL, '1', 0, '0', 'Catalogo intervalo de dias para Muestras');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_INTERVAL_DIAS_MX_30', '1', 'CAT_INTERVAL_DIAS_MX', NULL, '0', 1, '0', '30');
+
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Details', 'Detalles','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('demise', 'Fallecimiento','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('reason', 'Motivo','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('realize', 'Realizar','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('returned_card','Devolvió Carnet?','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('documented_by','Documentado Por','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('communicated_by','Comunicado Por','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('supervised_by','Supervisado Por','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('cause_withdrawal','Causas de la No Participación','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('person_communicates','Padre o Tutor con quien había comunicación sobre el retiro','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('receives_document','Personal del Estudio quien recibe el retiro','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('fill_document','Personal quien llena el Documento','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('relationship','Parentesco','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('in_last','en los últimos','0','0',0);
+
+-- Hemodinamica
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_PERSONAL_HEMODINAMICA', NULL, NULL, NULL, '1', 0, '0', 'Catalogo para Seleccionar Medicos en los módulo Hemodinamica');
+INSERT INTO `mensajes` (`messageKey`, `catKey`, `catRoot`, `en`, `isCat`, `orden`, `catPasive`, `es`) VALUES ('CAT_SELECCIONAR_MEDICOS', '1', 'CAT_SELECCIONAR_PERSONAL_HEMODINAMICA', NULL, '0', 1, '0', '6,7');
+
+
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('out.of.sector','Fuera de Sector','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('calculations','Cálculos','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Negative','Negativo','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Weight','Peso','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Size','Talla','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Parameters','Parámetros','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('illness','Enfermedad','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('Query','Consulta','0','0',0);
+INSERT INTO `mensajes` (`messageKey`, `es`, `catPasive`, `isCat`, `orden`) VALUES ('hemodynamics','Hemodinámica','0','0',0);
+/*Fin Lizandro.. agosto 2022*/

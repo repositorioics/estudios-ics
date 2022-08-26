@@ -93,7 +93,7 @@ public class MuestraService {
     public List<Muestra> getMuestrasUO1() throws Exception{
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Muestra where pasive = '0' and ( " +
-                "(proposito = '4' and recordDate >= (select coalesce(min(caso.fechaIngreso), current_date ) from ParticipanteCasoUO1 caso where caso.activo = '1' and caso.pasive = '0'))" +
+                "(proposito in ('4','11') and recordDate >= (select coalesce(min(caso.fechaIngreso), current_date ) from ParticipanteCasoUO1 caso where caso.activo = '1' and caso.pasive = '0'))" +
                 " or (proposito = '5'))");
         return  query.list();
     }

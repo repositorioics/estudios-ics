@@ -65,6 +65,9 @@ public class ExcelBuilder extends AbstractExcelView {
             buildExcelInfoCartas(model, workbook, response);
         } else if (reporte.equalsIgnoreCase(Constants.TPR_COMPARACION_MX_MA)){
             buildExcelComparacionMuestrasMA(model, workbook, response);
+        } else if (reporte.equalsIgnoreCase(Constants.TPR_ENTO)) {
+
+            BuildEntoData.buildExcel(model, workbook, response);
         }
 	}
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -1150,6 +1153,7 @@ public class ExcelBuilder extends AbstractExcelView {
             sheet.autoSizeColumn(i);
         }
     }
+
 
     /***
      * Método para crear el encabezado de las tablas
