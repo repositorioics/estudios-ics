@@ -234,7 +234,7 @@
                                         <div class="form-group">
                                             <label for="fecha">Fecha de Nacimiento:</label>
                                             <input type="text" class="form-control" id="fecha" name="fecha"
-                                                   value="<fmt:formatDate value="${obj.fecha}" pattern="dd/MM/yyyy"/>" readonly />
+                                                   value="<fmt:formatDate value="${obj.participante.fechaNac}" pattern="dd/MM/yyyy"/>" readonly />
                                         </div>
 
                                     </div>
