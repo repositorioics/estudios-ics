@@ -417,7 +417,6 @@ public class CovidService {
     }
 
     //region todo: busqueda en tabla muestras y chf_muestras tomas <= a 30 dias  m.codigo=:codigo
-
     public List<MxDto>getMuestrasTomaMinor30Days(Integer codigo, Integer intervalo){
         Session session = sessionFactory.getCurrentSession();
         String sql = "SELECT m.codigo as codigoParticipante, date_format(m.fecha_registro, '%d/%m/%Y    ') as fechaRegistro, date_format(m.fecha_muestra, '%d/%m/%Y %H:%i:%S') as fechaToma, m.username as usuario, m.terreno as terreno, " +
