@@ -390,17 +390,11 @@
             <div class="media">
                 <div class="media-body">
                     <form id="form-scan" class="needs-validation" autocomplete="off" novalidate>
-                    <div class="row"   >
-                        <div class="col-md-6">
+                    <div class="row" hidden="hidden">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="principal">principal</label>
-                                <input type="text" class="form-control" disabled="disabled" id="principal"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group"  >
-                                <label for="principal2">principal2</label>
-                                <input type="text" class="form-control" disabled="disabled" id="principal2"/>
+                                <label for="principalAll">principalAll</label>
+                                <input type="text" class="form-control" disabled="disabled" id="principalAll" name="principalAll"/>
                             </div>
                         </div>
                     </div>
@@ -603,12 +597,6 @@
                                     <div class="invalid-feedback">
                                         <spring:message code="lbl.Accept.future.contact" /> <spring:message code="lbl.required" />
                                     </div>
-                                   <%-- <div class="form-check mt-4 text-center">
-                                        <input class="form-check-input" type="checkbox" id="contactoFuturo" name="contactoFuturo">
-                                        <label class="form-check-label" for="contactoFuturo">
-                                            <spring:message code="lbl.Accept.future.contact" />
-                                        </label>
-                                    </div>--%>
                             </div>
                             <br/>
                             <input type="text" name="aptoCovid" id="aptoCovid" hidden="hidden" disabled/>

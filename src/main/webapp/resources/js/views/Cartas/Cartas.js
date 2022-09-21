@@ -255,26 +255,23 @@ var scanCarta = function(){
                     $("#partes").empty();
                     ObtenerParte(parametroII);
                     if(cur_value != null) {
-                        ContactoFuture(parametroII);
-                    }else{
-                        $("#contactoFuturo").select2().val('').trigger("change");
-                        $('#contactoFuturo option[value="2"]').prop('disabled',false);
+                        ContactoFuture(parametroII, cur_value);
                     }
                 }
             });//fin
 
-            function ContactoFuture(parametros){
+            function ContactoFuture(parametros, codeVersion){
+                debugger;
                 var idcarta = document.getElementById('carta').value;
                 $.getJSON(parametros.VersionCartatUrl, { idcarta : idcarta,   ajax : 'true'  }, function(data) {
                     var respons = JSON.parse(JSON.stringify(data));
-                    if (respons.objV[0].tiene_contacto_futuro){
-                        $("#contactoFuturo").select2().val('1').trigger("change").prop('disabled',false);
-                        $("#contactoFuturo").prop('required','required');
-                        $('#contactoFuturo option[value="2"]').prop('disabled',true);
-                    }else{
-                        $('#contactoFuturo option[value="2"]').prop('disabled',false);
-                        $("#contactoFuturo").select2().val('2').trigger("change");
-                        $("#contactoFuturo").select2().prop('disabled',true);
+                    for (i = 0; i < data.objV.length; i++) {
+                        if(data.objV[i].idversion === parseInt(codeVersion) && data.objV[i].tiene_contacto_futuro == false) {
+                            $("#contactoFuturo").select2().val('1').trigger("change").prop('disabled',data.objV[i].tiene_contacto_futuro);
+                        }else
+                        if(data.objV[i].idversion === parseInt(codeVersion) && data.objV[i].tiene_contacto_futuro == true){
+                            $("#contactoFuturo").select2().val('2').trigger("change").prop('disabled',data.objV[i].tiene_contacto_futuro);
+                        }
                     }
                 });
             }
@@ -289,13 +286,7 @@ var scanCarta = function(){
                 }
             });
 
-            $("#partes").on("select2-removing", function(e) {
-                var p = $("#principal").val();
-                if (e.choice.text === p) {
-                    e.preventDefault();
-                    $(this).select2("close");
-                }
-             });
+
 
             function seleccionar(id){
                 var cod = parseInt(id);
@@ -333,6 +324,7 @@ var scanCarta = function(){
                     }
                     if(data.parte.length > 0){
                         bandera=true;
+                        $("#principalAll").val('');
                         $("#principal").val('');
                         $("#principal2").val('');
                         $.each(data.parte, function (i, val) {
@@ -342,13 +334,25 @@ var scanCarta = function(){
                                 seleccionar(val.idparte);
                             }
                         });
-                        $("#principal").val(data.partesPrincipales[0]);
-                        $("#principal2").val(data.partesPrincipales[1]);
+                        $("#principalAll").val(data.partesPrincipales);
                     }else{
                         $ele.empty();
                     }
                 })
             }
+
+
+            $("#partes").on("select2-removing", function(e) {
+                var p = $("#principalAll").val();
+                var arrayDeCadenas = p.split(',');
+                for (var i = 0; i < arrayDeCadenas.length; i++) {
+                    console.info("quita: " + e.choice.text+ " arrayDeCadenas: " + arrayDeCadenas[i]);
+                    if(e.choice.text === arrayDeCadenas[i]){
+                        e.preventDefault();
+                        $(this).select2("close");
+                    }
+                }
+            });
 
             //Validar las cajas de texto...
             $('.onlytext').keypress(function (e) {
@@ -356,15 +360,6 @@ var scanCarta = function(){
                 return !((tecla > 47 && tecla < 58) || tecla == 46);
             });
 
-            $("#btnCancel").on("click", function(e){
-                var num= $("#partes").select2().val();
-                if($.isEmptyObject(num)){
-                    alert("Selecciona al menos una opción");
-                    return;
-                }else{
-                    console.log("else Id : " + num);
-                }
-            });
             $('#form-scan').submit(function(e){
                 e.preventDefault();
                 var isOK = ValidateForm();
@@ -490,7 +485,6 @@ var scanCarta = function(){
                     dataType: "JSON",
                     contentType:'application/json;charset=utf-8',
                     success: function(response){
-                        //console.log(response);
                         if(response.msj != null){
                             swal({
                                 title: "Advertencia!",

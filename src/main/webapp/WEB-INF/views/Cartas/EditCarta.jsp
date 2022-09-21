@@ -398,7 +398,7 @@
                                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
                                             <!-- init test principal -->
-                                            <div class="row" hidden="hidden">
+                                            <div class="row" hidden="hidden" >
                                                 <ul id="ul_Items">
                                                     <ol>
                                                         <c:forEach items="${select2}" var="p">
@@ -411,14 +411,18 @@
                                             <div class="media">
                                                 <div class="media-body">
                                                     <div class="row">
-                                                        <div hidden="hidden">
-                                                            <div class="col-md-6">
-                                                                <input type="text" class="form-control" name="codigo" id="codigo" value="${obj.idparticipantecarta}"/>
+
+                                                            <div class="col-md-6" hidden="hidden">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control" name="codigo" id="codigo" value="${obj.idparticipantecarta}">
+                                                                </div>
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <input type="text" class="form-control" name="fecha_registro" id="fecha_registro" value="<fmt:formatDate value="${obj.recordDate}" pattern="dd-MM-yyyy HH:mm:ss" />">
+
+                                                            <div class="col-md-6" hidden="hidden">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control" name="fecha_registro" id="fecha_registro" value="<fmt:formatDate value="${obj.recordDate}" pattern="dd-MM-yyyy HH:mm:ss" />">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -441,7 +445,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-1">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label for="edadmeses"><spring:message code="age"/> <spring:message code="lbl.mounths"/></label>
                                                                 <input type="text" class="form-control form-control-sm" id="edadmeses" name="edadmeses" disabled value="${obj.edadmeses}">
@@ -787,7 +791,7 @@
                                                                         <c:forEach items="${contactoFuturo}" var="c">
                                                                             <c:choose>
                                                                                 <c:when test="${c.catKey eq obj.contactoFuturo}">
-                                                                                    <option selected value="${c.catKey}">${c.spanish}</option>
+                                                                                    <option selected value="${c.catKey}">${c.catKey} - ${c.spanish}</option>
                                                                                 </c:when>
                                                                                 <c:otherwise>
                                                                                     <option value="${c.catKey}">${c.catKey} - <spring:message code="${c.spanish}" /></option>
@@ -1026,7 +1030,6 @@
                     $(this).select2("close");
                 }
             }
-
         });
 
         var table2 = $("#tblDetalleParte").DataTable({
