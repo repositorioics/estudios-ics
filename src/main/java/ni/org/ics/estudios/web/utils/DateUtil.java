@@ -127,4 +127,19 @@ public final class DateUtil {
         return diffHours.intValue();
     }
 
+    public static String getHoraFormateada(String hora){
+        if (hora != null && !hora.isEmpty()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date date = null;
+            String formattedTime = "Wrong time";
+            try {
+                date = sdf.parse(hora);
+                formattedTime = sdf.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return formattedTime;
+        } else return hora;
+    }
+
 }

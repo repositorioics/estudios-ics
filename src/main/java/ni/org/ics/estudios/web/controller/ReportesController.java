@@ -11,6 +11,7 @@ import ni.org.ics.estudios.domain.catalogs.Razones_Retiro;
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.entomologia.CuestionarioHogar;
 import ni.org.ics.estudios.domain.entomologia.CuestionarioHogarPoblacion;
+import ni.org.ics.estudios.domain.entomologia.CuestionarioPuntoClave;
 import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
 import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.*;
@@ -31,6 +32,7 @@ import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.comparacion.ComparasionService;
 import ni.org.ics.estudios.service.entomologia.CuestionarioHogarService;
+import ni.org.ics.estudios.service.entomologia.CuestionarioPuntoClaveService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.*;
 import ni.org.ics.estudios.service.reportes.ReportesPdfService;
@@ -109,8 +111,12 @@ public class ReportesController {
     /* Instancia de mi Servicio Retiro */
     @Resource(name = "RetiroService")
     private RetiroService retiroService;
+
     @Resource(name = "cuestionarioHogarService")
     private CuestionarioHogarService cuestionarioHogarService;
+
+    @Resource(name = "cuestionarioPuntoClaveService")
+    private CuestionarioPuntoClaveService cuestionarioPuntoClaveService;
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -519,21 +525,25 @@ public class ReportesController {
         Date dFechaFin = null;
         List<CuestionarioHogar> cuestionarios = new ArrayList<CuestionarioHogar>();
         List<CuestionarioHogarPoblacion> poblacion = new ArrayList<CuestionarioHogarPoblacion>();
+        List<CuestionarioPuntoClave> puntosClaves = new ArrayList<CuestionarioPuntoClave>();
 
         if ((fechaInicio != null && !fechaInicio.isEmpty()) && (fechaFin != null && !fechaFin.isEmpty())) {
             dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
             dFechaFin = DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
             cuestionarios = this.cuestionarioHogarService.getCuestionariosHogarByRangoFechas(dFechaInicio, dFechaFin);
             poblacion = this.cuestionarioHogarService.getCuestionariosHogarPobByRangoFechas(dFechaInicio, dFechaFin);
+            puntosClaves = this.cuestionarioPuntoClaveService.getCuestionariosPuntoClaveByRangoFechas(dFechaInicio, dFechaFin);
         } else {
             cuestionarios = this.cuestionarioHogarService.getCuestionariosHogar();
             poblacion = this.cuestionarioHogarService.getCuestionariosHogarPoblacion();
+            puntosClaves = this.cuestionarioPuntoClaveService.getCuestionariosPuntoClave();
         }
 
         reporteDatosEntomologia.addObject("fechaInicio", fechaInicio);
         reporteDatosEntomologia.addObject("fechaFin", fechaFin);
         reporteDatosEntomologia.addObject("cuestionarios", cuestionarios);
         reporteDatosEntomologia.addObject("poblacion", poblacion);
+        reporteDatosEntomologia.addObject("puntosClaves", puntosClaves);
         reporteDatosEntomologia.addObject("TipoReporte", Constants.TPR_ENTO);
 
         return reporteDatosEntomologia;
