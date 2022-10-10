@@ -29,10 +29,10 @@ var SearchCartaParticipant = function () {
     init: function(parametros){
         urls = parametros;
         var table  = $('#tableCartParticipnt').DataTable({
-            searching: false,
+            "searching": false,
             "autoWidth": true,
             "info" : false,
-            paging: true,
+            "paging": true,
             "oLanguage": {
                 "sUrl": parametros.dataTablesLang
             },columnDefs: [
