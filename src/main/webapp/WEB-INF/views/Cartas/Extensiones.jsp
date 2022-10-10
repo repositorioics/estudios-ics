@@ -264,6 +264,13 @@
                        name="idParticipantExtension" value="${caso.idParticipantExtension}"/>
             </div>
         </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="vigente">vigente</label>
+                <input type="text" class="form-control" id="vigente"
+                       name="vigente" value="${caso.vigente}"/>
+            </div>
+        </div>
     </div>
 
     <div class="row">

@@ -331,7 +331,7 @@ public class ScanCartaService {
 
     public List<ParticipanteCarta> getScanCartasByParticipante(Integer parametro){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCarta where participante.codigo = :parametro");
+        Query query = session.createQuery("from ParticipanteCarta pc where pc.participante.codigo = :parametro order by pc.fechacarta asc");
         query.setParameter("parametro",parametro);
         return query.list();
     }
@@ -375,7 +375,7 @@ public class ScanCartaService {
     // Obtener todas las extensiones ListadoExtensionParticipante.
     public List<ParticipanteExtension>getAllPartipantExtension(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteExtension pe where pe.anulada=false  order by pe.fechaExtension desc ");
+        Query query = session.createQuery("from ParticipanteExtension pe where pe.anulada=false  order by pe.fechaExtension asc ");
         return query.list();
     }
 

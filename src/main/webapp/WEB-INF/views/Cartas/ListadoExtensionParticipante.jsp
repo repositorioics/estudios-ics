@@ -18,13 +18,14 @@
     <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
     <link href="${boot}" rel="stylesheet" type="text/css"/>
 
-    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
-    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
     <style>
         #list_participante_extension_filter {
             float: left !important;
         }
     </style>
+
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
 
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -38,95 +39,131 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
-                <a href="<spring:url value="/cartas/CartaParticipantTmp" htmlEscape="true "/>">
-                    <spring:message code="lbl.Back" /> <spring:message code="Form" />
+                <a href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
+                    <spring:message code="List" />
                 </a>
+                <i class="fa fa-angle-right"></i>
+                <spring:message code="List" /> <spring:message code="Extension" />
             </li>
         </ol>
         <div class="container-fluid">
             <div class="animated fadeIn">
                 <div class="container col-md-10 col-lg-12">
-                    <div class="card">
-                    <div class="card-header">
-                        <h5>
-                            <i class="fa fa-list-alt" aria-hidden="true"></i>
-                            <spring:message code="List"/>  <spring:message code="Extension"/>
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <spring:url value="/cartas/ListadoCartaParticipant" var="ListadoCartaParticipantUrl"/>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="col-md-12">
-                                    <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom"
-                                       title="<spring:message code="List"/> <spring:message code="letters" />" href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
-                                        <i class="fa fa-undo" aria-hidden="true"></i>
-                                        <spring:message code="back.list"/>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4"></div>
-                        </div>
-                        <hr/>
-                        <div class="table-responsive">
-                            <table  id="list_participante_extension" class="table table-hover table-bordered" style="width: 100%">
-                                <thead>
-                                <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-center"> <spring:message code="participant"/></th>
-                                    <th class="text-center"> <spring:message code="dateAdded"/></th>
-                                    <th class="text-center"><spring:message code="Extension"/></th>
-                                    <th class="text-center"><spring:message code="lbl.tutor"/></th>
-                                    <th class="text-center"><spring:message code="lbl.vigente"/></th>
-                                    <th class="text-center"><spring:message code="lbl.fec.fic.vig"/></th>
-                                    <th class="text-center"><spring:message code="observacion"/></th>
-                                    <th class="text-center"><spring:message code="actions"/></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${listExtensiones}" var="e" varStatus="theCount">
-                                    <spring:url value="/cartas/disableExtension/{idParticipantExtensiontmp}" var="disableExtensionUrl">
-                                        <spring:param name="idParticipantExtension" value="${e.idParticipantExtension}" />
-                                    </spring:url>
-                                    <c:set var="confirmar"><spring:message code="confirm" /></c:set>
-                                    <spring:url value="/cartas/editExtension/{idParticipantExtension}" var="editExtensionUrl">
-                                        <spring:param name="idParticipantExtension" value="${e.idParticipantExtension}" />
-                                    </spring:url>
-                                    <tr>
-                                        <td class="text-center">${e.idParticipantExtension}</td>
-                                        <td class="text-center">${e.participantecarta.participante.codigo}</td>
-                                        <td class="text-center"><fmt:formatDate value="${e.fechaExtension}" pattern="dd/MM/yyyy"/></td>
-                                        <td class="text-center">${e.extensiones.extension}</td>
-                                        <td class="text-center">${e.nombre1Tutor} ${e.apellido1Tutor}</td>
-                                        <c:choose>
-                                            <c:when test="${e.vigente}">
-                                                <td class="text-center"><span class="badge badge-success"><spring:message code="CHF_CAT_SINO_SI" /></span></td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td class="text-center"><span class="badge badge-danger"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <td class="text-center"><fmt:formatDate value="${e.fecFinVigencia}" pattern="dd/MM/yyyy"/></td>
-                                        <td class="">${e.observacion}</td>
-                                        <td class="text-center">
-                                            <a title="<spring:message code="edit" />" href="${fn:escapeXml(editExtensionUrl)}" class="btn btn-warning btn-sm">
-                                                <i class="fa fa-edit" aria-hidden="true"></i> </a>
-
-                                            <a title="<spring:message code="disable" />" data-toggle="modal" class="btn btn-danger btn-sm desact">
-                                                <i class="fa fa-trash-o text-white" aria-hidden="true"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                </div>
+                 <div class="row">
+                     <div class="col-md-8 col-lg-8">
+                         <div class="card">
+                             <div class="card-header">
+                                 <h5>
+                                     <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                     <spring:message code="List"/>  <spring:message code="Extension"/>
+                                 </h5>
+                             </div>
+                             <div class="card-body">
+                                 <spring:url value="/cartas/ListadoCartaParticipant" var="ListadoCartaParticipantUrl"/>
+                                 <div class="row">
+                                     <div class="col-md-4">
+                                         <div class="col-md-12">
+                                             <a class="btn btn-info btn-lg" data-toggle="tooltip" data-placement="bottom"
+                                                title="<spring:message code="List"/> <spring:message code="letters" />" href="<spring:url value="/cartas/ListadoCartaParticipant" htmlEscape="true "/>">
+                                                 <i class="fa fa-undo" aria-hidden="true"></i>
+                                                 <spring:message code="back.list"/>
+                                             </a>
+                                         </div>
+                                     </div>
+                                     <div class="col-md-4"></div>
+                                     <div class="col-md-4"></div>
+                                 </div>
+                                 <hr/>
+                                 <div class="table-responsive" style="min-height: 400px;">
+                                     <table  id="list_participante_extension" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                                         <thead>
+                                         <tr>
+                                             <th hidden="hidden" class="text-center">#</th>
+                                             <th class="text-center"> <spring:message code="participant"/></th>
+                                             <th class="text-center"> <spring:message code="dateAdded"/></th>
+                                             <th class="text-center"> <spring:message code="study"/></th>
+                                             <th class="text-center"> <spring:message code="version"/></th>
+                                             <th class="text-center"><spring:message code="Extension"/></th>
+                                             <th class="text-center"><spring:message code="lbl.tutor"/></th>
+                                             <th class="text-center"><spring:message code="lbl.vigente"/></th>
+                                             <th class="text-center"><spring:message code="lbl.fec.fic.vig"/></th>
+                                             <th class="text-center"><spring:message code="observacion"/></th>
+                                             <th class="text-center"><spring:message code="actions"/></th>
+                                         </tr>
+                                         </thead>
+                                         <tbody>
+                                         <c:forEach items="${listExtensiones}" var="e" varStatus="theCount">
+                                             <spring:url value="/cartas/disableExtension/{idParticipantExtensiontmp}" var="disableExtensionUrl">
+                                                 <spring:param name="idParticipantExtension" value="${e.idParticipantExtension}" />
+                                             </spring:url>
+                                             <c:set var="confirmar"><spring:message code="confirm" /></c:set>
+                                             <spring:url value="/cartas/editExtension/{idParticipantExtension}" var="editExtensionUrl">
+                                                 <spring:param name="idParticipantExtension" value="${e.idParticipantExtension}" />
+                                             </spring:url>
+                                             <tr>
+                                                 <td hidden="hidden" class="text-center">${e.idParticipantExtension}</td>
+                                                 <td class="text-center">${e.participantecarta.participante.codigo}</td>
+                                                 <td class="text-center"><fmt:formatDate value="${e.fechaExtension}" pattern="dd/MM/yyyy"/></td>
+                                                 <td class="text-center">
+                                                     <c:choose>
+                                                         <c:when test = "${fn:contains(e.participantecarta.version.estudio.nombre, 'UO1')}">
+                                                             <p>UO1</p>
+                                                         </c:when>
+                                                         <c:when test="${fn:contains(e.participantecarta.version.estudio.nombre, 'Dengue')}">
+                                                             <p>Dengue</p>
+                                                         </c:when>
+                                                         <c:when test="${fn:contains(e.participantecarta.version.estudio.nombre, 'Influenza')}">
+                                                             <p>Influenza</p>
+                                                         </c:when>
+                                                         <c:when test="${fn:contains(e.participantecarta.version.estudio.nombre, 'Familia')}">
+                                                             <p>CH Familia</p>
+                                                         </c:when>
+                                                         <c:otherwise>
+                                                             <c:out value="${e.participantecarta.version.estudio.nombre}"></c:out>
+                                                         </c:otherwise>
+                                                     </c:choose>
+                                                 </td>
+                                                 <td class="text-center">${e.participantecarta.version.version}</td>
+                                                 <td class="text-center">${e.extensiones.extension}</td>
+                                                 <td class="text-center">${e.nombre1Tutor} ${e.apellido1Tutor}</td>
+                                                 <c:choose>
+                                                     <c:when test="${e.vigente}">
+                                                         <td class="text-center"><span class="badge badge-success"><spring:message code="CHF_CAT_SINO_SI" /></span></td>
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         <td class="text-center"><span class="badge badge-danger"><spring:message code="CHF_CAT_SINO_NO" /></span></td>
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                                 <td class="text-center"><fmt:formatDate value="${e.fecFinVigencia}" pattern="dd/MM/yyyy"/></td>
+                                                 <td class="">${e.observacion}</td>
+                                                 <td class="text-center">
+                                                     <div class="btn-group dropleft">
+                                                         <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                             <spring:message code="actions"/>
+                                                         </button>
+                                                         <div class="dropdown-menu">
+                                                             <a title="<spring:message code="edit" />" href="${fn:escapeXml(editExtensionUrl)}" class="dropdown-item">
+                                                                 <strong><i class="fa fa-edit text-white" aria-hidden="true"></i>
+                                                                     <spring:message code="edit" /></strong></a>
+                                                             <div class="dropdown-divider"></div>
+                                                             <a title="<spring:message code="disable" />" data-toggle="modal" class="dropdown-item desact">
+                                                                 <strong> <i class="fa fa-trash-o text-white" aria-hidden="true"></i>
+                                                                     <spring:message code="disable" /> </strong>
+                                                             </a>
+                                                         </div>
+                                                     </div>
+                                                 </td>
+                                             </tr>
+                                         </c:forEach>
+                                         </tbody>
+                                     </table>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
             </div>
-
         </div>
         <!-- /.conainer-fluid -->
     </div>
@@ -194,10 +231,32 @@
         var table = $('#list_participante_extension').DataTable({
             "oLanguage"  : {
                 "sUrl"   : "${dataTablesLang}"
-            },"columnDefs": [
+            },
+            "autoWidth": true,
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
                 { "width": "1%", "targets": 0 },
                 { "width": "2%", "targets": 2 }
             ]
+        });
+
+        $('#list_participante_extension thead tr').clone(true).appendTo( '#list_participante_extension thead' );
+        $('#list_participante_extension thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            if (title != 'Acciones') {
+                $(this).html('<input type="text" placeholder="Buscar '+title+'" class="form-control-buscar" />');
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i).search(this.value).draw();
+                    }
+                });
+            } else {
+                $(this).html('');
+            }
         });
 
         $("#list_participante_extension tbody").on("click", ".desact", function(e){
