@@ -13,6 +13,11 @@
     <spring:url value="/resources/css/datepicker.css" var="datepickerCss" />
     <link href="${datepickerCss}" rel="stylesheet" type="text/css"/>
     <!-- END DATE PICKER -->
+    <style>
+        .form-control-buscar {
+            width: 100%;
+        }
+    </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../../fragments/bodyHeader.jsp" />
@@ -349,6 +354,21 @@
                         toastr.error( "error:" + errorThrown,{timeOut: 0});
                     });
         }
+
+        $('#lista_casos thead tr').clone(true).appendTo( '#lista_casos thead' );
+        $('#lista_casos thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            if (title != 'Acciones') {
+                $(this).html('<input type="text" placeholder="Buscar '+title+'" class="form-control-buscar form-control-xs" />');
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i).search(this.value).draw();
+                    }
+                });
+            } else {
+                $(this).html('');
+            }
+        });
 
     });
 
