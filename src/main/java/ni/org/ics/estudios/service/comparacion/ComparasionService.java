@@ -1,31 +1,20 @@
 package ni.org.ics.estudios.service.comparacion;
 
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 import ni.org.ics.estudios.domain.catalogs.Personal_Cargo;
-import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
-import ni.org.ics.estudios.domain.cohortefamilia.RecepcionMuestra;
-import ni.org.ics.estudios.domain.muestreoanual.LabSero;
 import ni.org.ics.estudios.domain.muestreoanual.MuestraMA;
 import ni.org.ics.estudios.domain.muestreoanual.RecepcionBHC;
 import ni.org.ics.estudios.domain.muestreoanual.RecepcionSero;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import ni.org.ics.estudios.users.model.UserSistema;
 import ni.org.ics.estudios.web.utils.DateUtil;
-import ni.org.ics.estudios.web.utils.pdf.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.annotations.SourceType;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.swing.*;
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
