@@ -23,6 +23,11 @@
     <link rel="stylesheet" href="${dtttcss}"/>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        .form-control-buscar {
+            width: 100%;
+        }
+    </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../../fragments/bodyHeader.jsp" />
@@ -248,7 +253,7 @@
         $('#lista_candidatos thead tr').clone(true).appendTo( '#lista_candidatos thead' );
         $('#lista_candidatos thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
+            $(this).html( '<input type="text" class="form-control-buscar form-control-xs" placeholder="Buscar '+title+'" />' );
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table.column(i).search( this.value ).draw();
@@ -265,8 +270,6 @@
             $('#recipient-name').val('id: '+col0_value);
             $('#exampleModal').modal('show');
         });
-
-
     });
 
     if ("${deshabilitado}"){

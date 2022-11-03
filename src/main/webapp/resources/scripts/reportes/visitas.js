@@ -8,6 +8,22 @@ var ReportVisit = function () {
                     "sUrl": parametros.dataTablesLang
                 }
             });
+
+            $('#lista_casos thead tr').clone(true).appendTo( '#lista_casos thead' );
+            $('#lista_casos thead tr:eq(1) th').each( function (i) {
+                var title = $(this).text();
+                if (title != 'Acciones') {
+                    $(this).html('<input type="text" placeholder="Buscar '+title+'" class="form-control-xs" style="width: 100%;" />');
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table.column(i).search(this.value).draw();
+                        }
+                    });
+                } else {
+                    $(this).html('');
+                }
+            });
+
             var laddaButton = Ladda.create( document.querySelector( '.btn-ladda' ) );
             var tt = new $.fn.dataTable.TableTools( table, {
                 "sSwfPath": parametros.sSwfPath,
