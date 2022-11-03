@@ -5,6 +5,7 @@ import ni.org.ics.estudios.domain.audit.Auditable;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Created by ICS on 04/01/2021.
@@ -54,4 +55,21 @@ public class Personal_Cargo extends BaseMetaData implements Auditable  {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Personal_Cargo)) return false;
+
+        Personal_Cargo that = (Personal_Cargo) o;
+
+        if (!cargo.equals(that.cargo)) return false;
+        if (!personal.equals(that.personal)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(cargo,personal);
+    }
 }

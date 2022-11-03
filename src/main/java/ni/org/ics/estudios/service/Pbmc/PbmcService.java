@@ -5,7 +5,7 @@ import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.catalogs.Rango_Edad_Volumen;
-import ni.org.ics.estudios.dto.PbmcHorasToma;
+//import ni.org.ics.estudios.dto.PbmcHorasToma;
 import ni.org.ics.estudios.service.UsuarioService;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -74,7 +74,7 @@ public class PbmcService {
         return query.list();
     }
 
-    public List<PbmcHorasToma> getHorasPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin){
+   /* public List<PbmcHorasToma> getHorasPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createSQLQuery("select m.codigo as codigo, date(m.fecha_muestra) as fechaToma, TIME_FORMAT(m.fecha_muestra, '%H:%i:%S') as horaToma, m.hora_pbmc as horaPbmc, m.tuborojo as tuboRojo, m.tuboleu as tuboPbmc " +
                 "from muestras m, pbmc_recepcion p " +
@@ -89,7 +89,7 @@ public class PbmcService {
 
         query.setResultTransformer(Transformers.aliasToBean(PbmcHorasToma.class));
         return query.list();
-    }
+    }*/
 
 
     //region Verificar si existe registro Guardado.

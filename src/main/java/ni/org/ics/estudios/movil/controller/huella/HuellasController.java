@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/movil/*")
 public class HuellasController {
 
-    private static final Logger logger = LoggerFactory.getLogger(HuellasController.class);
+    /*private static final Logger logger = LoggerFactory.getLogger(HuellasController.class);
 
     @Resource(name = "huellaService")
     private HuellaService huellaService;
@@ -51,5 +51,5 @@ public class HuellasController {
             }
         }
         return "Datos recibidos!";
-    }
+    }*/
 }

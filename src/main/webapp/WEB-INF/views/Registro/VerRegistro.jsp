@@ -346,7 +346,7 @@
                 </a>
             </li>
         </ol>
-        <div class="container-fluid">
+        <div class="container col-md-12 col-lg-12">
             <div class="animated fadeIn">
                 <div class="card shadow w-100 bg-white rounded">
                     <spring:url value="/Registro/searchParticipant" var="searchPartUrl"/>
@@ -381,7 +381,6 @@
                                 </div>
                             </form>
                         </div>
-
                         <!-- Tabs -->
                         <div class="">
                             <div class="">
@@ -420,7 +419,7 @@
                                                                             <spring:url value="/resources/img/default-profile.jpg" var="userDefault" />
                                                                             <img class="rounded-circle" width="150" src="${userDefault}" alt="<spring:message code="Admin" />" />
                                                                             <div class="mt-3">
-                                                                                <span class="badge badge-pill text-primary" id="nombreComplete" style="font-size: 15px"></span>
+                                                                                <span class="badge ba   dge-pill text-primary" id="nombreComplete" style="font-size: 15px"></span>
                                                                                 <div class="table-responsive">
 
                                                                                     <table class="table table-hover" style="width:100%">
@@ -700,9 +699,8 @@
                                                 <!-- Fin 1er tabs-->
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="four" role="tabpanel" aria-labelledby="four-tab">
-                                                <!-- 1er tabs -->
                                                 <!-- Fin 1er tabs-->
-                                                                    <form name="form_verification" action="#" id="form_verification">
+                                                   <form name="form_verification" action="#" id="form_verification">
 
                                                                         <div class="row">
                                                                             <div class="col-lg-1 col-md-1 col-sm-12">
@@ -863,43 +861,45 @@
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="two" role="tabpanel" aria-labelledby="two-tab">
                                                 <hr>
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-xl-12">
-                                                                        <div class="table-responsive">
-                                                                            <table id="tblVerRetiro" class="table table-hover table-bordered dt-responsive nowrap" style="width:100%">
-                                                                                <thead>
-                                                                                <tr>
-                                                                                    <th class="text-center"><spring:message code="CÓDIGO" /></th>
-                                                                                    <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
-                                                                                    <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
-                                                                                    <th class="text-center"><spring:message code="RELACIÓN" /></th>
-                                                                                    <th><spring:message code="MOTIVO" /></th>
-                                                                                    <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
-                                                                                    <th class="text-center"><spring:message code="ESTUDIO" /></th>
-                                                                                    <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
-                                                                                </tr>
-                                                                                </thead>
-                                                                                <tbody></tbody>
-                                                                                <tfoot>
-                                                                                <tr>
-                                                                                    <th class="text-center"><spring:message code="CÓDIGO" /></th>
-                                                                                    <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
-                                                                                    <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
-                                                                                    <th class="text-center"><spring:message code="RELACIÓN" /></th>
-                                                                                    <th><spring:message code="MOTIVO" /></th>
-                                                                                    <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
-                                                                                    <th class="text-center"><spring:message code="ESTUDIO" /></th>
-                                                                                    <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
-                                                                                </tr>
-                                                                                </tfoot>
-                                                                            </table>
-                                                                        </div>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-lg-12">
+                                                            <div class="table-responsive">
+                                                                <table id="tblVerRetiro" class="table table-hover table-bordered dt-responsive nowrap" style="width:100%">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th class="text-center"><spring:message code="CÓDIGO" /></th>
+                                                                        <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
+                                                                        <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
+                                                                        <th class="text-center"><spring:message code="RELACIÓN" /></th>
+                                                                        <th><spring:message code="MOTIVO" /></th>
+                                                                        <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
+                                                                        <th class="text-center"><spring:message code="ESTUDIO" /></th>
+                                                                        <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody></tbody>
+                                                                    <tfoot>
+                                                                    <tr>
+                                                                        <th class="text-center"><spring:message code="CÓDIGO" /></th>
+                                                                        <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
+                                                                        <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
+                                                                        <th class="text-center"><spring:message code="RELACIÓN" /></th>
+                                                                        <th><spring:message code="MOTIVO" /></th>
+                                                                        <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
+                                                                        <th class="text-center"><spring:message code="ESTUDIO" /></th>
+                                                                        <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
+                                                                    </tr>
+                                                                    </tfoot>
+                                                                </table>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
 
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="three" role="tabpanel" aria-labelledby="three-tab">
-
+                                                <div class="container">
                                                 <div class="row">
 
                                                     <div class="col-md-12">
@@ -925,60 +925,44 @@
                                                                     <button id="cargarParticipantes"  type="submit" class="btn btn-success btn-ladda btn-block" data-style="expand-right"><i class="fa fa-search"></i></button>
                                                                 </div>
                                                                 <div class="col-md-1"></div>
-
                                                             </div>
-                                                           <!-- <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label for="nombre1">Nombre</label>
-                                                                        <input type="text" class="form-control" placeholder="Primer Nombre" name="nombre1" id="nombre1">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                        <label for="nombre1">Apellido</label>
-                                                                    <div class="input-group mb-3">
-                                                                        <input type="text" class="form-control" placeholder="Primer Apellido" name="apellido1" id="apellido1" aria-describedby="basic-addon2">
-                                                                        <div class="input-group-append">
-                                                                            <button id="cargarParticipantes"  type="submit" class="btn btn-success btn-ladda" data-style="expand-right"><i class="fa fa-search"></i></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>-->
                                                         </form>
-                                                        <div class="table-responsive">
-                                                        <table class="table table-hover table-bordered dt-responsive nowrap" id="tblParticipantes" style="width:100%">
-                                                            <thead>
-                                                            <tr>
-                                                                <th scope="col"><spring:message code="code" /></th>
-                                                                <th scope="col"><spring:message code="1er.Nombre" /></th>
-                                                                <th scope="col"><spring:message code="2do.Nombre" /></th>
-                                                                <th scope="col"><spring:message code="1er Apellido" /></th>
-                                                                <th scope="col"><spring:message code="2do.Apellido" /></th>
-                                                                <th scope="col"><spring:message code="Fecha Nac." /></th>
-                                                                <th scope="col"><spring:message code="Sexo" /></th>
-                                                                <th scope="col"><spring:message code="actions" /></th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                            <tfoot>
-                                                            <tr>
-                                                                <th scope="col"><spring:message code="code" /></th>
-                                                                <th scope="col"><spring:message code="1er.Nombre" /></th>
-                                                                <th scope="col"><spring:message code="2do.Nombre" /></th>
-                                                                <th scope="col"><spring:message code="1er Apellido" /></th>
-                                                                <th scope="col"><spring:message code="2do.Apellido" /></th>
-                                                                <th scope="col"><spring:message code="Fecha Nac." /></th>
-                                                                <th scope="col"><spring:message code="Sexo" /></th>
-                                                                <th scope="col"><spring:message code="actions" /></th>
-                                                            </tr>
-                                                            </tfoot>
-                                                        </table>
-                                                    </div>
+                                                        <div class="container" style="width: 100%">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-bordered dt-responsive nowrap" id="tblParticipantes" style="width:100%">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th class="text-center" scope="col"><spring:message code="code" /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="1er.Nombre" /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="2do.Nombre" /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="1er Apellido" /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="2do.Apellido" /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="Fecha Nac." /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="Sexo" /></th>
+                                                                        <th class="text-center" scope="col"><spring:message code="actions" /></th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                    <tfoot>
+                                                                    <tr>
+                                                                        <th scope="col"><spring:message code="code" /></th>
+                                                                        <th scope="col"><spring:message code="1er.Nombre" /></th>
+                                                                        <th scope="col"><spring:message code="2do.Nombre" /></th>
+                                                                        <th scope="col"><spring:message code="1er Apellido" /></th>
+                                                                        <th scope="col"><spring:message code="2do.Apellido" /></th>
+                                                                        <th scope="col"><spring:message code="Fecha Nac." /></th>
+                                                                        <th scope="col"><spring:message code="Sexo" /></th>
+                                                                        <th scope="col"><spring:message code="actions" /></th>
+                                                                    </tr>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                 </div>
 
                                                 </div>
-
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1397,46 +1381,6 @@
             });
         }
 
-        $("#btnCodeLineal").on("click", function(){
-            var id = $("#idParticipante").text();
-            Swal.fire({
-                title: "Imprimir Lineal!",
-                input: 'text',
-                inputLabel: "Número de copias: "+id,
-                inputValue: 1,
-                confirmButtonText: 'Imprimir',
-                cancelButtonText: 'Cancelar',
-                showCancelButton: true,
-                inputValidator: (value) => {
-                if (!value)
-            {
-                return 'Favor ingresar la cantidad de copias!'
-            } else {
-                imprimir(id,value,'2');
-            }
-        }
-    })
-        });
-        $("#btnCodeBidi").on("click", function(){
-            var id = $("#idParticipante").text();
-            Swal.fire({
-                title: "Imprimir QR!",
-                input: 'text',
-                inputLabel: "Número de copias: "+id,
-                inputValue: 3,
-                confirmButtonText: 'Imprimir',
-                cancelButtonText: 'Cancelar',
-                showCancelButton: true,
-                inputValidator: (value) => {
-                    if (!value)
-                    {
-                        return 'Favor ingresar la cantidad de copias!'
-                    }else {
-                        imprimir(id,value,'3');
-                    }
-                }
-            })
-        });
 
         function imprimir(strBarCodes,inputValue,tipo){
             $.getJSON("http://localhost:13001/print", { barcodes: strBarCodes+'*'+inputValue+'*'+tipo, ajax:'false' }, function (data) {
@@ -1811,7 +1755,6 @@
 
         function LimpiarCtrls(){
             $("#idParticipante").text("");
-
             $("#estudios").text("");
             $("#fnac").text("");
             $("#pbmc2").text("");
@@ -1842,7 +1785,46 @@
 
         }
 
-    });
+        $("#btnCodeLineal").on("click", function() {
+            var id = $("#idParticipante").text();
+            Swal.fire({
+                title: "Imprimir Lineal!",
+                input: 'text',
+                inputLabel: "Número de copias: " + id,
+                inputValue: 1,
+                confirmButtonText: 'Imprimir',
+                cancelButtonText: 'Cancelar',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                if (!value) {
+                return 'Favor ingresar la cantidad de copias!'
+            } else {
+                imprimir(id, value, '2');
+            }
+        }
+    })
+        });
+        $("#btnCodeBidi").on("click", function() {
+            var id = $("#idParticipante").text();
+            Swal.fire({
+                title: "Imprimir QR!",
+                input: 'text',
+                inputLabel: "Número de copias: " + id,
+                inputValue: 3,
+                confirmButtonText: 'Imprimir',
+                cancelButtonText: 'Cancelar',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                if (!value) {
+                return 'Favor ingresar la cantidad de copias!'
+            } else {
+                imprimir(id, value, '3');
+            }
+        }
+        })
+        });
+
+        });
 
 </script>
 </body>

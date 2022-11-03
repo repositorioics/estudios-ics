@@ -38,13 +38,13 @@
 				p:minPoolSize="10"
 				p:maxStatementsPerConnection="100" />
 
-    <!-- Declare the Hibernate SessionFactory for retrieving Hibernate sessions -->
+    <!-- Declare the Hibernate SessionFactory for retrieving Hibernate sessions
     <bean id="huellaSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
           p:dataSource-ref="huellaDataSource"
           p:configLocation="${hibernate.hd.config}"
-          p:packagesToScan="ni.org.ics.estudios"/>
+          p:packagesToScan="ni.org.ics.estudios"/>-->
 
-    <!-- Declare a datasource that has pooling capabilities-->
+    <!-- Declare a datasource that has pooling capabilities
     <bean id="huellaDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close"
           p:driverClass="${app.jdbc.driverClassName}"
@@ -56,7 +56,7 @@
           p:maxPoolSize="100"
           p:maxStatements="50"
           p:minPoolSize="10"
-          p:maxStatementsPerConnection="100" />
+          p:maxStatementsPerConnection="100" />-->
 	<!-- Declare a transaction manager-->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager" 
        			p:sessionFactory-ref="sessionFactory" />

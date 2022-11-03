@@ -182,7 +182,8 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-            <version>5.1.44</version><!-- para nuevo server-->
+            <version>8.0.29</version>
+            <!--<version>8.0.29</version> para nuevo server-->
         </dependency>
 
     <!-- Postgresql
@@ -196,7 +197,8 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>3.6.4.Final</version>
+            <version>3.6.10.Final</version>
+			<!--<version>3.6.4.Final</version>-->
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

@@ -235,10 +235,30 @@
                         </li>
                         <li class="nav-item filedata">
                             <a class="nav-link" href="<spring:url value="/Serologia/listEnviosMuestras" htmlEscape="true "/>">
-                                <i class="fa fa-send"></i><spring:message code="reports" /> <spring:message code="Envios" /></a>
+                                <i class="fa
+                                 fa-send"></i><spring:message code="reports" /> <spring:message code="Envios" /></a>
                         </li>
+
                     </ul>
                 </li>
+
+            <!-- init anti -->
+            <li class="nav-item nav-dropdown Domicilio">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="fa fa-home" aria-hidden="true"></i><spring:message code="Anticuerpo" /></a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item anti">
+                        <a class="nav-link" href="<spring:url value="/Anti/listado" htmlEscape="true "/>">
+                            <i class="fa fa-university" aria-hidden="true"></i>
+                            <spring:message code="List" /></a>
+                        <a class="nav-link" href="<spring:url value="/Anti/EnviosAnticuerpo" htmlEscape="true "/>">
+                            <i class="fa fa-send " aria-hidden="true"></i>
+                            <spring:message code="Envios" /> <spring:message code="Anticuerpo" /></a>
+                    </li>
+                </ul>
+            </li>
+            <!-- fin anti -->
+
                 <li class="nav-item nav-dropdown Pbmc">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="fa fa-flask text-pbmc" aria-hidden="true"></i><spring:message code="Pbmc" /></a>

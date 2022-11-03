@@ -48,6 +48,8 @@ public class DatoshemodinamicaService {
             //Query query = session.createQuery("from DatosHemodinamica where recordUser =:getUserName");
             //query.setParameter("getUserName", getUserName);
             Query query = session.createQuery("from DatosHemodinamica order by fecha asc");
+            query.setFirstResult(0);
+            query.setMaxResults(100);
             return query.list();
         }catch (Exception e){
             throw e;

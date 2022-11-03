@@ -21,10 +21,10 @@ import java.util.List;
 @Transactional
 public class HuellaService {
 
-    //Configuration conf2 = new Configuration().configure("hibernate.huella.cfg.xml");
-    //SessionFactory huellaSessionFactory = conf2.buildSessionFactory();
+    /*Configuration conf2 = new Configuration().configure("hibernate.huella.cfg.xml");
+    SessionFactory huellaSessionFactory = conf2.buildSessionFactory();
 
-    @Autowired
+   @Autowired
     @Qualifier(value="huellaSessionFactory")
     private SessionFactory huellaSessionFactory;
 
@@ -38,5 +38,5 @@ public class HuellaService {
     {
         Session session = huellaSessionFactory.getCurrentSession();
         session.saveOrUpdate(huella);
-    }
+    }*/
 }

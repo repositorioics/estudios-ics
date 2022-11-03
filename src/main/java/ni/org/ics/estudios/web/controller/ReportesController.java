@@ -3,6 +3,7 @@ package ni.org.ics.estudios.web.controller;
 import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.Retiros.Retiros;
+import ni.org.ics.estudios.domain.SerologiaAnticuerpo.Anticuerpo_Detalle_envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.catalogs.Estudio;
@@ -28,6 +29,7 @@ import ni.org.ics.estudios.service.EstudioService;
 import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.Pbmc.PbmcService;
 import ni.org.ics.estudios.service.SerologiaOct2020.SerologiaOct2020Service;
+import ni.org.ics.estudios.service.anticuerpo.AnticuerpoService;
 import ni.org.ics.estudios.service.cohortefamilia.ReportesService;
 import ni.org.ics.estudios.service.comparacion.ComparasionService;
 import ni.org.ics.estudios.service.entomologia.CuestionarioHogarService;
@@ -111,6 +113,10 @@ public class ReportesController {
     private RetiroService retiroService;
     @Resource(name = "cuestionarioHogarService")
     private CuestionarioHogarService cuestionarioHogarService;
+
+    @Resource(name = "anticuerpoService")
+    private AnticuerpoService anticuerpoService;
+
 
     @RequestMapping(value = "/super/visitas", method = RequestMethod.GET)
     public String obtenerVisitas(Model model) throws ParseException {
@@ -570,5 +576,32 @@ public class ReportesController {
         return ReporteRetiro;
     }
     //endregion
+
+    @RequestMapping(value = "/EnvioAnticuerpoPdf", method = RequestMethod.GET)
+    public ModelAndView EnvioAnticuerpoPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
+                                                 @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                                 @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            throws Exception{
+        ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+
+
+        ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
+        ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+
+        List<Anticuerpo_Detalle_envio> allAnticuerpo = this.anticuerpoService.getAntiToReport(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("allAnticuerpo",allAnticuerpo);
+
+        ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEANTICUERPO);
+        return ReporteEnvioPbmcPdf;
+    }
+
+
 
 }
