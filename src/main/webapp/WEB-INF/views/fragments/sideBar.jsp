@@ -79,6 +79,11 @@
                             <a class="nav-link" href="<spring:url value="/comparacion/reporte-diferencias" htmlEscape="true "/>">
                                 <i class="fa fa-info" aria-hidden="true"></i><spring:message code="lbl.differences" /></a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/correction/CorrectionForm" htmlEscape="true "/>">
+                                <i class="fa fa-pencil" aria-hidden="true"></i> <spring:message code="corrections" />  <spring:message code="letters" /></a>
+                        </li>
                     </ul>
                 </li>
             </sec:authorize>
