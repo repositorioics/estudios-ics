@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <header class="app-header navbar">
     <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
     <a class="navbar-brand" href="#"></a>
@@ -9,10 +10,10 @@
             <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
         </li>
     </ul>
-    <ul class="nav navbar-nav ml-auto">
+    <ul class="ml-auto" style="list-style-type: none">
         <!-- BEGIN USER LOGIN DROPDOWN -->
         <li class="nav-item dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+            <a href="#" class="dropdown-toggle text-white" style="font-size: medium;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                 <i class="fa fa-user"></i>
                     <span class="username">
                          <sec:authentication property="principal.username" />
@@ -31,5 +32,5 @@
             </ul>
         </li>
         <!-- END USER LOGIN DROPDOWN -->
-     </ul>
+    </ul>
 </header>
