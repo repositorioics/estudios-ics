@@ -19,6 +19,7 @@ import ni.org.ics.estudios.domain.scancarta.ParticipanteCarta;
 import ni.org.ics.estudios.domain.scancarta.ParticipanteExtension;
 import ni.org.ics.estudios.dto.BhcEnvioDto;
 import ni.org.ics.estudios.dto.ComparacionMuestrasDto;
+import ni.org.ics.estudios.dto.Hemodinamica.HemodinamicaDto;
 import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.dto.muestras.MuestraDto;
 import ni.org.ics.estudios.dto.muestras.RecepcionBHCDto;
@@ -397,6 +398,49 @@ public class ReportesController {
         return ReporteEnvio;
     }
     //endregion
+
+    //region todo HEMODINAMICA
+
+    @RequestMapping(value = "/hemoExcel", method = RequestMethod.GET)
+    public ModelAndView hemoToExcel(@RequestParam(value = "participantCode") int participantCode,
+                                    @RequestParam(value = "currentYear") int currentYear
+                                    )throws Exception{
+        ModelAndView hemoToExcel = new ModelAndView("excelView");
+        // Obtengo el listado por codigo Participante y anio
+        List<DatosHemodinamica> listaHemodinamica = this.datoshemodinamicaService.getDatosByParticipantCodeAndCurYears(participantCode, currentYear);
+        List<HemodinamicaDto>hemodinamicaDtoList= new ArrayList<HemodinamicaDto>();
+
+        for (DatosHemodinamica loop: listaHemodinamica){
+            HemodinamicaDto hemodinamicaDto = new HemodinamicaDto();
+            hemodinamicaDto.setIdDatoHemo(loop.getIdDatoHemo());
+            hemodinamicaDto.setCodigo_participante(loop.getParticipante().getCodigo());
+            hemodinamicaDto.setFechaRegistro(loop.getRecordDate());
+            hemodinamicaDto.setFecha(loop.getFecha());
+            hemodinamicaDto.setEdad(loop.getEdad());
+            hemodinamicaDto.setUsuario(loop.getRecordUser());
+            hemodinamicaDto.setAsuperficiecorporal(loop.getAsc());
+            hemodinamicaDto.setDias_enfermo(loop.getDiasenf());
+            hemodinamicaDto.setImc(loop.getImc());
+            hemodinamicaDto.setPeso(loop.getPeso());
+            hemodinamicaDto.setTalla(loop.getTalla());
+            hemodinamicaDto.setnExpediente(loop.getnExpediente());
+            hemodinamicaDto.setFechaInicioEnfermedad(loop.getFie());
+            List<HemoDetalle> hemoDetalles= this.datoshemodinamicaService.NumeroHemoDet(loop.getIdDatoHemo());
+            hemodinamicaDto.setListaDetalles(hemoDetalles);
+            hemodinamicaDto.setPositivo(loop.getPositivo());
+            hemodinamicaDtoList.add(hemodinamicaDto);
+        }
+        hemoToExcel.addObject("hemodinamicaDtoList",hemodinamicaDtoList);
+        List<MessageResource> extremidades = messageResourceService.getCatalogo("EXTREMIDADES");
+        extremidades.addAll(messageResourceService.getCatalogo("NIVELCONCIENCIA"));
+        extremidades.addAll(messageResourceService.getCatalogo("LLENADOCAPILAR"));
+        extremidades.addAll(messageResourceService.getCatalogo("PULSOCALIDAD"));
+        extremidades.addAll(messageResourceService.getCatalogo("DIURESIS"));
+        hemoToExcel.addObject("extremidades", extremidades);
+        hemoToExcel.addObject("TipoReporte", Constants.TPR_HEMOREPORTEEXCEL);
+        return  hemoToExcel;
+    }
+
 
     /*Este controlador devuelve archivo Hemodinámica  /ReporteHemodinamica/?idDatoHemo=e868722a-a855-4929-ba00-076df1b7ea5f    */
     @RequestMapping(value = "/ReporteHemodinamica", method = RequestMethod.GET)

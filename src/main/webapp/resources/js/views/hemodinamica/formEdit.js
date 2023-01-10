@@ -130,8 +130,9 @@ $(document).ready(function(){
         format: "dd/mm/yyyy",
         todayBtn:true,
         todayHighlight: true,
-        autoclose: true,
-        endDate: '-0d'
+        endDate: '-0d',
+        startDate: '-4y',
+        autoclose: true
     });
     $("#fconsulta").on("changeDate", function(selected){
         $("#fie").val("");

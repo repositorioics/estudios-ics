@@ -242,7 +242,7 @@
                                     <div class="form-group col-sm-3">
                                         <label for="fecha">Fecha:</label>
                                         <span class="required text-danger"> * </span>
-                                        <input type="text" class="form-control focusNext"  id="fecha" name="fecha" required tabindex="2">
+                                        <input type="text" class="form-control focusNext" data-date-end-date="+0d"  id="fecha" name="fecha" required tabindex="2">
                                     </div>
                                     <div class="form-group col-sm-3">
                                         <label for="hora">Hora:</label>
@@ -491,10 +491,12 @@
         $("#personaValida").select2();
         $("#diuresis").select2();
         $("#fecha").datepicker({
-            autoclose: true,
             format: "dd/mm/yyyy",
+            todayHighlight: true,
             todayBtn:true,
-            endDate: '-0d'
+            endDate: '-0d',
+            startDate: '-4y',
+            autoclose: true
         });
         var parameters = {addDetalleHemoUrl: "${addDetalleHemoUrl}"};
         $.validator.addMethod('customphone', function (value, element) {

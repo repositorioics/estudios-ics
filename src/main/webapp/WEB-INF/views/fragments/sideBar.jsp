@@ -316,8 +316,6 @@
                             <spring:message code="uo1.positives" /></a>
                     </li>
 
-
-
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#">
                             <i class="fa fa-snowflake-o" aria-hidden="true"></i>
@@ -376,18 +374,26 @@
                                 <i class="fa fa-snowflake-o" aria-hidden="true"></i>
                                 <spring:message code="List" /></a>
                         </li>
+                        <sec:authorize access="hasRole('ROLE_SUPER')">
+                            <li class="nav-item reporte">
+                                <a class="nav-link" href="<spring:url value="/hemo/reporteHemodinamica" htmlEscape="true "/>">
+                                    <i class="fa fa-snowflake-o" aria-hidden="true"></i>
+                                    <spring:message code="reports" /></a>
+                            </li>
+                        </sec:authorize>
                     </ul>
                 </li>
             </sec:authorize>
             <sec:authorize access="hasRole('ROLE_ENTO')">
                 <li class="nav-item nav-dropdown cuestionarios">
                     <a class="nav-link nav-dropdown-toggle" href="#">
-                        <i class="fa fa-bug" aria-hidden="true"></i><spring:message code="lbl.ento" /></a>
+                        <i class="fa fa-bug" aria-hidden="true"></i>
+                        <strong><spring:message code="lbl.ento" /></strong></a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link" href="<spring:url value="/ento/informacion" htmlEscape="true "/>">
                                 <i class="fa fa-snowflake-o" aria-hidden="true"></i>
-                                <spring:message code="lbl.letters.info" /></a>
+                                <spring:message code="lbl.letters.info" /> </a>
                         </li>
                     </ul>
                 </li>

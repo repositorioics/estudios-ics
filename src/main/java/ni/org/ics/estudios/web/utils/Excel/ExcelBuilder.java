@@ -5,17 +5,20 @@ import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
+import ni.org.ics.estudios.domain.hemodinamica.DatosHemodinamica;
+import ni.org.ics.estudios.domain.hemodinamica.HemoDetalle;
 import ni.org.ics.estudios.domain.muestreoanual.*;
 import ni.org.ics.estudios.dto.BhcEnvioDto;
 import ni.org.ics.estudios.dto.ComparacionMuestrasDto;
+import ni.org.ics.estudios.dto.Hemodinamica.HemodinamicaDto;
 import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.dto.muestras.MuestraDto;
 import ni.org.ics.estudios.dto.muestras.RecepcionBHCDto;
+import ni.org.ics.estudios.language.MessageResource;
+import ni.org.ics.estudios.web.utils.*;
+import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.pdf.Constants;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -29,6 +32,7 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +47,11 @@ import java.util.logging.Logger;
 public class ExcelBuilder extends AbstractExcelView {
 
     private static final Logger logger = Logger.getLogger("ni.org.ics.webapp.web.utils.Excel.ExcelBuilder");
+    List<MessageResource> messageExtremidades = new ArrayList<MessageResource>();
+    List<MessageResource> messagenivel = new ArrayList<MessageResource>();
+    List<MessageResource> messagellenado = new ArrayList<MessageResource>();
+    List<MessageResource> messagepulso = new ArrayList<MessageResource>();
+    List<MessageResource> messagediuresis = new ArrayList<MessageResource>();
 
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model,
@@ -66,10 +75,258 @@ public class ExcelBuilder extends AbstractExcelView {
         } else if (reporte.equalsIgnoreCase(Constants.TPR_COMPARACION_MX_MA)){
             buildExcelComparacionMuestrasMA(model, workbook, response);
         } else if (reporte.equalsIgnoreCase(Constants.TPR_ENTO)) {
-
             BuildEntoData.buildExcel(model, workbook, response);
         }
+        else  if (reporte.equalsIgnoreCase(Constants.TPR_HEMOREPORTEEXCEL)){
+            buildHemoExcel(model, workbook, response);
+        }
 	}
+
+    public void buildHemoExcel(Map<String, Object>model, HSSFWorkbook workbook, HttpServletResponse response)throws IOException{
+        List<HemodinamicaDto>hemodinamicaDtoList = (List<HemodinamicaDto>) model.get("hemodinamicaDtoList");
+        response.setContentType("application/octec-stream");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+        String fechaActual = dateFormat.format(new Date());
+        String fileName = "Hemodinamica_"+ fechaActual +".xls";
+        response.setHeader("Content-Disposition", "attachment; filename=" + hemodinamicaDtoList.get(0).getCodigo_participante() + "_"+ fileName);
+
+        Font font = workbook.createFont();
+        font.setFontName("Arial");
+        font.setFontHeight((short)(11*20));
+        font.setColor(HSSFColor.BLACK.index);
+        font.setBold(true);
+
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setBorderBottom(BorderStyle.THIN);
+        headerStyle.setBorderTop(BorderStyle.THIN);
+        headerStyle.setBorderLeft(BorderStyle.THIN);
+        headerStyle.setBorderRight(BorderStyle.THIN);
+        headerStyle.setFont(font);
+
+        CellStyle sideBarStyle = workbook.createCellStyle();
+        sideBarStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+        sideBarStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        sideBarStyle.setAlignment(HorizontalAlignment.LEFT);
+        sideBarStyle.setBorderBottom(BorderStyle.THIN);
+        sideBarStyle.setBorderTop(BorderStyle.THIN);
+        sideBarStyle.setBorderLeft(BorderStyle.THIN);
+        sideBarStyle.setBorderRight(BorderStyle.THIN);
+        sideBarStyle.setFont(font);
+
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        CreationHelper createHelper = workbook.getCreationHelper();
+        dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("MM/dd/yyyy"));
+        dateCellStyle.setBorderBottom(BorderStyle.THIN);
+        dateCellStyle.setBorderTop(BorderStyle.THIN);
+        dateCellStyle.setBorderLeft(BorderStyle.THIN);
+        dateCellStyle.setBorderRight(BorderStyle.THIN);
+        dateCellStyle.setFont(font);
+
+        CellStyle contentCellStyle = workbook.createCellStyle();
+        contentCellStyle.setBorderBottom(BorderStyle.THIN);
+        contentCellStyle.setBorderTop(BorderStyle.THIN);
+        contentCellStyle.setBorderLeft(BorderStyle.THIN);
+        contentCellStyle.setBorderRight(BorderStyle.THIN);
+        contentCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        contentCellStyle.setFont(font);
+
+
+        DataFormat format = workbook.createDataFormat();
+        CellStyle decimalCellStyle = workbook.createCellStyle();
+        decimalCellStyle.setDataFormat(format.getFormat("#,##0.00"));
+        decimalCellStyle.setBorderBottom(BorderStyle.THIN);
+        decimalCellStyle.setBorderTop(BorderStyle.THIN);
+        decimalCellStyle.setBorderLeft(BorderStyle.THIN);
+        decimalCellStyle.setBorderRight(BorderStyle.THIN);
+        decimalCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        decimalCellStyle.setFont(font);
+
+
+
+        messageExtremidades = (java.util.List<MessageResource>) model.get("extremidades");
+        messagenivel = (java.util.List<MessageResource>) model.get("nivel");
+        messagellenado = (List<MessageResource>) model.get("llenado");
+        messagepulso = (List<MessageResource>) model.get("pulso");
+        messagediuresis = (List<MessageResource>) model.get("diuresis");
+
+            String[] headers = new String[]{"CODIGO_PARTICIPANTE","FECHA_REGISTRO",
+                    "AREA_SUP_CORPORAL", "EDAD_PARTICIPANTE","FECHA_CONSULTA", "  IMC  ","EXPEDIENTE","  PESO  ", "  TALLA  ","FECHA_INICIO_ENFERMEDAD",
+             "DIAS_ENFERMEDAD", "POSITIVO"
+            };
+        if (hemodinamicaDtoList.size()>0){
+
+            for (int i = 0; i <hemodinamicaDtoList.size() ; i++) {
+                HSSFSheet sheet = workbook.createSheet("HOJA_"+ (i+1));
+                setTableHeader(sheet.createRow(0), headerStyle, headers);
+                int rowCount=1;
+                HSSFRow dataRow2 = sheet.createRow(rowCount);
+                setCellData(dataRow2, hemodinamicaDtoList.get(i).getCodigo_participante(), 0, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow2,DateUtil.DateToString(hemodinamicaDtoList.get(i).getFechaRegistro(),"dd/MM/yyyy HH:mm:ss"),1,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,hemodinamicaDtoList.get(i).getAsuperficiecorporal(),2,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,hemodinamicaDtoList.get(i).getEdad(),3,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,DateUtil.DateToString(hemodinamicaDtoList.get(i).getFecha(),"dd/MM/yyyy"),4,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,new Double(hemodinamicaDtoList.get(i).getImc()).toString(),5,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,hemodinamicaDtoList.get(i).getnExpediente().toString(),6,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,hemodinamicaDtoList.get(i).getPeso().toString(),7,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,hemodinamicaDtoList.get(i).getTalla(),8,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,DateUtil.DateToString(hemodinamicaDtoList.get(i).getFechaInicioEnfermedad(),"dd/MM/yyyy"),9,false,contentCellStyle,dateCellStyle);
+                setCellData(dataRow2,hemodinamicaDtoList.get(i).getDias_enfermo().toString(),10,false,contentCellStyle,dateCellStyle);
+                String pos = (hemodinamicaDtoList.get(i).getPositivo() == '1')?"Si":"No";
+                setCellData(dataRow2, pos,11,false,contentCellStyle,dateCellStyle);
+
+                for (HemoDetalle det: hemodinamicaDtoList.get(i).getListaDetalles()){
+                    for (int parametros = 4; parametros < 22; parametros++) {
+                        HSSFRow dataRow = sheet.createRow(parametros);
+                        int contDet = 1;
+                        if (parametros == 4){
+                            int celda=1;
+                            setCellData(dataRow,"",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,contDet++,celda++,false,headerStyle,dateCellStyle);
+                            }
+                        }
+
+                        if (parametros == 5) {
+                            int celda=1;
+                            setCellData(dataRow,"Fecha",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,DateUtil.DateToString(detII.getFecha(),"dd/MM/yyyy"),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 6) {
+                            int celda=1;
+                            setCellData(dataRow,"Hora",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,detII.getHora().toString(),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 7) {
+                            int celda=1;
+                            setCellData(dataRow,"Nivel de Consciencia",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,getDescripcionCatalogo(detII.getNivelConciencia().toString(), "NIVELCONCIENCIA"),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 8) {
+                            int celda=1;
+                            setCellData(dataRow,"P/A mmHg",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,detII.getPa().toString() + "/" + det.getPd().toString(),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 9) {
+                            int celda=1;
+                            setCellData(dataRow,"PP mmHg",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,new Double(detII.getPp().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 10) {
+                            int celda=1;
+                            setCellData(dataRow, "PAM mmHg", 0, false, sideBarStyle, dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,new Double(detII.getPam().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 11) {
+                            int celda=1;
+                            setCellData(dataRow,"FC por Minuto",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,new Double(detII.getFc().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 12) {
+                            int celda =1;
+                            setCellData(dataRow,"Fr por Minuto",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow, new Double(detII.getFr().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 13) {
+                            int celda=1;
+                            setCellData(dataRow,"T°C",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,new Double(detII.getTc().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 14) {
+                            int celda=1;
+                            setCellData(dataRow, "SA02%", 0, false, sideBarStyle, dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,new Double(detII.getSa().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 15) {
+                            int celda=1;
+                            setCellData(dataRow,"Extremidades",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,getDescripcionCatalogo(detII.getExtremidades().toString(),"EXTREMIDADES"),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 16) {
+                            int celda=1;
+                            setCellData(dataRow,"Llenado Capilar (seg)",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,this.getDescripcionCatalogo(detII.getLlenadoCapilar().toString(),"LLENADOCAPILAR"),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 17) {
+                            int celda=1;
+                            setCellData(dataRow, "Pulso (Calidad)", 0, false, sideBarStyle, dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,this.getDescripcionCatalogo(detII.getPulsoCalidad().toString(),"PULSOCALIDAD"),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 18) {
+                            int celda =1;
+                            setCellData(dataRow,"Diuresis/ml/Kg/Hr",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,this.getDescripcionCatalogo(detII.getDiuresis().toString(),"DIURESIS"),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                        if (parametros == 19) {
+                            int celda = 1;
+                            setCellData(dataRow,"Densidad Urinaria",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,detII.getDensidadUrinaria().toString(),celda++,false,decimalCellStyle,contentCellStyle);
+                            }
+                        }
+                        if (parametros == 20) {
+                            int celda =1;
+                            setCellData(dataRow,"Validado por",0,false,sideBarStyle,dateCellStyle);
+                            for (HemoDetalle detII: hemodinamicaDtoList.get(i).getListaDetalles()) {
+                                setCellData(dataRow,new Double(detII.getPersonaValida().toString()),celda++,false,contentCellStyle,dateCellStyle);
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            CellStyle noDataCellStyle = workbook.createCellStyle();
+            noDataCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            noDataCellStyle.setFont(font);
+            HSSFSheet sheet = workbook.createSheet("SIN_DATOS");
+            HSSFRow aRow = sheet.createRow(1);
+            sheet.addMergedRegion(new CellRangeAddress(aRow.getRowNum(), aRow.getRowNum(),0, headers.length - 1));
+            aRow.createCell(0).setCellValue("NO SE ENCONTRARON DATOS!");
+            aRow.getCell(0).setCellStyle(noDataCellStyle);
+        }
+    }
+
+    private String getDescripcionCatalogo(String codigo,String catroot){
+        for(MessageResource rnv : messageExtremidades){
+            if (rnv.getCatKey().equals(codigo)) {
+                if (catroot != "" && rnv.getCatRoot().equals(catroot))
+                    return rnv.getSpanish();
+            }
+        }
+        return "-";
+    }
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public void buildExcelDocumentVigDx(Map<String, Object> model, HSSFWorkbook workbook,HttpServletResponse response) throws IOException {
@@ -277,11 +534,6 @@ public class ExcelBuilder extends AbstractExcelView {
             aRow.createCell(0).setCellValue("NO SE ENCONTRARON DATOS!");
             aRow.getCell(0).setCellStyle(noDataCellStyle);
         }
-
-
-
-
-
     }
 
     //region todo: Reporte en Excel unicamente de PBMC
@@ -396,7 +648,6 @@ public class ExcelBuilder extends AbstractExcelView {
         }
     }
     //endregion
-
 
     public void buildExcelBhc(Map<String, Object>model, HSSFWorkbook workbook, HttpServletResponse response)throws IOException{
         //List<Bhc_Detalle_envio> bhc_detalle_envios = (List<Bhc_Detalle_envio>) model.get("allBhc");

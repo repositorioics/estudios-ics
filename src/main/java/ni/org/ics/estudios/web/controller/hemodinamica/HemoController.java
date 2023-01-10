@@ -15,7 +15,6 @@ import ni.org.ics.estudios.service.MessageResourceService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
-import ni.org.ics.estudios.web.utils.JsonUtil;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,13 +142,11 @@ public class HemoController {
 
 
     /*LISTAR DE TODOS LOS PACIENTE CON HOJA HEMODINAMICA -- No está en uso*/
-    @RequestMapping(value = "/listado", method = RequestMethod.GET)
-    public ModelAndView ListadoHemo() throws Exception {
+    @RequestMapping(value = "/reporteHemodinamica", method = RequestMethod.GET)
+    public ModelAndView reporteHemodinamica() throws Exception {
         try {
-        List<DatosHemodinamica> lista = datoshemodinamicaService.getListadoHemo();
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("lista", lista);
-        modelAndView.setViewName("/hemodinamica/listado");
+        modelAndView.setViewName("/hemodinamica/reporteHemodinamica");
         return modelAndView;
         }catch (Exception e){
             throw e;

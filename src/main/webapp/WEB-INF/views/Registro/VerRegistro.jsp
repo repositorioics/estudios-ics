@@ -860,50 +860,42 @@
                                                                     </form>
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="two" role="tabpanel" aria-labelledby="two-tab">
-                                                <hr>
                                                 <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-md-8 col-lg-12">
-                                                            <div class="table-responsive">
-                                                                <table id="tblVerRetiro" class="table table-hover table-bordered dt-responsive nowrap" style="width:100%">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th class="text-center"><spring:message code="CÓDIGO" /></th>
-                                                                        <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
-                                                                        <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
-                                                                        <th class="text-center"><spring:message code="RELACIÓN" /></th>
-                                                                        <th><spring:message code="MOTIVO" /></th>
-                                                                        <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
-                                                                        <th class="text-center"><spring:message code="ESTUDIO" /></th>
-                                                                        <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody></tbody>
-                                                                    <tfoot>
-                                                                    <tr>
-                                                                        <th class="text-center"><spring:message code="CÓDIGO" /></th>
-                                                                        <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
-                                                                        <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
-                                                                        <th class="text-center"><spring:message code="RELACIÓN" /></th>
-                                                                        <th><spring:message code="MOTIVO" /></th>
-                                                                        <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
-                                                                        <th class="text-center"><spring:message code="ESTUDIO" /></th>
-                                                                        <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
-                                                                    </tr>
-                                                                    </tfoot>
-                                                                </table>
-                                                            </div>
-                                                        </div>
+                                                    <div class="table-responsive">
+                                                        <table id="tblVerRetiro" class="table table-hover table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="text-center"><spring:message code="CÓDIGO" /></th>
+                                                            <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
+                                                            <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
+                                                            <th class="text-center"><spring:message code="RELACIÓN" /></th>
+                                                            <th><spring:message code="MOTIVO" /></th>
+                                                            <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
+                                                            <th class="text-center"><spring:message code="ESTUDIO" /></th>
+                                                            <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th class="text-center"><spring:message code="CÓDIGO" /></th>
+                                                            <th class="text-center"><spring:message code="FECHA RETIRO" /></th>
+                                                            <th class="text-center"><spring:message code="COMUNICADO POR" /></th>
+                                                            <th class="text-center"><spring:message code="RELACIÓN" /></th>
+                                                            <th><spring:message code="MOTIVO" /></th>
+                                                            <th class="text-center"><spring:message code="OBSERVACIÓN" /></th>
+                                                            <th class="text-center"><spring:message code="ESTUDIO" /></th>
+                                                            <th class="text-center"><spring:message code="FECHA FALLECIDO" /></th>
+                                                        </tr>
+                                                        </tfoot>
+                                                    </table>
                                                     </div>
                                                 </div>
-
                                             </div>
                                             <div class="tab-pane fade p-3 animate__headShake" id="three" role="tabpanel" aria-labelledby="three-tab">
                                                 <div class="container">
                                                 <div class="row">
-
                                                     <div class="col-md-12">
-
                                                         <form name="form_by_nombre" action="#" id="form_by_nombre">
 
                                                             <div class="row">
@@ -927,41 +919,40 @@
                                                                 <div class="col-md-1"></div>
                                                             </div>
                                                         </form>
-                                                        <div class="container" style="width: 100%">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-hover table-bordered dt-responsive nowrap" id="tblParticipantes" style="width:100%">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th class="text-center" scope="col"><spring:message code="code" /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="1er.Nombre" /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="2do.Nombre" /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="1er Apellido" /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="2do.Apellido" /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="Fecha Nac." /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="Sexo" /></th>
-                                                                        <th class="text-center" scope="col"><spring:message code="actions" /></th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    </tbody>
-                                                                    <tfoot>
-                                                                    <tr>
-                                                                        <th scope="col"><spring:message code="code" /></th>
-                                                                        <th scope="col"><spring:message code="1er.Nombre" /></th>
-                                                                        <th scope="col"><spring:message code="2do.Nombre" /></th>
-                                                                        <th scope="col"><spring:message code="1er Apellido" /></th>
-                                                                        <th scope="col"><spring:message code="2do.Apellido" /></th>
-                                                                        <th scope="col"><spring:message code="Fecha Nac." /></th>
-                                                                        <th scope="col"><spring:message code="Sexo" /></th>
-                                                                        <th scope="col"><spring:message code="actions" /></th>
-                                                                    </tr>
-                                                                    </tfoot>
-                                                                </table>
-                                                            </div>
+                                                    </div>
+                                                </div>
+                                                    <div class="" style="width: 100%">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-bordered dt-responsive nowrap" id="tblParticipantes" style="width:100%">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="text-center" scope="col"><spring:message code="code" /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="1er.Nombre" /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="2do.Nombre" /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="1er Apellido" /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="2do.Apellido" /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="Fecha Nac." /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="Sexo" /></th>
+                                                                    <th class="text-center" scope="col"><spring:message code="actions" /></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                <tr>
+                                                                    <th scope="col"><spring:message code="code" /></th>
+                                                                    <th scope="col"><spring:message code="1er.Nombre" /></th>
+                                                                    <th scope="col"><spring:message code="2do.Nombre" /></th>
+                                                                    <th scope="col"><spring:message code="1er Apellido" /></th>
+                                                                    <th scope="col"><spring:message code="2do.Apellido" /></th>
+                                                                    <th scope="col"><spring:message code="Fecha Nac." /></th>
+                                                                    <th scope="col"><spring:message code="Sexo" /></th>
+                                                                    <th scope="col"><spring:message code="actions" /></th>
+                                                                </tr>
+                                                                </tfoot>
+                                                            </table>
                                                         </div>
-                                                </div>
-
-                                                </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1109,7 +1100,7 @@
 
         $('#tblVerRetiro tfoot th').each( function () {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
         });
         $("#parametro").focus();
         var parametros = {searchPartUrl: "${searchPartUrl}",

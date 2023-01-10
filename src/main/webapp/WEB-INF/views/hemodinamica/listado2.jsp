@@ -17,7 +17,11 @@
 
     <spring:url value="/resources/css/responsive.bootstrap4.min.css" var="bdrespat4" />
     <link rel="stylesheet" href="${bdrespat4}" type="text/css"/>
-    <title>Hemodinámica</title>
+    <style>
+        .error{
+            color: #ff5454;
+        }
+    </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -31,7 +35,7 @@
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
                 <a href="<spring:url value="/hemo/listado2" htmlEscape="true "/>">
-                    <spring:message code="Listado" /></a>
+                    <spring:message code="List" /></a>
             </li>
         </ol>
         <div class="container-fluid">
@@ -79,7 +83,7 @@
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Edad" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Registro" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Fecha Consulta" /></th>
-                                            <th data-hide="phone,tablet" class="text-center"><spring:message code="Editar" /></th>
+                                            <th data-hide="phone,tablet" class="text-center"><spring:message code="actions" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Detalle" /></th>
                                             <th data-hide="phone,tablet" class="text-center"><spring:message code="Reporte" /></th>
                                         </tr>

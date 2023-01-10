@@ -141,7 +141,7 @@ public class DatoshemodinamicaService {
     @SuppressWarnings("unchecked")
     public List<HemoDetalle> NumeroHemoDet(String idDatoHemo) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("FROM HemoDetalle hd where " + "hd.datoshemodinamica.idDatoHemo =:idDatoHemo");
+        Query query = session.createQuery("FROM HemoDetalle hd where hd.datoshemodinamica.idDatoHemo =:idDatoHemo order by hd.fecha asc ");
         query.setParameter("idDatoHemo", idDatoHemo);
         return query.list();
     }
@@ -214,6 +214,15 @@ public class DatoshemodinamicaService {
         Query query = session.createQuery("from Personal p where p.idpersonal=:codigo");
         query.setParameter("codigo",codigo);
         return (Personal) query.uniqueResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<DatosHemodinamica>getDatosByParticipantCodeAndCurYears(Integer codigo_participante, Integer currYears){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from DatosHemodinamica d where year(d.recordDate)=:currYears and d.participante.codigo=:codigo_participante");
+        query.setParameter("codigo_participante", codigo_participante);
+        query.setParameter("currYears", currYears);
+        return query.list();
     }
 
 

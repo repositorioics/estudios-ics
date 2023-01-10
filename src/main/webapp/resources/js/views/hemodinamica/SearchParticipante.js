@@ -11,7 +11,7 @@ var SearchHemoParticipant = function () {
             });
             $("#select-Participante-form").validate( {
                 rules: {
-                    parametro: 'required'
+                    parametro: {required:true}
                 },
                 errorElement: 'em',
                 errorPlacement: function ( error, element ) {
@@ -48,12 +48,12 @@ var SearchHemoParticipant = function () {
                         for ( var i = 0; i < len; i++) {
                             var valor ="";
                             var partsUrl = parametros.edithemoUrl + '/'+data[i].idDatoHemo+ '/';
+                            var excelUrl = parametros.pdfHemoExcelUrl  + '/'+data[i].idDatoHemo+ '/';
                             var editUrl = parametros.listDetailsHemoUrl + '/'+data[i].idDatoHemo+ '/';
                             var pdf = parametros.pdfUrl+ '/'+data[i].idDatoHemo+ '/';
                             var d =new Date(data[i].fecha);
                             var datestring =  ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
                             var fReg = new Date(data[i].recordDate);
-                            console.log(data[i].recordDate);
                             var fregistro =  ("0" + fReg.getDate()).slice(-2) + "/" + ("0"+(fReg.getMonth()+1)).slice(-2) + "/" + fReg.getFullYear() +" "+  fReg.getHours().toString() + ":"+ fReg.getMinutes();
                             var getCode = data[i].participante.codigo;
                             var NameComplete =  data[i].participante.nombre1+' '+ data[i].participante.nombre2+' '+ data[i].participante.apellido1+' '+data[i].participante.apellido1;

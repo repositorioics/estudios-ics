@@ -2321,7 +2321,7 @@ public class PdfView extends AbstractPdfView {
                 cell.setBorder(1);
                 table.addCell(cell);
 
-                table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
+                table.writeSelectedRows(0, -1, 42, 35, writer.getDirectContent());
                 document.close();
                 //endregion
             }else{
@@ -3278,10 +3278,10 @@ class HeaderFooterReporteEnvio extends PdfPageEventHelper {
 
     @Override
     public void onCloseDocument(PdfWriter writer, Document document) { }
-    
+
     @Override
     public void onEndPage(PdfWriter writer, Document document) {
-        /*ENCABEZADO**/
+         /*ENCABEZADO**/
         Paragraph encabezado = new Paragraph("CENTRO DE SALUD SÓCRATES FLORES VIVAS.",FontFactory.getFont("COURIER", 20, java.awt.Font.BOLD, Color.black));
         encabezado.setAlignment(Element.ALIGN_CENTER);
         Paragraph encabezado2 = new Paragraph("RECEPCIÓN DE "+tipoDeTubos, FontFactory.getFont("COURIER",16, java.awt.Font.ITALIC));
@@ -3337,20 +3337,21 @@ class HeaderFooterReporteEnvio extends PdfPageEventHelper {
         table.addCell(cell);
         table.writeSelectedRows(0, -1, 42, y, writer.getDirectContent());
 
-        if (totalNumber <= 0){
+        /*if (totalNumber <= 0){
             totalNumber =  writer.getPageNumber();
-        }
+        }*/
         PdfPTable table1 = new PdfPTable(2);
         try{
             table1.setWidths(new int[]{25,25});
             table1.setTotalWidth(527);
             table1.setLockedWidth(true);
             table1.getDefaultCell().setFixedHeight(18);
-            table1.getDefaultCell().setBorder(Rectangle.BOTTOM);
+            table1.getDefaultCell().setBorder(Rectangle.NO_BORDER);
             table1.addCell("");
             table1.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
-            table1.addCell(String.format(writer.getCurrentPageNumber() + " Página of %d", totalNumber));
-            table1.writeSelectedRows(0,-1,24,50, writer.getDirectContent()); // 50 para ubicarlo abajo y 833 hacia arriba
+            table1.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+            table1.addCell(String.format(" Página " + writer.getCurrentPageNumber()));
+            table1.writeSelectedRows(0,-1,24,30, writer.getDirectContent()); // 50 para ubicarlo abajo y 833 hacia arriba
         }catch (DocumentException de){
             throw  new ExceptionConverter(de);
         }
