@@ -430,6 +430,11 @@
                                                                                             <td class="text-right"><span class="badge badge-pill text-primary" id="idParticipante" style="font-size: 15px"></span> </td>
                                                                                         </tr>
                                                                                         <tr>
+                                                                                            <td class="text-left">Estado</td>
+
+                                                                                            <td class="text-right"><span class="badge badge-pill text-white" id="estado" style="font-size: 15px"></span> </td>
+                                                                                        </tr>
+                                                                                        <tr>
                                                                                             <td class="text-left">Estudios</td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-primary" id="estudios" style="font-size: 15px"></span> </td>
                                                                                         </tr>
@@ -1142,7 +1147,7 @@
         });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                //console.log(data);
+                console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
@@ -1225,6 +1230,13 @@
                         $("#pbmc2").text(data.isPbmc);
                         $("#paxgene").val(data.isPaxgene);
                         $("#paxgene2").text(data.isPaxgene);
+
+
+                        if(data.estPart ===1){
+                            $("#estado").text("ACTIVO").removeClass('badge-danger').addClass('badge badge-success badge-pill');
+                        }else{
+                            $("#estado").text("RETIRADO").removeClass('badge-success').addClass('badge badge-danger badge-pill');
+                        }
 
                         if(data.pesotalla != null && data.pesotalla =='Si'){//11979- codigo
                             $("#pyt").text(data.pesotalla).addClass('badge badge-danger badge-pill text-dark');
