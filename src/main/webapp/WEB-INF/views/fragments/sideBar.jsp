@@ -90,7 +90,7 @@
                     </li>
                     </sec:authorize>
 
-                    <sec:authorize access="hasRole('ROLE_DIG,ROLE_SUPER')">
+                    <sec:authorize access="hasAnyRole('ROLE_DIG,ROLE_SUPER')">
                     <li class="nav-item retiro">
                         <a class="nav-link" href="<spring:url value="/retiro/ListRetiro" htmlEscape="true "/>">
                             <i class="fa fa-snowflake-o" aria-hidden="true"></i>

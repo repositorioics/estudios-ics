@@ -122,17 +122,18 @@
                             </div>
                         </form>
                         <div class="row">
-                            <div class="container">
+                            <div class="">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <table class="table table-hover dt-responsive nowrap" style="width:100%" id="tblCoor">
+                                        <table class="table table-hover dt-responsive" style="width:100%" id="tblCoor">
                                             <thead>
                                             <tr>
                                                 <th class="text-center">Id</th>
                                                 <th class="text-center"><spring:message code="PARTICIPANTE"/></th>
-                                                <th class="text-center"><spring:message code="CASA"/></th>
-                                                <th class="text-center"><spring:message code="CASA FAM"/></th>
-                                                <th class="text-center"><spring:message code="FECHA CAMBIO"/></th>
+                                                <th class="text-center"><spring:message code="PDCS"/></th>
+                                                <th class="text-center"><spring:message code="CHF"/></th>
+                                                <th class="text-center"><spring:message code="FECHA REGISTRO"/></th>
+                                                <th class="text-center"><spring:message code="FECHA REPORTADO"/></th>
                                                 <th class="text-center"> BarrioId</th>
                                                 <th class="text-center"><spring:message code="BARRIO"/></th>
                                                 <th class="text-center"><spring:message code="OTRO BARRIO"/></th>
@@ -140,6 +141,7 @@
                                                 <th > <spring:message code="DIRECCIÓN"/></th>
                                                 <th class="text-center">PersonalId</th>
                                                 <th class="text-center"><spring:message code="RECURSO"/></th>
+                                                <th class="text-center"><spring:message code="NOMBRE USUARIO"/></th>
                                                 <th class="text-center"><spring:message code="OBSERVACIÓN"/></th>
                                             </tr>
                                             </thead>
@@ -148,9 +150,10 @@
                                             <tr>
                                                 <th  class="text-center">Id</th>
                                                 <th  class="text-center"><spring:message code="PARTICIPANTE"/></th>
-                                                <th  class="text-center"> <spring:message code="CASA"/></th>
-                                                <th  class="text-center"><spring:message code="CASA FAM"/></th>
-                                                <th  class="text-center"> <spring:message code="FECHA CAMBIO"/></th>
+                                                <th  class="text-center"> <spring:message code="PDCS"/></th>
+                                                <th  class="text-center"><spring:message code="CHF"/></th>
+                                                <th  class="text-center"> <spring:message code="FECHA REGISTRO"/></th>
+                                                <th  class="text-center"> <spring:message code="FECHA REPORTADO"/></th>
                                                 <th  class="text-center"> BarrioId</th>
                                                 <th  class="text-center"> <spring:message code="BARRIO"/></th>
                                                 <th  class="text-center"><spring:message code="OTRO BARRIO"/></th>
@@ -158,6 +161,7 @@
                                                 <th > <spring:message code="DIRECCIÓN"/></th>
                                                 <th  class="text-center">PersonalId</th>
                                                 <th  class="text-center"><spring:message code="RECURSO"/></th>
+                                                <th  class="text-center"><spring:message code="NOMBRE USUARIO"/></th>
                                                 <th  class="text-center"><spring:message code="OBSERVACIÓN"/></th>
                                             </tr>
                                             </tfoot>

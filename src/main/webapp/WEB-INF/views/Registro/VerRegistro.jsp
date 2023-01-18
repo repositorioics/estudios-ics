@@ -424,33 +424,32 @@
 
                                                                                     <table class="table table-hover" style="width:100%">
 
-
                                                                                         <tr>
-                                                                                            <td class="text-left">Código Participante:</td>
+                                                                                            <td class="text-left"> <h6> Código Participante:</h6></td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-primary" id="idParticipante" style="font-size: 15px"></span> </td>
                                                                                         </tr>
                                                                                         <tr>
-                                                                                            <td class="text-left">Estado</td>
+                                                                                            <td class="text-left"> <h6>Estado:</h6> </td>
 
                                                                                             <td class="text-right"><span class="badge badge-pill text-white" id="estado" style="font-size: 15px"></span> </td>
                                                                                         </tr>
                                                                                         <tr>
-                                                                                            <td class="text-left">Estudios</td>
+                                                                                            <td class="text-left"> <h6>Estudios:</h6> </td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-primary" id="estudios" style="font-size: 15px"></span> </td>
                                                                                         </tr>
 
                                                                                         <tr>
-                                                                                            <td class="text-left">Fecha Nacimiento</td>
+                                                                                            <td class="text-left"> <h6>Fecha Nacimiento:</h6> </td>
                                                                                             <td class="text-right">	<span id="fnac"></span> </td>
                                                                                         </tr>
 
                                                                                         <tr>
-                                                                                            <td class="text-left">PBMC</td>
+                                                                                            <td class="text-left"> <h6>PBMC:</h6> </td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-white pull-rigth" style="background-color: #d562da; font-size: 15px" id="pbmc2"></span></td>
                                                                                         </tr>
 
                                                                                         <tr>
-                                                                                            <td class="text-left">PaxGene</td>
+                                                                                            <td class="text-left"> <h6>PaxGene:</h6> </td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-white" style="background-color: #00dd00; font-size: 15px" id="paxgene2"></span></td>
                                                                                         </tr>
 
@@ -1147,12 +1146,12 @@
         });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                console.log(data);
+                //console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
                     swal("Error!","Código no encontrado","error");
-                    $("#parametro").focus();
+                    $("#parametro").focus().val("");
                 }
                 else{
                     if(data.estPart == "0"){
@@ -1367,6 +1366,7 @@
                                 ffallecido
                             ]).draw( false );
                         }
+                    $("#parametro").focus().val("");
                 }
             }).fail(function() {
                 toastr.error("Código no existe!");

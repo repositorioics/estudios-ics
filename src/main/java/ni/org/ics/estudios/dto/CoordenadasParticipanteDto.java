@@ -1,29 +1,35 @@
 package ni.org.ics.estudios.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by ICS on 12/02/2020.
  */
 public class CoordenadasParticipanteDto implements Serializable {
 
+    private String CODIGO;
     private Integer CODIGO_PARTICIPANTE;
     private Integer CODIGO_CASA;
     private Integer CODIGO_CHF;
     private String FECHA_REPORTADO;
+    private Date FECHA_REGISTRO;
     private Integer CODIGO_BARRIO;
     private String NOMBRE;
     private String OTRO_BARRIO;
     private Integer MANZANA;
+    private String STRING_MANZANA;
     private String DIRECCION;
     private Integer idPersona;
     private String NombrePersona;
+    private String NOMBRE_USUARIO;
     private String OBSERVACION;
 
     public CoordenadasParticipanteDto() {
     }
 
-    public CoordenadasParticipanteDto(String OBSERVACION, Integer CODIGO_PARTICIPANTE, Integer CODIGO_CASA, Integer CODIGO_CHF, String FECHA_REPORTADO, Integer CODIGO_BARRIO, String NOMBRE, String OTRO_BARRIO, Integer MANZANA, String DIRECCION, Integer idPersona, String nombrePersona) {
+    public CoordenadasParticipanteDto(String NOMBRE_USUARIO,String CODIGO, String STRING_MANZANA, Date FECHA_REGISTRO, String OBSERVACION, Integer CODIGO_PARTICIPANTE, Integer CODIGO_CASA, Integer CODIGO_CHF, String FECHA_REPORTADO, Integer CODIGO_BARRIO, String NOMBRE, String OTRO_BARRIO, Integer MANZANA, String DIRECCION, Integer idPersona, String nombrePersona) {
+        this.CODIGO=CODIGO;
         this.OBSERVACION = OBSERVACION;
         this.CODIGO_PARTICIPANTE = CODIGO_PARTICIPANTE;
         this.CODIGO_CASA = CODIGO_CASA;
@@ -36,6 +42,9 @@ public class CoordenadasParticipanteDto implements Serializable {
         this.DIRECCION = DIRECCION;
         this.idPersona = idPersona;
         NombrePersona = nombrePersona;
+        this.FECHA_REGISTRO=FECHA_REGISTRO;
+        this.STRING_MANZANA=STRING_MANZANA;
+        this.NOMBRE_USUARIO = NOMBRE_USUARIO;
     }
 
     public Integer getCODIGO_PARTICIPANTE() {
@@ -132,5 +141,37 @@ public class CoordenadasParticipanteDto implements Serializable {
 
     public void setNombrePersona(String nombrePersona) {
         NombrePersona = nombrePersona;
+    }
+
+    public String getCODIGO() {
+        return CODIGO;
+    }
+
+    public void setCODIGO(String CODIGO) {
+        this.CODIGO = CODIGO;
+    }
+
+    public String getSTRING_MANZANA() {
+        return STRING_MANZANA;
+    }
+
+    public void setSTRING_MANZANA(String STRING_MANZANA) {
+        this.STRING_MANZANA = STRING_MANZANA;
+    }
+
+    public Date getFECHA_REGISTRO() {
+        return FECHA_REGISTRO;
+    }
+
+    public void setFECHA_REGISTRO(Date FECHA_REGISTRO) {
+        this.FECHA_REGISTRO = FECHA_REGISTRO;
+    }
+
+    public String getNOMBRE_USUARIO() {
+        return NOMBRE_USUARIO;
+    }
+
+    public void setNOMBRE_USUARIO(String NOMBRE_USUARIO) {
+        this.NOMBRE_USUARIO = NOMBRE_USUARIO;
     }
 }
