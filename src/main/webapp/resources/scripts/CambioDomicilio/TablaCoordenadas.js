@@ -42,10 +42,6 @@ var SearchCoordenadas = function () {
                         "visible": false,
                         "searchable": false
                     },{
-                        "targets": [10],
-                        "visible": false,
-                        "searchable": false
-                    },{
                         "targets": [11],
                         "visible": false,
                         "searchable": false
@@ -86,7 +82,7 @@ var SearchCoordenadas = function () {
 
             //Buscar una lista de la tabla datos_coordenadas
             function searchCoordenada(){$.getJSON(parametros.ListaCoordenadasUrl, {parametro : $('#parametro').val(), ajax : 'true' }, function(data) {
-                //console.log( data);
+                console.log( data);
                     var len = data.length;
                     if(len==0){
                         swal("Advertencia!", "Datos no encontrados!", "warning");

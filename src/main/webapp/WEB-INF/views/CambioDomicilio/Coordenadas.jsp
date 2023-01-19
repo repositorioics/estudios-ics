@@ -137,11 +137,11 @@
                                                 <th class="text-center"> BarrioId</th>
                                                 <th class="text-center"><spring:message code="BARRIO"/></th>
                                                 <th class="text-center"><spring:message code="OTRO BARRIO"/></th>
-                                                <th class="text-center"><spring:message code="MANZANA"/></th>
+                                                <th class="text-center"><spring:message code="MZ"/></th>
                                                 <th > <spring:message code="DIRECCIÓN"/></th>
                                                 <th class="text-center">PersonalId</th>
-                                                <th class="text-center"><spring:message code="RECURSO"/></th>
-                                                <th class="text-center"><spring:message code="NOMBRE USUARIO"/></th>
+                                                <th class="text-center"><spring:message code="REPORTA"/></th>
+                                                <th class="text-center"><spring:message code="REALIZA"/></th>
                                                 <th class="text-center"><spring:message code="OBSERVACIÓN"/></th>
                                             </tr>
                                             </thead>
@@ -157,11 +157,11 @@
                                                 <th  class="text-center"> BarrioId</th>
                                                 <th  class="text-center"> <spring:message code="BARRIO"/></th>
                                                 <th  class="text-center"><spring:message code="OTRO BARRIO"/></th>
-                                                <th  class="text-center"><spring:message code="MANZANA"/></th>
+                                                <th  class="text-center"><spring:message code="MZ"/></th>
                                                 <th > <spring:message code="DIRECCIÓN"/></th>
                                                 <th  class="text-center">PersonalId</th>
-                                                <th  class="text-center"><spring:message code="RECURSO"/></th>
-                                                <th  class="text-center"><spring:message code="NOMBRE USUARIO"/></th>
+                                                <th  class="text-center"><spring:message code="REPORTA"/></th>
+                                                <th  class="text-center"><spring:message code="REALIZA"/></th>
                                                 <th  class="text-center"><spring:message code="OBSERVACIÓN"/></th>
                                             </tr>
                                             </tfoot>
