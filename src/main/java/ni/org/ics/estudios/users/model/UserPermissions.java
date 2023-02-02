@@ -41,6 +41,7 @@ public class UserPermissions {
 	private Boolean casazika=false;
 	private Boolean tamizajezika=false;
 	private Boolean datosparto=false;
+    private Boolean pabdominal=false;
 
 	@Id
 	@Column(name = "username", nullable = false, length =50)
@@ -162,4 +163,13 @@ public class UserPermissions {
 	public void setDatosparto(Boolean datosparto) {
 		this.datosparto = datosparto;
 	}
+
+    @Column(name = "pabdominal", nullable = false)
+    public Boolean getpAbdominal() {
+        return pabdominal;
+    }
+
+    public void setpAbdominal(Boolean pAbdominal) {
+        this.pabdominal = pAbdominal;
+    }
 }

@@ -88,6 +88,9 @@ public class ParticipanteProcesos implements Auditable {
     private String mxDenParteE;
     private String informacionRetiro;
 
+    //Perimetro Abdominal perimetro_abdominal
+    private String perimetroAbdominal;
+
 
     @Id
 	@Column(name = "codigo", nullable = false, length = 6)
@@ -638,5 +641,14 @@ public class ParticipanteProcesos implements Auditable {
     @Override
     public String toString() {
         return "ParticipanteProcesos{" + codigo + '}';
+    }
+
+    @Column(name = "perimetro_abdominal", nullable = false, length = 2)
+    public String getPerimetroAbdominal() {
+        return perimetroAbdominal;
+    }
+
+    public void setPerimetroAbdominal(String perimetroAbdominal) {
+        this.perimetroAbdominal = perimetroAbdominal;
     }
 }

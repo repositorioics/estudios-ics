@@ -124,6 +124,7 @@ public class AdminUsuariosController {
             , @RequestParam( value="chk_eparticipante", required=false, defaultValue="" ) String chkEparticipante
             , @RequestParam( value="chk_elactancia", required=false, defaultValue="" ) String chkElactancia
             , @RequestParam( value="chk_esatisfaccion", required=false, defaultValue="" ) String chkEsatisfaccion
+            , @RequestParam( value="chk_pAbdominal", required=false, defaultValue="" ) String chkpAbdominal
 	        )
 	{
     	try{
@@ -159,6 +160,7 @@ public class AdminUsuariosController {
                 permissions.setEncuestaParticipante(!chkEparticipante.isEmpty());
                 permissions.setEncuestaLactancia(!chkElactancia.isEmpty());
                 permissions.setEncuestaSatisfaccion(!chkEsatisfaccion.isEmpty());
+                permissions.setpAbdominal(!chkpAbdominal.isEmpty());
                 this.usuarioService.saveUserPermissions(permissions);
 
 	    		for(String a:authorities){
@@ -200,6 +202,7 @@ public class AdminUsuariosController {
                 permissions.setEncuestaParticipante(!chkEparticipante.isEmpty());
                 permissions.setEncuestaLactancia(!chkElactancia.isEmpty());
                 permissions.setEncuestaSatisfaccion(!chkEsatisfaccion.isEmpty());
+                permissions.setpAbdominal(!chkpAbdominal.isEmpty());
                 this.usuarioService.saveUserPermissions(permissions);
 
 				//Recupera los roles activos de este usuario de la base de datos y pone el username en una lista

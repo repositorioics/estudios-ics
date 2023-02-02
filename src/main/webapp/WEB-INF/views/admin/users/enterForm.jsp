@@ -261,6 +261,18 @@
                                                 </c:choose>
                                                 <spring:message code="esatisfaccion" />
                                             </label>
+                                            <!--ENCUESTA DE PERMITRO ABDOMINAL-->
+                                            <label class="checkbox-inline">
+                                                <c:choose>
+                                                    <c:when test="${permisos.pAbdominal}">
+                                                        <input type="checkbox" id="chk_pAbdominal" name="chk_pAbdominal" checked>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <input type="checkbox" id="chk_pAbdominal" name="chk_pAbdominal">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <spring:message code="Abdominal Perimeter" />
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="form-group row">
