@@ -38,11 +38,11 @@ var SearchCoordenadas = function () {
                         "visible": false,
                         "searchable": false
                     },{
-                        "targets": [5],
+                        "targets": [6],
                         "visible": false,
                         "searchable": false
                     },{
-                        "targets": [10],
+                        "targets": [11],
                         "visible": false,
                         "searchable": false
                     }
@@ -50,7 +50,7 @@ var SearchCoordenadas = function () {
             });
             $('#tblCoor tfoot th').each( function () {
                 var title = $(this).text();
-                $(this).html( '<input type="text" placeholder="Búscar '+title+'" />' );
+                $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
             } );
             $( '#select-Coordenadas-form' ).validate( {
                 rules: {
@@ -88,40 +88,31 @@ var SearchCoordenadas = function () {
                         swal("Advertencia!", "Datos no encontrados!", "warning");
                     }
                     else{
-                        $.each(data, function(index, element){
-                            var codigo0 = element[0];
-                            var codigo1 = element[1];
-                            var codigo2 = element[2];
-                            var codigo3 = element[3];
-                            var codigo4 = element[4];
-                            var codigo5 = element[5];
-                            var codigo6 = element[6];
-                            var codigo7 = element[7];
-                            var codigo8 = element[8];
-                            var codigo9 = element[9];
-                            var codigo10 = element[10];
-                            var codigo11 = element[11];
-                            var codigo12 = element[12];
+                        for(var i = 0; i < len; i++){
+                            var d = new Date(data[i].fecha_REGISTRO);
+                            var datestring = ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear();
                             table.row.add([
-                                codigo0,
-                                codigo1,
-                                codigo2,
-                                codigo3,
-                                codigo4,
-                                codigo5,
-                                codigo6,
-                                codigo7,
-                                codigo8,
-                                codigo9,
-                                codigo10,
-                                codigo11,
-                                codigo12
+                                data[i].codigo,
+                                data[i].codigo_PARTICIPANTE,
+                                data[i].codigo_CASA,
+                                data[i].codigo_CHF,
+                                datestring,
+                                data[i].fecha_REPORTADO,
+                                data[i].codigo_BARRIO,
+                                data[i].nombre,
+                                data[i].otro_BARRIO,
+                                data[i].string_MANZANA,
+                                data[i].direccion,
+                                data[i].idPersona,
+                                data[i].nombrePersona,
+                                data[i].nombre_USUARIO,
+                                data[i].observacion
                             ]).draw( false );
-                        })
+                        }
                     }
                 }).fail(function() {
-                        swal("Error!", "Falló al obtener la información!", "error");
-                    });
+                    swal("Error!", "Falló al obtener la información!", "error");
+                });
             }
         }
     };

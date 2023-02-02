@@ -109,7 +109,7 @@ public class DomicilioController {
             throws ParseException {
         List<CoordenadasParticipanteDto> coordenadas = null;
         try{
-            coordenadas =  DomicilioService.CoordenadasParticipante(parametro);
+            coordenadas =  DomicilioService.convertToDtoCoordenadas(parametro);
             return coordenadas;
         }catch (Exception e){
             return coordenadas = null;

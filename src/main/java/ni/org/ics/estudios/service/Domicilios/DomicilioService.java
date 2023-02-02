@@ -84,7 +84,7 @@ public class DomicilioService {
                      "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d,per.nombre AS NombrePersona,d.OBSERVACION " +
                      " FROM datos_coordenadas AS d LEFT JOIN Personal AS per ON d.idPersona = per.idpersonal " +
                      "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro asc");*/
-             Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, fecha_reportado, " +
+             Query query = session.createSQLQuery("SELECT d.CODIGO,d.CODIGO_PARTICIPANTE, d.CODIGO_CASA,d.CODIGO_CHF, fecha_reportado, cast(d.FECHA_REGISTRO AS DATE) AS FECHA_REGISTRO, " +
                      "d.CODIGO_BARRIO, b.NOMBRE,case when d.OTRO_BARRIO ='' then '-' ELSE d.OTRO_BARRIO END AS oBarrio,d.MANZANA,d.DIRECCION,d.idPersona,per.NOMBRE_APELLIDO AS NombrePersona,d.OBSERVACION " +
                      " FROM datos_coordenadas AS d LEFT JOIN cat_personal AS per ON d.idPersona = per.PERSONA_ID " +
                      "INNER JOIN barrios AS b ON d.CODIGO_BARRIO = b.CODIGO and codigo_participante = :parametro ORDER BY d.fecha_registro asc");
@@ -102,6 +102,32 @@ public class DomicilioService {
              throw e;
          }
      }
+
+
+    public List<CoordenadasParticipanteDto>convertToDtoCoordenadas(Integer parametro){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select d.codigo as CODIGO, " +
+                "d.participante.codigo AS CODIGO_PARTICIPANTE, " +
+                "d.codigoCasa AS CODIGO_CASA, " +
+                "d.casacohortefamilia AS CODIGO_CHF, " +
+                "d.direccion AS DIRECCION, " +
+                "d.fechaReportado AS FECHA_REPORTADO, " +
+                "d.movilInfo.today AS FECHA_REGISTRO, " +
+                " d.movilInfo.username as NOMBRE_USUARIO, "+
+                "CASE WHEN d.otroBarrio ='' THEN '-' ELSE d.otroBarrio END AS OTRO_BARRIO, " +
+                "d.barrio.codigo AS CODIGO_BARRIO, " +
+                "(SELECT b.nombre FROM Barrio b WHERE b.codigo=d.barrio.codigo ) AS NOMBRE, " +
+                "d.recurso1 AS idPersona," +
+                "(SELECT p.nombreApellido FROM Personal p WHERE p.idpersonal = d.recurso1 ) AS NombrePersona,  " +
+                "d.manzana AS STRING_MANZANA, " +
+                " d.observacion AS OBSERVACION " +
+                "FROM DatosCoordenadas AS d WHERE d.participante.codigo = :parametro ");
+        query.setParameter("parametro",parametro);
+        query.setResultTransformer(Transformers.aliasToBean(CoordenadasParticipanteDto.class));
+        return query.list();
+    }
+
+
     /* Metodo para Guardar el Datos Coordenadas */
     @SuppressWarnings("unchecked")
     public void SaveDomicilio(DatosCoordenadas obj) throws Exception {

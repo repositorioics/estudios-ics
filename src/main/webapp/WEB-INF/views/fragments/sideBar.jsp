@@ -67,14 +67,14 @@
                 </li>
             </sec:authorize>
             <!--  **  PROCESOS **  -->
-            <sec:authorize access="hasAnyRole('ROLE_DIG,ROLE_SUPER,ROLE_LABORATORY,ROLE_DOM')">
+            <sec:authorize access="hasAnyRole('ROLE_ADMISION,ROLE_DIG,ROLE_LABORATORY,ROLE_DOM')">
                 <li class="nav-item nav-dropdown procesos">
                 <a class="nav-link nav-dropdown-toggle" href="#">
                     <i class="fa fa-cogs" aria-hidden="true"></i>
                     <strong><spring:message code="processes" /></strong>
                 </a>
                 <ul class="nav-dropdown-items">
-                    <sec:authorize access="hasAnyRole('ROLE_LABORATORY,ROLE_ADMISION,ROLE_DIG,ROLE_SUPER')">
+                    <sec:authorize access="hasAnyRole('ROLE_ADMISION,ROLE_DIG,ROLE_LABORATORY,ROLE_DOM')">
                     <li class="nav-item">
                         <a class="nav-link" href="<spring:url value="/Registro/BuscarInfor" htmlEscape="true "/>">
                           <i class="fa fa-snowflake-o" aria-hidden="true"></i>
@@ -82,7 +82,7 @@
                     </li>
                     </sec:authorize>
 
-                    <sec:authorize access="hasRole('ROLE_SUPER')">
+                    <sec:authorize access="hasAnyRole('ROLE_ROOT,ROLE_DIG')">
                     <li class="nav-item filedata">
                         <a class="nav-link" href="<spring:url value="/reportes/pdf/fileData/" htmlEscape="true "/>">
                             <i class="fa fa-snowflake-o" aria-hidden="true"></i>
@@ -90,7 +90,7 @@
                     </li>
                     </sec:authorize>
 
-                    <sec:authorize access="hasRole('ROLE_DIG,ROLE_SUPER')">
+                    <sec:authorize access="hasAnyRole('ROLE_DIG')">
                     <li class="nav-item retiro">
                         <a class="nav-link" href="<spring:url value="/retiro/ListRetiro" htmlEscape="true "/>">
                             <i class="fa fa-snowflake-o" aria-hidden="true"></i>
@@ -109,7 +109,7 @@
             </li>
             </sec:authorize>
             <!--  **  CARTAS CONSENTIMIENTOS **  -->
-            <sec:authorize access="hasAnyRole('ROLE_DIG,ROLE_SUPER')">
+            <sec:authorize access="hasAnyRole('ROLE_DIG,ROLE_QA_CARTA')">
             <li class="nav-item nav-dropdown consentimiento">
                 <a class="nav-link nav-dropdown-toggle" href="#">
                     <i class="icon-notebook"></i>
@@ -137,7 +137,7 @@
                         </li>
                     </sec:authorize>
 
-                    <sec:authorize access="hasRole('ROLE_SUPER')">
+                    <sec:authorize access="hasRole('ROLE_QA_CARTA')">
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#">
                             <i class="fa fa-cc" aria-hidden="true"></i>
@@ -175,14 +175,14 @@
             </li>
             </sec:authorize>
             <!-- **  MUESTREO ANUAL  ** -->
-            <sec:authorize access="hasAnyRole('ROLE_SUPER,ROLE_LABORATORY')">
+            <sec:authorize access="hasAnyRole('ROLE_LABORATORY')">
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#">
                     <i class="fa fa-maxcdn" aria-hidden="true"></i>
                     <strong>    <spring:message code="Muestreo Anual" /> </strong>
                 </a>
                 <ul class="nav-dropdown-items">
-                    <sec:authorize access="hasAnyRole('ROLE_LABORATORY,ROLE_SUPER')">
+                    <sec:authorize access="hasAnyRole('ROLE_LABORATORY')">
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#">
                             <i class="fa fa-tablet" aria-hidden="true"></i>
@@ -197,7 +197,7 @@
                     </li>
                     </sec:authorize>
 
-                    <sec:authorize access="hasAnyRole('ROLE_LABORATORY,ROLE_SUPER')">
+                    <sec:authorize access="hasAnyRole('ROLE_LABORATORY,ROLE_QA_LAB')">
                         <li class="nav-item nav-dropdown Laboratorio">
                         <a class="nav-link nav-dropdown-toggle" href="#">
                             <i class="fa fa-flask" aria-hidden="true"></i>
@@ -267,7 +267,7 @@
                         </li>
                     </sec:authorize>
 
-                    <sec:authorize access="hasAnyRole('ROLE_SUPER,ROLE_LABORATORY')">
+                    <sec:authorize access="hasAnyRole('ROLE_QA_LAB,ROLE_LABORATORY')">
                     <li class="nav-item nav-dropdown">
                             <a class="nav-link nav-dropdown-toggle" href="#">
                                 <i class="fa fa-user-secret" aria-hidden="true"></i>
@@ -298,12 +298,13 @@
                                 </li>
                             </ul>
                         </li>
+
                     </sec:authorize>
                 </ul>
             </li>
             </sec:authorize>
             <!-- ** POSITIVOS ** -->
-            <sec:authorize access="hasRole('ROLE_SUPER')">
+            <sec:authorize access="hasRole('ROLE_ROOT')">
             <li class="nav-item nav-dropdown comparison">
                 <a class="nav-link nav-dropdown-toggle" href="#">
                     <i class="fa fa-plus" aria-hidden="true"></i>
@@ -374,13 +375,11 @@
                                 <i class="fa fa-snowflake-o" aria-hidden="true"></i>
                                 <spring:message code="List" /></a>
                         </li>
-                        <sec:authorize access="hasRole('ROLE_SUPER')">
-                            <li class="nav-item reporte">
-                                <a class="nav-link" href="<spring:url value="/hemo/reporteHemodinamica" htmlEscape="true "/>">
-                                    <i class="fa fa-snowflake-o" aria-hidden="true"></i>
-                                    <spring:message code="reports" /></a>
-                            </li>
-                        </sec:authorize>
+                        <li class="nav-item reporte">
+                        <a class="nav-link" href="<spring:url value="/hemo/reporteHemodinamica" htmlEscape="true "/>">
+                            <i class="fa fa-snowflake-o" aria-hidden="true"></i>
+                            <spring:message code="reports" /></a>
+                        </li>
                     </ul>
                 </li>
             </sec:authorize>
