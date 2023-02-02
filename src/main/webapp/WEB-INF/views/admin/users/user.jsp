@@ -333,7 +333,7 @@
                                                 <c:if test="${permisos.encuestaSatisfaccion}">
                                                     <spring:message code="esatisfaccion" />
                                                 </c:if>
-                                                <c:if test="${permisos.pAbdominal}">
+                                                <c:if test="${permisos.pAbdominal}"> <%--Perimetro Abdominal--%>
                                                     <spring:message code="pAbdominal" />
                                                 </c:if>
                                             </p>

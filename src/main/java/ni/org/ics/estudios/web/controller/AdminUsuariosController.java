@@ -202,7 +202,7 @@ public class AdminUsuariosController {
                 permissions.setEncuestaParticipante(!chkEparticipante.isEmpty());
                 permissions.setEncuestaLactancia(!chkElactancia.isEmpty());
                 permissions.setEncuestaSatisfaccion(!chkEsatisfaccion.isEmpty());
-                permissions.setpAbdominal(!chkpAbdominal.isEmpty());
+                permissions.setpAbdominal(!chkpAbdominal.isEmpty()); //Perimetro Abdominal
                 this.usuarioService.saveUserPermissions(permissions);
 
 				//Recupera los roles activos de este usuario de la base de datos y pone el username en una lista

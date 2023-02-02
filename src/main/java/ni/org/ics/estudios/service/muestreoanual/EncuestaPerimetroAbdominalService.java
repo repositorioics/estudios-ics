@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by Ing. Santiago Carballo on 30/01/2023.
+ *
  */
 
 @Service("encuestaPerimetroAbdominalService")
@@ -31,8 +32,6 @@ public class EncuestaPerimetroAbdominalService {
         // Retrieve all
         return query.list();
     }
-
-
 
     public EncuestaPerimetroAbdominal getEncuestaPerimetroAbdominal(EncuestaPerimetroAbdominalId pabdominalId) {
         // Retrieve session from Hibernate

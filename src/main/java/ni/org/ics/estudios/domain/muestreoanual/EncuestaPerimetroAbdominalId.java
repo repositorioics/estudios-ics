@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * Created by Ing. Santiago Carballo on 30/01/2023.
+ *
  */
 
 @Embeddable

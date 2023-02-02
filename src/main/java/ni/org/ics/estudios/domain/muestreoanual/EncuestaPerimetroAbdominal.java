@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 /**
  * Created by Ing. Santiago Carballo on 30/01/2023.
+ *
  */
 
 @Entity

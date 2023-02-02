@@ -88,7 +88,7 @@ public class ParticipanteProcesos implements Auditable {
     private String mxDenParteE;
     private String informacionRetiro;
 
-    //Perimetro Abdominal perimetro_abdominal
+    //  Perimetro Abdominal perimetro_abdominal
     private String perimetroAbdominal;
 
 

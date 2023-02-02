@@ -261,7 +261,7 @@
                                                 </c:choose>
                                                 <spring:message code="esatisfaccion" />
                                             </label>
-                                            <!--ENCUESTA DE PERMITRO ABDOMINAL-->
+                                            <!-----ENCUESTA DE PERMITRO ABDOMINAL----->
                                             <label class="checkbox-inline">
                                                 <c:choose>
                                                     <c:when test="${permisos.pAbdominal}">

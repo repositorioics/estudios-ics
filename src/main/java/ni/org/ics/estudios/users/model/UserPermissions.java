@@ -41,7 +41,7 @@ public class UserPermissions {
 	private Boolean casazika=false;
 	private Boolean tamizajezika=false;
 	private Boolean datosparto=false;
-    private Boolean pabdominal=false;
+    private Boolean pabdominal=false; //Perimetro Abdominal
 
 	@Id
 	@Column(name = "username", nullable = false, length =50)
