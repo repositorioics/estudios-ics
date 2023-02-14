@@ -19,6 +19,7 @@ public class Ventana extends AreaAmbiente {
 	private static final long serialVersionUID = 1L;
     private AreaAmbiente areaAmbiente;
     private String abierta;
+    private Banio banio;
 
     @Column(name = "ABIERTA", length = 1)
     public String getAbierta() {
@@ -30,7 +31,7 @@ public class Ventana extends AreaAmbiente {
     }
 
     @ManyToOne
-    @JoinColumn(name = "CODIGO_AREA")
+    @JoinColumn(name = "CODIGO_AREA", nullable = true)
     @ForeignKey(name = "FK_AREA_AREA")
     public AreaAmbiente getAreaAmbiente() {
         return areaAmbiente;
@@ -38,5 +39,16 @@ public class Ventana extends AreaAmbiente {
 
     public void setAreaAmbiente(AreaAmbiente areaAmbiente) {
         this.areaAmbiente = areaAmbiente;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "CODIGO_BANIO", nullable = true)
+    @ForeignKey(name = "FK_AREA_BANIO")
+    public Banio getBanio() {
+        return banio;
+    }
+
+    public void setBanio(Banio banio) {
+        this.banio = banio;
     }
 }
