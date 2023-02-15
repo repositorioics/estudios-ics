@@ -173,7 +173,8 @@ public class ReportesController {
     @RequestMapping(value = "/downloadFileEnviosSerologia", method = RequestMethod.GET)
     public ModelAndView downloadFileEnviosSerologia(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
             @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-            @RequestParam(value="fechaFin", required=false ) String fechaFin)
+            @RequestParam(value="fechaFin", required=false ) String fechaFin,
+            @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
         throws Exception{
         ModelAndView ReporteEnvio = new ModelAndView("pdfView");
         Date dFechaInicio = null;
@@ -182,12 +183,16 @@ public class ReportesController {
         Date dFechaFin = null;
         if (fechaFin!=null && !fechaFin.isEmpty())
             dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
-        List<SerologiaEnvio> SerologiasEnviadas =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin);
+
+        List<SerologiaEnvio> SerologiasEnviadas =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin, lugarEnvio);
         ReporteEnvio.addObject("nEnvios",nEnvios);
         ReporteEnvio.addObject("fechaInicio",fechaInicio);
         ReporteEnvio.addObject("fechaFin",fechaFin);
         ReporteEnvio.addObject("SerologiasEnviadas",SerologiasEnviadas);
-        List<Serologia_Detalle_Envio> allSerologia = this.serologiaservice.getAllSerologia(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvio.addObject("lugarEnvio",lugarEnvio);
+        List<MessageResource> lugares = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        ReporteEnvio.addObject("lugares",lugares);
+        List<Serologia_Detalle_Envio> allSerologia = this.serologiaservice.getAllSerologia(nEnvios,dFechaInicio,dFechaFin, lugarEnvio);
         ReporteEnvio.addObject("allSerologia",allSerologia);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTE);
         return ReporteEnvio;
@@ -197,7 +202,9 @@ public class ReportesController {
     @RequestMapping(value = "downloadFileSerologiaExcel", method = RequestMethod.GET)
     public ModelAndView SerologiaExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                        @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                       @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                       @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                       @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio
+                                       )
             throws Exception {
         ModelAndView ReporteEnvio = new ModelAndView("excelView");
         Date dFechaInicio = null;
@@ -206,14 +213,14 @@ public class ReportesController {
         Date dFechaFin = null;
         if (fechaFin != null && !fechaFin.isEmpty())
             dFechaFin = DateUtil.StringToDate(fechaFin + " 23:59:59", "dd/MM/yyyy HH:mm:ss");
-        List<SerologiaEnvio> SerologiasEnviadas = this.serologiaservice.getSerologiaEnvioByDates(nEnvios, dFechaInicio, dFechaFin);
+        List<SerologiaEnvio> SerologiasEnviadas = this.serologiaservice.getSerologiaEnvioByDates(nEnvios, dFechaInicio, dFechaFin, lugarEnvio);
         ReporteEnvio.addObject("nEnvios", nEnvios);
         List<MessageResource> sitios = messageResourceService.getCatalogo("CAT_SITIOS_ENVIO_SEROLOGIA");
         ReporteEnvio.addObject("sitios", sitios);
         ReporteEnvio.addObject("fechaInicio", fechaInicio);
         ReporteEnvio.addObject("fechaFin", fechaFin);
         ReporteEnvio.addObject("SerologiasEnviadas", SerologiasEnviadas);
-        List<Serologia_Detalle_Envio> allSerologia = this.serologiaservice.getAllSerologia(nEnvios, dFechaInicio, dFechaFin);
+        List<Serologia_Detalle_Envio> allSerologia = this.serologiaservice.getAllSerologia(nEnvios, dFechaInicio, dFechaFin, lugarEnvio);
         ReporteEnvio.addObject("allSerologia", allSerologia);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTE);
         return ReporteEnvio;
@@ -225,7 +232,11 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioPbmcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                                     @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                                    @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                                    @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                                    @RequestParam(value="numero_envio", required=false ) Integer numero_envio,
+                                                    @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio
+
+    )
             throws Exception{
         ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("pdfView");
         Date dFechaInicio = null;
@@ -236,13 +247,16 @@ public class ReportesController {
             dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
 
 
-        List<SerologiaEnvio> EnvioPbmc =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin);
+        List<SerologiaEnvio> EnvioPbmc =  this.serologiaservice.getSerologiaEnvioByDates(nEnvios,dFechaInicio,dFechaFin, numero_envio);
         ReporteEnvioPbmcPdf.addObject("nEnvios",nEnvios);
         ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
         ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
         ReporteEnvioPbmcPdf.addObject("EnvioPbmc",EnvioPbmc);
-        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("lugarEnvio",lugarEnvio);
+        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin,lugarEnvio);
         ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
+        List<MessageResource> lugares = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        ReporteEnvioPbmcPdf.addObject("lugares",lugares);
         ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCM);
         return ReporteEnvioPbmcPdf;
     }
@@ -251,7 +265,8 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioPbmcToExcel", method = RequestMethod.GET)
     public ModelAndView EnvioPbmcToExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                          @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                         @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                         @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                         @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
             throws Exception{
         ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("excelView");
         Date dFechaInicio = null;
@@ -265,8 +280,9 @@ public class ReportesController {
 
         ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
         ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+        ReporteEnvioPbmcPdf.addObject("lugarEnvio",lugarEnvio);
 
-        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
+        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin,lugarEnvio);
         ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
         /*List<PbmcHorasToma> horasPbmc = this.pbmcService.getHorasPbmc(nEnvios,dFechaInicio,dFechaFin);
         ReporteEnvioPbmcPdf.addObject("horasPbmc",horasPbmc);
@@ -278,7 +294,8 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioSerologiaConPbmcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioSerologiaConPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                          @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                         @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                         @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                         @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
             throws Exception{
         ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("pdfView");
         Date dFechaInicio = null;
@@ -288,12 +305,11 @@ public class ReportesController {
         if (fechaFin!=null && !fechaFin.isEmpty())
             dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
 
-
-
         ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
         ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
+        ReporteEnvioPbmcPdf.addObject("lugarEnvio",lugarEnvio);
 
-        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin);
+        List<Pbmc_Detalle_Envio> allPbmc = this.pbmcService.getAllPbmc(nEnvios,dFechaInicio,dFechaFin,lugarEnvio);
         ReporteEnvioPbmcPdf.addObject("allPbmc",allPbmc);
 
         ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
@@ -308,7 +324,8 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioSeroPbmcExcel", method = RequestMethod.GET)
     public ModelAndView EnvioSeroPbmcExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                      @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                     @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                     @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                     @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
             throws Exception{
         ModelAndView ReporteEnvioPbmcPdf = new ModelAndView("excelView");
         Date dFechaInicio = null;
@@ -321,7 +338,8 @@ public class ReportesController {
 
         ReporteEnvioPbmcPdf.addObject("fechaInicio",fechaInicio);
         ReporteEnvioPbmcPdf.addObject("fechaFin",fechaFin);
-        List<Serologia_Detalle_Envio> SerologiaWithPbmc = this.serologiaservice.getSerologiaByPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioPbmcPdf.addObject("lugarEnvio",lugarEnvio);
+        List<Serologia_Detalle_Envio> SerologiaWithPbmc = this.serologiaservice.getSerologiaByPbmc(nEnvios,dFechaInicio,dFechaFin,lugarEnvio);
         ReporteEnvioPbmcPdf.addObject("SerologiaWithPbmc",SerologiaWithPbmc);
         ReporteEnvioPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCM);
         return ReporteEnvioPbmcPdf;
@@ -331,7 +349,8 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioSeroPbmcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioSeroPbmcPdf(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                            @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                           @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                           @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                           @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
             throws Exception{
         ModelAndView ReporteEnvioSeroPbmcPdf = new ModelAndView("pdfView");
         Date dFechaInicio = null;
@@ -341,11 +360,13 @@ public class ReportesController {
         if (fechaFin!=null && !fechaFin.isEmpty())
             dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
 
-
         ReporteEnvioSeroPbmcPdf.addObject("fechaInicio",fechaInicio);
         ReporteEnvioSeroPbmcPdf.addObject("fechaFin",fechaFin);
-        List<Serologia_Detalle_Envio> SerologiaWithPbmc = this.serologiaservice.getSerologiaByPbmc(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvioSeroPbmcPdf.addObject("lugarEnvio",lugarEnvio);
+        List<Serologia_Detalle_Envio> SerologiaWithPbmc = this.serologiaservice.getSerologiaByPbmc(nEnvios,dFechaInicio,dFechaFin, lugarEnvio);
         ReporteEnvioSeroPbmcPdf.addObject("SerologiaWithPbmc",SerologiaWithPbmc);
+        List<MessageResource> lugares = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        ReporteEnvioSeroPbmcPdf.addObject("lugares",lugares);
         ReporteEnvioSeroPbmcPdf.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEPBCMTOEXCEL);
         return ReporteEnvioSeroPbmcPdf;
     }
@@ -355,7 +376,8 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioBhcPdf", method = RequestMethod.GET)
     public ModelAndView EnvioBhc(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                                     @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                                    @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                                    @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                                    @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
             throws Exception{
         ModelAndView ReporteEnvio = new ModelAndView("pdfView");
         Date dFechaInicio = null;
@@ -368,7 +390,10 @@ public class ReportesController {
 
         ReporteEnvio.addObject("fechaInicio",fechaInicio);
         ReporteEnvio.addObject("fechaFin",fechaFin);
-        List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin);
+        ReporteEnvio.addObject("lugarEnvio",lugarEnvio);
+        List<MessageResource> lugares = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        ReporteEnvio.addObject("lugares",lugares);
+        List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin, lugarEnvio);
         ReporteEnvio.addObject("allBhc",allBhc);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEBHC);
         return ReporteEnvio;
@@ -378,7 +403,8 @@ public class ReportesController {
     @RequestMapping(value = "/EnvioBhcExcel", method = RequestMethod.GET)
     public ModelAndView EnvioBhcExcel(@RequestParam(value="nEnvios", required=false ) Integer nEnvios,
                                  @RequestParam(value="fechaInicio", required=false ) String fechaInicio,
-                                 @RequestParam(value="fechaFin", required=false ) String fechaFin)
+                                 @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                 @RequestParam(value="lugarEnvio", required=false ) Integer lugarEnvio)
             throws Exception{
         ModelAndView ReporteEnvio = new ModelAndView("excelView");
         Date dFechaInicio = null;
@@ -392,7 +418,7 @@ public class ReportesController {
         ReporteEnvio.addObject("fechaInicio",fechaInicio);
         ReporteEnvio.addObject("fechaFin",fechaFin);
         //List<Bhc_Detalle_envio> allBhc = this.bhcService.getBhcDetailsEnvio(nEnvios,dFechaInicio,dFechaFin);
-        List<BhcEnvioDto> allBhc = this.bhcService.getReporteEnvioBhc(nEnvios, dFechaInicio, dFechaFin);
+        List<BhcEnvioDto> allBhc = this.bhcService.getReporteEnvioBhc(nEnvios, dFechaInicio, dFechaFin, lugarEnvio);
         ReporteEnvio.addObject("allBhc",allBhc);
         ReporteEnvio.addObject("TipoReporte", Constants.TPR_ENVIOREPORTEBHC);
         return ReporteEnvio;
@@ -615,4 +641,51 @@ public class ReportesController {
     }
     //endregion
 
+
+    //region todo: filtro para encontrar Muestras
+    @RequestMapping(value = "/buscarMuestras", method = RequestMethod.GET)
+    public ModelAndView buscarMuestras(@RequestParam(value="fechaInicio", required=false ) String fechaInicio,
+                                     @RequestParam(value="fechaFin", required=false ) String fechaFin,
+                                     @RequestParam(value="tipoMuestra", required=false ) Integer tipoMuestra ) throws Exception{
+
+        ModelAndView filtrarMuestra = new ModelAndView("pdfView");
+        Date dFechaInicio = null;
+        if (fechaInicio!=null && !fechaInicio.isEmpty())
+            dFechaInicio = DateUtil.StringToDate(fechaInicio, "dd/MM/yyyy");
+        Date dFechaFin = null;
+        if (fechaFin!=null && !fechaFin.isEmpty())
+            dFechaFin = DateUtil.StringToDate(fechaFin+ " 23:59:59", "dd/MM/yyyy HH:mm:ss");
+
+        filtrarMuestra.addObject("fechaInicio",fechaInicio);
+        filtrarMuestra.addObject("fechaFin",fechaFin);
+        filtrarMuestra.addObject("tipoMuestra", ""+tipoMuestra);
+
+        if (tipoMuestra == 0){
+            List<Pbmc_Detalle_Envio> filtro_Pbmc =  this.serologiaservice.filtroListPbmc(dFechaInicio,dFechaFin);
+            filtrarMuestra.addObject("filtro_Pbmc",filtro_Pbmc);
+        }
+
+        if (tipoMuestra == 1){
+            List<Serologia_Detalle_Envio> filtro_Serologia = this.serologiaservice.filtroListSerologia(dFechaInicio,dFechaFin);
+            filtrarMuestra.addObject("filtro_Serologia",filtro_Serologia);
+        }
+
+        if (tipoMuestra == 2){
+            List<Bhc_Detalle_envio> filtro_Bhc = this.serologiaservice.filtroListBhc(dFechaInicio,dFechaFin);
+            filtrarMuestra.addObject("filtro_Bhc",filtro_Bhc);
+        }
+
+        if (tipoMuestra == 3){
+            List<Serologia_Detalle_Envio> filtro_RojoAdicional = this.serologiaservice.filtroListRojoAdicionalPbmc(dFechaInicio,dFechaFin);
+            filtrarMuestra.addObject("filtro_RojoAdicional",filtro_RojoAdicional);
+        }
+
+        List<MessageResource> catalogosLugarTipoMuestra = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        catalogosLugarTipoMuestra.addAll(messageResourceService.getCatalogo("CAT_TIPO_TUBO_MUESTRA"));
+        filtrarMuestra.addObject("catalogosLugarTipoMuestra",catalogosLugarTipoMuestra);
+
+        filtrarMuestra.addObject("TipoReporte", Constants.TPR_FILTROMUESTRA);
+        return filtrarMuestra;
+    }
+    //endregion
 }

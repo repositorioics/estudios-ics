@@ -5,6 +5,7 @@ var Urls = {};
 var datosHemo = function(){
     return{
         init : function(endPoint){
+
             Urls = endPoint;
             //inicio Buscar Participante
             $("#select-participante-form").validate({
@@ -111,7 +112,7 @@ var datosHemo = function(){
             }
             $("#telefono").keypress(function(e) {
                 if (e.which == 13) {
-                    nextPass();
+                   // nextPass();
                 }
             });
             function nextPass() {
@@ -356,13 +357,19 @@ var GuardarDinamica = function(){
                 //fin valid
                 if (isValidData) {
                     $.post(dir.saveHemoUrl, form1.serialize(), function (data) {
-                        console.log(data);
+                        console.log(data.msj);
                         debugger;
-                        if (data.idDatoHemo != undefined){
+
+                        if(data.msj != null) {
+                            toastr.error(data.msj,"ERROR",{timeOut:6000});
+                            return false;
+                        }else{
+                        if (data.idDatoHemo != undefined) {
                             toastr.success(dir.successmessage, "success", {timeOut: 6000});
-                        window.setTimeout(function () {
-                            window.location.href = dir.adddetailsUrl + "/" + data.idDatoHemo;
-                        }, 1300);
+                            window.setTimeout(function () {
+                                window.location.href = dir.adddetailsUrl + "/" + data.idDatoHemo;
+                            }, 1300);
+                        }
                     }
                      }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                      toastr.error("Interno del Servidor!","ERROR", {timeOut: 6000});

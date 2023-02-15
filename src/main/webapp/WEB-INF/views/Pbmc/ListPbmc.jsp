@@ -79,7 +79,7 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
-
+                <a href="<spring:url value="/Pbmc/listPbmc" htmlEscape="true "/>"><spring:message code="List" /> <spring:message code="Pbmc" /></a>
             </li>
         </ol>
         <div class="container-fluid">
@@ -232,6 +232,19 @@
                             <label for="temperatura" class="col-sm-2 col-form-label"><spring:message code="Temperatura" /></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="temperatura" name="temperatura" minlength="1" maxlength="4"  required="required">
+                            </div>
+                        </div>
+
+                        <!-- Lugar de envio MA2023 -->
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="numenvio"><spring:message code="lbl.sendTo" /></label>
+                            <div class="col-sm-10">
+                                <select id="lugarEnvio" name="lugarEnvio" class="form-control" required="required">
+                                    <option selected value=""><spring:message code="select" />...</option>
+                                    <c:forEach items="${lugar_envio}" var="l">
+                                        <option value="${l.catKey}">${l.spanish}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 

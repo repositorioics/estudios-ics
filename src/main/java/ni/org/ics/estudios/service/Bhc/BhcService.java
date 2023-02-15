@@ -124,16 +124,17 @@ public class BhcService {
     }
 
     // todo **  Consulta para llenar el reporte BHC **
-    public List<Bhc_Detalle_envio>getBhcDetailsEnvio(Integer nEnvios, Date fechaInicio, Date fechaFin){
+    public List<Bhc_Detalle_envio>getBhcDetailsEnvio(Integer nEnvios, Date fechaInicio, Date fechaFin, Integer lugar_envio){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Bhc_Detalle_envio b where b.serologiaEnvio.fecha between :fechaInicio and :fechaFin and b.serologiaEnvio.idenvio =:nEnvios order by b.bhc.codigo_participante asc ");
+        Query query = session.createQuery("from Bhc_Detalle_envio b where b.serologiaEnvio.fecha between :fechaInicio and :fechaFin and b.serologiaEnvio.idenvio =:nEnvios and b.serologiaEnvio.lugarenvio=:lugar_envio order by b.bhc.codigo_participante asc ");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);
+        query.setParameter("lugar_envio", lugar_envio);
         return query.list();
     }
 
-    public List<BhcEnvioDto> getReporteEnvioBhc(Integer nEnvios, Date fechaInicio, Date fechaFin) {
+    public List<BhcEnvioDto> getReporteEnvioBhc(Integer nEnvios, Date fechaInicio, Date fechaFin, Integer lugar_envio) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createSQLQuery("select r.CODIGO_PARTICIPANTE as codigo, date(r.FECHA_TOMA) as fecha, r.volumen as volumen, r.observacion as observacion, " +
                 "adn.ADN_DEN as adnDengue, adn.ADN_UO1 as adnUO1, adn.ADN_FLU as adnFlu, adn.ADN_CHF as adnChf, " +
@@ -143,12 +144,13 @@ public class BhcService {
                 "inner join bhc_detalle_envio de on r.BHC_ID = de.BHC_ID " +
                 "inner join envio_muestras e on de.ENVIO_MUESTRA_ID = e.ENVIO_MUESTRA_ID " +
                 "inner join view_adn_consentimientos adn on adn.codigo = r.CODIGO_PARTICIPANTE " +
-                "where e.FECHA_ENVIO between :fechaInicio and :fechaFin and e.NUMERO_ENVIO = :nEnvios " +
+                "where e.FECHA_ENVIO between :fechaInicio and :fechaFin and e.NUMERO_ENVIO = :nEnvios and e.LUGAR_ENVIO=:lugar_envio " +
                 "ORDER BY r.CODIGO_PARTICIPANTE asc");
         query.setResultTransformer(Transformers.aliasToBean(BhcEnvioDto.class));
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);
+        query.setParameter("lugar_envio", lugar_envio);
         return query.list();
     }
 

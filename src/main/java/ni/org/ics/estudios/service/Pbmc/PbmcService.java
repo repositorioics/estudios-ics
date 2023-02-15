@@ -65,12 +65,13 @@ public class PbmcService {
 
 
     // todo **  Consulta para llenar el reporte PBMC **
-    public List<Pbmc_Detalle_Envio>getAllPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin){
+    public List<Pbmc_Detalle_Envio>getAllPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin, Integer lugarEnvio){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Pbmc_Detalle_Envio pe where pe.serologiaEnvio.fecha between :fechaInicio and :fechaFin and pe.serologiaEnvio.idenvio =:nEnvios  order by pe.pbmc.codigo_participante asc ");
+        Query query = session.createQuery("from Pbmc_Detalle_Envio pe where pe.serologiaEnvio.fecha between :fechaInicio and :fechaFin and pe.serologiaEnvio.idenvio =:nEnvios and serologiaEnvio.lugarenvio=:lugarEnvio  order by pe.pbmc.codigo_participante asc ");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);
+        query.setParameter("lugarEnvio", lugarEnvio);
         return query.list();
     }
 

@@ -569,6 +569,13 @@
                                                                                </div>
                                                                                <h2><span id="vacuna" class="badge badge-primary badge-pill text-white"></span> </h2>
                                                                            </li>
+                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                               <div>
+                                                                                   <small class="text-muted">Realizar encuesta</small>
+                                                                                   <h6 class="my-0">Perímetro Abdominal</h6>
+                                                                               </div>
+                                                                               <h2><span id="perimetroAbdominal" class="badge badge-primary badge-pill text-white"></span> </h2>
+                                                                           </li>
                                                                        </ul>
                                                                    </div>
                                                                 </div>
@@ -1146,7 +1153,7 @@
         });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                //console.log(data);
+                console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
@@ -1307,6 +1314,12 @@
                         $("#serologia-pendiente").text("Si").addClass('badge badge-danger badge-pill text-dark');
                     }else{
                         $("#serologia-pendiente").text("No").removeClass('badge-danger');
+                    }
+
+                    if(data.perimetroAbdominal != null && data.perimetroAbdominal =='No'){
+                        $("#perimetroAbdominal").text("Si").addClass('badge badge-danger badge-pill text-dark');
+                    }else{
+                        $("#perimetroAbdominal").text("No").removeClass('badge-danger');
                     }
 
                     if(data.alertas != '' ){

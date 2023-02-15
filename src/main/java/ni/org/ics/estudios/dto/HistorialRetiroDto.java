@@ -44,6 +44,9 @@ public class HistorialRetiroDto implements Serializable {
     private String tieneBhc;
     private String tieneSerologia;
     private String alertas;
+    //agregado por Santiago MA2023
+    private String perimetroAbdominal;
+
     private List<RetiroDto> retiroList;
 
     public HistorialRetiroDto() {
@@ -335,5 +338,13 @@ public class HistorialRetiroDto implements Serializable {
 
     public void setAlertas(String alertas) {
         this.alertas = alertas;
+    }
+
+    public String getPerimetroAbdominal() {
+        return perimetroAbdominal;
+    }
+
+    public void setPerimetroAbdominal(String perimetroAbdominal) {
+        this.perimetroAbdominal = perimetroAbdominal;
     }
 }

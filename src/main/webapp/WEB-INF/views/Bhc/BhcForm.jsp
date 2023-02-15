@@ -52,6 +52,8 @@
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
                 <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/Bhc/list" htmlEscape="true "/>"><spring:message code="List" /></a>
+                <i class="fa fa-angle-right"></i>
                 <spring:message code="Form" />
             </li>
         </ol>

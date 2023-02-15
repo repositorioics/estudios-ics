@@ -33,6 +33,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<spring:url value="/" htmlEscape="true "/>"><spring:message code="home" /></a>
+                <i class="fa fa-angle-right"></i>
+                <a href="<spring:url value="/Pbmc/listPbmc" htmlEscape="true "/>"><spring:message code="List" /> <spring:message code="Pbmc" /></a>
+                <i class="fa fa-angle-right"></i>
+                <spring:message code="Form" /> <spring:message code="lbl.send" />
             </li>
         </ol>
         <div class="container-fluid">
@@ -85,17 +89,61 @@
                                 </div>
                             </div>
 
+                            <!-- Lugar de envio MA2023 -->
+                            <div class="form-group row">
+                                <label class="form-control-label col-md-3" for="numenvio"><spring:message code="lbl.sendTo" /></label>
+                                <div class="col-sm-6">
+                                    <select id="lugarEnvio" name="lugarEnvio" class="form-control" required="required">
+                                        <option selected value=""><spring:message code="select" />...</option>
+                                        <c:forEach items="${lugar_envio}" var="l">
+                                            <option value="${l.catKey}">${l.spanish}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4">
+                                        <div class="dropdown">
+                                            <button class="btn btn-success btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <spring:message code="generate" /> <spring:message code="reports" />
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <button id="toPdf" type="submit" class="dropdown-item" data-toggle="tooltip" data-placement="right" title="Pdf">
+                                                    <i class="fa fa-file-pdf-o text-danger" aria-hidden="true"></i>
+                                                    <spring:message code="generate" /> <spring:message code="Pbmc" /> </button>
+                                                <button id="Sero_PBMC_PDF" type="submit" data-toggle="tooltip" data-placement="right" title="Pdf" class="dropdown-item">
+                                                    <i class="fa fa-file-pdf-o text-danger" aria-hidden="true"></i>
+                                                    <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
+                                                </button>
+                                                <div class="dropdown-divider"></div>
+                                                <button id="PbmctoExcel" type="submit" class="dropdown-item" data-toggle="tooltip" data-placement="right" title="Excel">
+                                                    <i class="fa fa-file-excel-o text-success" aria-hidden="true"></i>
+                                                    <spring:message code="generate" /> <spring:message code="Pbmc" /> </button>
+                                                <button id="Sero_PBMC_Excel" type="submit" class="dropdown-item" data-toggle="tooltip" data-placement="right" title="Excel">
+                                                    <i class="fa fa-file-excel-o text-success" aria-hidden="true"></i>
+                                                    <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+                            </div>
+
                             <div class="d-flex justify-content-between">
                                 <div class="p-2 bd-highlight">
 
                                 </div>
                                 <div class="p-2 bd-highlight">
-                                    <button id="toPdf" type="submit" class="btn btn-success btn-ladda" data-toggle="tooltip" data-placement="top" title="Reporte pbmc pdf" data-style="expand-right">
+                                    <!-- <button id="toPdf" type="submit" class="btn btn-success btn-ladda" data-toggle="tooltip" data-placement="top" title="Reporte pbmc pdf" data-style="expand-right">
                                         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                         <spring:message code="generate" /> <spring:message code="Pbmc" /> </button>
                                     <button id="PbmctoExcel" type="submit" class="btn btn-info btn-ladda" data-toggle="tooltip" data-placement="top" title="Reporte pbmc excel" data-style="expand-right">
                                         <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                        <spring:message code="generate" /> <spring:message code="Pbmc" /> </button>
+                                        <spring:message code="generate" /> <spring:message code="Pbmc" /> </button>-->
                                 </div>
                                 <div class="p-2 bd-highlight"></div>
                             </div>
@@ -105,7 +153,7 @@
                                 </div>
                                 <div class="p-2 bd-highlight">
                                     <div class="container">
-                                        <button id="Sero_PBMC_PDF" type="submit" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Pdf" class="btn btn-danger btn-ladda" data-style="expand-right">
+                                      <%--  <button id="Sero_PBMC_PDF" type="submit" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Pdf" class="btn btn-danger btn-ladda" data-style="expand-right">
                                             <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                             <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
                                         </button>
@@ -113,7 +161,7 @@
                                         <button id="Sero_PBMC_Excel" type="submit" class="btn btn-danger btn-ladda" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Excel" data-style="expand-right">
                                             <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                             <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
-                                        </button>
+                                        </button>--%>
 
                                     </div>
                                 </div>

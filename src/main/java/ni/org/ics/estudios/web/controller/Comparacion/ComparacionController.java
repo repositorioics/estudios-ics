@@ -502,6 +502,8 @@ public class ComparacionController {
 
     @RequestMapping(value = "reporte-diferencias", method = RequestMethod.GET)
     public String info(Model model) throws ParseException {
+        List<MessageResource> tipo_muestra = messageResourceService.getCatalogo("CAT_TIPO_TUBO_MUESTRA");
+        model.addAttribute("tipo_muestra",tipo_muestra);
         return "comparacion/diferencias";
     }
 

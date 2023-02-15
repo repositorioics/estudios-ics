@@ -63,6 +63,9 @@ public class BhcController {
             model.addAttribute("bhcs", bhcs);
             List<MessageResource> numero_envio = messageResourceService.getCatalogo("CAT_NUMERO_ENVIO_MUESTRA");
             model.addAttribute("numero_envio", numero_envio);
+            // lugar de envio MA2023
+            List<MessageResource> lugar_envio = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+            model.addAttribute("lugar_envio", lugar_envio);
             return "/Bhc/BhcList";
         } catch (Exception e) {
             return "404";
@@ -395,6 +398,10 @@ public class BhcController {
     public String listPbmc(Model model)throws Exception{
         List<MessageResource> numero_envio = messageResourceService.getCatalogo("CAT_NUMERO_ENVIO_MUESTRA");
         model.addAttribute("numero_envio", numero_envio);
+
+        // lugar de envio MA2023
+        List<MessageResource> lugar_envio = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        model.addAttribute("lugar_envio", lugar_envio);
         return "/Bhc/EnvioBhc";
     }
 
@@ -409,6 +416,7 @@ public class BhcController {
             ,@RequestParam(value="fechaEnvio", required=false ) String fechaEnvio
             ,@RequestParam(value="horaEnvio", required=false ) String horaEnvio
             ,@RequestParam(value="temperatura", required=true ) String temperatura
+            ,@RequestParam(value="lugarEnvio", required=true ) Integer lugarEnvio
     )throws Exception{
         try{
             Date fdesde = DateUtil.StringToDate(desde +  " 00:00:00","dd/MM/yyyy HH:mm:ss");
@@ -428,6 +436,7 @@ public class BhcController {
             envio.setFecha(DateUtil.StringToDate(fechaEnvio, "dd/MM/yyyy"));
             envio.setHora(horaEnvio);
             envio.setIdenvio(numenvio);
+            envio.setLugarenvio(lugarEnvio);
             double temp = Double.parseDouble(temperatura);
             envio.setTemperatura(temp);
             this.serologiaService.save_Envio_Serologia(envio);// aqui guardo los datos del envio

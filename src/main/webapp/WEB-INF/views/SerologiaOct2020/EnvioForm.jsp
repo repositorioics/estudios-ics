@@ -252,32 +252,40 @@
                                     </div>
                                 </div>
 
+                                <!-- Lugar de envio MA2023 -->
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label" for="lugarEnvio"><spring:message code="lbl.sendTo" /></label>
+                                    <div class="col-sm-6">
+                                        <select id="lugarEnvio" name="lugarEnvio" class="form-control" required="required">
+                                            <option selected value=""><spring:message code="select" />...</option>
+                                            <c:forEach items="${lugar_envio}" var="l">
+                                                <option value="${l.catKey}">${l.spanish}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-md-6 text-center">
-                                            <button id="toPdf" type="submit" data-toggle="tooltip" data-placement="top" title="Serologia en Pdf" class="btn btn-success btn-ladda" data-style="expand-right">
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                                <spring:message code="generate" /> <spring:message code="Serologia" />
-                                            </button>
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <spring:message code="generate" /> <spring:message code="reports" />
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <button id="toPdf" type="submit" data-toggle="tooltip" data-placement="right" title="Pdf" class="dropdown-item">
+                                                        <i class="fa fa-file-pdf-o text-danger" aria-hidden="true"></i>
+                                                        <spring:message code="generate" /> <spring:message code="Serologia" />
+                                                    </button>
+                                                    <button id="toExcel" type="submit" data-toggle="tooltip" data-placement="right" title="Excel" class="dropdown-item">
+                                                        <i class="fa fa-file-excel-o text-success" aria-hidden="true"></i>
+                                                        <spring:message code="generate" /> <spring:message code="Serologia" />
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6 text-center">
-                                            <button id="toExcel" type="submit" data-toggle="tooltip" data-placement="top" title="Serologia en Excel" class="btn btn-info btn-ladda" data-style="expand-right">
-                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                                <spring:message code="generate" /> <spring:message code="Serologia" />
-                                            </button>
-                                        </div>
-                                        <%--<div class="col-md-6 text-center mt-1">
-                                            <button id="Sero_PBMC_PDF" type="submit" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Pdf" class="btn btn-danger btn-ladda" data-style="expand-right">
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                                <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
-                                            </button>
-                                        </div>
-                                        <div class="col-md-6 text-center mt-1">
-                                            <button id="Sero_PBMC_Excel" type="submit" class="btn btn-danger btn-ladda" data-toggle="tooltip" data-placement="bottom" title="Serologia de Pbmc en Excel" data-style="expand-right">
-                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                                <spring:message code="generate" />  <spring:message code="Serologia" /> <spring:message code="Pbmc" />
-                                            </button>
-                                        </div>--%>
+                                        <div class="col-md-4"></div>
                                     </div>
                                 </div>
 

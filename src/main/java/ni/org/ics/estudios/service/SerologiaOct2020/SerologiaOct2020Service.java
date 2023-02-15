@@ -1,6 +1,9 @@
 package ni.org.ics.estudios.service.SerologiaOct2020;
 
+import ni.org.ics.estudios.domain.Bhc.Bhc_Detalle_envio;
 import ni.org.ics.estudios.domain.Participante;
+import ni.org.ics.estudios.domain.Pbmc.Pbmc;
+import ni.org.ics.estudios.domain.Pbmc.Pbmc_Detalle_Envio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia;
 import ni.org.ics.estudios.domain.SerologiaOct2020.SerologiaEnvio;
 import ni.org.ics.estudios.domain.SerologiaOct2020.Serologia_Detalle_Envio;
@@ -208,24 +211,6 @@ public class SerologiaOct2020Service {
         }
     }
 
-    public List<SerologiaEnvio> getAllSeroEnviadas()throws Exception{
-        try{
-            Session session = sessionFactory.getCurrentSession();
-            Query query = session.createQuery("from SerologiaEnvio");
-            return query.list();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    public ParticipanteSeroDto getDatosParticipanteById(Integer codigo){
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select p.codigo as codigo, concat(p.nombre1,' ', p.nombre2,' ', p.apellido1,' ', p.apellido2) as nombreCompleto, pp.casaCHF as casaFamilia, pp.estPart as estado, pp.estudio as estudios, p.fechaNac as fechaNacimiento from Participante p, ParticipanteProcesos pp where p.codigo = pp.codigo and p.codigo= :codigo");
-        query.setParameter("codigo", codigo);
-        query.setResultTransformer(Transformers.aliasToBean(ParticipanteSeroDto.class));
-        return (ParticipanteSeroDto)query.uniqueResult();
-    }
-
 
     /* Obtiene Un Participante por su codigo  */
     public Participante getParticipanteByCodigo(Integer codigo){
@@ -237,33 +222,37 @@ public class SerologiaOct2020Service {
 
  //10401 = 8 no 12
 
-
-    public List<SerologiaEnvio> getSerologiaEnvioByDates(Integer nEnvios, Date fechaInicio, Date fechaFin){
+    @SuppressWarnings("unchecked")
+    public List<SerologiaEnvio> getSerologiaEnvioByDates(Integer nEnvios, Date fechaInicio, Date fechaFin, Integer numero_envio ){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from SerologiaEnvio se where se.fecha between :fechaInicio and :fechaFin and se.idenvio =:nEnvios ");
+        Query query = session.createQuery("from SerologiaEnvio se where se.fecha between :fechaInicio and :fechaFin and se.idenvio =:nEnvios and se.lugarenvio =:numero_envio");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);
+        query.setParameter("numero_envio", numero_envio);
         return query.list();
     }
 
     // todo **  Consulta para llenar el reporte Serologia **
-    public List<Serologia_Detalle_Envio>getAllSerologia(Integer nEnvios, Date fechaInicio, Date fechaFin){
+    public List<Serologia_Detalle_Envio>getAllSerologia(Integer nEnvios, Date fechaInicio, Date fechaFin, Integer lugar_envio){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Serologia_Detalle_Envio se where se.serologiaEnvio.fecha between :fechaInicio and :fechaFin and se.serologiaEnvio.idenvio =:nEnvios and se.serologia.codigoPbmc=0  order by se.serologia.participante asc ");
+        Query query = session.createQuery("from Serologia_Detalle_Envio se where se.serologiaEnvio.fecha between :fechaInicio and :fechaFin and se.serologiaEnvio.idenvio =:nEnvios and se.serologia.codigoPbmc=0 and se.serologiaEnvio.lugarenvio=:lugar_envio order by se.serologia.participante asc ");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);
+        query.setParameter("lugar_envio", lugar_envio);
+        //query.setParameter("codigo_envio", codigo_envio);
         return query.list();
     }
 
     // todo **  Consulta para llenar el reporte Serologia con PBMC **
-    public List<Serologia_Detalle_Envio>getSerologiaByPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin){
+    public List<Serologia_Detalle_Envio>getSerologiaByPbmc(Integer nEnvios, Date fechaInicio, Date fechaFin, Integer lugarEnvio){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Serologia_Detalle_Envio se where se.serologiaEnvio.fecha between :fechaInicio and :fechaFin and se.serologiaEnvio.idenvio =:nEnvios and se.serologia.codigoPbmc>0 and se.serologia.descripcion='PBMC' and se.serologia.pasive='0' order by se.serologia.participante asc ");
+        Query query = session.createQuery("from Serologia_Detalle_Envio se where se.serologiaEnvio.fecha between :fechaInicio and :fechaFin and se.serologiaEnvio.idenvio =:nEnvios and se.serologia.codigoPbmc>0 and se.serologia.descripcion='PBMC' and se.serologia.pasive='0' and se.serologiaEnvio.lugarenvio=:lugarEnvio order by se.serologia.participante asc ");
         query.setParameter("fechaInicio", fechaInicio);
         query.setParameter("fechaFin", fechaFin);
         query.setParameter("nEnvios", nEnvios);
+        query.setParameter("lugarEnvio", lugarEnvio);
         return query.list();
     }
 
@@ -283,5 +272,62 @@ public class SerologiaOct2020Service {
         query.setParameter("observacion", '%' + observacion + '%');
         return query.list();
     }
+
+
+    //region todo: Filtrar BHC
+    @SuppressWarnings("unchecked")
+    public List<Bhc_Detalle_envio> filtroListBhc(Date f1, Date f2){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Bhc_Detalle_envio det where det.serologiaEnvio.fecha between :f1 and :f2 and det.bhc.enviado='1' and det.bhc.pasive='0' order by det.bhc.codigo_participante asc ");
+        query.setParameter("f1", f1);
+        query.setParameter("f2", f2);
+        return query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Serologia_Detalle_Envio> filtroListSerologia(Date f1, Date f2)throws Exception{
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery("from Serologia_Detalle_Envio  det where det.serologiaEnvio.fecha between :f1 and :f2 and det.serologia.enviado='1' and det.serologia.pasive='0' and det.serologia.codigoPbmc=0 order by det.serologia.participante asc ");
+            query.setParameter("f1", f1);
+            query.setParameter("f2", f2);
+            return query.list();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<Pbmc_Detalle_Envio> filtroListPbmc(Date f1, Date f2)throws Exception{
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery("from Pbmc_Detalle_Envio  det where det.pbmc.fecha_pbmc between :f1 and :f2 and det.pbmc.enviado='1' and det.pbmc.pasive='0' order by det.pbmc.codigo_participante asc ");
+            query.setParameter("f1", f1);
+            query.setParameter("f2", f2);
+            return query.list();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<Serologia_Detalle_Envio> filtroListRojoAdicionalPbmc(Date f1, Date f2)throws Exception{
+        try{
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery("from Serologia_Detalle_Envio  det where det.serologia.fecha between :f1 and :f2 and det.serologia.enviado='1' and det.serologia.pasive='0' and det.serologia.descripcion='Pbmc' and det.serologia.codigoPbmc>0 order by det.serologia.participante asc ");
+            query.setParameter("f1", f1);
+            query.setParameter("f2", f2);
+            return query.list();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    //endregion
+
+
+
 
 }

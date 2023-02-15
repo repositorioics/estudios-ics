@@ -202,6 +202,7 @@ public class SerologiaOct2020Controller {
             ,@RequestParam(value="fechaEnvio", required=false ) String fechaEnvio
             ,@RequestParam(value="horaEnvio", required=false ) String horaEnvio
             ,@RequestParam(value="temperatura", required=true ) String temperatura
+            ,@RequestParam(value="lugarEnvio", required=true ) Integer lugarEnvio
     )throws Exception{
         try{
             Date fdesde = DateUtil.StringToDate(desde +  " 00:00:00","dd/MM/yyyy HH:mm:ss");
@@ -222,6 +223,7 @@ public class SerologiaOct2020Controller {
             envio.setIdenvio(numenvio);
             double temp = Double.parseDouble(temperatura);
             envio.setTemperatura(temp);
+            envio.setLugarenvio(lugarEnvio);
             this.serologiaService.save_Envio_Serologia(envio);// aqui guardo los datos del envio
 
             if (envio.getIdserologiaenvio()!=null){
@@ -497,6 +499,9 @@ public class SerologiaOct2020Controller {
         model.addAttribute("serologias",serologias);
         List<MessageResource> numero_envio = messageResourceService.getCatalogo("CAT_NUMERO_ENVIO_MUESTRA");
         model.addAttribute("numero_envio", numero_envio);
+        // lugar de envio MA2023
+        List<MessageResource> lugar_envio = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        model.addAttribute("lugar_envio", lugar_envio);
         return "/SerologiaOct2020/List";
     }
 
@@ -520,6 +525,11 @@ public class SerologiaOct2020Controller {
         model.addAttribute("serologias",serologias);
         List<MessageResource> numero_envio = messageResourceService.getCatalogo("CAT_NUMERO_ENVIO_MUESTRA");
         model.addAttribute("numero_envio", numero_envio);
+
+        // lugar de envio MA2023
+        List<MessageResource> lugar_envio = messageResourceService.getCatalogo("CAT_ENVIAR_MUETRAS");
+        model.addAttribute("lugar_envio", lugar_envio);
+
         return "/SerologiaOct2020/EnvioForm";
     }
 

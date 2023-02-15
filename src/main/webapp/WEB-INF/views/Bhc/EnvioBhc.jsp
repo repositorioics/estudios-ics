@@ -13,7 +13,6 @@
 <html>
 <head>
     <jsp:include page="../fragments/headTag.jsp" />
-    <jsp:include page="../fragments/headTag.jsp" />
 
     <spring:url value="/resources/css/bootstrap.min.css" var="boot"/>
     <link href="${boot}" rel="stylesheet" type="text/css"/>
@@ -84,21 +83,41 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex justify-content-between">
-                                    <div class="p-2 bd-highlight">
-
+                                <!-- Lugar de envio MA2023 -->
+                                <div class="form-group row">
+                                    <label class="form-control-label col-md-3" for="numenvio"><spring:message code="lbl.sendTo" /></label>
+                                    <div class="col-sm-6">
+                                        <select id="lugarEnvio" name="lugarEnvio" class="form-control" required="required">
+                                            <option selected value=""><spring:message code="select" />...</option>
+                                            <c:forEach items="${lugar_envio}" var="l">
+                                                <option value="${l.catKey}">${l.spanish}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
-                                    <div class="p-2 bd-highlight">
-                                        <button id="toPdf" type="submit" class="btn btn-success btn-ladda" data-toggle="tooltip" data-placement="top" title="Reporte Bhc pdf" data-style="expand-right">
-                                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                            <spring:message code="generate" /> <spring:message code="Bhc" /> </button>
-                                        <button id="BhctoExcel" type="submit" class="btn btn-info btn-ladda" data-toggle="tooltip" data-placement="top" title="Reporte Bhc excel" data-style="expand-right">
-                                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                            <spring:message code="generate" /> <spring:message code="Bhc" /> </button>
-                                    </div>
-                                    <div class="p-2 bd-highlight"></div>
                                 </div>
 
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <spring:message code="generate" /> <spring:message code="reports" />
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <button id="toPdf" type="submit" class="dropdown-item" data-toggle="tooltip" data-placement="right" title="Pdf">
+                                                        <i class="fa fa-file-pdf-o text-danger" aria-hidden="true"></i>
+                                                        <spring:message code="generate" /> <spring:message code="Bhc" /> </button>
+                                                    <div class="dropdown-divider"></div>
+                                                    <button id="BhctoExcel" type="submit" class="dropdown-item" data-toggle="tooltip" data-placement="right" title="Excel">
+                                                        <i class="fa fa-file-excel-o text-success" aria-hidden="true"></i>
+                                                        <spring:message code="generate" /> <spring:message code="Bhc" /> </button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        <div class="col-md-4"></div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>

@@ -20,6 +20,7 @@ public class BhcEnvioDto {
     private Double edadA;
     private Double edadM;
     private Integer viaje;
+    private Integer lugar_envio;
 
     public Integer getCodigo() {
         return codigo;
@@ -123,5 +124,13 @@ public class BhcEnvioDto {
 
     public void setViaje(Integer viaje) {
         this.viaje = viaje;
+    }
+
+    public Integer getLugar_envio() {
+        return lugar_envio;
+    }
+
+    public void setLugar_envio(Integer lugar_envio) {
+        this.lugar_envio = lugar_envio;
     }
 }

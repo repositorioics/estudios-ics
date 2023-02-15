@@ -29,4 +29,5 @@ public class Constants {
     public static final String[] ENTO_COLUMNAS_TBL_CUEST_PUNTO_CLAVE = new String[]{"fecha_cuestionario","codigo_barrio","nombre_punto_clave","direccion_punto_clave","tipo_punto_clave","tipo_punto_clave_prod","tipo_punto_clave_prod_otro","tipo_punto_clave_aglo","tipo_punto_clave_aglo_otro","cuantas_personas_reunen","cuantos_dias_sem_reunen","hora_inicio_reunion","hora_fin_reunion","punto_gps","latitud","longitud","tipo_ingreso_cod_sitio","codigo_sitio","hay_ambiente_peri","hora_captura_peri","porcentaje_humedad_peri","temperatura_peri","tipo_ingreso_cod_peri","codigo_peri","hay_ambiente_intra","hora_captura_intra","porcentaje_humedad_intra","temperatura_intra","tipo_ingreso_cod_intra","codigo_intra","nombre_contesta_cuestionario","usuario_registro", "fecha_registro","codigo_cuestionario"};
 
     public static final String TPR_ENVIOREPORTEANTICUERPO = "TPR_ENVIOREPORTEANTICUERPO";
+    public static final String TPR_FILTROMUESTRA = "TPR_FILTROMUESTRA";
 }

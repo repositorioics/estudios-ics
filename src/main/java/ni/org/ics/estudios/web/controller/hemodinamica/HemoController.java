@@ -327,7 +327,6 @@ public class HemoController {
             obj.setAsc(Double.valueOf(round(areasc,2)));
             obj.setDireccion(direccion);
             obj.setEdad(edad);
-            obj.setFecha(DateUtil.StringToDate(fconsulta,"dd/MM/yyyy"));
             double valorImc = getIMC(peso,talla);
             obj.setImc(Double.valueOf(round(valorImc,2)));
             obj.setMunicipio("Managua");
@@ -345,11 +344,25 @@ public class HemoController {
             obj.setIMCdetallado("-");
             obj.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             obj.setRecordDate(new Date());
-            obj.setFie(DateUtil.StringToDate(fie, "dd/MM/yyyy"));
+
+            if (YearIsValid(fconsulta)){
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("msj", "Año no valido en fecha de consulta" );
+                return createJsonResponse(map);
+            }
+
+            if (YearIsValid(fie)){
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("msj", "Año no valido en fecha inicio de enfermedad" );
+                return createJsonResponse(map);
+            }
+
             if (validarFecha(fie) && validarFecha(fconsulta)) {
                 int dias_enfermo = (int) calculateDays(DateUtil.StringToDate(fie, "dd/MM/yyyy"), DateUtil.StringToDate(fconsulta, "dd/MM/yyyy"));
                 obj.setDiasenf(dias_enfermo);
             }
+            obj.setFecha(DateUtil.StringToDate(fconsulta,"dd/MM/yyyy"));
+            obj.setFie(DateUtil.StringToDate(fie, "dd/MM/yyyy"));
             obj.setSdMin(sdMin);
             obj.setSdMed(sdMed);
             obj.setSdMax(sdMax);
@@ -385,6 +398,25 @@ public class HemoController {
             return false;
         }
         return true;
+    }
+
+    public static boolean YearIsValid(String fecha){
+        boolean isValid = false;
+        try{
+            Calendar calendar = new GregorianCalendar();
+            Calendar calendarFechaToVerificar = new GregorianCalendar();
+            Date fecha_verificar = DateUtil.StringToDate(fecha,"dd/MM/yyyy");
+            calendarFechaToVerificar.setTime(fecha_verificar);
+            int anioInicio = 2019;
+            int currentYears = calendar.get(Calendar.YEAR);
+            int yearHemo = calendarFechaToVerificar.get(Calendar.YEAR);
+            if (yearHemo < anioInicio || yearHemo > currentYears ){
+                isValid = true;
+            }
+        } catch (Exception e){
+            return isValid;
+        }
+        return isValid;
     }
 
     public static long calculateDays(Date dateBeforeString1, Date dateAfterString2) {

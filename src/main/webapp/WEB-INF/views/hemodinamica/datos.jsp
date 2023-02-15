@@ -266,6 +266,8 @@
     <link href="${smw}" rel="stylesheet" type="text/css"/>
     <spring:url value="/resources/css/smartWizardCss/smart_wizard_theme_arrows.min.css" var="smwtheme" />
     <link href="${smwtheme}" rel="stylesheet" type="text/css"/>--%>
+
+
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 <jsp:include page="../fragments/bodyHeader.jsp" />
@@ -628,9 +630,6 @@
 
 <spring:url value="/resources/js/libs/moment.js" var="moment" />
 <script type="text/javascript" src="${moment}"></script>
-
-<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
-<script type="text/javascript" src="${sw}"></script>
 
 <spring:url value="/resources/js/views/hemodinamica/datos.js" var="datosHemo" />
 <script type="text/javascript" src="${datosHemo}"></script>

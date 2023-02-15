@@ -20,6 +20,8 @@ public class SerologiaEnvio extends BaseMetaData implements Auditable {
     private Date fecha;
     private String hora;
     private double temperatura;
+    //Agregado para MA2023
+    private Integer lugarenvio;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,6 +67,15 @@ public class SerologiaEnvio extends BaseMetaData implements Auditable {
 
     public void setTemperatura(double temperatura) {
         this.temperatura = temperatura;
+    }
+
+    @Column(name = "LUGAR_ENVIO", nullable = false)
+    public Integer getLugarenvio() {
+        return lugarenvio;
+    }
+
+    public void setLugarenvio(Integer lugarenvio) {
+        this.lugarenvio = lugarenvio;
     }
 
     @Override
