@@ -1316,10 +1316,16 @@
                         $("#serologia-pendiente").text("No").removeClass('badge-danger');
                     }
 
-                    if(data.perimetroAbdominal != null && data.perimetroAbdominal =='No'){
+                    /*if(data.perimetroAbdominal != null && data.perimetroAbdominal =='Si'){
                         $("#perimetroAbdominal").text("Si").addClass('badge badge-danger badge-pill text-dark');
                     }else{
                         $("#perimetroAbdominal").text("No").removeClass('badge-danger');
+                    }*/
+
+                    if(data.perimetroAbdominal != null && data.perimetroAbdominal =='Si'){//11979- codigo
+                        $("#perimetroAbdominal").text(data.perimetroAbdominal).addClass('badge badge-danger badge-pill text-dark');
+                    }else{
+                        $("#perimetroAbdominal").text(data.perimetroAbdominal).removeClass('badge-danger');
                     }
 
                     if(data.alertas != '' ){
