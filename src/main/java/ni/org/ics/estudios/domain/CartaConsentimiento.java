@@ -69,6 +69,11 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
     private String motivoRechazoParteF;
     private String otroMotivoRechazoParteF;
 
+    //re-enrolamiento y obtención de muestras de sangre adicionales-CEIRS. MA2022
+    private String aceptaParteG;//re-enrolamiento y obtención de muestras de sangre adicionales-CEIRS. MA2023
+    private String motivoRechazoParteG;
+    private String otroMotivoRechazoParteG;
+
     @Id
     @Column(name = "CODIGO", nullable = false, insertable = true, updatable = false, length = 36)
     public String getCodigo() {
@@ -461,6 +466,34 @@ public class CartaConsentimiento extends BaseMetaData implements Auditable {
 
     public void setOtroMotivoRechazoParteF(String otroMotivoRechazoParteF) {
         this.otroMotivoRechazoParteF = otroMotivoRechazoParteF;
+    }
+
+    /**------------------**/
+    @Column(name = "ACEPTA_PARTE_G", length = 1)
+    public String getAceptaParteG() {
+        return aceptaParteG;
+    }
+
+    public void setAceptaParteG(String aceptaParteG) {
+        this.aceptaParteG = aceptaParteG;
+    }
+
+    @Column(name = "MOTIVO_RECHAZO_PARTE_G", nullable = true, length = 2)
+    public String getMotivoRechazoParteG() {
+        return motivoRechazoParteG;
+    }
+
+    public void setMotivoRechazoParteG(String motivoRechazoParteG) {
+        this.motivoRechazoParteG = motivoRechazoParteG;
+    }
+
+    @Column(name = "OTRO_MOT_RECHAZO_PARTE_G", nullable = true)
+    public String getOtroMotivoRechazoParteG() {
+        return otroMotivoRechazoParteG;
+    }
+
+    public void setOtroMotivoRechazoParteG(String otroMotivoRechazoParteG) {
+        this.otroMotivoRechazoParteG = otroMotivoRechazoParteG;
     }
 
     @Override
