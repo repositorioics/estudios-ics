@@ -166,6 +166,7 @@ public class RegistroController {
             historialDTO.setTieneSerologia(procesos.getConmx());
             //agregado por Santiago MA2023
             historialDTO.setPerimetroAbdominal(procesos.getPerimetroAbdominal());
+            historialDTO.setEncSatUsu(procesos.getEsatUsuario());
 
             List<RetiroDto>addobj = new ArrayList<RetiroDto>();
 
