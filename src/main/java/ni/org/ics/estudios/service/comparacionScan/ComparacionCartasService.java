@@ -47,7 +47,7 @@ public class ComparacionCartasService {
                         "t1.ACEPTA_CONTACTO_FUTURO, COALESCE(t2.ASENTIMIENTO_VERBAL, 'NA') as ASENTIMIENTO_VERBAL, concat(t1.VERSION, '.0') as VERSION, t2.CODIGO_ESTUDIO as CODIGO_ESTUDIO " +
                         "FROM cartas_consentimientos t1 inner join tamizajes t2 on t1.CODIGO_TAMIZAJE = t2.CODIGO " +
                         "inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO " +
-                        "where t1.FECHA_FIRMA >=  str_to_date('15/03/2022', '%d/%m/%Y')" + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
+                        "where t1.FECHA_FIRMA >=  str_to_date('10/02/2023', '%d/%m/%Y')" + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
                         ") as a, " +
                         "(select t1.CODIGO_PARTICIPANTE, DATE_FORMAT(t1.FECHA_CARTA, '%d-%m-%Y') as FECHA_CARTA," +
                         "( select if(t3.ACEPTA, '1','0') from scan_detalle_parte t3 inner join scan_catalog_parte t2 on t3.IDPARTE = t2.IDPARTE " +
@@ -64,7 +64,7 @@ public class ComparacionCartasService {
                         "where t3.IDPARTICIPANTECARTA = t1.IDPARTICIPANTECARTA and  (t2.PARTE = 'F' or t2.PARTE = 'Parte F')) as ACEPTA_PARTE_F, " +
                         "if(t1.CONTACTO_FUTURO, '1','0') as ACEPTA_CONTACTO_FUTURO, if (t1.TIPO_ASENTIMIENTO='1', t1.ASENTIMIENTO, 'NA') as ASENTIMIENTO_VERBAL, " +
                         "tv.VERSION as VERSION, tv.CODIGO_ESTUDIO as CODIGO_ESTUDIO " +
-                        "from scan_participante_carta t1 inner join scan_catalog_version tv on t1.IDVERSION = tv.IDVERSION) as b " +
+                        "from scan_participante_carta t1 inner join scan_catalog_version tv on t1.IDVERSION = tv.IDVERSION WHERE t1.FECHA_CARTA >= str_to_date('10-02-2023','%d-%m-%Y')) as b " +
                         "where a.CODIGO_PARTICIPANTE = b.CODIGO_PARTICIPANTE and a.FECHA_FIRMA = b.FECHA_CARTA and a.VERSION = b.VERSION " +
                         "and ( " +
                         "a.ACEPTA_PARTE_A != b.ACEPTA_PARTE_A or " +
@@ -93,6 +93,35 @@ public class ComparacionCartasService {
         "and t1.FECHA_FIRMA >=  str_to_date('15/03/2022', '%d/%m/%Y') " + //FECHA INICIO DE SCAN WEB OFICIAL 15-03-2022. MA2022
         "order by t1.CODIGO_PARTICIPANTE");
         query.setResultTransformer(Transformers.aliasToBean(ComparacionCartasDto.class));
+        return query.list();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<DiferenciaParteCartaDto> getDiferenciasPartesCartasG()
+    {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createSQLQuery("select a.CODIGO_PARTICIPANTE as codigo, a.FECHA_FIRMA as fechaFirma, a.USUARIO_REGISTRO as usuarioRegistro, " +
+                "a.EDAD_ACTUAL_MESES as edadActualMeses, a.EDAD_MESES as edadMeses,  " +
+                "a.ACEPTA_PARTE_G AS aceptaParteGCc, b.ACEPTA_PARTE_G AS aceptaParteGSc, " +
+                "a.ACEPTA_CONTACTO_FUTURO as aceptaContactoFuturoCc, b.ACEPTA_CONTACTO_FUTURO as aceptaContactoFuturoSc," +
+                "a.ASENTIMIENTO_VERBAL as asentimientoVerbalCc, b.ASENTIMIENTO_VERBAL as asentimientoVerbalSc, " +
+                "a.CODIGO_ESTUDIO as estudio, " +
+                "a.VERSION as version " +
+                "from ( SELECT t1.CODIGO_PARTICIPANTE, DATE_FORMAT(t1.FECHA_FIRMA, '%d-%m-%Y') as FECHA_FIRMA, t1.USUARIO_REGISTRO AS USUARIO_REGISTRO, " +
+                "               fn_edad_actual_meses(t3.FECHANAC) as EDAD_ACTUAL_MESES, fn_edad_meses(t3.FECHANAC, t1.FECHA_FIRMA) as EDAD_MESES, t1.ACEPTA_PARTE_G," +
+                "               t1.ACEPTA_CONTACTO_FUTURO, COALESCE(t2.ASENTIMIENTO_VERBAL, 'NA') as ASENTIMIENTO_VERBAL, concat(t1.VERSION, '.0') as VERSION, t2.CODIGO_ESTUDIO as CODIGO_ESTUDIO " +
+                "        FROM cartas_consentimientos t1 inner join tamizajes t2 on t1.CODIGO_TAMIZAJE = t2.CODIGO " +
+                "               inner join participantes t3 on t1.CODIGO_PARTICIPANTE = t3.CODIGO " +
+                "        WHERE date(t1.FECHA_FIRMA) >= str_to_date('10-02-2023', '%d-%m-%Y') AND t2.CODIGO_ESTUDIO=4 " +
+                ") AS a,(select t1.CODIGO_PARTICIPANTE, DATE_FORMAT(t1.FECHA_CARTA, '%d-%m-%Y') as FECHA_CARTA, " +
+                "        (SELECT if(t3.ACEPTA, '1','0') FROM scan_detalle_parte t3 INNER JOIN scan_catalog_parte t2 ON t3.IDPARTE = t2.IDPARTE " +
+                "         WHERE t3.IDPARTICIPANTECARTA = t1.IDPARTICIPANTECARTA AND (t2.PARTE = 'G' OR t2.PARTE = 'Parte G')) AS ACEPTA_PARTE_G, " +
+                "         if(t1.CONTACTO_FUTURO, '1','0') as ACEPTA_CONTACTO_FUTURO, if (t1.TIPO_ASENTIMIENTO='1', t1.ASENTIMIENTO, 'NA') as ASENTIMIENTO_VERBAL, " +
+                "            tv.VERSION as VERSION, tv.CODIGO_ESTUDIO AS CODIGO_ESTUDIO " +
+                "         from scan_participante_carta t1 inner join scan_catalog_version tv on t1.IDVERSION = tv.IDVERSION AND t1.FECHA_CARTA >= STR_TO_DATE('10-02-2023','%d-%m-%Y') AND tv.CODIGO_ESTUDIO = 4) as b " +
+                "where a.CODIGO_PARTICIPANTE = b.CODIGO_PARTICIPANTE and a.FECHA_FIRMA = b.FECHA_CARTA and a.VERSION = b.VERSION and (a.ACEPTA_PARTE_G != b.ACEPTA_PARTE_G)");
+        query.setResultTransformer(Transformers.aliasToBean(DiferenciaParteCartaDto.class));
         return query.list();
     }
 

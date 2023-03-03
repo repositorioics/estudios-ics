@@ -2096,6 +2096,37 @@ public class CartasController {
         }
     }
 
+
+    @RequestMapping(value = "comparacion/getCartasPartesG", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody ResponseEntity<String> getCartasPartesG() throws ParseException {
+        try {
+            logger.debug("buscar diferencias en partes de cartas");
+            List<DiferenciaParteCartaDto> diferenciaParteCartaDtos = comparacionCartasService.getDiferenciasPartesCartasG();
+            for(DiferenciaParteCartaDto diferencia : diferenciaParteCartaDtos) {
+
+                if (!diferencia.getAceptaParteGCc().equalsIgnoreCase(diferencia.getAceptaParteGSc())) {
+                    diferencia.setAceptaParteGCc("<span class='badge badge-danger'>"+diferencia.getAceptaParteGCc()+"</span>");
+                    diferencia.setAceptaParteGSc("<span class='badge badge-danger'>"+diferencia.getAceptaParteGSc()+"</span>");
+                }
+                if (!diferencia.getAceptaContactoFuturoCc().equalsIgnoreCase(diferencia.getAceptaContactoFuturoSc())) {
+                    diferencia.setAceptaContactoFuturoCc("<span class='badge badge-danger'>"+diferencia.getAceptaContactoFuturoCc()+"</span>");
+                    diferencia.setAceptaContactoFuturoSc("<span class='badge badge-danger'>"+diferencia.getAceptaContactoFuturoSc()+"</span>");
+                }
+                if (!diferencia.getAsentimientoVerbalCc().equalsIgnoreCase(diferencia.getAsentimientoVerbalSc())) {
+                    diferencia.setAsentimientoVerbalCc("<span class='badge badge-danger'>"+diferencia.getAsentimientoVerbalCc()+"</span>");
+                    diferencia.setAsentimientoVerbalSc("<span class='badge badge-danger'>"+diferencia.getAsentimientoVerbalSc()+"</span>");
+                }
+                diferencia.setEdadActualMeses(diferencia.getEdadActualMeses()/12);
+                diferencia.setEdadMeses(diferencia.getEdadMeses()/12);
+            }
+
+            return JsonUtil.createJsonResponse(diferenciaParteCartaDtos);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     @RequestMapping(value = "comparacion/getCartasSinDigitar", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<String> getCartasSinDigitar() throws ParseException {
         try {
