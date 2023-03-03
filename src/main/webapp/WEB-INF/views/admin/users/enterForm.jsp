@@ -273,6 +273,18 @@
                                                 </c:choose>
                                                 <spring:message code="Abdominal Perimeter" />
                                             </label>
+                                            <!-----ENCUESTA de Satisfaccion de usuario---->
+                                            <label class="checkbox-inline">
+                                                <c:choose>
+                                                    <c:when test="${permisos.encSatUsu}">
+                                                        <input type="checkbox" id="chk_encSatUsu" name="chk_encSatUsu" checked>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <input type="checkbox" id="chk_encSatUsu" name="chk_encSatUsu">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <spring:message code="User Satisfaction Survey" />
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="form-group row">
