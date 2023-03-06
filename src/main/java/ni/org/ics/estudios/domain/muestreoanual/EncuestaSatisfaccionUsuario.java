@@ -79,6 +79,15 @@ public class EncuestaSatisfaccionUsuario implements Serializable{
     private String creado;
     private String usuarioRegistro;
 
+    //Nuevos campos agregados el 06/03/2023
+    private String nombre1Tutor;
+    private String nombre2Tutor;
+    private String apellido1Tutor;
+    private String apellido2Tutor;
+    private Integer codigoCasa;
+    private String casaChf;
+    private String estudio;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODIGO", nullable = false)
@@ -682,5 +691,68 @@ public class EncuestaSatisfaccionUsuario implements Serializable{
 
     public void setUsuarioRegistro(String usuarioRegistro) {
         this.usuarioRegistro = usuarioRegistro;
+    }
+
+    @Column(name = "NOMBRE1TUTOR", length = 100)
+    public String getNombre1Tutor() {
+        return nombre1Tutor;
+    }
+
+    public void setNombre1Tutor(String nombre1Tutor) {
+        this.nombre1Tutor = nombre1Tutor;
+    }
+
+    @Column(name = "NOMBRE2TUTOR", length = 100)
+    public String getNombre2Tutor() {
+        return nombre2Tutor;
+    }
+
+    public void setNombre2Tutor(String nombre2Tutor) {
+        this.nombre2Tutor = nombre2Tutor;
+    }
+
+    @Column(name = "APELLIDO1TUTOR", length = 100)
+    public String getApellido1Tutor() {
+        return apellido1Tutor;
+    }
+
+    public void setApellido1Tutor(String apellido1Tutor) {
+        this.apellido1Tutor = apellido1Tutor;
+    }
+
+    @Column(name = "APELLIDO2TUTOR", length = 100)
+    public String getApellido2Tutor() {
+        return apellido2Tutor;
+    }
+
+    public void setApellido2Tutor(String apellido2Tutor) {
+        this.apellido2Tutor = apellido2Tutor;
+    }
+
+    @Column(name = "CODIGOCASA", nullable = true)
+    public Integer getCodigoCasa() {
+        return codigoCasa;
+    }
+
+    public void setCodigoCasa(Integer codigoCasa) {
+        this.codigoCasa = codigoCasa;
+    }
+
+    @Column(name = "CASACHF", length = 10)
+    public String getCasaChf() {
+        return casaChf;
+    }
+
+    public void setCasaChf(String casaChf) {
+        this.casaChf = casaChf;
+    }
+
+    @Column(name = "ESTUDIO", length = 100)
+    public String getEstudio() {
+        return estudio;
+    }
+
+    public void setEstudio(String estudio) {
+        this.estudio = estudio;
     }
 }
