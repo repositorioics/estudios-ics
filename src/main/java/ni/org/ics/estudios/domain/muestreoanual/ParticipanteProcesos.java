@@ -91,6 +91,8 @@ public class ParticipanteProcesos implements Auditable {
     //  Perimetro Abdominal perimetro_abdominal
     private String perimetroAbdominal;
 
+    private String esatUsuario;
+
 
     @Id
 	@Column(name = "codigo", nullable = false, length = 6)
@@ -650,5 +652,14 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setPerimetroAbdominal(String perimetroAbdominal) {
         this.perimetroAbdominal = perimetroAbdominal;
+    }
+
+    @Column(name = "esat_usuario", nullable = false, length = 2)
+    public String getEsatUsuario() {
+        return esatUsuario;
+    }
+
+    public void setEsatUsuario(String esatUsuario) {
+        this.esatUsuario = esatUsuario;
     }
 }

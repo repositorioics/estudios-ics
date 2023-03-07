@@ -46,6 +46,7 @@ public class HistorialRetiroDto implements Serializable {
     private String alertas;
     //agregado por Santiago MA2023
     private String perimetroAbdominal;
+    private String encSatUsu;
 
     private List<RetiroDto> retiroList;
 
@@ -346,5 +347,13 @@ public class HistorialRetiroDto implements Serializable {
 
     public void setPerimetroAbdominal(String perimetroAbdominal) {
         this.perimetroAbdominal = perimetroAbdominal;
+    }
+
+    public String getEncSatUsu() {
+        return encSatUsu;
+    }
+
+    public void setEncSatUsu(String encSatUsu) {
+        this.encSatUsu = encSatUsu;
     }
 }

@@ -27,6 +27,8 @@ public class DiferenciaParteCartaDto implements Serializable {
     private String aceptaParteESc;
     private String aceptaParteFCc;
     private String aceptaParteFSc;
+    private String aceptaParteGCc;
+    private String aceptaParteGSc;
     private String aceptaContactoFuturoCc;
     private String aceptaContactoFuturoSc;
     private String asentimientoVerbalCc;
@@ -216,5 +218,21 @@ public class DiferenciaParteCartaDto implements Serializable {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getAceptaParteGCc() {
+        return aceptaParteGCc;
+    }
+
+    public void setAceptaParteGCc(String aceptaParteGCc) {
+        this.aceptaParteGCc = aceptaParteGCc;
+    }
+
+    public String getAceptaParteGSc() {
+        return aceptaParteGSc;
+    }
+
+    public void setAceptaParteGSc(String aceptaParteGSc) {
+        this.aceptaParteGSc = aceptaParteGSc;
     }
 }

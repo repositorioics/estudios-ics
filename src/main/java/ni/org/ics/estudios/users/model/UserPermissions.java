@@ -42,6 +42,7 @@ public class UserPermissions {
 	private Boolean tamizajezika=false;
 	private Boolean datosparto=false;
     private Boolean pabdominal=false; //Perimetro Abdominal
+    private Boolean encSatUsu=false; //Perimetro Abdominal
 
 	@Id
 	@Column(name = "username", nullable = false, length =50)
@@ -172,4 +173,16 @@ public class UserPermissions {
     public void setpAbdominal(Boolean pAbdominal) {
         this.pabdominal = pAbdominal;
     }
+
+    @Column(name = "encsatusu", nullable = false)
+    public Boolean getEncSatUsu() {
+        return encSatUsu;
+    }
+
+    public void setEncSatUsu(Boolean encSatUsu) {
+        this.encSatUsu = encSatUsu;
+    }
+
+
+
 }
