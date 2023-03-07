@@ -113,7 +113,8 @@ public class CorregirCartas_Consentimientos {
                                                           @RequestParam(value = "parteC", defaultValue = "") String parteC,
                                                           @RequestParam(value = "parteD", defaultValue = "") String parteD,
                                                           @RequestParam(value = "parteE", defaultValue = "") String parteE,
-                                                          @RequestParam(value = "parteF", defaultValue = "") String parteF) {
+                                                          @RequestParam(value = "parteF", defaultValue = "") String parteF,
+                                                          @RequestParam(value = "parteG", defaultValue = "") String parteG) {
         try{
             CartaConsentimiento cartaConsentimiento = this.cartaConsentimientoCorrectionService.getByCartaConsentimientoId(codigo);
             if (cartaConsentimiento!=null){
@@ -173,6 +174,9 @@ public class CorregirCartas_Consentimientos {
                 }
                 if(parteF!=""){
                     cartaConsentimiento.setAceptaParteF(parteF);
+                }
+                if(parteG!=""){
+                    cartaConsentimiento.setAceptaParteG(parteG);
                 }
                 this.cartaConsentimientoCorrectionService.updateConsentimiento(cartaConsentimiento);
                 return JsonUtil.createJsonResponse(cartaConsentimiento);

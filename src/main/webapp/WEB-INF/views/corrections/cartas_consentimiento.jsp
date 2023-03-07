@@ -149,6 +149,7 @@
                             <th data-hide="phone,tablet" class="text-center"><spring:message code="letters" /></th>
                             <th data-hide="phone,tablet" class="text-center"><spring:message code="version" /></th>
                             <th data-hide="phone,tablet" class="text-center"><spring:message code="dateAdded" /></th>
+                            <th data-hide="phone,tablet" class="text-center"><spring:message code="username" /></th>
                             <th data-hide="phone,tablet" class="text-center"><spring:message code="actions" /></th>
                         </tr>
                         </thead>
@@ -315,7 +316,7 @@
 
                                             <div class="form-row">
 
-                                                <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label for="parteD">Parte D</label>
                                                     <select id="parteD" name="parteD" class="form-control parte">
                                                         <option selected value=""><spring:message code="select"/>...</option>
@@ -324,7 +325,7 @@
                                                         </c:forEach>
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-md-4">
+                                                <div class="form-group col-md-3">
                                                     <label for="parteE">Parte E</label>
                                                     <select id="parteE" name="parteE" class="form-control parte">
                                                         <option selected value=""><spring:message code="select"/>...</option>
@@ -333,7 +334,8 @@
                                                         </c:forEach>
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-md-4">
+
+                                                <div class="form-group col-md-3">
                                                     <label for="parteF">Parte F</label>
                                                     <select id="parteF" name="parteF" class="form-control parte">
                                                         <option selected value=""><spring:message code="select"/>...</option>
@@ -343,7 +345,19 @@
                                                     </select>
                                                 </div>
 
+                                                <div class="form-group col-md-3">
+                                                    <label for="parteG">Parte G</label>
+                                                    <select id="parteG" name="parteG" class="form-control parte">
+                                                        <option selected value=""><spring:message code="select"/>...</option>
+                                                        <c:forEach items="${catSiNo}" var="sn">
+                                                            <option value="${sn.catKey}"> ${sn.spanish}</option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
                                             </div>
+
+
                                         </div>
                                     </div>
 

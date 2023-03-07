@@ -209,6 +209,18 @@ var cartaConsentimiento = function(){
                             }
                         }
                     }
+
+                    /*  PARTE G */
+                    if(data.aceptaParteG!=null || data.aceptaParteG !=""){
+                        var optionUnselectedParteG= $('#parteG option:not(:selected)');
+                        for (var i = 0; i < optionUnselectedParteG.length; i++) {
+                            if (data.aceptaParteG === optionUnselectedParteG[i].value){
+                                $("#parteG").select2().val( optionUnselectedParteG[i].value ).trigger("change");
+                                break;
+                            }
+                        }
+                    }
+
                 });//fin getJson
             });
 
@@ -267,6 +279,7 @@ var cartaConsentimiento = function(){
                             var datestring = getFormattedDate(new Date(data[i].fechaFirma));
                             var carta = data[i].tamizaje.estudio.nombre;
                             var version = data[i].version;
+                            var usuario = data[i].recordUser;
                             var boton = '<a class="btn btn-warning btnForm" data-id="' + data[i].codigo + '"> <i class="fa fa-pencil-square text-white" aria-hidden="true"></i> </a>';
                             table.row.add([
                                 getCode,
@@ -274,6 +287,7 @@ var cartaConsentimiento = function(){
                                 carta,
                                 version,
                                 datestring,
+                                usuario,
                                 boton
                             ]).draw( false );
                         }
@@ -308,6 +322,7 @@ var cartaConsentimiento = function(){
                 $("#parteD").select2().val("").trigger('change.select2');
                 $("#parteE").select2().val("").trigger('change.select2');
                 $("#parteF").select2().val("").trigger('change.select2');
+                $("#parteG").select2().val("").trigger('change.select2');
             }
 
             function verifcarTestigo(){
