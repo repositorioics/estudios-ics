@@ -339,6 +339,9 @@
                                                 <c:if test="${permisos.encSatUsu}"> <%--Encuesta satisfaccion usuario--%>
                                                     <spring:message code="encSatUsu" />
                                                 </c:if>
+                                                <c:if test="${permisos.encSatUsuCc}"> <%--Encuesta satisfaccion usuario Control de calidad--%>
+                                                    <spring:message code="encSatUsuCc" />
+                                                </c:if>
                                             </p>
                                         </div>
                                     </div>
