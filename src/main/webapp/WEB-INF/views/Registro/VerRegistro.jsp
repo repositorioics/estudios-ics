@@ -1580,7 +1580,6 @@
 
         function getParticipantes(){
             tablaParticipantes.clear().draw( false );
-            //var form1 = $('#form_by_nombre');
             $.getJSON(parametros.getPartNombreApellido,{nombre1: $("#nombre1").val().trim(), apellido1: $("#apellido1").val().trim()}, function(data){
                 $.each(data, function(key, item){
                     var codigo = (data[key].codigo);

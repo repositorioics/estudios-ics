@@ -241,7 +241,7 @@ public class MuestraService {
             e.printStackTrace();
         }
         Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
-        // Create a Hibernate query (HQL)
+        // Create a Hibernate query (HQL) add recursos
         Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2, " +
 				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso1 ) AS `recurso11`, " +
 				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso2 ) AS `recurso22` " +

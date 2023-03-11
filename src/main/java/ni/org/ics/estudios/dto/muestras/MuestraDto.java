@@ -11,7 +11,7 @@ public class MuestraDto {
     private Integer pinchazos;
     private Integer recurso1;
     private Integer recurso2;
-    //
+    // nombre del recurso
     private String recurso11;
     private String recurso22;
 

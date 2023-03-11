@@ -1283,7 +1283,6 @@ public class ExcelBuilder extends AbstractExcelView {
             sheet.autoSizeColumn(i);
         }
         rowCount += 2;
-
         createHorizontalCellRange(sheet, sheet.createRow(rowCount++), "3) Tubos Rojos de las estaciones que no tiene el supervisor", 0, 4, false, titleStyle);
         setTableHeader(sheet.createRow(rowCount++), headerStyle, Constants.COLUMNAS_TBL_DIF_MX_EST);
         if (rojoEstnoSup.size() > 0) {
