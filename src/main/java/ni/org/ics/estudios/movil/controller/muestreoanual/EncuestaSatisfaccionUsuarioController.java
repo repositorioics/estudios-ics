@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.movil.controller.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.EncuestaSatisfaccionUsuario;
+import ni.org.ics.estudios.domain.muestreoanual.EncuestaSatisfaccionUsuarioCC;
 import ni.org.ics.estudios.service.covid.CovidService;
 import ni.org.ics.estudios.service.muestreoanual.EncuestaSatisfaccionUsuarioService;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,23 @@ public class EncuestaSatisfaccionUsuarioController {
             for(EncuestaSatisfaccionUsuario encuestaSatisfaccionUsuario : encuestaSatisfaccionUsuarioList) {
                 encuestaSatisfaccionUsuario.setFechaRegistro(new Date());
                 encuestaSatisfaccionUsuarioService.saveOrUpdateEncuestaSatisfaccionUsuario(encuestaSatisfaccionUsuario);
+            }
+        }
+        return "Datos recibidos!";
+    }
+
+    @RequestMapping(value = "encuestaSatisfaccionUsuarioCc", method = RequestMethod.POST, consumes = "application/json")
+    public @ResponseBody
+    String saveEncuestaSatisfaccionUsuarioCc(@RequestBody EncuestaSatisfaccionUsuarioCC[] objetos){
+        logger.debug("Insertando/Actualizando las encuestas de satisfaccion de usuario - CC");
+        if (objetos == null){
+            logger.debug("Nulo");
+            return "No recibi nada!";
+        }else{
+            List<EncuestaSatisfaccionUsuarioCC> encuestaSatisfaccionUsuarioCcList = Arrays.asList(objetos);
+            for(EncuestaSatisfaccionUsuarioCC encuestaSatisfaccionUsuarioCc : encuestaSatisfaccionUsuarioCcList) {
+                encuestaSatisfaccionUsuarioCc.setFechaRegistro(new Date());
+                encuestaSatisfaccionUsuarioService.saveOrUpdateEncuestaSatisfaccionUsuarioCc(encuestaSatisfaccionUsuarioCc);
             }
         }
         return "Datos recibidos!";

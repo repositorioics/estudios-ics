@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.service.muestreoanual;
 
 import ni.org.ics.estudios.domain.muestreoanual.EncuestaSatisfaccionUsuario;
+import ni.org.ics.estudios.domain.muestreoanual.EncuestaSatisfaccionUsuarioCC;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class EncuestaSatisfaccionUsuarioService {
     private SessionFactory sessionFactory;
 
     public void saveOrUpdateEncuestaSatisfaccionUsuario(EncuestaSatisfaccionUsuario encuestaSatisfaccionUsuario){
+        Session session = sessionFactory.getCurrentSession();
+        session.save(encuestaSatisfaccionUsuario);
+    }
+
+    public void saveOrUpdateEncuestaSatisfaccionUsuarioCc(EncuestaSatisfaccionUsuarioCC encuestaSatisfaccionUsuario){
         Session session = sessionFactory.getCurrentSession();
         session.save(encuestaSatisfaccionUsuario);
     }

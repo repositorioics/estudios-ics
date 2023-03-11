@@ -126,6 +126,7 @@ public class AdminUsuariosController {
             , @RequestParam( value="chk_esatisfaccion", required=false, defaultValue="" ) String chkEsatisfaccion
             , @RequestParam( value="chk_pAbdominal", required=false, defaultValue="" ) String chkpAbdominal
             , @RequestParam( value="chk_encSatUsu", required=false, defaultValue="" ) String chkencSatUsu
+            , @RequestParam( value="chk_encSatUsuCc", required=false, defaultValue="" ) String chkencSatUsuCc
 	        )
 	{
     	try{
@@ -163,6 +164,7 @@ public class AdminUsuariosController {
                 permissions.setEncuestaSatisfaccion(!chkEsatisfaccion.isEmpty());
                 permissions.setpAbdominal(!chkpAbdominal.isEmpty());
                 permissions.setEncSatUsu(!chkencSatUsu.isEmpty());
+                permissions.setEncSatUsuCc(!chkencSatUsuCc.isEmpty());
                 this.usuarioService.saveUserPermissions(permissions);
 
 	    		for(String a:authorities){
@@ -206,6 +208,7 @@ public class AdminUsuariosController {
                 permissions.setEncuestaSatisfaccion(!chkEsatisfaccion.isEmpty());
                 permissions.setpAbdominal(!chkpAbdominal.isEmpty()); //Perimetro Abdominal
                 permissions.setEncSatUsu(!chkencSatUsu.isEmpty());
+                permissions.setEncSatUsuCc(!chkencSatUsuCc.isEmpty());
                 this.usuarioService.saveUserPermissions(permissions);
 
 				//Recupera los roles activos de este usuario de la base de datos y pone el username en una lista

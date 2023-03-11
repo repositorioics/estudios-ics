@@ -42,7 +42,8 @@ public class UserPermissions {
 	private Boolean tamizajezika=false;
 	private Boolean datosparto=false;
     private Boolean pabdominal=false; //Perimetro Abdominal
-    private Boolean encSatUsu=false; //Perimetro Abdominal
+    private Boolean encSatUsu=false; //Encuesta satisfaccion usuario
+    private Boolean encSatUsuCc=false; //Encuesta satisfaccion usuario control de calidad
 
 	@Id
 	@Column(name = "username", nullable = false, length =50)
@@ -183,6 +184,14 @@ public class UserPermissions {
         this.encSatUsu = encSatUsu;
     }
 
+    @Column(name = "encsatusucc", nullable = false)
+    public Boolean getEncSatUsuCc() {
+        return encSatUsuCc;
+    }
+
+    public void setEncSatUsuCc(Boolean encSatUsuCc) {
+        this.encSatUsuCc = encSatUsuCc;
+    }
 
 
 }

@@ -93,6 +93,8 @@ public class ParticipanteProcesos implements Auditable {
 
     private String esatUsuario;
 
+    private String esatUsuarioCc;
+
 
     @Id
 	@Column(name = "codigo", nullable = false, length = 6)
@@ -661,5 +663,14 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setEsatUsuario(String esatUsuario) {
         this.esatUsuario = esatUsuario;
+    }
+
+    @Column(name = "esat_usuario_cc", nullable = false, length = 2)
+    public String getEsatUsuarioCc() {
+        return esatUsuarioCc;
+    }
+
+    public void setEsatUsuarioCc(String esatUsuarioCc) {
+        this.esatUsuarioCc = esatUsuarioCc;
     }
 }
