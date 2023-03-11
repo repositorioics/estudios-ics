@@ -447,32 +447,24 @@
                                                                                             <td class="text-left"> <h6>PBMC:</h6> </td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-white pull-rigth" style="background-color: #d562da; font-size: 15px" id="pbmc2"></span></td>
                                                                                         </tr>
-
                                                                                         <tr>
                                                                                             <td class="text-left"> <h6>PaxGene:</h6> </td>
                                                                                             <td class="text-right"><span class="badge badge-pill text-white" style="background-color: #00dd00; font-size: 15px" id="paxgene2"></span></td>
                                                                                         </tr>
-
                                                                                         <tr>
-
                                                                                             <td><button id="btnCodeLineal" class="btn btn-primary float-left" data-toggle="tooltip" data-placement="top" title="Imprimir Lineal">
                                                                                                 <i class="fa fa-barcode"></i>
                                                                                             </button>
                                                                                             </td>
-
                                                                                             <td>
                                                                                                 <button id="btnCodeBidi" class="btn btn-warning float-right" data-toggle="tooltip" data-placement="bottom" title="Imprimir QRCode">
                                                                                                     <i class="fa fa-qrcode"></i>
                                                                                                 </button>
                                                                                             </td>
-
                                                                                         </tr>
                                                                                     </table>
-
                                                                                 </div>
-
                                                                             </div>
-
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -498,56 +490,12 @@
                                                                            </li>
                                                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                                                <div>
-                                                                                   <small class="text-muted"> Realizar Encuesta </small>
-                                                                                   <h6 class="my-0"> Casa Cohorte</h6>
-                                                                               </div>
-                                                                               <h2><span id="enc_casa_cohorte" class="badge badge-primary badge-pill text-dark"></span> </h2>
-                                                                           </li>
-
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar Encuesta</small>
-                                                                                   <h6 class="my-0"> Casa Familia</h6>
-                                                                               </div>
-                                                                               <h2> <span id="enc_casa_Fam" class="badge badge-primary badge-pill text-dark"></span></h2>
-                                                                           </li>
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar encuesta</small>
-                                                                                   <h6 class="my-0">Peso y Talla</h6>
-                                                                               </div>
-                                                                               <h2><span id="pyt" class="badge badge-primary badge-pill text-dark"></span></h2>
-                                                                           </li>
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar encuesta</small>
-                                                                                   <h6 class="my-0">Lactancia Materna</h6>
-                                                                               </div>
-                                                                               <h2><span id="lact" class="badge badge-primary badge-pill text-dark"></span></h2>
-                                                                           </li>
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar encuesta</small>
-                                                                                   <h6 class="my-0">Cuestionario COVID19</h6>
-                                                                               </div>
-                                                                               <h2><span id="cuest_covid" class="badge badge-primary badge-pill text-dark"></span></h2>
-                                                                           </li>
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
-                                                                                   <small class="text-muted">Realizar encuesta</small>
-                                                                                   <h6 class="my-0">Participante</h6>
-                                                                               </div>
-                                                                               <h2><span id="enc_part" class="badge badge-primary badge-pill text-dark"></span></h2>
-                                                                           </li>
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                                                               <div>
                                                                                    <small  class="text-muted">Realizar</small>
                                                                                    <h6 class="my-0">Consentimiento Flu</h6>
                                                                                </div>
                                                                                <h2> <span id="cons_flu" class="badge badge-primary badge-pill text-dark"></span> </h2>
 
                                                                            </li>
-
                                                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                                                <div>
                                                                                    <small class="text-muted">Realizar </small>
@@ -569,7 +517,7 @@
                                                                                </div>
                                                                                <h2><span id="vacuna" class="badge badge-primary badge-pill text-white"></span> </h2>
                                                                            </li>
-                                                                           <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                           <!--<li class="list-group-item d-flex justify-content-between lh-condensed">
                                                                                <div>
                                                                                    <small class="text-muted">Realizar encuesta</small>
                                                                                    <h6 class="my-0">Perímetro Abdominal</h6>
@@ -582,7 +530,7 @@
                                                                                    <h6 class="my-0">Satisfacción de Usuario</h6>
                                                                                </div>
                                                                                <h2><span id="encSatUsu" class="badge badge-primary badge-pill text-white"></span> </h2>
-                                                                           </li>
+                                                                           </li>-->
                                                                        </ul>
                                                                    </div>
                                                                 </div>
@@ -658,7 +606,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                                 <div class="col-md-8">
                                                                     <div class="card card1 mb-3">
                                                                         <div class="card-body">
@@ -710,6 +657,72 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="card card1">
+                                                                        <div class="card-body">
+                                                                            <h5 class="d-flex align-items-center mb-3"><i class="material-icons text-warning mr-2">
+                                                                                <strong>Encuestas Pendientes </strong></i> </h5>
+                                                                            <ul id="myUL1" class="list-group mb-3">
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted"> Realizar Encuesta </small>
+                                                                                        <h6 class="my-0"> Casa Cohorte</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="enc_casa_cohorte" class="badge badge-primary badge-pill text-dark"></span> </h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar Encuesta</small>
+                                                                                        <h6 class="my-0"> Casa Familia</h6>
+                                                                                    </div>
+                                                                                    <h2> <span id="enc_casa_Fam" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar encuesta</small>
+                                                                                        <h6 class="my-0">Peso y Talla</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="pyt" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar encuesta</small>
+                                                                                        <h6 class="my-0">Lactancia Materna</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="lact" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar encuesta</small>
+                                                                                        <h6 class="my-0">Cuestionario COVID19</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="cuest_covid" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar encuesta</small>
+                                                                                        <h6 class="my-0">Participante</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="enc_part" class="badge badge-primary badge-pill text-dark"></span></h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar encuesta</small>
+                                                                                        <h6 class="my-0">Perímetro Abdominal</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="perimetroAbdominal" class="badge badge-primary badge-pill text-white"></span> </h2>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                                                    <div>
+                                                                                        <small class="text-muted">Realizar encuesta</small>
+                                                                                        <h6 class="my-0">Satisfacción de Usuario</h6>
+                                                                                    </div>
+                                                                                    <h2><span id="encSatUsu" class="badge badge-primary badge-pill text-white"></span> </h2>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -719,7 +732,6 @@
                                             <div class="tab-pane fade p-3 animate__headShake" id="four" role="tabpanel" aria-labelledby="four-tab">
                                                 <!-- Fin 1er tabs-->
                                                    <form name="form_verification" action="#" id="form_verification">
-
                                                                         <div class="row">
                                                                             <div class="col-lg-1 col-md-1 col-sm-12">
                                                                             </div>
@@ -1000,15 +1012,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive" style="width: 100%">
-                         <table id="tblCasa_Participants" class="table table-dark table-hover dt-responsive nowrap" style="width:100%">
+                    <div class="table-responsive">
+                         <table id="tblCasa_Participants" class="table table-bordered table-hover" style="width:100%">
                         <thead>
                         <tr>
-                            <th>C.Pediátrica</th>
-                            <th>Casa CHF</th>
-                            <th>Código</th>
-                            <th>Nombre Completo</th>
-                            <th>Edad</th>
+                            <th class="text-center">C.Pediátrica</th>
+                            <th class="text-center">Casa CHF</th>
+                            <th class="text-center">Código</th>
+                            <th class="text-center">Nombre Completo</th>
+                            <th class="text-center">Edad</th>
+                            <th class="text-center">Estado</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -1201,8 +1214,9 @@
                         $("#conQuien").val(data.nombreCompletoParticipante);
                         $('#relacionFam').val('8').trigger('change');
                     } else {
-                        $("#conQuien").val();
-                        $('#relacionFam').val('').trigger('change');
+                        $("#conQuien").val("").focus();
+                        $("#conQuien").val(data.tutor);
+                        $('#relacionFam').val(data.relacionFamTutor).trigger('change');
                     }
 
                         $("#sexo").text(data.sexo);
@@ -1210,7 +1224,7 @@
                         $("#edad").text(datestring);
                         $("#jefe").text(data.jefe);
                         $("#tutor").text(data.tutor);
-                        var relacion;
+                    var relacion="";
                         switch(data.relacionFamTutor){
                             case '1':
                                 relacion = "Madre";
@@ -1408,6 +1422,14 @@
                 $('#contador').text(""+cont);
                 $("#pendientes").text(""+cont);
             });
+
+            $("#myUL1 li span").each(function(indice, elemento) {
+                if($(elemento).text() == 'Si'){
+                    cont++;
+                }
+                $('#contador').text(""+cont);
+                $("#pendientes").text(""+cont);
+            });
         }
 
 
@@ -1435,16 +1457,20 @@
 
         var tableParticipantCasa = $("#tblCasa_Participants").DataTable({
             "oLanguage": {
-                "sUrl": "${dataTablesLang}"
+                "sUrl": "${dataTablesLang}",
             },
-            autoWidth: true
+            "columnDefs":[
+                {"className": "text-center", "targets": "_all"}
+            ],
+            autoWidth: false
         });
 
         /* Metodo para vizualizar participantes por casa pediatrica*/
         $('#VerAll').on('click', function(){
             const codCasa = $('#idCasa').text();
+
             const idParticipante = $('#idParticipante').text();
-            if( !isNaN(codCasa) || codCasa != null ){
+            if( !isNaN(codCasa) || (codCasa != null && codCasa!=9999) ){
                 $.getJSON(parametros.participantsByCodeCasaUrl,{casaCode: codCasa, codParticipante: idParticipante, ajax:'true'}, function(data){
                     console.log(data);
                     tableParticipantCasa.clear().draw( false );
@@ -1454,18 +1480,23 @@
                         var cParticipante = (data[i].idParticipante);
                         var nombre = (data[i].nombreParticipante);
                         var edad = data[i].anios+" años "+ data[i].meses + " meses " + data[i].dias +" dias";
+                        var status = (data[i].estado=="ACTIVO") ? '<h4><span class="badge badge-success badge-pill"> Activo </span></h4>': '<h4><span class="badge badge-danger badge-pill"> Retirado </span></h4>';
                         tableParticipantCasa.row.add([
                             cPediatrica,
                             casaFam,
                             cParticipante,
                             nombre,
-                            edad
+                            edad,
+                            status
                         ]).draw(false);
 
                     });
                 }).fail(function(){
                     toastr.error("Error, Intenta de nuevo!","Error",{timeOut: 0});
                 });
+            }else{
+                toastr.error("Error, Código de Casa no válido!","Error",{timeOut: 0});
+                return false;
             }
 
             $("#exampleModal").modal("show");
@@ -1688,7 +1719,6 @@
 
         $("#relacionFam").on("change", function(){
             var valor = $(this).val();
-            console.log(valor);
             if(valor == "6"){
                 $("#otraRelacionFam").val('').prop("disabled", false).focus();
             } else {
@@ -1698,7 +1728,6 @@
 
         $("#contactado").on("change", function(){
             var valor = $(this).val();
-            console.log(valor);
             if ($.inArray('998', valor) !== -1) {
                 $("#otraFormaContacto").val('').prop("disabled", false);
                 $("#otraFormaContacto").focus();
@@ -1768,8 +1797,6 @@
         });
 
         function limpiarCtrlsVerificacion() {
-            //$("#codigoVeri").val('');
-            //$("#nombreVeri").val('');
             $("#conQuien").val('');
             $('#asentimiento').val('').trigger('change');
             $('#relacionFam').val('').trigger('change');
@@ -1810,8 +1837,6 @@
             $("#tutor").text("");
             $("#relfam").text("");
             $("#nombreComplete").text("");
-            //verificacion
-
         }
 
         $("#btnCodeLineal").on("click", function() {

@@ -1169,8 +1169,8 @@ public class ExcelBuilder extends AbstractExcelView {
                 setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso11(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso22(), 4, false, contentCellStyle, dateCellStyle);
             }
         } else {
             setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
@@ -1188,8 +1188,8 @@ public class ExcelBuilder extends AbstractExcelView {
                 setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso11(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso22(), 4, false, contentCellStyle, dateCellStyle);
             }
         } else {
             setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
@@ -1292,8 +1292,8 @@ public class ExcelBuilder extends AbstractExcelView {
                 setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso11(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso22(), 4, false, contentCellStyle, dateCellStyle);
             }
         } else {
             setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
@@ -1311,8 +1311,8 @@ public class ExcelBuilder extends AbstractExcelView {
                 setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso11(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso22(), 4, false, contentCellStyle, dateCellStyle);
             }
         } else {
             setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_EST.length, rowCount++, noDataCellStyle);
@@ -1394,8 +1394,8 @@ public class ExcelBuilder extends AbstractExcelView {
                 setCellData(dataRow, registro.getCodigo(), 0, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getFechaMuestra(), 1, false, contentCellStyle, dateCellStyle);
                 setCellData(dataRow, registro.getPinchazos(), 2, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso1(), 3, false, contentCellStyle, dateCellStyle);
-                setCellData(dataRow, registro.getRecurso2(), 4, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso11(), 3, false, contentCellStyle, dateCellStyle);
+                setCellData(dataRow, registro.getRecurso22(), 4, false, contentCellStyle, dateCellStyle);
             }
         } else {
             setNoDataRow(sheet, Constants.COLUMNAS_TBL_DIF_MX_LAB.length, rowCount++, noDataCellStyle);

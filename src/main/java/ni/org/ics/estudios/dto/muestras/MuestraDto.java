@@ -11,6 +11,9 @@ public class MuestraDto {
     private Integer pinchazos;
     private Integer recurso1;
     private Integer recurso2;
+    //
+    private String recurso11;
+    private String recurso22;
 
     public Integer getCodigo() {
         return codigo;
@@ -50,5 +53,21 @@ public class MuestraDto {
 
     public void setRecurso2(Integer recurso2) {
         this.recurso2 = recurso2;
+    }
+
+    public String getRecurso11() {
+        return recurso11;
+    }
+
+    public void setRecurso11(String recurso11) {
+        this.recurso11 = recurso11;
+    }
+
+    public String getRecurso22() {
+        return recurso22;
+    }
+
+    public void setRecurso22(String recurso22) {
+        this.recurso22 = recurso22;
     }
 }

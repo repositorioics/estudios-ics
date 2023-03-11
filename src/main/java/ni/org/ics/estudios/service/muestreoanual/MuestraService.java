@@ -117,7 +117,9 @@ public class MuestraService {
         }
         Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
         // Create a Hibernate query (HQL)
-        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2, " +
+				" (SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso1 ) AS `recurso11`, " +
+				" (SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso2 ) AS `recurso22` " +
                 "from estudios_ics.muestras left join estudios_ics.recepcionbhc on muestras.codigo = recepcionbhc.codigo and muestras.fecha_registro = recepcionbhc.fecha_bhc " +
                 "where ((muestras.fecha_registro  = :fechaBHC and muestras.tubobhc =1) and (recepcionbhc.codigo Is Null or muestras.fecha_registro <> recepcionbhc.fecha_bhc) " +
                 "and (YEAR(muestras.fecha_registro) = :anio));");
@@ -142,7 +144,14 @@ public class MuestraService {
         }
         Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
         // Create a Hibernate query (HQL)
-        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+        /*Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+                "from estudios_ics.muestras left join estudios_ics.labbhc on muestras.codigo = labbhc.codigo and muestras.fecha_registro = labbhc.fecha_bhc " +
+                "where ((muestras.fecha_registro = :fechaBHC and muestras.tubobhc =1) and (labbhc.codigo Is Null or muestras.fecha_registro <> labbhc.fecha_bhc) " +
+                "and (YEAR(muestras.fecha_registro) = :anio));");
+        query.setTimestamp("fechaBHC", timeStamp);*/
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2," +
+				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso1 ) AS `recurso11`, " +
+				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso2 ) AS `recurso22` " +
                 "from estudios_ics.muestras left join estudios_ics.labbhc on muestras.codigo = labbhc.codigo and muestras.fecha_registro = labbhc.fecha_bhc " +
                 "where ((muestras.fecha_registro = :fechaBHC and muestras.tubobhc =1) and (labbhc.codigo Is Null or muestras.fecha_registro <> labbhc.fecha_bhc) " +
                 "and (YEAR(muestras.fecha_registro) = :anio));");
@@ -167,10 +176,23 @@ public class MuestraService {
         }
         Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
         // Create a Hibernate query (HQL)
-        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+        /*Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, " +
+				" (SELECT cat_personal.NOMBRE_APELLIDO FROM estudios_ics.cat_personal  WHERE cat_personal.PERSONA_ID = estudios_ics.muestras.recurso1 ) as recurso11, " +
+				" (SELECT cat_personal.NOMBRE_APELLIDO FROM estudios_ics.cat_personal  WHERE cat_personal.PERSONA_ID = estudios_ics.muestras.recurso2 ) as recurso22 " +
                 "from estudios_ics.muestras left join estudios_ics.recepcionsero on muestras.codigo = recepcionsero.codigo and muestras.fecha_registro = recepcionsero.fecha_sero " +
                 "where ((muestras.fecha_registro  = :fechaSero and muestras.tuborojo =1 and (muestras.tuboLeu is null or muestras.tuboLeu = 0)) and (recepcionsero.codigo Is Null or muestras.fecha_registro <> recepcionsero.fecha_sero) " +
-                "and (YEAR(muestras.fecha_registro) = :anio));");
+                "and (YEAR(muestras.fecha_registro) = :anio));");*/
+
+                //mia
+		String q = "SELECT muestras.codigo AS codigo, muestras.fecha_muestra AS fechaMuestra, muestras.pinchazos AS pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2, " +
+				"( SELECT cat_personal.NOMBRE_APELLIDO FROM estudios_ics.cat_personal WHERE cat_personal.PERSONA_ID = estudios_ics.muestras.recurso1) recurso11, " +
+				"( SELECT cat_personal.NOMBRE_APELLIDO FROM estudios_ics.cat_personal WHERE cat_personal.PERSONA_ID = estudios_ics.muestras.recurso2) recurso22 " +
+				"FROM estudios_ics.muestras " +
+				"LEFT JOIN estudios_ics.recepcionsero ON muestras.codigo = recepcionsero.codigo AND muestras.fecha_registro = recepcionsero.fecha_sero " +
+				"WHERE ((DATE(muestras.fecha_registro) = :fechaSero AND muestras.tuborojo =1 AND (muestras.tuboLeu IS NULL OR muestras.tuboLeu = 0)) AND (recepcionsero.codigo IS NULL OR muestras.fecha_registro <> recepcionsero.fecha_sero) " +
+				"AND (YEAR(muestras.fecha_registro) = :anio));";
+        Query query = session.createSQLQuery(q);
+
         query.setTimestamp("fechaSero", timeStamp);
         query.setInteger("anio", Constants.ANIOMUESTREO);
         query.setResultTransformer(Transformers.aliasToBean(MuestraDto.class));
@@ -192,7 +214,9 @@ public class MuestraService {
         }
         Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
         // Create a Hibernate query (HQL)
-        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2, " +
+				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso1 ) AS `recurso11`, " +
+				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso2 ) AS `recurso22` " +
                 "from estudios_ics.muestras left join estudios_ics.labsero on muestras.codigo = labsero.codigo and muestras.fecha_registro = labsero.fecha_sero " +
                 "where ((muestras.fecha_registro = :fechaSero and muestras.tuborojo =1 and (muestras.tuboLeu is null or muestras.tuboLeu = 0)) and (labsero.codigo Is Null or muestras.fecha_registro <> labsero.fecha_sero) " +
                 "and (YEAR(muestras.fecha_registro) = :anio));");
@@ -218,7 +242,9 @@ public class MuestraService {
         }
         Timestamp timeStamp = new Timestamp(dateWithoutTime.getTime());
         // Create a Hibernate query (HQL)
-        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2 " +
+        Query query = session.createSQLQuery("select muestras.codigo as codigo, muestras.fecha_muestra as fechaMuestra, muestras.pinchazos as pinchazos, muestras.recurso1 as recurso1, muestras.recurso2 as recurso2, " +
+				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso1 ) AS `recurso11`, " +
+				"(SELECT cp.NOMBRE_APELLIDO FROM cat_personal cp WHERE cp.PERSONA_ID = muestras.recurso2 ) AS `recurso22` " +
                 "from estudios_ics.muestras left join estudios_ics.labpbmc on muestras.codigo = labpbmc.codigo  and muestras.fecha_registro = labpbmc.fecha_pbmc " +
                 "where ((muestras.fecha_registro = :fechaPbmc and muestras.tuboleu =1) and (labpbmc.codigo Is Null or muestras.fecha_registro <> labpbmc.fecha_pbmc) " +
                 "and (YEAR(muestras.fecha_registro) = :anio));");
