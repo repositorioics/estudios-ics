@@ -195,64 +195,69 @@ public class BuildEntoData {
             cell.setCellValue(header);
         }
 
-        if (listaPuntosClaves.size()>0) {
-            int rowCount = 1;
-            for (CuestionarioPuntoClave registro : listaPuntosClaves) {
-                HSSFRow dataRow = sheet.createRow(rowCount++);
+        /*Se valida Cambio listaPuntosClaves != null ya que por eso da error debido en ningun momento se obtiene la data y da null pointer
+        Fecha cambio = 13/03/2023, Ing Santiago Carballo */
+        if (listaPuntosClaves != null) {
+            if (listaPuntosClaves.size()>0) {
+                int rowCount = 1;
+                for (CuestionarioPuntoClave registro : listaPuntosClaves) {
+                    HSSFRow dataRow = sheet.createRow(rowCount++);
 
-                ExcelBuilder.setCellData(dataRow, DateUtil.DateToString(registro.getFechaCuestionario(), "dd/MM/yyyy"), 0, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getBarrio(), 1, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getNombrePuntoClave(), 2, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getDireccionPuntoClave(), 3, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoClave(), 4, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoProductividad(), 5, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoProductividadOtro(), 6, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoAglomeracion(), 7, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoAglomeracionOtro(), 8, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getCuantasPersonasReunen(), 9, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getCuantosDiasSemanaReunen(),10 , false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraInicioReunion()), 11, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraFinReunion()), 12, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getPuntoGps(), 13, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getLatitud(), 14, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getLongitud(), 15, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, DateUtil.DateToString(registro.getFechaCuestionario(), "dd/MM/yyyy"), 0, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getBarrio(), 1, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getNombrePuntoClave(), 2, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getDireccionPuntoClave(), 3, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoClave(), 4, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoProductividad(), 5, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoProductividadOtro(), 6, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoAglomeracion(), 7, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoPuntoAglomeracionOtro(), 8, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getCuantasPersonasReunen(), 9, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getCuantosDiasSemanaReunen(),10 , false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraInicioReunion()), 11, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraFinReunion()), 12, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getPuntoGps(), 13, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getLatitud(), 14, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getLongitud(), 15, false, contentCellStyle, dateCellStyle);
 
 
-                ExcelBuilder.setCellData(dataRow, registro.getTipoIngresoCodigoSitio(), 16, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getCodigoSitio(), 17, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoIngresoCodigoSitio(), 16, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getCodigoSitio(), 17, false, contentCellStyle, dateCellStyle);
 
-                ExcelBuilder.setCellData(dataRow, registro.getHayAmbientePERI(), 18, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraCapturaPERI()), 19, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getHumedadRelativaPERI(), 20, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTemperaturaPERI(), 21, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoIngresoCodigoPERI(), 22, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getCodigoPERI(), 23, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getHayAmbientePERI(), 18, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraCapturaPERI()), 19, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getHumedadRelativaPERI(), 20, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTemperaturaPERI(), 21, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoIngresoCodigoPERI(), 22, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getCodigoPERI(), 23, false, contentCellStyle, dateCellStyle);
 
-                ExcelBuilder.setCellData(dataRow, registro.getHayAmbienteINTRA(), 24, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraCapturaINTRA()), 25, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getHumedadRelativaINTRA(), 26, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTemperaturaINTRA(), 27, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getTipoIngresoCodigoINTRA(), 28, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getCodigoINTRA(), 29, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getHayAmbienteINTRA(), 24, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, DateUtil.getHoraFormateada(registro.getHoraCapturaINTRA()), 25, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getHumedadRelativaINTRA(), 26, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTemperaturaINTRA(), 27, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getTipoIngresoCodigoINTRA(), 28, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getCodigoINTRA(), 29, false, contentCellStyle, dateCellStyle);
 
-                ExcelBuilder.setCellData(dataRow, registro.getNombrePersonaContesta(), 30, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getMovilInfo().getUsername(), 31, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, ni.org.ics.estudios.web.utils.DateUtil.DateToString(registro.getMovilInfo().getToday(), "dd/MM/yyyy"), 32, false, contentCellStyle, dateCellStyle);
-                ExcelBuilder.setCellData(dataRow, registro.getCodigoCuestionario(), 33, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getNombrePersonaContesta(), 30, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getMovilInfo().getUsername(), 31, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, ni.org.ics.estudios.web.utils.DateUtil.DateToString(registro.getMovilInfo().getToday(), "dd/MM/yyyy"), 32, false, contentCellStyle, dateCellStyle);
+                    ExcelBuilder.setCellData(dataRow, registro.getCodigoCuestionario(), 33, false, contentCellStyle, dateCellStyle);
+                }
+
+                for (int i = 0; i < Constants.ENTO_COLUMNAS_TBL_CUEST_PUNTO_CLAVE.length ; i++){
+                    sheet.autoSizeColumn(i);
+                }
+            }else{
+                CellStyle noDataCellStyle = workbook.createCellStyle();
+                noDataCellStyle.setAlignment(HorizontalAlignment.CENTER);
+                noDataCellStyle.setFont(font);
+                HSSFRow aRow = sheet.createRow(1);
+                sheet.addMergedRegion(new CellRangeAddress(aRow.getRowNum(), aRow.getRowNum(), 0, Constants.ENTO_COLUMNAS_TBL_CUEST_PUNTO_CLAVE.length - 1));
+                aRow.createCell(0).setCellValue("NO SE ENCONTRARON DATOS!");
+                aRow.getCell(0).setCellStyle(noDataCellStyle);
             }
-
-            for (int i = 0; i < Constants.ENTO_COLUMNAS_TBL_CUEST_PUNTO_CLAVE.length ; i++){
-                sheet.autoSizeColumn(i);
-            }
-        }else{
-            CellStyle noDataCellStyle = workbook.createCellStyle();
-            noDataCellStyle.setAlignment(HorizontalAlignment.CENTER);
-            noDataCellStyle.setFont(font);
-            HSSFRow aRow = sheet.createRow(1);
-            sheet.addMergedRegion(new CellRangeAddress(aRow.getRowNum(), aRow.getRowNum(), 0, Constants.ENTO_COLUMNAS_TBL_CUEST_PUNTO_CLAVE.length - 1));
-            aRow.createCell(0).setCellValue("NO SE ENCONTRARON DATOS!");
-            aRow.getCell(0).setCellStyle(noDataCellStyle);
         }
+
     }
 
     private static int obtenerCodigoCasaCuestionario(List<CuestionarioHogar> listaCuestionario, String codigoEncuesta) {
