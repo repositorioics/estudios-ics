@@ -269,6 +269,7 @@
 <spring:url value="/cartas/getNombre2" var="getNombre2Url"/>
 <spring:url value="/cartas/getApellido1" var="getApellido1Url"/>
 <spring:url value="/cartas/getApellido2" var="getApellido2Url"/>
+<spring:url value="/cartas/verificaEstudioVersionCarta" var="verificaEstudioVersionCartaUrl"/>
 <c:set var="successMessage"><spring:message code="process.success" /></c:set>
 <c:set var="errorProcess"><spring:message code="process.error" /></c:set>
 <div class="card-body">
@@ -826,10 +827,10 @@
             getNombre1Url       : "${getNombre1Url}",
             getNombre2Url       : "${getNombre2Url}",
             getApellido1Url     : "${getApellido1Url}",
-            getApellido2Url     : "${getApellido2Url}"
+            getApellido2Url     : "${getApellido2Url}",
+            verificaEstudioVersionCartaUrl : "${verificaEstudioVersionCartaUrl}"
         };
         scanCarta.init(parametros);
-        var elementos = [];
         $("#version").prop('disabled',true);
         $("#partes").prop('disabled',true);
         $("#partes").select2({placeholder: "Selección parte"});

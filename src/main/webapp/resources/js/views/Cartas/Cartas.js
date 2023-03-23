@@ -187,7 +187,6 @@ var scanCarta = function(){
                 $('#version').val("").trigger('change.select2');
                 $('#version').select2().empty();
                 $("#partes").select2().empty();
-                //$("#partes").append($('<option></option>').val('').html('Seleccione'));
                 $('#partes').select2().empty().trigger('change.select2');
                 $("#partes").select2("val", "");
                 $("#principal").val('');
@@ -314,7 +313,6 @@ var scanCarta = function(){
                 var $ele = $("#partes");
                 $.getJSON(parametros.ParteVersionUrl,{idversion : idversion, ajax:'true'}, function(data){
                      elementos = [];
-                    var texto="";
                     for(var i=0; i < data.parte.length; i++){
                         var obj = {};
                         obj.idparte = parseInt(data.parte[i].idparte);
@@ -395,7 +393,7 @@ var scanCarta = function(){
                         estudios_actuales: $("#estudios").val(),
                         esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim())
                     };
-                    GuardarScan(data);
+                    verificaEstudioVersionCarta(data);
                 }
             });
             function ValidateForm() {
@@ -476,6 +474,34 @@ var scanCarta = function(){
                 return isAllValid;
             }
 
+            async function verificaEstudioVersionCarta(data) {
+                let asincrono;
+                var codigo_participante  = document.getElementById('codigo').value;
+                var idversion = document.getElementById('version').value;
+                var idestudio = document.getElementById('carta').value;
+                asincrono = await $.getJSON(direct.verificaEstudioVersionCartaUrl,{codigo_participante,idversion,idestudio})
+                    .done(function (response) {
+                        if (response.mensaje === "false"){
+                            GuardarScan(data);
+                        }else{
+                            swal({
+                                title: "Participante tiene versión \n registrada!",
+                                text: "Deseas continuar?",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-warning",
+                                confirmButtonText: "Si, Guardar!",
+                                closeOnConfirm: false,
+                                closeOnCancel: false
+                            }, function(isConfirm){
+                                if(isConfirm)
+                                    GuardarScan(data);
+                                else
+                                    swal("Cancelado", "proceso terminado :)", "error");
+                            });
+                        }
+                    });
+            }
 
             function GuardarScan(obj){
                 $.ajax({

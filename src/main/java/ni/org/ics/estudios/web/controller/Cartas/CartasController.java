@@ -34,12 +34,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import java.security.cert.Extension;
 import java.text.ParseException;
 import java.util.*;
 
 /**
- * Created by ICS on 09/01/2020.
+ * Created by lserrano on 09/01/2020.
  */
 @Controller
 @RequestMapping("/cartas")
@@ -573,6 +572,16 @@ public class CartasController {
             return new ResponseEntity<String>(json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(value = "/verificaEstudioVersionCarta", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> verificaEstudioVersionCarta(@RequestParam(value = "codigo_participante", required = true) Integer codigo_participante,
+                                                              @RequestParam(value = "idversion", required = true) Integer idversion,
+                                                              @RequestParam(value = "idestudio", required = true) Integer idestudio) throws Exception {
+        boolean result = this.scanCartaService.verificarSiTieneMismaVersionCarta(codigo_participante, idversion, idestudio);
+        String mismaVersion = (result == true) ? "true":"false";
+        return JsonUtil.createJsonResponse(mismaVersion);
+    }
+
     //endregion
 
     /* Buscar Listado por Codigo Participante */
@@ -789,7 +798,7 @@ public class CartasController {
         try {
             ParticipanteCarta objParticipanteCarta = this.scanCartaService.getCartasParticipante(idParticipanteCarta);
             model.addAttribute("objParticipanteCarta", objParticipanteCarta);
-            List<Extension> exts = scanCartaService.getExtensionVersion(objParticipanteCarta.getVersion().getIdversion());
+            List<Extensiones> exts = scanCartaService.getExtensionVersion(objParticipanteCarta.getVersion().getIdversion());
             model.addAttribute("exts", exts);
             String nombreCompleto = objParticipanteCarta.getParticipante().getNombre1() + " " + objParticipanteCarta.getParticipante().getNombre2() + " " + objParticipanteCarta.getParticipante().getApellido1() + " " + objParticipanteCarta.getParticipante().getApellido2();
             model.addAttribute("nombreCompleto", nombreCompleto);
@@ -847,7 +856,7 @@ public class CartasController {
             model.addAttribute("idParticipanteCarta", objParticipanteCarta.getIdparticipantecarta());
             model.addAttribute("idParticipante", objParticipanteCarta.getParticipante().getCodigo());
             model.addAttribute("idVersion", objParticipanteCarta.getVersion().getIdversion());
-            List<Extension> exts = scanCartaService.getExtensionVersion(caso.getParticipantecarta().getVersion().getIdversion());
+            List<Extensiones> exts = scanCartaService.getExtensionVersion(caso.getParticipantecarta().getVersion().getIdversion());
             model.addAttribute("exts", exts);
             List<ParticipanteExtension> getParticipantExt = this.scanCartaService.getAllPartExt(objParticipanteCarta.getIdparticipantecarta());
             model.addAttribute("getPartExt", getParticipantExt);

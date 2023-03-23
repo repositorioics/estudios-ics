@@ -3,7 +3,6 @@ package ni.org.ics.estudios.service.scancarta;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.*;
 import ni.org.ics.estudios.domain.scancarta.*;
-//import ni.org.ics.estudios.dto.scan;
 import ni.org.ics.estudios.dto.cartas.*;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import org.hibernate.Query;
@@ -16,17 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.security.cert.Extension;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-//import ni.org.ics.estudios.domain.scancarta.ScanCarta;
 
-/**
- * Created by Miguel Salinas on 6/27/2017.
- * V1.0
- */
 @Transactional
 @Service("scanCartaService")
 public class ScanCartaService {
@@ -62,7 +55,7 @@ public class ScanCartaService {
         return query.list();
     }
 
-    public List<Extension> getExtensionVersion(Integer idversion){
+    public List<Extensiones> getExtensionVersion(Integer idversion){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Extensiones e where e.version.id=:idversion");
         query.setParameter("idversion",idversion);
@@ -1045,6 +1038,29 @@ public class ScanCartaService {
             throw e;
         }
     }
-    /**/
+
+
+    /**
+     * @param codigo_participante
+     * @param idversion
+     * @param idestudio
+     * @return
+     * @throws Exception
+     */
+    public boolean verificarSiTieneMismaVersionCarta(Integer codigo_participante, Integer idversion, Integer idestudio)throws Exception{
+        Session session = sessionFactory.getCurrentSession();
+        boolean result, anulada = false;
+        Query query = session.createSQLQuery("SELECT scp.* " +
+                "FROM estudios e " +
+                "INNER JOIN scan_catalog_version v ON (e.CODIGO = v.CODIGO_ESTUDIO) " +
+                "INNER JOIN scan_participante_carta scp ON (v.IDVERSION = scp.IDVERSION) " +
+                "WHERE scp.CODIGO_PARTICIPANTE =:codigo_participante AND scp.IDVERSION =:idversion and e.codigo=:idestudio AND scp.PASIVO = '0' AND scp.ANULADA =:anulada");
+        query.setParameter("codigo_participante", codigo_participante);
+        query.setParameter("idversion", idversion);
+        query.setParameter("idestudio", idestudio);
+        query.setParameter("anulada", anulada);
+        result = query.list().size()>0;
+        return result;
+    }
 
 }
