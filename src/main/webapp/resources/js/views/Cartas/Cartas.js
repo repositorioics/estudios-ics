@@ -260,7 +260,6 @@ var scanCarta = function(){
             });//fin
 
             function ContactoFuture(parametros, codeVersion){
-                debugger;
                 var idcarta = document.getElementById('carta').value;
                 $.getJSON(parametros.VersionCartatUrl, { idcarta : idcarta,   ajax : 'true'  }, function(data) {
                     var respons = JSON.parse(JSON.stringify(data));
@@ -377,7 +376,7 @@ var scanCarta = function(){
                         person: parseInt($("#person").val().trim()),
                         fechacarta: $("#fechacarta").val(),
                         proyecto: $("#proyecto").val(),
-                        contactoFuturo: $("#contactoFuturo").val(), //($('input:checkbox[name=contactoFuturo]').prop('checked') == true) ? '1' : '0',
+                        contactoFuturo: $("#contactoFuturo").val(),
                         testigopresente: ($('input:checkbox[name=chktestigo]').prop('checked') == true) ? '1' : '0',
                         nombre1testigo: $("#nombre1Testigo").val().trim(),
                         nombre2testigo: $("#nombre2Testigo").val().trim(),

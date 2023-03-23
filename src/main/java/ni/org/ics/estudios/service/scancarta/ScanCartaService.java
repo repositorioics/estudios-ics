@@ -77,14 +77,6 @@ public class ScanCartaService {
         return query.list();
     }
 
-    /*public List<Carta> getCartaActiva(){
-        Session session = sessionFactory.getCurrentSession();
-        String verdadera = "true";
-        Query query = session.createQuery("from Carta c where c.activo= :verdadera order by carta");
-        query.setParameter("verdadera",verdadera);
-        return query.list();
-    }*/
-
     public List<Estudio>getEstudios(){
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from Estudio e where e.pasive='0' order by e.nombre asc ");

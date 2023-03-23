@@ -95,8 +95,6 @@ public class PdfView extends AbstractPdfView {
         }
     }
 
-
-
     private PdfPCell createCell(String text, Font f, int border){
         PdfPCell cell = new PdfPCell(new Phrase(text, f));
         cell.setPaddingBottom(5);

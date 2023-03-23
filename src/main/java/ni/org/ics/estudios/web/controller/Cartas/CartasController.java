@@ -509,7 +509,6 @@ public class CartasController {
                         } else {
                             pc.setEsIndiceOrMiembro(0);//NA(No Aplica)
                         }
-
                         pc.setQuienfirma(obj.getNombfirma().toUpperCase());
                         String name2Tutor = (obj.getNombre2Firma() != null) ? obj.getNombre2Firma().toUpperCase() : "";
                         pc.setNombre2Firma(name2Tutor);

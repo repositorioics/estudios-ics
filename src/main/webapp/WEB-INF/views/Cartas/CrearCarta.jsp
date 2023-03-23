@@ -782,27 +782,6 @@
         }).on('hide.bs.collapse', function(){
             $(this).parent().find(".card-header .btn i").removeClass("fa-minus-circle").addClass("fa-plus-circle");
         });
-        /* $('.collapse').on('show.bs.collapse', function () {
-         // do something…
-         debugger;
-         });
-         $('.collapse').on('shown.bs.collapse', function (e) {
-         console.log(e.target.id);
-         });
-         $('.collapse').on('hidden.bs.collapse', function (e) {
-         console.log(e.target.id);
-         });
-
-         $("#two").on("click", function(e){
-         debugger;
-         if($("#codigo").val() == null || $("#codigo").val() == ""){
-         console.error(e.target.id);
-         return false;
-         }else {
-         return true;
-         }
-         });
- */
         $("#carta").select2();
         $("#version").select2();
         $("#person").select2();
