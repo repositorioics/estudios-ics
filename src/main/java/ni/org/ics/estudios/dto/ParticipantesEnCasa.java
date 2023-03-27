@@ -98,7 +98,6 @@ public class ParticipantesEnCasa implements Serializable {
     public String getEstudio() {
         return estudio;
     }
-
     public void setEstudio(String estudio) {
         this.estudio = estudio;
     }

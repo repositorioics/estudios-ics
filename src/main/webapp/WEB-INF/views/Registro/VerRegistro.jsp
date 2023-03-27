@@ -1173,7 +1173,7 @@
         });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                console.log(data);
+                //console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
