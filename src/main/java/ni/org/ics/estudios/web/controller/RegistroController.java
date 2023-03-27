@@ -314,6 +314,7 @@ public class RegistroController {
                 ParticipantEnCasa.setDias(part3);
                 String est = (procesos.getEstPart()== 1 ? "Activo" : "Retirado");
                 ParticipantEnCasa.setEstado(est.toUpperCase());
+                ParticipantEnCasa.setEstudio(procesos.getEstudio());
                 listEnCasa.add(ParticipantEnCasa);
            }
             return listEnCasa;
