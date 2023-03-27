@@ -400,8 +400,8 @@ public class ComparacionController {
             ,@RequestParam(value = "estudiosAct", required = true) String estudiosAct
             ,@RequestParam(value = "chkEstado", required = false) String chkEstado
             ,@RequestParam(value = "fechaReg", required = false) String fechaReg
-            /*,@RequestParam(value = "chkEliminadoMx", required = false) String chkEliminadoMx
-            ,@RequestParam(value = "chkEstadoMx", required = false) String chkEstadoMx*/
+            ,@RequestParam(value = "observacion", required = false) String observacion
+            /*,@RequestParam(value = "chkEstadoMx", required = false) String chkEstadoMx*/
     )throws Exception{
         try {
             MuestraMA o = new MuestraMA();
@@ -463,6 +463,8 @@ public class ComparacionController {
             o.setEstudiosAct(estudiosAct);
             //campos rellenos
             o.setFiebreM(0);
+
+            o.setObservacion(observacion);
 
             this.comparasionService.SaveMuestra(o);
             return createJsonResponse(o);
