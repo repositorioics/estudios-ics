@@ -522,6 +522,12 @@
                             <label for="tuborojo"><spring:message code="lbl.serologia"/></label>
                             <input type="text" class="form-control focusNext" tabindex="13" id="tuborojo" name="tuborojo" min="1" max="2" value="${caso.tuboRojo}">
                         </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="tuborojo"><spring:message code="observacion"/></label>
+                            <textarea class="form-control" name="observacion" id="observacion" rows="3">${caso.observacion}</textarea>
+                        </div>
+
                     </div>
 
                     <div class="form-group">
@@ -570,9 +576,10 @@
                             <th class="text-center"><spring:message code="numPinchazos" /></th>
                             <th class="text-center"><spring:message code="lbl.BHC" /></th>
                             <th class="text-center"><spring:message code="Rojo" /></th>
-                            <th class="text-center"><spring:message code="Leu" /></th>
+                            <th class="text-center"><spring:message code="lbl.Leucosep" /></th>
                             <th class="text-center"><spring:message code="Pax" /></th>
                             <th class="text-center"><spring:message code="userstudies" /></th>
+                            <th class="text-center"><spring:message code="observacion" /></th>
                             <th class="text-center"><spring:message code="actions" /></th>
                         </tr>
                         </thead>
@@ -644,6 +651,7 @@
                                 </c:choose>
 
                                 <td class="text-center"> <span class="label label-default"> ${mx.estudiosAct} </span> </td>
+                                <td class="text-center">  ${mx.observacion} </td>
                                 <td class="text-center">
                                     <!-- <a href="${fn:escapeXml(editMuestraUrl)}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm">
                                                 <i class="fa fa-edit"></i>

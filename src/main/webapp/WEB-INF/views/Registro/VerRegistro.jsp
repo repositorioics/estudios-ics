@@ -1021,7 +1021,7 @@
                             <th class="text-center">Código</th>
                             <th class="text-center">Nombre Completo</th>
                             <th class="text-center">Edad</th>
-                            <th class="text-center">Estado</th>
+                            <th class="text-center">Estudio</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -1173,7 +1173,7 @@
         });
         function searchParticipante(id){
             $.getJSON(parametros.searchPartUrl, { parametro : id,   ajax : 'true'  }, function(data) {
-                console.log(data);
+                //console.log(data);
                 LimpiarCtrls();
                 var len = data.length;
                 if(len==0){
@@ -1481,13 +1481,14 @@
                         var nombre = (data[i].nombreParticipante);
                         var edad = data[i].anios+" años "+ data[i].meses + " meses " + data[i].dias +" dias";
                         var status = (data[i].estado=="ACTIVO") ? '<h4><span class="badge badge-success badge-pill"> Activo </span></h4>': '<h4><span class="badge badge-danger badge-pill"> Retirado </span></h4>';
+                        var estudio = (data[i].estudio);
                         tableParticipantCasa.row.add([
                             cPediatrica,
                             casaFam,
                             cParticipante,
                             nombre,
                             edad,
-                            status
+                            estudio
                         ]).draw(false);
 
                     });
