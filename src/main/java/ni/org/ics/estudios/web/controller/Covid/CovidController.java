@@ -3,6 +3,7 @@ package ni.org.ics.estudios.web.controller.Covid;
 import com.google.gson.Gson;
 import ni.org.ics.estudios.domain.CartaConsentimiento;
 import ni.org.ics.estudios.domain.Participante;
+import ni.org.ics.estudios.domain.Retiros.Retiros;
 import ni.org.ics.estudios.domain.cohortefamilia.CasaCohorteFamilia;
 import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
@@ -14,6 +15,7 @@ import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
 import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
+import ni.org.ics.estudios.dto.ParticipantesEnCasa;
 import ni.org.ics.estudios.dto.muestras.MxDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.CartaConsentimientoService;
@@ -24,6 +26,7 @@ import ni.org.ics.estudios.service.cohortefamilia.casos.ParticipanteCohorteFamil
 import ni.org.ics.estudios.service.covid.CovidService;
 import ni.org.ics.estudios.service.influenzauo1.ParticipanteCasoUO1Service;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
+import ni.org.ics.estudios.service.retiro.RetiroService;
 import ni.org.ics.estudios.service.scancarta.ScanCartaService;
 import ni.org.ics.estudios.web.utils.DateUtil;
 import ni.org.ics.estudios.web.utils.JsonUtil;
@@ -43,10 +46,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -83,6 +83,9 @@ public class CovidController {
 
     @Resource(name = "messageResourceService")
     private MessageResourceService messageResourceService;
+
+    @Resource(name = "RetiroService")
+    private RetiroService retiroService;
 
     /* Buscar Listado Covid Participante  getParticipantesCohorteFamiliaCasoByCodigoCaso */
     @RequestMapping(value = "/listCovid", method = RequestMethod.GET)
@@ -394,12 +397,15 @@ public class CovidController {
         return "casosCovid/participantesList";
     }
 
+    private static String identificador;
+    private static Integer medico_supervisor;
+    private static Integer persona_documenta;
+    private static Integer relacionFamiliar;
+
     @RequestMapping( value="closeCase", method=RequestMethod.POST)
     public ResponseEntity<String> cerrarCaso( @RequestParam(value="codigo", required=true ) String codigo
             , @RequestParam( value="fechaInactivo", required=true, defaultValue="" ) String fechaInactivo
-            , @RequestParam( value="observacion", required=false, defaultValue="" ) String observacion
-    )
-    {
+            , @RequestParam( value="observacion", required=false, defaultValue="" ) String observacion) {
         try{
             CasoCovid19 casoExistente = this.covidService.getCasoCovid19ByCodigo(codigo);
             if (casoExistente!=null) {
@@ -413,10 +419,64 @@ public class CovidController {
                 //casoExistente.setRecordDate(new Date());
                 casoExistente.setInactivo("1");
                 this.covidService.saveOrUpdateCasoCovid19(casoExistente);
+
+                /* Iniciar retiro del estudio de covid */
+                List<MessageResource> meta = this.messageResourceService.getCatalogo("CAT_METADATOS_RETIRO_AUTOMATIC");
+                identificador = meta.get(1).getSpanish();
+                medico_supervisor = Integer.parseInt(meta.get(2).getSpanish());
+                persona_documenta = Integer.parseInt(meta.get(3).getSpanish());
+                relacionFamiliar = Integer.parseInt(meta.get(4).getSpanish());
+
+                List<ParticipantesEnCasa> participantesEnCasas = this.covidService.getParticipantesByCasaFamiliaId(casoExistente.getCasa().getCodigoCHF());
+                for (int i = 0; i < participantesEnCasas.size() ; i++) {
+                ArrayList<String> arrayEstudios = new ArrayList<String>();
+                    ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participantesEnCasas.get(i).getIdParticipante());
+                    if (procesos != null & procesos.getEstudio().contains("Tcovid")){
+
+                        String[] arrayString = procesos.getEstudio().split("  ");
+                        for (int j = 0; j < arrayString.length ; j++) {
+                            arrayEstudios.add(arrayString[j]);
+                            arrayEstudios.remove("Tcovid");
+                        }
+                        StringBuffer stringBuffer = new StringBuffer();
+                        for (String s:arrayEstudios){
+                            stringBuffer.append(s);
+                            stringBuffer.append("  ");
+                        }
+
+                        //Actualiza el campo estudio
+                        boolean result = this.covidService.ActualizarCampoEstudio(procesos.getCodigo(), stringBuffer.toString());
+                        if(result){ // iniciar Guardar en documentacion_retiro_data
+                            Retiros retiro = new Retiros();
+                            retiro.setDeviceid(identificador);
+                            retiro.setEstado('1');
+                            retiro.setPasive('0');
+                            retiro.setRecordDate(new Date());
+                            retiro.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                            retiro.setActual(true);
+                            retiro.setCodigocasafamilia(procesos.getCasaCHF());
+                            retiro.setCodigocasapdcs(casoExistente.getCasa().getCasa().getCodigo());
+                            retiro.setDevolviocarnet('0');
+                            retiro.setEstudioretirado("Tcovid");
+                            retiro.setEstudiosanteriores(procesos.getEstudio());
+                            retiro.setFecharetiro(dFechaInactivo);
+                            retiro.setMedicosupervisor(medico_supervisor);
+                            retiro.setMotivo("C2");
+                            retiro.setObservaciones("RETIRADO POR TERMINAR PERIODO DEL ESTUDIO");
+                            retiro.setOtrosmotivo("");
+                            retiro.setPersonadocumenta(persona_documenta);
+                            retiro.setQuiencomunica("Ninguno");
+                            retiro.setRelfam(relacionFamiliar);
+                            retiro.setTipofecha("1");
+                            Participante participante = this.participanteService.getParticipanteByCodigo(procesos.getCodigo());
+                            retiro.setParticipante(participante);
+                            this.retiroService.SaveRetiros(retiro);
+                        }
+                    }
+                }
             }
             return JsonUtil.createJsonResponse(casoExistente);
-        }
-        catch(Exception e){
+        } catch(Exception e){
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.CREATED);

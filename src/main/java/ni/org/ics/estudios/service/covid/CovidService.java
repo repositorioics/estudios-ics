@@ -4,10 +4,12 @@ import ni.org.ics.estudios.domain.cohortefamilia.Muestra;
 import ni.org.ics.estudios.domain.covid19.*;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
+import ni.org.ics.estudios.dto.ParticipantesEnCasa;
 import ni.org.ics.estudios.dto.muestras.MxDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -506,4 +508,39 @@ public class CovidService {
         return query.list();
     }
     //endregion
+
+    // Buscar todos los participantes por codigo de casas de familia
+
+    public List<ParticipantesEnCasa> getParticipantesByCasaFamiliaId(String casaFam){
+        Session session = sessionFactory.getCurrentSession();
+        String consulta = "SELECT p.CODIGO_CASA AS codCasaPediatrica, pp.casa_chf AS codCasaFamilia, p.CODIGO AS idParticipante, pp.estudio  AS estudio " +
+                "FROM participantes p JOIN participantes_procesos pp USING(codigo) " +
+                "WHERE pp.casa_chf =:casaFam AND pp.est_part = 1 AND pp.estudio IS NOT NULL;";
+        Query query = session.createSQLQuery(consulta);
+        query.setParameter("casaFam", casaFam);
+        query.setResultTransformer(Transformers.aliasToBean(ParticipantesEnCasa.class));
+        return query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean ActualizarCampoEstudio(Integer codigo, String estudioFinales) throws Exception{
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        boolean response;
+        Query query = session.createQuery("update ParticipanteProcesos pp set pp.estudio= :estudioFinales where pp.codigo= :codigo");
+        query.setParameter("codigo",codigo);
+        query.setParameter("estudioFinales",estudioFinales);
+        int result = query.executeUpdate();
+
+        if (result > 0)
+            response = true;
+        else
+            response = false;
+
+
+        tx.commit();
+        session.close();
+        return response;
+    }
+
 }
