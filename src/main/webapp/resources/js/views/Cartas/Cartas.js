@@ -497,6 +497,10 @@ var scanCarta = function(){
                                     GuardarScan(data);
                                 else
                                     swal("Cancelado", "proceso terminado :)", "error");
+                                window.setTimeout(function(){
+                                    window.location.reload();
+                                }, 1000);
+
                             });
                         }
                     });
