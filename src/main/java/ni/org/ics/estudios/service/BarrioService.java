@@ -30,5 +30,12 @@ public class BarrioService {
         return query.list();
     }
 
+    @SuppressWarnings("unchecked")
+    public Barrio getBarrioById(Integer id){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Barrio b where b.codigo=:id");
+        query.setParameter("id",id);
+        return (Barrio) query.uniqueResult();
+    }
     
 }

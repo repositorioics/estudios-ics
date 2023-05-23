@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.web.controller.DomicilioController;
 
 import com.google.gson.Gson;
+import ni.org.ics.estudios.domain.Casa;
 import ni.org.ics.estudios.domain.DatosCoordenadas;
 import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.catalogs.Barrio;
@@ -11,8 +12,11 @@ import ni.org.ics.estudios.dto.CambioDomParticipanteDto;
 import ni.org.ics.estudios.dto.CoordenadasParticipanteDto;
 import ni.org.ics.estudios.dto.ParticipantesCodigo;
 import ni.org.ics.estudios.language.MessageResource;
+import ni.org.ics.estudios.service.BarrioService;
+import ni.org.ics.estudios.service.CasaService;
 import ni.org.ics.estudios.service.Domicilios.DomicilioService;
 import ni.org.ics.estudios.service.MessageResourceService;
+import ni.org.ics.estudios.service.ParticipanteService;
 import ni.org.ics.estudios.service.hemodinanicaService.DatoshemodinamicaService;
 import ni.org.ics.estudios.service.muestreoanual.ParticipanteProcesosService;
 import ni.org.ics.estudios.web.utils.JsonUtil;
@@ -52,9 +56,18 @@ public class DomicilioController {
     /* Instancia de mi Servicio Hemodinamico */
     @Resource(name = "DomicilioService")
     private DomicilioService DomicilioService;
+
     @Resource(name = "participanteProcesosService")
     private ParticipanteProcesosService participanteProcesosService;
 
+    @Resource(name = "casaService")
+    private CasaService casaService;
+
+    @Resource(name = "barrioService")
+    private BarrioService barrioService;
+
+    @Resource(name = "participanteService")
+    private ParticipanteService participanteService;
 
     /* Buscar Participante desde Form Domicilio */
     @RequestMapping(value = "/searchParticipant", method = RequestMethod.GET, produces = "application/json")
@@ -193,10 +206,15 @@ public class DomicilioController {
             DatosCoordenadas obj = new DatosCoordenadas();
             UUID deviceUuid = new UUID(IdParticipante.hashCode(),new Date().hashCode());
             obj.setCodigo(deviceUuid.toString());
-            Participante p = new Participante();
-            p.setCodigo(Integer.valueOf(IdParticipante));
+
+            Integer part = Integer.parseInt(IdParticipante);
+            Participante p = this.participanteService.getParticipanteByCodigo(part);
             obj.setParticipante(p);
-            obj.setCodigoCasa(Integer.valueOf(codigoCasa));
+
+            Integer codigoCasaPediatrica = Integer.parseInt(codigoCasa);
+            Casa casa = this.casaService.getCasaByCodigo(codigoCasaPediatrica);
+            obj.setCodigoCasa(casa.getCodigo());
+
             if(casacohortefamilia == null ){
                 obj.setCasacohortefamilia(0);
             }else{
@@ -204,8 +222,7 @@ public class DomicilioController {
                 obj.setCasacohortefamilia(casacohortefamilia);
             }
 
-            Barrio b = new Barrio();
-            b.setCodigo(Integer.valueOf(barrio));
+            Barrio b = this.barrioService.getBarrioById(barrio);
             obj.setBarrio(b);
             obj.setManzana(manzana);
             obj.setTelefono(telefono);
@@ -235,6 +252,9 @@ public class DomicilioController {
             movil.setRecurso2(0);
             obj.setMovilInfo(movil);
             DomicilioService.SaveDomicilio(obj);
+            //todo: update a la tabla casas, solicitado por Brenda López (17-05-2023).
+            int result = this.casaService.updateCasaById(codigoCasaPediatrica,direccion,barrio,manzana);
+            System.out.println("esta son las rows actualizadas: " + result);
             return createJsonResponse(obj) ;
         }catch (Exception e){
             Gson gson = new Gson();
@@ -250,31 +270,36 @@ public class DomicilioController {
     @RequestMapping(value="SaveListDom", method= RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseEntity<String>SaveListDom(@RequestBody CambioDomParticipanteDto data)throws Exception{
-
         try{
+            Integer codeCasaP=0;
+            Integer barrioCode=0;
+
             for (int i = 0; i < data.getList().length ; i++) {
                 DomicilioService.allActualBaja(Integer.valueOf(data.getList()[i]));
                 DatosCoordenadas obj = new DatosCoordenadas();
                 String IdParticipante = ""+data.getList()[i];
                 UUID deviceUuid = new UUID(IdParticipante.hashCode(),new Date().hashCode());
                 obj.setCodigo(deviceUuid.toString());
-                Participante participant = new Participante();
-                participant.setCodigo(data.getList()[i]);
 
                 Integer codigo_participante = Integer.valueOf(data.getList()[i]);
                 Participante particip2 = this.datoshemodinamicaService.getParticipante(codigo_participante);
-                obj.setParticipante(participant);
-                //codigoCasa
-                Integer codeCasaP = particip2.getCasa().getCodigo();
+                obj.setParticipante(particip2);
+
+                //get codigoCasa
+                codeCasaP = particip2.getCasa().getCodigo();
                 obj.setCodigoCasa(codeCasaP);
+
                 if(data.getCasaFam() == "" ){
                     obj.setCasacohortefamilia(0);
                 }else{
                     obj.setCasacohortefamilia(Integer.valueOf(data.getCasaFam()));
                 }
-                Barrio b = new Barrio();
-                b.setCodigo(Integer.valueOf(data.getBarrio()));
-                obj.setBarrio(b);
+                //get Barrio
+                barrioCode = Integer.valueOf(data.getBarrio());
+                Barrio barrio = new Barrio();
+                barrio.setCodigo(barrioCode);
+                obj.setBarrio(barrio);
+
                 obj.setOtroBarrio(data.getOtroBarrio().toUpperCase());
                 obj.setManzana(data.getManzana());
                 obj.setTelefono(data.getTelefono());
@@ -307,6 +332,11 @@ public class DomicilioController {
                 obj.setMovilInfo(movil);
                 DomicilioService.SaveDomicilio(obj);
             }
+            //todo: Solicitado por Brenda el 17-05-2023
+            Casa casa = this.casaService.getCasaByCodigo(codeCasaP);
+            Barrio b = this.barrioService.getBarrioById(barrioCode);
+            int result = this.casaService.updateCasaById(casa.getCodigo(),data.getDir(),b.getCodigo(),data.getManzana());
+            logger.info("datos de casa actualizados..." + result);
             return createJsonResponse(data);
         }catch (Exception e){
             Gson gson = new Gson();
