@@ -50,10 +50,21 @@ public class CasaService {
         return query.list();
     }
 
-    public void saveOrUpdateCasa(Casa casa)
-    {
+    public void saveOrUpdateCasa(Casa casa){
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(casa);
+    }
+
+    public int updateCasaById(Integer id, String dir, int barrio, String manzana){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "UPDATE casas c SET c.DIRECCION=:dir, c.MANZANA=:manzana, c.CODIGO_BARRIO =:barrio WHERE c.CODIGO =:id";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("dir",dir);
+        query.setParameter("manzana", manzana);
+        query.setParameter("barrio", barrio);
+        query.setParameter("id",id);
+        int rows = query.executeUpdate();
+        return rows;
     }
 
     /**

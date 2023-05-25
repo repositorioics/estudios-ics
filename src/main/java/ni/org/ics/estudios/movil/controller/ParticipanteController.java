@@ -150,14 +150,179 @@ public class ParticipanteController {
      * @return String con el resultado
      */
     @RequestMapping(value = "participantesprocesos", method = RequestMethod.POST, consumes = "application/json")
-    public @ResponseBody String saveParticipantesProcesos(@RequestBody ParticipanteProcesos[] participantesArray){
+    public @ResponseBody String saveParticipantesProcesos(@RequestBody ParticipanteProcesos[] participantesArray) {
         logger.debug("Insertando/Actualizando datos procesos de participantes");
         if (participantesArray == null){
             logger.debug("Nulo");
             return "No recibi nada!";
         }else{
             List<ParticipanteProcesos> participantes = Arrays.asList(participantesArray);
-            for (ParticipanteProcesos participante : participantes){
+            for (ParticipanteProcesos participante : participantes) {
+                //Obteniendo el participanteProceso por codigo
+                ParticipanteProcesos partProc = participanteProcesosService.getParticipante(participante.getCodigo());
+                /*Verificar si los procesos del participante estan pendientes*/
+
+                if (partProc != null) {
+                    if (!isNullOrEmpty(partProc.getMovilInfo().getUltimoCambio()) && isNullOrEmpty(participante.getMovilInfo().getUltimoCambio())) {
+                        participante.getMovilInfo().setUltimoCambio(partProc.getMovilInfo().getUltimoCambio());
+                    }
+                    if (!isNullOrEmpty(partProc.getMovilInfo().getStart()) && isNullOrEmpty(participante.getMovilInfo().getStart())) {
+                        participante.getMovilInfo().setStart(partProc.getMovilInfo().getStart());
+                    }
+                    if (!isNullOrEmpty(partProc.getMovilInfo().getEnd()) && isNullOrEmpty(participante.getMovilInfo().getEnd())) {
+                        participante.getMovilInfo().setEnd(partProc.getMovilInfo().getEnd());
+                    }
+                    if (!isNullOrEmpty(partProc.getMovilInfo().getInstancePath()) && isNullOrEmpty(participante.getMovilInfo().getInstancePath())) {
+                        participante.getMovilInfo().setInstancePath(partProc.getMovilInfo().getInstancePath());
+                    }
+
+                    //conmx
+                    if (!isNullOrEmpty(partProc.getConmx()) && !isNullOrEmpty(participante.getConmx())) {
+                        if (partProc.getConmx().trim().equals("No") && participante.getConmx().trim().equals("Si")) {
+                            participante.setConmx("No");
+                        }
+                    }
+
+                    //conmxbhc
+                    if (!isNullOrEmpty(partProc.getConmxbhc()) && !isNullOrEmpty(participante.getConmxbhc())) {
+                        if (partProc.getConmxbhc().trim().equals("No") && participante.getConmxbhc().trim().equals("Si")) {
+                            participante.setConmxbhc("No");
+                        }
+                    }
+
+                    //cons_deng
+                    if (!isNullOrEmpty(partProc.getConsDeng()) && !isNullOrEmpty(participante.getConsDeng())) {
+                        if (partProc.getConsDeng().trim().equals("No") && participante.getConsDeng().trim().equals("Si")) {
+                            participante.setConsDeng("No");
+                        }
+                    }
+
+                    //cons_flu
+                    if (!isNullOrEmpty(partProc.getConsFlu()) && !isNullOrEmpty(participante.getConsFlu())) {
+                        if (partProc.getConsFlu().trim().equals("No") && participante.getConsFlu().trim().equals("Si")) {
+                            participante.setConsFlu("No");
+                        }
+                    }
+
+                    //datos_parto
+                    if (!isNullOrEmpty(partProc.getDatosParto()) && !isNullOrEmpty(participante.getDatosParto())) {
+                        if (partProc.getDatosParto().trim().equals("No") && participante.getDatosParto().trim().equals("Si")) {
+                            participante.setDatosParto("No");
+                        }
+                    }
+
+                    //enc_casa
+                    if (!isNullOrEmpty(partProc.getEnCasa()) && !isNullOrEmpty(participante.getEnCasa())) {
+                        if (partProc.getEnCasa().trim().equals("No") && participante.getEnCasa().trim().equals("Si")) {
+                            participante.setEnCasa("No");
+                        }
+                    }
+
+                    //enc_casa_chf
+                    if (!isNullOrEmpty(partProc.getEnCasaChf()) && !isNullOrEmpty(participante.getEnCasaChf())) {
+                        if (partProc.getEnCasaChf().trim().equals("No") && participante.getEnCasaChf().trim().equals("Si")) {
+                            participante.setEnCasaChf("No");
+                        }
+                    }
+
+                    //enc_lacmat
+                    if (!isNullOrEmpty(partProc.getEncLacMat()) && !isNullOrEmpty(participante.getEncLacMat())) {
+                        if (partProc.getEncLacMat().trim().equals("No") && participante.getEncLacMat().trim().equals("Si")) {
+                            participante.setEncLacMat("No");
+                        }
+                    }
+
+                    //enc_part
+                    if (!isNullOrEmpty(partProc.getEncPart()) && !isNullOrEmpty(participante.getEncPart())) {
+                        if (partProc.getEncPart().trim().equals("No") && participante.getEncPart().trim().equals("Si")) {
+                            participante.setEncPart("No");
+                        }
+                    }
+
+                    //info_vacuna
+                    if (!isNullOrEmpty(partProc.getInfoVacuna()) && !isNullOrEmpty(participante.getInfoVacuna())) {
+                        if (partProc.getInfoVacuna().trim().equals("No") && participante.getInfoVacuna().trim().equals("Si")) {
+                            participante.setInfoVacuna("No");
+                        }
+                    }
+
+                    //obsequio
+                    if (!isNullOrEmpty(partProc.getObsequio()) && !isNullOrEmpty(participante.getObsequio())) {
+                        if (partProc.getObsequio().trim().equals("No") && participante.getObsequio().trim().equals("Si")) {
+                            participante.setObsequio("No");
+                        }
+                    }
+
+                    //pbmc
+                    if (!isNullOrEmpty(partProc.getPbmc()) && !isNullOrEmpty(participante.getPbmc())) {
+                        if (partProc.getPbmc().trim().equals("No") && participante.getPbmc().trim().equals("Si")) {
+                            participante.setPbmc("No");
+                        }
+                    }
+
+                    //peso_talla
+                    if (!isNullOrEmpty(partProc.getPesoTalla()) && !isNullOrEmpty(participante.getPesoTalla())) {
+                        if (partProc.getPesoTalla().trim().equals("No") && participante.getPesoTalla().trim().equals("Si")) {
+                            participante.setPesoTalla("No");
+                        }
+                    }
+
+                    //pos_zika
+                    if (!isNullOrEmpty(partProc.getPosZika()) && !isNullOrEmpty(participante.getPosZika())) {
+                        if (partProc.getPosZika().trim().equals("No") && participante.getPosZika().trim().equals("Si")) {
+                            participante.setPosZika("No");
+                        }
+                    }
+
+                    //obsequio_chf
+                    if (!isNullOrEmpty(partProc.getObsequioChf()) && !isNullOrEmpty(participante.getObsequioChf())) {
+                        if (partProc.getObsequioChf().trim().equals("No") && participante.getObsequioChf().trim().equals("Si")) {
+                            participante.setObsequioChf("No");
+                        }
+                    }
+
+                    //c_datos_parto
+                    if (!isNullOrEmpty(partProc.getcDatosParto()) && !isNullOrEmpty(participante.getcDatosParto())) {
+                        if (partProc.getcDatosParto().trim().equals("No") && participante.getcDatosParto().trim().equals("Si")) {
+                            participante.setcDatosParto("No");
+                        }
+                    }
+
+                    //cons_chf
+                    if (!isNullOrEmpty(partProc.getConsChf()) && !isNullOrEmpty(participante.getConsChf())) {
+                        if (partProc.getConsChf().trim().equals("No") && participante.getConsChf().trim().equals("Si")) {
+                            participante.setConsChf("No");
+                        }
+                    }
+
+                    //cuest_covid19
+                    if (!isNullOrEmpty(partProc.getCuestCovid()) && !isNullOrEmpty(participante.getCuestCovid())) {
+                        if (partProc.getCuestCovid().trim().equals("No") && participante.getCuestCovid().trim().equals("Si")) {
+                            participante.setCuestCovid("No");
+                        }
+                    }
+
+                    //perimetro_abdominal
+                    if (!isNullOrEmpty(partProc.getPerimetroAbdominal()) && !isNullOrEmpty(participante.getPerimetroAbdominal())) {
+                        if (partProc.getPerimetroAbdominal().trim().equals("No") && participante.getPerimetroAbdominal().trim().equals("Si")) {
+                            participante.setPerimetroAbdominal("No");
+                        }
+                    }
+
+                    //esat_usuario
+                    if (!isNullOrEmpty(partProc.getEsatUsuario()) && !isNullOrEmpty(participante.getEsatUsuario())) {
+                        if (partProc.getEsatUsuario().trim().equals("No") && participante.getEsatUsuario().trim().equals("Si")) {
+                            participante.setEsatUsuario("No");
+                        }
+                    }
+
+                    //esat_usuario_cc
+                    if (!isNullOrEmpty(partProc.getEsatUsuarioCc()) && !isNullOrEmpty(participante.getEsatUsuarioCc())) {
+                        if (partProc.getEsatUsuarioCc().trim().equals("No") && participante.getEsatUsuarioCc().trim().equals("Si")) {
+                            participante.setEsatUsuarioCc("No");
+                        }
+                    }
+                }
                 participanteProcesosService.saveOrUpdateParticipanteProc(participante);
             }
         }
@@ -327,6 +492,10 @@ public class ParticipanteController {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean isNullOrEmpty(String string) {
+        return string==null || string.trim().equals("");
     }
 
 }
