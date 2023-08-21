@@ -5,6 +5,7 @@ import ni.org.ics.estudios.domain.Participante;
 import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
+import ni.org.ics.estudios.dto.influenzauo1.casosPositivosDiffDto;
 import ni.org.ics.estudios.dto.muestras.MxDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
@@ -277,6 +278,62 @@ public class ParticipanteCasoUO1Controller {
             return JsonUtil.createJsonResponse(casaCasoExistente);
         }
         catch(Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+
+    @RequestMapping( value="desactiveCase", method=RequestMethod.POST)
+    public ResponseEntity<String> desactiveCase( @RequestParam(value="codigo", required=true ) String codigo,
+                                                 @RequestParam(value="motivo", required=true) String motivo){
+        try{
+            ParticipanteCasoUO1 casaCasoExistente = this.participanteCasoUO1Service.getCasoByCodigo(codigo);
+            if(casaCasoExistente!=null){
+                casaCasoExistente.setRecordDate(new Date());
+                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                casaCasoExistente.setPasive('1');
+                casaCasoExistente.setActivo("0");// preguntar si debo cambiar este campo
+                String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+                String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " - " + nombreUsuario;
+                casaCasoExistente.setDeshabilitado_por(mot);
+                this.participanteCasoUO1Service.saveOrUpdate(casaCasoExistente);
+                return JsonUtil.createJsonResponse(casaCasoExistente);
+            }
+            else{
+                return JsonUtil.createJsonResponse("Registro no encontrado.");
+            }
+        }
+        catch(Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+    @RequestMapping(value = "searchDaysDiff", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<String> searchDaysDiff(@RequestParam( value="codigo", required=true ) String codigo) throws ParseException {
+        try{
+            Integer dias;
+            casosPositivosDiffDto dto = null;
+            MessageResource intervalDias = messageResourceService.getMensaje("CAT_INTERVAL_DIAS_CASO_FLU_UO1");
+            if (intervalDias == null){
+                return JsonUtil.createJsonResponse("Intervalos de dias no encontrado.");
+            }else{
+                dias = Integer.parseInt(intervalDias.getSpanish());
+            }
+            dto = this.participanteCasoUO1Service.getdiasTranscurridos(codigo, dias);
+            if (dto != null) {
+                dto.setDiasDeBusqueda(dias);
+                return JsonUtil.createJsonResponse(dto);
+            }else{
+                dto = this.participanteCasoUO1Service.getInfoDiasTranscurridos(codigo);
+                dto.setDiasDeBusqueda(dias);
+                return JsonUtil.createJsonResponse(dto);
+            }
+        }catch (Exception e){
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.CREATED);

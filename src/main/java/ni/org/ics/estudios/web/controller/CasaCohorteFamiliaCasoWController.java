@@ -6,6 +6,7 @@ import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.CasaCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.influenzauo1.casosPositivosDiffDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.CartaConsentimientoService;
 import ni.org.ics.estudios.service.MessageResourceService;
@@ -27,10 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
@@ -147,7 +145,12 @@ public class CasaCohorteFamiliaCasoWController {
             participanteCohorteFamiliaCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             participanteCohorteFamiliaCaso.setPasive('1');
             this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCohorteFamiliaCaso);
-
+            //Actualizar el campo MI en procesos
+            ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participanteCohorteFamiliaCaso.getParticipante().getParticipante().getCodigo());
+            if (procesos.getEstudio().contains("CH Familia") && (procesos.getCasaCHF()!="" || procesos.getCasaCHF()!=null) ) {
+                procesos.setMi("No");
+                this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+            }
             redirecTo = "redirect:/super/casacaso/participants/"+participanteCohorteFamiliaCaso.getCodigoCaso().getCodigoCaso();
         }
         else{
@@ -172,6 +175,15 @@ public class CasaCohorteFamiliaCasoWController {
                 casaCasoExistente.setRecordDate(new Date());
                 casaCasoExistente.setInactiva("1");
                 this.casaCohorteFamiliaCasoService.saveOrUpdateCasaCohorteFamiliaCaso(casaCasoExistente);
+                // Actualizar el campo MI en procesos
+                List<ParticipanteCohorteFamiliaCaso> participanteCohorteFamiliaCasos = this.participanteCohorteFamiliaCasoService.getParticipantesCohorteFamiliaCasoByCodigoCaso(codigo);
+                for(ParticipanteCohorteFamiliaCaso participante : participanteCohorteFamiliaCasos){
+                    ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getParticipante().getParticipante().getCodigo());
+                    if (procesos.getEstudio().contains("CH Familia") && (procesos.getCasaCHF()!="" || procesos.getCasaCHF()!=null) ) {
+                        procesos.setMi("No");
+                        this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+                    }
+                }
             }
             return JsonUtil.createJsonResponse(casaCasoExistente);
         }
@@ -300,11 +312,10 @@ public class CasaCohorteFamiliaCasoWController {
                     this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCaso);
                         ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getParticipante().getCodigo());
                         procesos.setMxSuperficie(pedirAsentimientoCasa?"1":"0");
+                        procesos.setMi("Si");
                         this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
-
                 }
             }
-
             return JsonUtil.createJsonResponse(casaCaso);
         }
         catch(Exception e){
@@ -313,4 +324,98 @@ public class CasaCohorteFamiliaCasoWController {
             return new ResponseEntity<String>( json, HttpStatus.CREATED);
         }
     }
+
+    //todo: alertas
+    @RequestMapping( value="desactCase", method=RequestMethod.POST)
+    public ResponseEntity<String> desactCaso( @RequestParam(value="codigo", required=true ) String codigo
+            , @RequestParam( value="motivo", required=false, defaultValue="" ) String motivo ) {
+        try{
+            CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasosByCodigo(codigo);
+            if(casaCasoExistente!=null){
+                casaCasoExistente.setRecordDate(new Date());
+                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                casaCasoExistente.setPasive('1');
+                String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+                String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " - " + nombreUsuario;
+                casaCasoExistente.setDeshabilitado_por(mot);
+                List<ParticipanteCohorteFamiliaCaso> participanteCohorteFamiliaCasos = this.participanteCohorteFamiliaCasoService.getParticipantesCohorteFamiliaCasoByCodigoCaso(codigo);
+                for(ParticipanteCohorteFamiliaCaso participante : participanteCohorteFamiliaCasos){
+                    ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getParticipante().getParticipante().getCodigo());
+                    if (procesos.getEstudio().contains("CH Familia") && (procesos.getCasaCHF()!="" || procesos.getCasaCHF()!=null) ) {
+                        procesos.setMi("No");
+                        this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+                        participante.setRecordDate(new Date());
+                        participante.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        participante.setPasive('1');
+                        //participante.setDeshabilitado_por(mot);
+                        this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participante); //descomentar esta linea
+                    }
+                }
+                this.casaCohorteFamiliaCasoService.saveOrUpdateCasaCohorteFamiliaCaso(casaCasoExistente);
+            }
+            return JsonUtil.createJsonResponse(casaCasoExistente);
+        }
+        catch(Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+
+    @RequestMapping( value="desactParticipanteCase", method=RequestMethod.POST)
+    public ResponseEntity<String> desactParticipanteCase( @RequestParam(value="codigo", required=true ) String codigo
+            , @RequestParam( value="motivo", required=false, defaultValue="" ) String motivo ) {
+        try{
+            ParticipanteCohorteFamiliaCaso participanteCohorteFamiliaCaso = participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByCodigo(codigo);
+            participanteCohorteFamiliaCaso.setRecordDate(new Date());
+            participanteCohorteFamiliaCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+            participanteCohorteFamiliaCaso.setPasive('1');
+            String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+            String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " - " + nombreUsuario;
+            participanteCohorteFamiliaCaso.setDeshabilitado_por(mot);
+            ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participanteCohorteFamiliaCaso.getParticipante().getParticipante().getCodigo());
+            if (procesos.getEstudio().contains("CH Familia") && (procesos.getCasaCHF()!="" || procesos.getCasaCHF()!=null) ) {
+                procesos.setMi("No");
+                this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
+            }
+            this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participanteCohorteFamiliaCaso);
+            return JsonUtil.createJsonResponse(participanteCohorteFamiliaCaso);
+        }
+        catch(Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+    @RequestMapping(value = "searchDaysDiff", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<String> searchDaysDiff(@RequestParam( value="codigo", required=true ) String codigo) throws ParseException {
+        try{
+            Integer dias;
+            casosPositivosDiffDto dto = null;
+            MessageResource intervalDias = messageResourceService.getMensaje("CAT_INTERVAL_DIAS_CASO_MI");
+            if (intervalDias == null){
+                return JsonUtil.createJsonResponse("Intervalos de dias no encontrado.");
+            }else{
+                dias = Integer.parseInt(intervalDias.getSpanish());
+            }
+            dto = this.participanteCohorteFamiliaCasoService.getdiasTranscurridos(codigo, dias);
+            if (dto != null) {
+                dto.setDiasDeBusqueda(dias);
+                return JsonUtil.createJsonResponse(dto);
+            }else{
+                dto = this.participanteCohorteFamiliaCasoService.getInfoDiasTranscurridos(codigo);
+                dto.setDiasDeBusqueda(dias);
+                return JsonUtil.createJsonResponse(dto);
+            }
+        }catch (Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+
 }

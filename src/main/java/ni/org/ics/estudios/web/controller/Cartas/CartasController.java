@@ -8,6 +8,7 @@ import ni.org.ics.estudios.domain.scancarta.*;
 import ni.org.ics.estudios.dto.*;
 import ni.org.ics.estudios.dto.cartas.ComparacionCartasDto;
 import ni.org.ics.estudios.dto.cartas.ComparacionRelFamCartasDto;
+import ni.org.ics.estudios.dto.cartas.ComparacionTutorRelFamDto;
 import ni.org.ics.estudios.dto.cartas.DiferenciaParteCartaDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.MessageResourceService;
@@ -453,6 +454,9 @@ public class CartasController {
                         pc.setDeviceid(computerName);
                         pc.setEstado('1');
                         pc.setPasive('0');
+                        //Determinar si es reactivacion -> 11-07-2023
+                        String react = obj.getReactivacion().equals("1")?"1":"0";
+                        pc.setReactivacion(react);
                         this.scanCartaService.saveOrUpdateScanCarta(pc); // Guarda/Participante-Version
                     }
                     if (obj.getParte() != null) {// Guarda las Version-Partes
@@ -540,6 +544,9 @@ public class CartasController {
                         pc.setDeviceid(computerName);
                         pc.setEstado('1');
                         pc.setPasive('0');
+                        //Determinar si es reactivacion -> 11-07-2023
+                        String react = obj.getReactivacion().equals("1")?"1":"0";
+                        pc.setReactivacion(react);
                         this.scanCartaService.saveOrUpdateScanCarta(pc); // Guarda/Participante-Version
                     }
                     if (obj.getParte() != null) {// Guarda las Version-Partes
@@ -723,6 +730,9 @@ public class CartasController {
                 pc.setDeviceid(computerName);
                 pc.setEstado('1');
                 pc.setPasive('0');
+                //Determinar si es reactivacion -> 11-07-2023
+                String react = obj.getReactivacion().equals("1") ?"1":"0";
+                pc.setReactivacion(react);
                 scanCartaService.saveOrUpdateScanCarta(pc);
             }
             if (obj.getParte() != null) {
@@ -1484,8 +1494,6 @@ public class CartasController {
         }
     }
 
-
-
     //region todo Extension Temporal
 
     // pagina del Listado de todas las ExtensionesTmp pasivo ='0'
@@ -2085,6 +2093,21 @@ public class CartasController {
                     diferencia.setAceptaParteCCc("<span class='badge badge-danger'>"+diferencia.getAceptaParteCCc()+"</span>");
                     diferencia.setAceptaParteCSc("<span class='badge badge-danger'>"+diferencia.getAceptaParteCSc()+"</span>");
                 }
+
+                if(diferencia.getEstudio().equals(5)) {
+                    if (!diferencia.getAceptaParteDCc().equalsIgnoreCase(diferencia.getAceptaParteDSc())) {
+                        diferencia.setAceptaParteDCc("<span class='badge badge-danger'>" + diferencia.getAceptaParteDCc() + "</span>");
+                        diferencia.setAceptaParteDSc("<span class='badge badge-danger'>" + diferencia.getAceptaParteDSc() + "</span>");
+                    }
+                }
+
+                if(diferencia.getEstudio().equals(4)){
+                    if (!diferencia.getAceptaParteGCc().equalsIgnoreCase(diferencia.getAceptaParteGSc())) {
+                        diferencia.setAceptaParteGCc("<span class='badge badge-danger'>" + diferencia.getAceptaParteGCc() + "</span>");
+                        diferencia.setAceptaParteGSc("<span class='badge badge-danger'>" + diferencia.getAceptaParteGSc() + "</span>");
+                    }
+                }
+
                 if (!diferencia.getAceptaContactoFuturoCc().equalsIgnoreCase(diferencia.getAceptaContactoFuturoSc())) {
                     diferencia.setAceptaContactoFuturoCc("<span class='badge badge-danger'>"+diferencia.getAceptaContactoFuturoCc()+"</span>");
                     diferencia.setAceptaContactoFuturoSc("<span class='badge badge-danger'>"+diferencia.getAceptaContactoFuturoSc()+"</span>");
@@ -2147,60 +2170,29 @@ public class CartasController {
         }
     }
 
-
     @RequestMapping(value = "comparacion/getCartasRelFam", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<String> getDiferenciasRelFam() throws ParseException {
         try {
             logger.debug("buscar diferencias de cartas sin digitar");
-            List<ComparacionRelFamCartasDto> cartas = comparacionCartasService.getDiferenciasRelFam();
-            for(ComparacionRelFamCartasDto diferencia : cartas){
+            List<ComparacionTutorRelFamDto> cartas = comparacionCartasService.getDiferenciasRelFam();
+            for(ComparacionTutorRelFamDto diferencia : cartas){
+
                 //comparar primer nombre
-                if (diferencia.getNombre1TutorC() == null) {
-                    diferencia.setNombre1TutorC(String.format(marcarDiferencia, " "));
-                    diferencia.setNombre1TutorS(String.format(marcarDiferencia, diferencia.getNombre1TutorS()));
-                } else if (diferencia.getNombre1TutorS() == null) {
-                    diferencia.setNombre1TutorS(String.format(marcarDiferencia, " "));
-                    diferencia.setNombre1TutorC(String.format(marcarDiferencia, diferencia.getNombre1TutorC()));
-                } else if (!diferencia.getNombre1TutorC().equalsIgnoreCase(diferencia.getNombre1TutorS())) {
-                    diferencia.setNombre1TutorC(String.format(marcarDiferencia, diferencia.getNombre1TutorC()));
-                    diferencia.setNombre1TutorS(String.format(marcarDiferencia, diferencia.getNombre1TutorS()));
+                if (diferencia.getNombreTutorC() == null) {
+                    diferencia.setNombreTutorC(String.format(marcarDiferencia, " "));
+                    diferencia.setNombreTutorS(String.format(marcarDiferencia, diferencia.getNombreTutorS()));
+                } else if (diferencia.getNombreTutorS() == null) {
+                    diferencia.setNombreTutorS(String.format(marcarDiferencia, " "));
+                    diferencia.setNombreTutorC(String.format(marcarDiferencia, diferencia.getNombreTutorC()));
+                } else if (!diferencia.getNombreTutorC().equalsIgnoreCase(diferencia.getNombreTutorS())) {
+                    diferencia.setNombreTutorC(String.format(marcarDiferencia, diferencia.getNombreTutorC()));
+                    diferencia.setNombreTutorS(String.format(marcarDiferencia, diferencia.getNombreTutorS()));
                 }
-                //comparar segundo nombre
-                if (diferencia.getNombre2TutorC() == null && diferencia.getNombre2TutorS() != null) {
-                    diferencia.setNombre2TutorC(String.format(marcarDiferencia, " "));
-                    diferencia.setNombre2TutorS(String.format(marcarDiferencia, diferencia.getNombre2TutorS()));
-                } else if (diferencia.getNombre2TutorS() == null && diferencia.getNombre2TutorC() != null) {
-                    diferencia.setNombre2TutorS(String.format(marcarDiferencia, " "));
-                    diferencia.setNombre2TutorC(String.format(marcarDiferencia, diferencia.getNombre2TutorC()));
-                } else if (diferencia.getNombre2TutorC() != null && (!diferencia.getNombre2TutorC().equalsIgnoreCase(diferencia.getNombre2TutorS()))) {
-                    diferencia.setNombre2TutorC(String.format(marcarDiferencia, diferencia.getNombre2TutorC()));
-                    diferencia.setNombre2TutorS(String.format(marcarDiferencia, diferencia.getNombre2TutorS()));
-                }
-                //comparar primer apellido
-                if (diferencia.getApellido1TutorC() == null) {
-                    diferencia.setApellido1TutorC(String.format(marcarDiferencia, " "));
-                    diferencia.setApellido1TutorS(String.format(marcarDiferencia, diferencia.getApellido1TutorS()));
-                } else if (diferencia.getApellido1TutorS() == null) {
-                    diferencia.setApellido1TutorS(String.format(marcarDiferencia, " "));
-                    diferencia.setApellido1TutorC(String.format(marcarDiferencia, diferencia.getApellido1TutorC()));
-                } else if (!diferencia.getApellido1TutorC().equalsIgnoreCase(diferencia.getApellido1TutorS())) {
-                    diferencia.setApellido1TutorC(String.format(marcarDiferencia, diferencia.getApellido1TutorC()));
-                    diferencia.setApellido1TutorS(String.format(marcarDiferencia, diferencia.getApellido1TutorS()));
-                }
-                //comparar segundo apellido
-                if (diferencia.getApellido2TutorC().isEmpty() && diferencia.getApellido2TutorS() != null) {
-                    diferencia.setApellido2TutorC(String.format(marcarDiferencia, " "));
-                    diferencia.setApellido2TutorS(String.format(marcarDiferencia, diferencia.getApellido2TutorS()));
-                } else if (diferencia.getApellido2TutorS() == null && !diferencia.getApellido2TutorC().isEmpty()) {
-                    diferencia.setApellido2TutorS(String.format(marcarDiferencia, " "));
-                    diferencia.setApellido2TutorC(String.format(marcarDiferencia, diferencia.getApellido2TutorC()));
-                } else if (!diferencia.getApellido2TutorC().isEmpty() && (!diferencia.getApellido2TutorC().equalsIgnoreCase(diferencia.getApellido2TutorS()))) {
-                    diferencia.setApellido2TutorC(String.format(marcarDiferencia, diferencia.getApellido2TutorC()));
-                    diferencia.setApellido2TutorS(String.format(marcarDiferencia, diferencia.getApellido2TutorS()));
-                }
+
                 //poner nombres completos
-                diferencia.setQuienFirmaC(diferencia.getNombre1TutorC()+ " "+diferencia.getNombre2TutorC()+ " "+diferencia.getApellido1TutorC()+" "+diferencia.getApellido2TutorC());
-                diferencia.setQuienFirmaS(diferencia.getNombre1TutorS()+ " "+diferencia.getNombre2TutorS()+ " "+diferencia.getApellido1TutorS()+" "+diferencia.getApellido2TutorS());
+                diferencia.setQuienFirmaC(diferencia.getNombreTutorC());
+                diferencia.setQuienFirmaS(diferencia.getNombreTutorS());
+
                 //comparar relacion familiar
                 if (diferencia.getRelacionFamiliarC() == null) {
                     diferencia.setRelacionFamiliarC(String.format(marcarDiferencia, " "));

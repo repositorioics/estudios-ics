@@ -14,8 +14,10 @@ import ni.org.ics.estudios.domain.covid19.OtrosPositivosCovid;
 import ni.org.ics.estudios.domain.covid19.ParticipanteCasoCovid19;
 import ni.org.ics.estudios.domain.influenzauo1.ParticipanteCasoUO1;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
+import ni.org.ics.estudios.dto.CasoCovid19ResponseDto;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import ni.org.ics.estudios.dto.ParticipantesEnCasa;
+import ni.org.ics.estudios.dto.influenzauo1.casosPositivosDiffDto;
 import ni.org.ics.estudios.dto.muestras.MxDto;
 import ni.org.ics.estudios.language.MessageResource;
 import ni.org.ics.estudios.service.CartaConsentimientoService;
@@ -317,7 +319,7 @@ public class CovidController {
                 casaChFam.setCodigoCHF(codigoCasa);
                 casoCovid19.setCasa(casaChFam);
             }
-            this.covidService.saveOrUpdateCasoCovid19(casoCovid19); // Aqui mando a guardar en la 1er tabla
+            this.covidService.saveOrUpdateCasoCovid19(casoCovid19); // Aqui mando a guardar en la 1er tabla "covid_casos"
 
             if (participanteCasoCovid==null) {
                 participanteCasoCovid = new ParticipanteCasoCovid19();
@@ -407,59 +409,57 @@ public class CovidController {
             , @RequestParam( value="fechaInactivo", required=true, defaultValue="" ) String fechaInactivo
             , @RequestParam( value="observacion", required=false, defaultValue="" ) String observacion) {
         try{
+            CasoCovid19ResponseDto responseDto = new CasoCovid19ResponseDto();
             CasoCovid19 casoExistente = this.covidService.getCasoCovid19ByCodigo(codigo);
             if (casoExistente!=null) {
                 Date dFechaInactivo = DateUtil.StringToDate(fechaInactivo, "dd/MM/yyyy");
-                //quitar vigencia a las extensiones de la carta o cartas de Tcovid de familia que puedan tener activas los participantes
+                //todo: quitar vigencia a las extensiones de la carta o cartas de Tcovid de familia que puedan tener activas los participantes
                 this.scanCartaService.quitarVigenciaCartaTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
-                this.scanCartaService.quitarVigenciaExtensionTCovid(casoExistente.getCodigoCaso(), dFechaInactivo);
+                this.scanCartaService.quitarVigenciaExtensionTCovid(casoExistente.getCodigoCaso(), dFechaInactivo); /**descomentar **/
+                responseDto.setCodigoCaso(casoExistente.getCodigoCaso());
                 casoExistente.setFechaInactivo(dFechaInactivo);
                 casoExistente.setObservacion(observacion);
-                //casoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
-                //casoExistente.setRecordDate(new Date());
                 casoExistente.setInactivo("1");
-                this.covidService.saveOrUpdateCasoCovid19(casoExistente);
-
-                /* Iniciar retiro del estudio de covid */
                 List<MessageResource> meta = this.messageResourceService.getCatalogo("CAT_METADATOS_RETIRO_AUTOMATIC");
                 identificador = meta.get(1).getSpanish();
                 medico_supervisor = Integer.parseInt(meta.get(2).getSpanish());
                 persona_documenta = Integer.parseInt(meta.get(3).getSpanish());
                 relacionFamiliar = Integer.parseInt(meta.get(4).getSpanish());
-
-                List<ParticipantesEnCasa> participantesEnCasas = this.covidService.getParticipantesByCasaFamiliaId(casoExistente.getCasa().getCodigoCHF());
-                for (int i = 0; i < participantesEnCasas.size() ; i++) {
-                ArrayList<String> arrayEstudios = new ArrayList<String>();
-                    ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participantesEnCasas.get(i).getIdParticipante());
-                    if (procesos != null & procesos.getEstudio().contains("Tcovid")){
-
+                // todo: Obtiene todos los participantes de la tabla covid_participantes_casos
+                List<ParticipanteCasoCovid19> participanteCasoCovid19List = this.covidService.getParticipantesCasoCovid19ByCodigoCaso(codigo);
+                Integer cuentaRetiros = 0;
+                for(ParticipanteCasoCovid19 participante : participanteCasoCovid19List){
+                    ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getParticipante().getCodigo());
+                    if(procesos.getEstudio().contains("Tcovid")){
+                        ArrayList<String> listaDeEstudios = new ArrayList<String>();
                         String[] arrayString = procesos.getEstudio().split("  ");
-                        for (int j = 0; j < arrayString.length ; j++) {
-                            arrayEstudios.add(arrayString[j]);
-                            arrayEstudios.remove("Tcovid");
+                        for (int j = 0; j < arrayString.length; j++) {
+                            listaDeEstudios.add(arrayString[j]);
+                            listaDeEstudios.remove("Tcovid");
                         }
                         StringBuffer stringBuffer = new StringBuffer();
-                        for (String s:arrayEstudios){
+                        for (String s : listaDeEstudios) {
                             stringBuffer.append(s);
                             stringBuffer.append("  ");
                         }
-
                         //Actualiza el campo estudio
                         boolean result = this.covidService.ActualizarCampoEstudio(procesos.getCodigo(), stringBuffer.toString());
-                        if(result){ // iniciar Guardar en documentacion_retiro_data
+                        if (result) { // iniciar Guardar en documentacion_retiro_data
                             Retiros retiro = new Retiros();
+                            cuentaRetiros++;
                             retiro.setDeviceid(identificador);
                             retiro.setEstado('1');
                             retiro.setPasive('0');
                             retiro.setRecordDate(new Date());
                             retiro.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                             retiro.setActual(true);
-                            retiro.setCodigocasafamilia(procesos.getCasaCHF());
-                            retiro.setCodigocasapdcs(casoExistente.getCasa().getCasa().getCodigo());
+                            String codigoCasaFam = (procesos.getCasaCHF() == null)?"":procesos.getCasaCHF();
+                            retiro.setCodigocasafamilia(codigoCasaFam);
+                            retiro.setCodigocasapdcs(participante.getParticipante().getCasa().getCodigo());
                             retiro.setDevolviocarnet('0');
                             retiro.setEstudioretirado("Tcovid");
                             retiro.setEstudiosanteriores(procesos.getEstudio());
-                            retiro.setFecharetiro(dFechaInactivo);
+                            retiro.setFecharetiro(new Date());
                             retiro.setMedicosupervisor(medico_supervisor);
                             retiro.setMotivo("C2");
                             retiro.setObservaciones("RETIRADO POR TERMINAR PERIODO DEL ESTUDIO");
@@ -468,22 +468,25 @@ public class CovidController {
                             retiro.setQuiencomunica("Ninguno");
                             retiro.setRelfam(relacionFamiliar);
                             retiro.setTipofecha("1");
-                            Participante participante = this.participanteService.getParticipanteByCodigo(procesos.getCodigo());
-                            retiro.setParticipante(participante);
+                            Participante p = this.participanteService.getParticipanteByCodigo(procesos.getCodigo());
+                            retiro.setParticipante(p);
                             this.retiroService.SaveRetiros(retiro);
+                            responseDto.setCantidadRetirados(cuentaRetiros);
                         }
                     }
-                }
+                }// fin FOR
+                this.covidService.saveOrUpdateCasoCovid19(casoExistente);/** descomentar **/
             }
-            return JsonUtil.createJsonResponse(casoExistente);
-        } catch(Exception e){
+            return JsonUtil.createJsonResponse(responseDto);
+        }
+        catch(Exception e){
             Gson gson = new Gson();
             String json = gson.toJson(e.toString());
             return new ResponseEntity<String>( json, HttpStatus.CREATED);
         }
     }
 
-    @RequestMapping("/actions/{accion}/{codigo}")
+    /*@RequestMapping("/actions/{accion}/{codigo}")
     public String enableUser(@PathVariable("codigo") String codigo,
                              @PathVariable("accion") String accion, RedirectAttributes redirectAttributes) {
         String redirecTo="404";
@@ -497,7 +500,7 @@ public class CovidController {
                 //casaCasoExistente.setRecordDate(new Date());
                 //casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setPasive('1');
-                List<ParticipanteCasoCovid19> participanteCasoCovid19List = this.covidService.getParticipantesCasoCovid19ByCodigoCaso(codigo);
+                List<ParticipanteCasoCovid19> participanteCasoCovid19List = this.covidService.getParticipantesCasoCovid19ByCodigoCaso(codigo);// todo: Obtiene todos los participantes de la tabla covid_participantes_casos
                 this.covidService.saveOrUpdateCasoCovid19(casaCasoExistente);
                 for(ParticipanteCasoCovid19 participante : participanteCasoCovid19List){
                     //participante.setRecordDate(new Date());
@@ -514,7 +517,7 @@ public class CovidController {
             //participanteCasoCovid19.setRecordDate(new Date());
             //participanteCasoCovid19.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             participanteCasoCovid19.setPasive('1');
-            this.covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid19);
+            //this.covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid19); descomentar
             redirectAttributes.addFlashAttribute("participante", participanteCasoCovid19.getParticipante().getCodigo());
             redirectAttributes.addFlashAttribute("deshabilitado", true);
             redirecTo = "redirect:/covid/participants/"+participanteCasoCovid19.getCodigoCaso().getCodigoCaso();
@@ -523,26 +526,214 @@ public class CovidController {
             return redirecTo;
         }
         return redirecTo;
+    }*/
+
+
+    @RequestMapping( value="desactiveCase", method=RequestMethod.POST)
+    public ResponseEntity<String> desactCaso( @RequestParam(value="codigo", required=true ) String codigo
+            , @RequestParam( value="motivo", required=false, defaultValue="" ) String motivo ) {
+        try{
+            CasoCovid19ResponseDto responseDto = new CasoCovid19ResponseDto();
+            CasoCovid19 casaCasoExistente = this.covidService.getCasoCovid19ByCodigo(codigo);
+
+            if(casaCasoExistente!=null){
+                casaCasoExistente.setPasive('1');
+                casaCasoExistente.setInactivo("1");
+                String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+                String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " _ " + nombreUsuario;
+                casaCasoExistente.setDeshabilitado_por(mot);
+                responseDto.setCodigoCaso(casaCasoExistente.getCodigoCaso());
+
+                List<MessageResource> meta = this.messageResourceService.getCatalogo("CAT_METADATOS_RETIRO_AUTOMATIC");
+                identificador = meta.get(1).getSpanish();
+                medico_supervisor = Integer.parseInt(meta.get(2).getSpanish());
+                persona_documenta = Integer.parseInt(meta.get(3).getSpanish());
+                relacionFamiliar = Integer.parseInt(meta.get(4).getSpanish());
+
+                List<ParticipanteCasoCovid19> participanteCasoCovid19List = covidService.getParticipantesCasoCovid19ByCodigoCaso(codigo);
+                Integer cuentaRetiros = 0;
+                for(ParticipanteCasoCovid19 participante : participanteCasoCovid19List){
+                    participante.setPasive('1');
+                    participante.setDeshabilitado_por(mot);
+                     this.covidService.saveOrUpdateParticipanteCasoCovid19(participante);/** descomentar **/
+                    ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participante.getParticipante().getCodigo());
+                    if (procesos.getEstudio().contains("Tcovid")){
+                        ArrayList<String> listaDeEstudios = new ArrayList<String>();
+                        String[] arrayString = procesos.getEstudio().split("  ");
+                        for (int j = 0; j < arrayString.length; j++) {
+                            listaDeEstudios.add(arrayString[j]);
+                            listaDeEstudios.remove("Tcovid");
+                        }
+                        StringBuffer stringBuffer = new StringBuffer();
+                        for (String s : listaDeEstudios) {
+                            stringBuffer.append(s);
+                            stringBuffer.append("  ");
+                        }
+                        //Actualiza el campo estudio
+                        boolean result = this.covidService.ActualizarCampoEstudio(procesos.getCodigo(), stringBuffer.toString());
+                        if (result) { // iniciar Guardar en documentacion_retiro_data
+                            cuentaRetiros++;
+                            Retiros retiro = new Retiros();
+                            retiro.setDeviceid(identificador);
+                            retiro.setEstado('1');
+                            retiro.setPasive('0');
+                            retiro.setRecordDate(new Date());
+                            retiro.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                            retiro.setActual(true);
+                            String codigoCasaFam = (procesos.getCasaCHF() == null)?"":procesos.getCasaCHF();
+                            retiro.setCodigocasafamilia(codigoCasaFam);
+                            retiro.setCodigocasapdcs(participante.getParticipante().getCasa().getCodigo());
+                            retiro.setDevolviocarnet('0');
+                            retiro.setEstudioretirado("Tcovid");
+                            retiro.setEstudiosanteriores(procesos.getEstudio());
+                            retiro.setFecharetiro(new Date());
+                            retiro.setMedicosupervisor(medico_supervisor);
+                            retiro.setMotivo("C2");
+                            retiro.setObservaciones("RETIRADO POR TERMINAR PERIODO DEL ESTUDIO");
+                            retiro.setOtrosmotivo("");
+                            retiro.setPersonadocumenta(persona_documenta);
+                            retiro.setQuiencomunica("Ninguno");
+                            retiro.setRelfam(relacionFamiliar);
+                            retiro.setTipofecha("1");
+                            Participante p = this.participanteService.getParticipanteByCodigo(procesos.getCodigo());
+                            retiro.setParticipante(p);
+                            this.retiroService.SaveRetiros(retiro);
+                            responseDto.setCantidadRetirados(cuentaRetiros);
+                        }
+                    }//fin if
+                }
+                this.covidService.saveOrUpdateCasoCovid19(casaCasoExistente); /** descomentar **/
+            }
+            return JsonUtil.createJsonResponse(responseDto);
+        }
+        catch(Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+
+    /** METODO DESACTIVAR POR PARTICIPANTE -> LISTO **/
+    @RequestMapping( value="desactParticipanteCase", method=RequestMethod.POST)
+    public ResponseEntity<String> desactParticipanteCase( @RequestParam(value="codigo", required=true ) String codigo
+            , @RequestParam( value="motivo", required=false, defaultValue="" ) String motivo ) {
+        try{
+            CasoCovid19ResponseDto responseDto = new CasoCovid19ResponseDto();
+            ParticipanteCasoCovid19 participanteCasoCovid19 = this.covidService.getParticipanteCasoCovid19ByCodCasoPart(codigo);
+            participanteCasoCovid19.setPasive('1');
+            String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+            String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " - " + nombreUsuario;
+            participanteCasoCovid19.setDeshabilitado_por(mot);
+            responseDto.setCodigoCaso(codigo);
+            //region retiros
+            List<MessageResource> meta = this.messageResourceService.getCatalogo("CAT_METADATOS_RETIRO_AUTOMATIC");
+            identificador = meta.get(1).getSpanish();
+            medico_supervisor = Integer.parseInt(meta.get(2).getSpanish());
+            persona_documenta = Integer.parseInt(meta.get(3).getSpanish());
+            relacionFamiliar = Integer.parseInt(meta.get(4).getSpanish());
+            ParticipanteProcesos procesos = this.participanteProcesosService.getParticipante(participanteCasoCovid19.getParticipante().getCodigo());
+            if(procesos.getEstudio().contains("Tcovid")){
+                ArrayList<String> listaDeEstudios = new ArrayList<String>();
+                String[] arrayString = procesos.getEstudio().split("  ");
+                for (int j = 0; j < arrayString.length; j++) {
+                    listaDeEstudios.add(arrayString[j]);
+                    listaDeEstudios.remove("Tcovid");
+                }
+                StringBuffer stringBuffer = new StringBuffer();
+                for (String s : listaDeEstudios) {
+                    stringBuffer.append(s);
+                    stringBuffer.append("  ");
+                }
+                //Actualiza el campo estudio
+                boolean result = this.covidService.ActualizarCampoEstudio(procesos.getCodigo(), stringBuffer.toString());
+                if (result) { // iniciar Guardar en documentacion_retiro_data
+                    Retiros retiro = new Retiros();
+                    retiro.setDeviceid(identificador);
+                    retiro.setEstado('1');
+                    retiro.setPasive('0');
+                    retiro.setRecordDate(new Date());
+                    retiro.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                    retiro.setActual(true);
+                    String codigoCasaFam = (procesos.getCasaCHF() == null)?"":procesos.getCasaCHF();
+                    retiro.setCodigocasafamilia(codigoCasaFam);
+                    retiro.setCodigocasapdcs(participanteCasoCovid19.getParticipante().getCasa().getCodigo());
+                    retiro.setDevolviocarnet('0');
+                    retiro.setEstudioretirado("Tcovid");
+                    retiro.setEstudiosanteriores(procesos.getEstudio());
+                    retiro.setFecharetiro(new Date());
+                    retiro.setMedicosupervisor(medico_supervisor);
+                    retiro.setMotivo("C2");
+                    retiro.setObservaciones("RETIRADO POR TERMINAR PERIODO DEL ESTUDIO");
+                    retiro.setOtrosmotivo("CASO COVID DESACTIVADO " + DateUtil.DateToString(new Date(),"dd/MM/YYYY"));
+                    retiro.setPersonadocumenta(persona_documenta);
+                    retiro.setQuiencomunica("Ninguno");
+                    retiro.setRelfam(relacionFamiliar);
+                    retiro.setTipofecha("1");
+                    Participante p = this.participanteService.getParticipanteByCodigo(procesos.getCodigo());
+                    retiro.setParticipante(p);
+                    this.retiroService.SaveRetiros(retiro);
+                    responseDto.setCodigoParticipante(procesos.getCodigo());
+                }else {
+                    responseDto.setCantidadRetirados(0);
+                }
+            }
+            //endregion
+            this.covidService.saveOrUpdateParticipanteCasoCovid19(participanteCasoCovid19);
+            return JsonUtil.createJsonResponse(responseDto);
+        }
+        catch(Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
+    }
+
+    @RequestMapping(value = "searchDaysDiff", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<String> searchDaysDiff(@RequestParam( value="codigo", required=true ) String codigo) throws ParseException {
+        try{
+            Integer dias;
+            MessageResource intervalDias = null;
+            casosPositivosDiffDto dto = null;
+            CasoCovid19 caso = this.covidService.getCasoCovid19ByCodigo(codigo);
+            if (caso.getCasa()==null){
+                intervalDias = messageResourceService.getMensaje("CAT_INTERVAL_DIAS_CASO_COVID_FLU_UO1");
+            }else{
+                intervalDias = messageResourceService.getMensaje("CAT_INTERVAL_DIAS_CASO_COVID");
+            }
+            if (intervalDias == null){
+                return JsonUtil.createJsonResponse("Intervalos de dias no encontrado.");
+            }else{
+                dias = Integer.parseInt(intervalDias.getSpanish());
+            }
+            dto = this.covidService.getdiasTranscurridos(codigo, dias);
+            if (dto != null) {
+                dto.setDiasDeBusqueda(dias);
+            }else{
+                dto = this.covidService.getInfoDiasTranscurridos(codigo);
+                dto.setDiasDeBusqueda(dias);
+            }
+            return JsonUtil.createJsonResponse(dto);
+        }catch (Exception e){
+            Gson gson = new Gson();
+            String json = gson.toJson(e.toString());
+            return new ResponseEntity<String>( json, HttpStatus.CREATED);
+        }
     }
 
 
 
 
-    ///covid/otrosPositivosCovid/00000000-75b3-19f8-ffff-ffff9d4bc42b*8152
+
+
+    //region todo: Otros positivos
     @RequestMapping(value = "/otrosPositivosCovid/{codigoCaso}/{idparticpante}", method = RequestMethod.GET)
     public String otrosPositivosCovid(Model model, @PathVariable("codigoCaso") String codigoCaso,
                                       @PathVariable("idparticpante") String idparticpante) throws Exception
     {
         try{
-           /* String string = codigoCaso;
-            String separador = Pattern.quote("*");
-            String[] parts = string.split(separador);
-            String part1 = parts[0]; // codigoCaso
-            String part2 = parts[1]; // codigo_participante
-            List<ParticipanteCasoCovid19> participantes = covidService.getParticipantesCasoCovid19ByCodigoCaso(codigoCaso);            */
             Integer codigo_participante = Integer.parseInt( idparticpante );
-
-
             CasoCovid19 casoCovid19 = this.covidService.getCasoCovid19ByCodigo(codigoCaso); // aqui obtengo la fecha de ingreso de la tabla caso covid
             model.addAttribute("casoCovid19",casoCovid19);
 
@@ -641,6 +832,7 @@ public class CovidController {
         }
     }
 
+//endregion
 
 
     private ResponseEntity<String> JsonUtilcreateJsonResponse( Object o )

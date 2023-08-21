@@ -32,9 +32,16 @@
                 <i class="fa fa-angle-right"></i><spring:message code="covid19.participants.list" />
             </li>
         </ol>
+        <c:set var="exportar"><spring:message code="export" /></c:set>
+        <c:set var="cerrarCaso"><spring:message code="close.case" /></c:set>
+        <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
+        <c:set var="successLabel"><spring:message code="process.success" /></c:set>
+        <c:set var="seleccionarCaso"><spring:message code="select.case" /></c:set>
+        <c:set var="casoInactivo"><spring:message code="inactive.case" /></c:set>
         <c:set var="recordDisabledLabel"><spring:message code="recordDisabled" /></c:set>
         <c:set var="confirmar"><spring:message code="confirm" /></c:set>
         <c:set var="deshabilitar"><spring:message code="disable" /></c:set>
+        <spring:url value="/covid/desactParticipanteCase" var="DisabledPartiUrl"/>
         <div class="container-fluid">
             <div class="animated fadeIn"></div>
             <div class="card">
@@ -150,6 +157,36 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+
+        <div class="modal fade bd-example-modal-lg" id="desactModalParti" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="title" class="modal-title" id="exampleModalLabel">${confirmar}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form autocomplete="off" class="form-horizontal" id="desactive-form">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="codigo" name="codigo">
+                            </div>
+                            <div id="cuerpo1"></div>
+                            <div class="form-group">
+                                <label for="motivo" class="col-form-label">Motivo:</label>
+                                <textarea class="form-control" id="motivo" name="motivo"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="resetForm"><spring:message code="cancel" /></button>
+                        <button type="button" class="btn btn-primary" id="btnDesact"><spring:message code="ok" /></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         </div>
         <!-- /.conainer-fluid -->
     </div>
@@ -182,6 +219,14 @@
 <spring:url value="/resources/js/libs/data-tables/i18n/label_{language}.json" var="dataTablesLang">
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
+
+<spring:url value="/resources/js/libs/jquery.validate.js" var="validateJs" />
+<script src="${validateJs}" type="text/javascript"></script>
+<spring:url value="/resources/js/libs/jquery-validation/localization/messages_{language}.js" var="jQValidationLoc">
+    <spring:param name="language" value="${lenguaje}" />
+</spring:url>
+<script src="${jQValidationLoc}"></script>
+
 <script>
     $(document).ready(function(){
         $("#lista_participantes").DataTable({
@@ -191,11 +236,83 @@
         });
 
         $(".desact").click(function(){
-            $('#accionUrl').val($(this).data('id').substr(0,$(this).data('id').lastIndexOf("*")));
+            $('#codigo').val('');
+            $('#cuerpo1').html();
+            var url = decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("/")+1));
+            var codigo_caso = decodeURIComponent(url.substr(0,url.indexOf("*")));
+            $('#codigo').val(codigo_caso);
+            var codigo_participante = decodeURIComponent( url.substr(url.lastIndexOf("*")+1));
+            $('#cuerpo1').html('<h3>'+"${deshabilitar}"+' '+ codigo_participante +'?</h3>');
+            $('#desactModalParti').modal('show');
+            /*$('#accionUrl').val($(this).data('id').substr(0,$(this).data('id').lastIndexOf("*")));
             $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
             $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("*")+1))+'?</h3>');
             $('#btnOk').show();
-            $('#basic').modal('show');
+            $('#basic').modal('show');*/
+        });
+
+        var form = $('#desactive-form');
+        form.validate({
+            errorElement: 'span', //default input error message container
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                codigo: { required: true },
+                motivo: { required: true }
+            },
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( 'form-control-feedback col-md-8' );
+                if ( element.prop( 'type' ) === 'checkbox' ) {
+                    error.insertAfter( element.parent( 'label' ) );
+                } else {
+                    //error.insertAfter( element ); //cuando no es input-group
+                    error.insertAfter(element.parent('.input-group'));
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+            }
+        });
+
+        $("#btnDesact").click(function(){
+            if (form.valid()){
+                desactParticipante();
+            }
+        });
+
+
+        function desactParticipante(){
+            $.post( "${DisabledPartiUrl}", {codigo: $('#codigo').val(), motivo: $('#motivo').val()}, function( data ){
+                var registro = JSON.parse(data);
+                console.log(registro);
+                if (registro.codigoCaso === undefined) {
+                    toastr.error(data,"Error",{timeOut: 0});
+                }else {
+                    if(registro.codigoParticipante != undefined){
+                        toastr.success("${successLabel}" + "\n Retirado: " + registro.codigoParticipante);
+                    }else{
+                        toastr.success("${successLabel}");
+                    }
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 1500);
+                }
+            }, 'text' ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                toastr.error( "error:" + errorThrown,{timeOut: 0});
+            });
+        }
+
+        $('#resetForm').on('click', function(){
+            document.getElementById("desactive-form").reset();
+            $('#codigo').val('');
+            $('#cuerpo1').html('');
+            $('#motivo').val('');
+            $('#desactModalParti').modal('hide');
         });
 
     });

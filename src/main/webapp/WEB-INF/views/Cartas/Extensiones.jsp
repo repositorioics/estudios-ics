@@ -598,7 +598,7 @@
             autoclose: true,
             format: "dd/mm/yyyy",
             todayBtn: true
-        }).val(fechaNow);
+        })/*.val(fechaNow);*/
         $("#idExtension").select2();
         $("#person").select2();
         $("#relfam").select2();

@@ -28,6 +28,8 @@ public class CasaCohorteFamiliaCaso extends BaseMetaData implements Auditable {
 	private String inactiva;
 	private Date fechaInactiva;
     private String observacion;
+    // add 2023-08-03 Solicitado por Brenda Lopez
+    private String deshabilitado_por;
     
 	@Id
     @Column(name = "CODIGO_CASO", length = 50, nullable = false)
@@ -86,6 +88,16 @@ public class CasaCohorteFamiliaCaso extends BaseMetaData implements Auditable {
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+
+    @JsonIgnore
+    @Column(name = "DESHABILITADO_POR", nullable = true, length = 255)
+    public String getDeshabilitado_por() {
+        return deshabilitado_por;
+    }
+
+    public void setDeshabilitado_por(String deshabilitado_por) {
+        this.deshabilitado_por = deshabilitado_por;
     }
 
     @Override

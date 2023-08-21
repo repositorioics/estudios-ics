@@ -781,7 +781,7 @@
                                                                         </div>
                                                             </div>
 
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label for="contactoFuturo">
                                                                         <spring:message code="lbl.Accept.future.contact" />
@@ -822,7 +822,7 @@
 
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
-                                                                    <div class="form-check mt-4 text-center">
+                                                                    <div class="form-check mt-4 text-center pt-2">
                                                                         <c:choose>
                                                                             <c:when test="${obj.testigopresent eq true}">
                                                                                 <input type="checkbox" value="${obj.testigopresent}" checked="checked" id="chktestigo" name="chktestigo"  class="chktestigo"  class="lcs_check" autocomplete="off" />
@@ -837,6 +837,24 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+
+                                                            <div class="col-md-1">
+                                                                <div class="form-group">
+                                                                    <div class="form-check mt-4 text-center pt-2">
+                                                                        <c:choose>
+                                                                            <c:when test="${obj.reactivacion eq '1'}">
+                                                                                <input type="checkbox" value="${obj.reactivacion}" checked="checked" id="reactivacion" name="reactivacion"  class="form-check-input"  class="lcs_check" autocomplete="off" />
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <input type="checkbox" id="reactivacion" name="reactivacion"  class="form-check-input" value="0" class="reactivacion" autocomplete="off" />
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                        <label class="form-check-label" for="reactivacion"><spring:message code="Reactivacion" /></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
 
                                                         <div id="selectt" style="display: none">
@@ -1280,7 +1298,8 @@
                         fecha_registro : ""+$("#fecha_registro").val(),
                         parte: MyArrayPartes,
                         estudios_actuales: $("#estudios").val(),
-                        esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim())
+                        esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim()),
+                        reactivacion: ($('input:checkbox[name=reactivacion]').prop('checked') == true) ? '1' : '0'
                     };
                     ActualizarScan(data);
                 }

@@ -5,6 +5,7 @@ import ni.org.ics.estudios.domain.covid19.*;
 import ni.org.ics.estudios.domain.muestreoanual.ParticipanteProcesos;
 import ni.org.ics.estudios.dto.ParticipanteBusquedaDto;
 import ni.org.ics.estudios.dto.ParticipantesEnCasa;
+import ni.org.ics.estudios.dto.influenzauo1.casosPositivosDiffDto;
 import ni.org.ics.estudios.dto.muestras.MxDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -47,6 +48,13 @@ public class CovidService {
         Query query = session.createQuery("from CasoCovid19 c where c.codigoCaso = :codigoCaso");
         query.setParameter("codigoCaso", codigoCaso);
         return (CasoCovid19)query.uniqueResult();
+    }
+
+    public ParticipanteCasoCovid19 getParticipanteCasoCovid19ByCode(String codigo){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from ParticipanteCasoCovid19 p where p.codigoCaso.codigoCaso =:codigo and p.codigoCaso.inactivo='0' and p.pasive='0' ");
+        query.setParameter("codigo", codigo);
+        return (ParticipanteCasoCovid19) query.uniqueResult();
     }
 
     public CasoCovid19 getCasoCovid19ByCasaChf(String casaChf){
@@ -140,7 +148,7 @@ public class CovidService {
         return query.uniqueResult()!=null;
     }
 
-    //Seleccionar los participantes
+    //todo: Seleccionar los participantes
     @SuppressWarnings("unchecked")
     public List<ParticipanteCasoCovid19> getParticipantesCasoCovid19ByCodigoCaso(String codigo){
         Session session = sessionFactory.getCurrentSession();
@@ -542,5 +550,37 @@ public class CovidService {
         session.close();
         return response;
     }
+
+
+    /*todo: */
+    public casosPositivosDiffDto getdiasTranscurridos(String codigo, int intervalo ){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT cc.CODIGO_CASO as codigoCaso, cc.CODIGO_CASA_CHF as casaCHF, DATE_format(cc.FECHA_INGRESO,'%d-%m-%Y') AS fechaIngreso, \n" +
+                "date_format(CURDATE(),'%d-%m-%Y' )AS hoy,TIMESTAMPDIFF(DAY, cc.FECHA_INGRESO, NOW()) AS diasTranscurridos\n" +
+                "FROM covid_casos cc WHERE cc.FECHA_INACTIVO IS NULL AND cc.PASIVO ='0' AND cc.INACTIVO='0' and cc.CODIGO_CASO =:codigo HAVING diasTranscurridos > :intervalo ORDER BY 2 ASC;";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo", codigo);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(casosPositivosDiffDto.class));
+        return (casosPositivosDiffDto) query.uniqueResult();
+    }
+
+
+    public casosPositivosDiffDto getInfoDiasTranscurridos( String codigo ){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT cc.CODIGO_CASO as codigoCaso, cc.CODIGO_CASA_CHF as casaCHF, DATE_format(cc.FECHA_INGRESO,'%d-%m-%Y') AS fechaIngreso, \n" +
+                "date_format(CURDATE(),'%d-%m-%Y' )AS hoy,TIMESTAMPDIFF(DAY, cc.FECHA_INGRESO, NOW()) AS diasTranscurridos\n" +
+                "FROM covid_casos cc \n" +
+                "WHERE cc.FECHA_INACTIVO IS NULL AND cc.PASIVO ='0' AND cc.INACTIVO='0' \n" +
+                " and cc.CODIGO_CASO =:codigo \n" +
+                "ORDER BY 2 ASC;";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo", codigo);
+        query.setResultTransformer(Transformers.aliasToBean(casosPositivosDiffDto.class));
+        return (casosPositivosDiffDto) query.uniqueResult();
+    }
+
+
+
 
 }
