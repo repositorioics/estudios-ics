@@ -30,6 +30,8 @@ public class ParticipanteCasoCovid19 extends BaseMetaData implements Auditable {
 	private String positivoPor;
 	private String consentimiento;
     private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
+    // solicitado por Brenda 28-07-2023.
+    private String deshabilitado_por;
     
 	@Id
     @Column(name = "CODIGO_PARTICIPANTE_CASO", length = 36, nullable = false)
@@ -119,7 +121,18 @@ public class ParticipanteCasoCovid19 extends BaseMetaData implements Auditable {
         this.fechaRecibido = fechaRecibido;
     }
 
-	@Override
+    @JsonIgnore
+    @Column(name = "DESHABILITADO_POR", nullable = true, length = 255)
+    public String getDeshabilitado_por() {
+        return deshabilitado_por;
+    }
+
+    public void setDeshabilitado_por(String deshabilitado_por) {
+        this.deshabilitado_por = deshabilitado_por;
+    }
+
+
+    @Override
 	public String toString(){
 		return participante.getCodigo() + "-" + codigoCaso.getFechaIngreso();
 	}

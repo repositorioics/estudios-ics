@@ -2,9 +2,11 @@ package ni.org.ics.estudios.service.cohortefamilia.casos;
 
 import ni.org.ics.estudios.domain.cohortefamilia.casos.ParticipanteCohorteFamiliaCaso;
 
+import ni.org.ics.estudios.dto.influenzauo1.casosPositivosDiffDto;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +41,7 @@ public class ParticipanteCohorteFamiliaCasoService {
     @SuppressWarnings("unchecked")
 	public List<ParticipanteCohorteFamiliaCaso> getParticipanteCohorteFamiliaCasosPositivos(){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ParticipanteCohorteFamiliaCaso p where p.pasive = '0' and p.enfermo = 'S' and p.codigoCaso.pasive = '0'");
+        Query query = session.createQuery("from ParticipanteCohorteFamiliaCaso p where p.pasive = '0' and p.enfermo = 'S' and p.codigoCaso.pasive = '0' order by p.codigoCaso.recordDate desc , p.recordDate desc ");
         return query.list();
     }
 
@@ -153,6 +155,31 @@ public class ParticipanteCohorteFamiliaCasoService {
         Query query = session.createQuery("from ParticipanteCohorteFamiliaCaso p where p.pasive = '0' and p.codigoCaso.inactiva = '0' and p.participante.participante.codigo  = :codigo");
         query.setParameter("codigo", codigo);
         return (ParticipanteCohorteFamiliaCaso)query.uniqueResult();
+    }
+
+
+
+    public casosPositivosDiffDto getdiasTranscurridos(String codigo, int intervalo ){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT c.CODIGO_CASO as codigoCaso, c.CODIGO_CASA_CHF as casaCHF, " +
+                "DATE_FORMAT(c.FECHA_INICIO,'%d-%m-%Y') AS fechaIngreso, DATE_FORMAT(CURDATE(),'%d-%m-%Y' ) AS hoy,TIMESTAMPDIFF(DAY, c.FECHA_INICIO, NOW()) AS diasTranscurridos \n" +
+                "FROM chf_casas_casos c WHERE c.FECHA_INACTIVA IS NULL AND c.INACTIVA = '0' AND c.PASIVO ='0' AND c.codigo_caso =:codigo HAVING diasTranscurridos > :intervalo ORDER BY 2 ASC;";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo", codigo);
+        query.setParameter("intervalo", intervalo);
+        query.setResultTransformer(Transformers.aliasToBean(casosPositivosDiffDto.class));
+        return (casosPositivosDiffDto) query.uniqueResult();
+    }
+
+    public casosPositivosDiffDto getInfoDiasTranscurridos( String codigo ){
+        Session session = sessionFactory.getCurrentSession();
+        String sql = "SELECT c.CODIGO_CASO as codigoCaso, c.CODIGO_CASA_CHF as casaCHF, \n" +
+                "DATE_FORMAT(c.FECHA_INICIO,'%d-%m-%Y') AS fechaIngreso, DATE_FORMAT(CURDATE(),'%d-%m-%Y' ) AS hoy,TIMESTAMPDIFF(DAY, c.FECHA_INICIO, NOW()) AS diasTranscurridos " +
+                "FROM chf_casas_casos c WHERE c.FECHA_INACTIVA IS NULL AND c.INACTIVA = '0' AND c.PASIVO ='0' AND c.codigo_caso =:codigo ORDER BY 2 ASC;";
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("codigo", codigo);
+        query.setResultTransformer(Transformers.aliasToBean(casosPositivosDiffDto.class));
+        return (casosPositivosDiffDto) query.uniqueResult();
     }
 
 }

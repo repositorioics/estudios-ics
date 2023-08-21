@@ -67,7 +67,7 @@ var saveOrUpdateBhc = function(){
                         $("#edadMeses").val("");
                         $("#parametro").focus();
                     } else{
-                        let fecha1Formateada = moment(data.fechaNacimiento).format('YYYY/MM/DD');
+                        var fecha1Formateada = moment(data.fechaNacimiento).format('YYYY/MM/DD');
                         $("#fechaNac").val(fecha1Formateada);
                         $("#idParticipante").val(data.codigo_participante);
                         $("#nombreCompleto").val(data.nombreCompleto);
@@ -133,135 +133,95 @@ var saveOrUpdateBhc = function(){
                 }
             });
 
-            function Bhc(parametros){
-                if($("#estado").val()==="0"){
-                    swal({
-                        title: "Participante Inactivo!",
-                        text: "Seguro que deseas continuar?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonClass: "btn-warning",
-                        confirmButtonText: "Si, Guardar!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    }, function(){
-                        save(parametros);
-                    });
-                }else if($("#estado").val()==="2"){
-                    swal({
-                        title: "Advertencia!",
-                        text: "Deseas ingresar participante?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonClass: "btn-warning",
-                        confirmButtonText: "Si, Ingresar!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    }, function(){
-                        save(parametros);
-                    });
-                }else {
-                    save(parametros);
-                }//fin valida estado
+            function Bhc(parametro){
+                if(validObservacion()) {
+                    save(parametro);
+                }
             }
 
             function save(parametro){
-                var volumen_bhc_desde_bd = parseInt($("#volumen_bhc_desde_bd").val());
-                if($("#volumen").val() != volumen_bhc_desde_bd) {
-                    if(validObservacion()){
+                if($("#estado").val()==="0" || $("#estado").val()==="") {
                     swal({
-                            title: "Diferencia en volumen!",
-                            text:  "Volúmenes sugerido para Bhc: " + volumen_bhc_desde_bd + "\nDeseas continuar?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn-warning",
-                            confirmButtonText: "Si, Continuar!",
-                            closeOnConfirm: false,
-                            closeOnCancel: false
-                        },
-                        function (isConfirm) {
-                            if(isConfirm) {
-                                $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
-                                    if (data.msj != null) {
-                                        swal({
-                                            title: "¡ERROR!",
-                                            text: data.msj,
-                                            type: "error",
-                                            timer: 2000
-                                        });
-                                        window.setTimeout(function () {
-                                            location.reload(true);
-                                        }, 3000);
-                                    } else {
-                                        swal({
-                                            title: "¡Buen trabajo!",
-                                            text: parametro.successMessage,
-                                            type: 'success',
-                                            timer: 2000
-                                        });
-                                        window.setTimeout(function () {
-                                            window.location.href = parametro.recepcionUrl;
-                                        }, 3000);
-                                        $("#parametro").focus().val("");
-                                    }
-                                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                    //console.log("XMLHttpRequest: " + XMLHttpRequest, "textStatus: " + textStatus, "errorThrown:" + errorThrown);
-                                    swal({
-                                        title: textStatus,
-                                        text: errorThrown,
-                                        type: 'error',
-                                        timer: 2100
-                                    });
-                                });
-                            }else {
-                                swal("Cancelado", "Tu registro está seguro :)", "info");
-                            }
-                        });
-                    }//fin valida observacion
-                }else{
-                    $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
-                        if (data.msj != null) {
-                            swal({
-                                title: "¡ERROR!",
-                                text: data.msj,
-                                type: "error",
-                                timer: 2000
-                            });
-                            window.setTimeout(function () {
-                                location.reload(true);
-                            }, 3000);
+                        title: "Deseas continuar?",
+                        text: "Reactivar Participante",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Si, continuar!",
+                        cancelButtonText: "No, cancelar plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            postBhc(parametro);
                         } else {
-                            swal({
-                                title: "¡Buen trabajo!",
-                                text: parametro.successMessage,
-                                type: 'success',
-                                timer: 2000
-                            });
-                            window.setTimeout(function () {
-                                window.location.href = parametro.recepcionUrl;
-                            }, 3000);
-                            $("#parametro").focus().val("");
+                            swal("Información!", "Operación ha sido cancelada :)", "info");
                         }
-                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        //console.log("XMLHttpRequest: "+XMLHttpRequest, "textStatus: "+textStatus, "errorThrown:"+errorThrown);
-                        swal({
-                            title: textStatus,
-                            text: errorThrown,
-                            type: 'error',
-                            timer: 2100
-                        });
                     });
+
+                }else if ($("#estado").val() === "2"){
+                    swal({
+                        title: "Desear continuar?",
+                        text: "Participante Nuevo Ingreso!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Si, continuar!",
+                        cancelButtonText: "No, cancelar plx!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            postBhc(parametro);
+                        } else {
+                            swal("Cancelado!", "Operación ha sido cancelada :)", "info");
+                        }
+                    });
+                }else{
+                    postBhc(parametro);
                 }
             }
 
+            function postBhc(parametro){
+                $.post(parametro.saveFormUrl, form1.serialize(), function (data) {
+                    if (data.msj != null) {
+                        swal({
+                            title: "¡ERROR!",
+                            text: data.msj,
+                            type: "error",
+                            timer: 2000
+                        });
+                        window.setTimeout(function () {
+                            location.reload(true);
+                        }, 3000);
+                    } else {
+                        swal({
+                            title: "¡Buen trabajo!",
+                            text: parametro.successMessage,
+                            type: 'success',
+                            timer: 2000
+                        });
+                        window.setTimeout(function () {
+                            window.location.href = parametro.recepcionUrl;
+                        }, 3000);
+                        $("#parametro").focus().val("");
+                    }
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: textStatus,
+                        text: errorThrown,
+                        type: 'error',
+                        timer: 2100
+                    });
+                });
+            }
 
             function validObservacion (){
                 var isAllValid = true;
-                if($("#observacion").val() == null || $("#observacion").val() == ""){
+                if ($("#observacion").val()==="" && ($("#volumen").val()!=$("#volumen_bhc_desde_bd").val()) ){
                     isAllValid = false;
                     $('#observacion').addClass('is-invalid').focus();
-                }
-                else{
+                }else{
                     $('#observacion').removeClass('is-invalid');
                 }
                 return isAllValid;

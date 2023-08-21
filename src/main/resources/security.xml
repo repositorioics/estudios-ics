@@ -19,11 +19,12 @@
         <intercept-url pattern="/reportes/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ENTO,ROLE_HEMODINAMICA,ROLE_LABORATORY"/>
         <intercept-url pattern="/hemo/.*" access="ROLE_HEMODINAMICA" />
         <intercept-url pattern="/Registro/.*" access="ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_LABORATORY" />
-        <intercept-url pattern="/Serologia/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR,ROLE_LABORATORY" />
-        <intercept-url pattern="/Pbmc/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR,ROLE_LABORATORY" />
-        <intercept-url pattern="/Bhc/.*" access="ROLE_SUPER,ROLE_ROOT,ROLE_DIG,ROLE_CNDR,ROLE_LABORATORY" />
-        <intercept-url pattern="/" access="ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM,ROLE_CNDR,ROLE_ENTO,ROLE_LABORATORY"/>
+        <intercept-url pattern="/Serologia/.*" access="ROLE_SUPER,ROLE_UMICH,ROLE_ROOT,ROLE_DIG,ROLE_CNDR,ROLE_LABORATORY" />
+        <intercept-url pattern="/Pbmc/.*" access="ROLE_SUPER,ROLE_UMICH,ROLE_ROOT,ROLE_DIG,ROLE_CNDR,ROLE_LABORATORY" />
+        <intercept-url pattern="/Bhc/.*" access="ROLE_SUPER,ROLE_UMICH,ROLE_ROOT,ROLE_DIG,ROLE_CNDR,ROLE_LABORATORY" />
+        <intercept-url pattern="/" access="ROLE_UMICH,ROLE_ROOT,ROLE_WEB,ROLE_SUPER,ROLE_ADMIN,ROLE_ADMISION,ROLE_DIG,ROLE_DOM,ROLE_CNDR,ROLE_ENTO,ROLE_LABORATORY"/>
         <intercept-url pattern="/ento/.*" access="ROLE_ENTO"/>
+        <intercept-url pattern="/CorrectionParticipant/.*" access="ROLE_EDIT"/>
         <intercept-url pattern="/.*" access="ROLE_ADMIN"/>
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/loginfailed" />

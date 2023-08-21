@@ -347,7 +347,7 @@ public class CovidCandidatoTransController {
             CandidatoTransmisionCovid19 casaCasoExistente = this.covidService.getCandidatoTransmisionCovid19(codigo);
             if(casaCasoExistente!=null){
                 casaCasoExistente.setPasive('1');
-                this.covidService.saveOrUpdateCandidatoTransmisionCovid19(casaCasoExistente);
+                //this.covidService.saveOrUpdateCandidatoTransmisionCovid19(casaCasoExistente); descomentar
             }
             else{
                 redirecTo = "403";
@@ -359,7 +359,8 @@ public class CovidCandidatoTransController {
 
         return redirecTo;
     }
-//region MÉTODOS PARA OTROS POSITIVOS COVID
+
+    //region MÉTODOS PARA OTROS POSITIVOS COVID
 
     // Editar Caso editOtherPositivo
     @RequestMapping(value = "/editOtroPositivo/{codigo}", method = RequestMethod.GET)
