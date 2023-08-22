@@ -257,7 +257,7 @@ public class BhcController {
                         bhc.setEstudios(estudios);
                         if (estado.equals("0")) {
                             bhc.setNotas("Reactivar");
-                        } else if (estado.equals("3")){
+                        } else if (estado.equals("2")){
                             bhc.setNotas("Ingreso");
                         }else {
                             bhc.setNotas("");
