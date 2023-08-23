@@ -170,8 +170,9 @@ public class CasaCohorteFamiliaCasoWController {
             CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasosByCodigo(codigo);
             if (casaCasoExistente!=null) {
                 casaCasoExistente.setFechaInactiva(DateUtil.StringToDate(fechaInactiva, "dd/MM/yyyy"));
-                casaCasoExistente.setObservacion(observacion);
-                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+                casaCasoExistente.setObservacion(observacion + " - " + nombreUsuario);
+                //casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setRecordDate(new Date());
                 casaCasoExistente.setInactiva("1");
                 this.casaCohorteFamiliaCasoService.saveOrUpdateCasaCohorteFamiliaCaso(casaCasoExistente);
@@ -333,7 +334,7 @@ public class CasaCohorteFamiliaCasoWController {
             CasaCohorteFamiliaCaso casaCasoExistente = this.casaCohorteFamiliaCasoService.getCasaCohorteFamiliaCasosByCodigo(codigo);
             if(casaCasoExistente!=null){
                 casaCasoExistente.setRecordDate(new Date());
-                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                //casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setPasive('1');
                 String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
                 String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " - " + nombreUsuario;
@@ -345,7 +346,7 @@ public class CasaCohorteFamiliaCasoWController {
                         procesos.setMi("No");
                         this.participanteProcesosService.saveOrUpdateParticipanteProc(procesos);
                         participante.setRecordDate(new Date());
-                        participante.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                        //participante.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                         participante.setPasive('1');
                         //participante.setDeshabilitado_por(mot);
                         this.participanteCohorteFamiliaCasoService.saveOrUpdateParticipanteCohorteFamiliaCaso(participante); //descomentar esta linea
@@ -369,7 +370,7 @@ public class CasaCohorteFamiliaCasoWController {
         try{
             ParticipanteCohorteFamiliaCaso participanteCohorteFamiliaCaso = participanteCohorteFamiliaCasoService.getParticipanteCohorteFamiliaCasosByCodigo(codigo);
             participanteCohorteFamiliaCaso.setRecordDate(new Date());
-            participanteCohorteFamiliaCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+            //participanteCohorteFamiliaCaso.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
             participanteCohorteFamiliaCaso.setPasive('1');
             String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
             String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " - " + nombreUsuario;

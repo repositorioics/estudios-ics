@@ -418,7 +418,8 @@ public class CovidController {
                 this.scanCartaService.quitarVigenciaExtensionTCovid(casoExistente.getCodigoCaso(), dFechaInactivo); /**descomentar **/
                 responseDto.setCodigoCaso(casoExistente.getCodigoCaso());
                 casoExistente.setFechaInactivo(dFechaInactivo);
-                casoExistente.setObservacion(observacion);
+                String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+                casoExistente.setObservacion(observacion + " - " +nombreUsuario);
                 casoExistente.setInactivo("1");
                 List<MessageResource> meta = this.messageResourceService.getCatalogo("CAT_METADATOS_RETIRO_AUTOMATIC");
                 identificador = meta.get(1).getSpanish();
@@ -538,7 +539,7 @@ public class CovidController {
 
             if(casaCasoExistente!=null){
                 casaCasoExistente.setPasive('1');
-                casaCasoExistente.setInactivo("1");
+                //casaCasoExistente.setInactivo("1");
                 String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
                 String mot = (motivo.equals(""))?"":motivo.toUpperCase() + " _ " + nombreUsuario;
                 casaCasoExistente.setDeshabilitado_por(mot);
@@ -614,7 +615,6 @@ public class CovidController {
     }
 
 
-    /** METODO DESACTIVAR POR PARTICIPANTE -> LISTO **/
     @RequestMapping( value="desactParticipanteCase", method=RequestMethod.POST)
     public ResponseEntity<String> desactParticipanteCase( @RequestParam(value="codigo", required=true ) String codigo
             , @RequestParam( value="motivo", required=false, defaultValue="" ) String motivo ) {

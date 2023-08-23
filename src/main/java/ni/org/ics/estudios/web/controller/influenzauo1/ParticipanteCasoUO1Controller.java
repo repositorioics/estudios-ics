@@ -244,7 +244,7 @@ public class ParticipanteCasoUO1Controller {
             ParticipanteCasoUO1 casaCasoExistente = this.participanteCasoUO1Service.getCasoByCodigo(codigo);
             if(casaCasoExistente!=null){
                 casaCasoExistente.setRecordDate(new Date());
-                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                //casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setPasive('1');
                 this.participanteCasoUO1Service.saveOrUpdate(casaCasoExistente);
                 redirectAttributes.addFlashAttribute("participante", casaCasoExistente.getParticipante().getCodigo().toString());
@@ -269,8 +269,9 @@ public class ParticipanteCasoUO1Controller {
             ParticipanteCasoUO1 casaCasoExistente = this.participanteCasoUO1Service.getCasoByCodigo(codigo);
             if (casaCasoExistente!=null) {
                 casaCasoExistente.setFechaDesactivacion(DateUtil.StringToDate(fechaDesactivacion, "dd/MM/yyyy"));
-                casaCasoExistente.setObservacion(observacion);
-                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();
+                casaCasoExistente.setObservacion(observacion + " - " + nombreUsuario);
+                //casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setRecordDate(new Date());
                 casaCasoExistente.setActivo("0");
                 this.participanteCasoUO1Service.saveOrUpdate(casaCasoExistente);
@@ -292,7 +293,7 @@ public class ParticipanteCasoUO1Controller {
             ParticipanteCasoUO1 casaCasoExistente = this.participanteCasoUO1Service.getCasoByCodigo(codigo);
             if(casaCasoExistente!=null){
                 casaCasoExistente.setRecordDate(new Date());
-                casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
+                //casaCasoExistente.setRecordUser(SecurityContextHolder.getContext().getAuthentication().getName());
                 casaCasoExistente.setPasive('1');
                 casaCasoExistente.setActivo("0");// preguntar si debo cambiar este campo
                 String nombreUsuario = SecurityContextHolder.getContext().getAuthentication().getName();

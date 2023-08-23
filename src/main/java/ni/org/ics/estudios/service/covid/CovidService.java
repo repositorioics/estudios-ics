@@ -557,7 +557,7 @@ public class CovidService {
         Session session = sessionFactory.getCurrentSession();
         String sql = "SELECT cc.CODIGO_CASO as codigoCaso, cc.CODIGO_CASA_CHF as casaCHF, DATE_format(cc.FECHA_INGRESO,'%d-%m-%Y') AS fechaIngreso, \n" +
                 "date_format(CURDATE(),'%d-%m-%Y' )AS hoy,TIMESTAMPDIFF(DAY, cc.FECHA_INGRESO, NOW()) AS diasTranscurridos\n" +
-                "FROM covid_casos cc WHERE cc.FECHA_INACTIVO IS NULL AND cc.PASIVO ='0' AND cc.INACTIVO='0' and cc.CODIGO_CASO =:codigo HAVING diasTranscurridos > :intervalo ORDER BY 2 ASC;";
+                "FROM covid_casos cc WHERE cc.FECHA_INACTIVO IS NULL AND cc.PASIVO ='0' AND cc.INACTIVO='0' and cc.CODIGO_CASO =:codigo HAVING diasTranscurridos >= :intervalo ORDER BY 2 ASC;";
         Query query = session.createSQLQuery(sql);
         query.setParameter("codigo", codigo);
         query.setParameter("intervalo", intervalo);
