@@ -54,6 +54,10 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
     private boolean vigente;
     private Date fecFinVigencia;
 
+    // Determinar SI es o No Reactivacion
+    private String reactivacion;
+
+
     @Id
     @Column(name = "IDPARTICIPANTECARTA", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -308,6 +312,15 @@ public class ParticipanteCarta extends BaseMetaData implements Auditable {
 
     public void setFecFinVigencia(Date fecFinVigencia) {
         this.fecFinVigencia = fecFinVigencia;
+    }
+
+    @Column(name = "REACTIVACION", length = 1, nullable = true)
+    public String getReactivacion() {
+        return reactivacion;
+    }
+
+    public void setReactivacion(String reactivacion) {
+        this.reactivacion = reactivacion;
     }
 
     @Override

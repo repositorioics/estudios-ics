@@ -584,7 +584,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                         <label for="contactoFuturo">
                                             <spring:message code="lbl.Accept.future.contact" />
@@ -603,7 +603,9 @@
                             <input type="text" name="aptoCovid" id="aptoCovid" hidden="hidden" disabled/>
                         </div>
 
-                            <div class="col-md-3">
+
+
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <div class="form-check mt-4 text-center pt-2">
                                         <input class="form-check-input chktestigo" type="checkbox" id="chkTestigo" name="chkTestigo">
@@ -613,6 +615,16 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <div class="form-check mt-4 text-center pt-2">
+                                        <input type="checkbox" class="form-check-input" id="reactivacion" name="reactivacion">
+                                        <label class="form-check-label" for="reactivacion"><spring:message code="Reactivacion" /></label>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div id="selectt" style="display: none">

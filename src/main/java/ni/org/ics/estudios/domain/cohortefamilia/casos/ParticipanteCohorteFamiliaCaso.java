@@ -8,6 +8,7 @@ import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 /**
@@ -29,6 +30,8 @@ public class ParticipanteCohorteFamiliaCaso extends BaseMetaData implements Audi
 	private Date fechaEnfermedad;
     private Date fis;
     private String positivoPor;
+    // add 2023-08-03 Solicitado por Brenda Lopez
+    private String deshabilitado_por;
     
 	@Id
     @Column(name = "CODIGO_PARTICIPANTE_CASO", length = 50, nullable = false)
@@ -99,7 +102,17 @@ public class ParticipanteCohorteFamiliaCaso extends BaseMetaData implements Audi
         this.positivoPor = positivoPor;
     }
 
-	@Override
+    @JsonIgnore
+    @Column(name = "DESHABILITADO_POR", nullable = true, length = 255)
+    public String getDeshabilitado_por() {
+        return deshabilitado_por;
+    }
+
+    public void setDeshabilitado_por(String deshabilitado_por) {
+        this.deshabilitado_por = deshabilitado_por;
+    }
+
+    @Override
 	public String toString(){
 		return codigoCaso.getCasa().getCodigoCHF() + "-" + participante.getParticipante().getCodigo() + "-" + codigoCaso.getFechaInicio();
 	}

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by ICS on 23/01/2020.
+ * Created by lserrano on 23/01/2020.
  */
 
 public class ParticipanteCartaDto  {
@@ -49,6 +49,8 @@ public class ParticipanteCartaDto  {
     private String accion;
     private String estudios_actuales;
     private Integer esIndiceOrMiembro;
+    private String reactivacion;
+
     public ParticipanteCartaDto() {}
 
     public Integer getCodigo() {
@@ -313,5 +315,13 @@ public class ParticipanteCartaDto  {
 
     public void setEsIndiceOrMiembro(Integer esIndiceOrMiembro) {
         this.esIndiceOrMiembro = esIndiceOrMiembro;
+    }
+
+    public String getReactivacion() {
+        return reactivacion;
+    }
+
+    public void setReactivacion(String reactivacion) {
+        this.reactivacion = reactivacion;
     }
 }

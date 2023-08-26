@@ -232,15 +232,9 @@ public class AreaAmbienteController {
     @RequestMapping(value = "ventanas", method = RequestMethod.POST, consumes = "application/json")
     public @ResponseBody String saveVentanas(@RequestBody Ventana[] envio) {
         logger.debug("Insertando/Actualizando datos Ventanas");
-        if (envio == null){
+        if (envio == null) {
             logger.debug("Nulo");
             return "No recibi nada!";
-        }
-        else{
-            List<Ventana> areasAmbienteList = Arrays.asList(envio);
-            for (Ventana areaAmb : areasAmbienteList){
-                areaAmbienteService.saveOrUpdateVentana(areaAmb);
-            }
         }
         return "Datos recibidos!";
     }

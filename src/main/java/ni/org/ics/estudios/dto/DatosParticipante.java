@@ -31,6 +31,10 @@ public class DatosParticipante {
     private String estudios;
     private Integer estPart;
     private String tutor;
+    private String nombre1Tutor;
+    private String nombre2Tutor;
+    private String apellido1Tutor;
+    private String apellido2Tutor;
     private String relacionFamTutor;
     private String cod_casaCHF;
 
@@ -232,5 +236,37 @@ public class DatosParticipante {
 
     public void setCod_casaCHF(String cod_casaCHF) {
         this.cod_casaCHF = cod_casaCHF;
+    }
+
+    public String getNombre1Tutor() {
+        return nombre1Tutor;
+    }
+
+    public void setNombre1Tutor(String nombre1Tutor) {
+        this.nombre1Tutor = nombre1Tutor;
+    }
+
+    public String getNombre2Tutor() {
+        return nombre2Tutor;
+    }
+
+    public void setNombre2Tutor(String nombre2Tutor) {
+        this.nombre2Tutor = nombre2Tutor;
+    }
+
+    public String getApellido1Tutor() {
+        return apellido1Tutor;
+    }
+
+    public void setApellido1Tutor(String apellido1Tutor) {
+        this.apellido1Tutor = apellido1Tutor;
+    }
+
+    public String getApellido2Tutor() {
+        return apellido2Tutor;
+    }
+
+    public void setApellido2Tutor(String apellido2Tutor) {
+        this.apellido2Tutor = apellido2Tutor;
     }
 }

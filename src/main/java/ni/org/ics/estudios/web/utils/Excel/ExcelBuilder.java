@@ -88,7 +88,7 @@ public class ExcelBuilder extends AbstractExcelView {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
         String fechaActual = dateFormat.format(new Date());
         String fileName = "Hemodinamica_"+ fechaActual +".xls";
-        response.setHeader("Content-Disposition", "attachment; filename=" + hemodinamicaDtoList.get(0).getCodigo_participante() + "_"+ fileName);
+
 
         Font font = workbook.createFont();
         font.setFontName("Arial");
@@ -158,7 +158,7 @@ public class ExcelBuilder extends AbstractExcelView {
              "DIAS_ENFERMEDAD", "POSITIVO"
             };
         if (hemodinamicaDtoList.size()>0){
-
+            response.setHeader("Content-Disposition", "attachment; filename=" + hemodinamicaDtoList.get(0).getCodigo_participante() + "_"+ fileName);
             for (int i = 0; i <hemodinamicaDtoList.size() ; i++) {
                 HSSFSheet sheet = workbook.createSheet("HOJA_"+ (i+1));
                 setTableHeader(sheet.createRow(0), headerStyle, headers);
@@ -306,6 +306,7 @@ public class ExcelBuilder extends AbstractExcelView {
                 }
             }
         }else{
+            response.setHeader("Content-Disposition", "attachment; filename=No_Data_"+ fileName);
             CellStyle noDataCellStyle = workbook.createCellStyle();
             noDataCellStyle.setAlignment(HorizontalAlignment.CENTER);
             noDataCellStyle.setFont(font);

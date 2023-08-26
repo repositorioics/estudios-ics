@@ -101,10 +101,8 @@
                                             <th><spring:message code="C_Car"/></th>
                                             <th><spring:message code="D_App"/></th>
                                             <th><spring:message code="D_Car"/></th>
-                                            <th><spring:message code="E_App"/></th>
-                                            <th><spring:message code="E_Car"/></th>
-                                            <th><spring:message code="F_App"/></th>
-                                            <th><spring:message code="F_Car"/></th>
+                                            <th><spring:message code="G_App"/></th>
+                                            <th><spring:message code="G_Car"/></th>
                                             <th><spring:message code="estudio"/></th>
                                             <th><spring:message code="version"/></th>
                                         </tr>
@@ -114,42 +112,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="page-title">
-                            <i class="fa fa-database"></i>&nbsp;<strong><spring:message code="lbl.letters.comparison.2" /> <spring:message code="G"/></strong>
-                        </h3>
-                    </div>
-                    <div class="row no-gutters row-bordered">
-                        <div class="col-md-12 col-lg-12 col-xl-12">
-                            <div class="card-body">
-                                <div class="card-block">
-                                    <div class="table-responsive">
-                                        <table id="lista_cartasG"  class="table table-striped table-bordered dt-responsive" width="100%">
-                                            <thead>
-                                            <tr>
-                                                <th><spring:message code="code"/></th>
-                                                <th><spring:message code="fecha"/></th>
-                                                <th><spring:message code="usuario"/></th>
-                                                <th><spring:message code="edad_act"/></th>
-                                                <th><spring:message code="edad_fdo"/></th>
-                                                <th><spring:message code="G_App"/></th>
-                                                <th><spring:message code="G_Car"/></th>
-                                                <th><spring:message code="estudio"/></th>
-                                                <th><spring:message code="version"/></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -262,7 +224,6 @@
 
     <spring:url value="/cartas/comparacion/getCartasSinDigitar" var="sCartas1Url"/>
     <spring:url value="/cartas/comparacion/getCartasPartes" var="sCartas2Url"/>
-    <spring:url value="/cartas/comparacion/getCartasPartesG" var="sCartasGUrl"/>
     <spring:url value="/cartas/comparacion/getCartasRelFam" var="sCartas3Url"/>
 
 <script>
@@ -338,45 +299,6 @@
                 { data: 'aceptaParteCSc', defaultContent: ""},
                 { data: 'aceptaParteDCc', defaultContent: ""},
                 { data: 'aceptaParteDSc', defaultContent: ""},
-                { data: 'aceptaParteECc', defaultContent: ""},
-                { data: 'aceptaParteEc', defaultContent: ""},
-                { data: 'aceptaParteFCc', defaultContent: ""},
-                { data: 'aceptaParteFSc', defaultContent: ""},
-                { data: 'estudio', defaultContent: ""},
-                { data: 'version', defaultContent: ""}
-            ]
-        });
-
-        $('#lista_cartasG').DataTable({
-            dom:    "<'row'<'col-sm-4'B><'col-sm-4'f><'col-sm-4'l>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-            "oLanguage": {
-                "sUrl": "${dataTablesLang}"
-            },
-            "bFilter": true,
-            "bInfo": true,
-            "bPaginate": true,
-            "bDestroy": true,
-            "responsive": true,
-            "pageLength": 10,
-            "bLengthChange": true,
-            "buttons": [
-                {
-                    extend: 'excel'
-                }
-            ],
-            "ajax":{
-                url: "${sCartasGUrl}", // Change this URL to where your json data comes from
-                type: "GET",
-                dataSrc: ""
-            },
-            "columns": [
-                { data: 'codigo', defaultContent: ""},
-                { data: 'fechaFirma', defaultContent: ""},
-                { data: 'usuarioRegistro', defaultContent: ""},
-                { data: 'edadActualMeses', defaultContent: ""},
-                { data: 'edadMeses', defaultContent: ""},
                 { data: 'aceptaParteGCc', defaultContent: ""},
                 { data: 'aceptaParteGSc', defaultContent: ""},
                 { data: 'estudio', defaultContent: ""},

@@ -126,6 +126,8 @@ public class CuestionarioHogar  extends BaseMetaData implements Auditable {
     //33.	¿Cuál es el mayor criadero de Zancudos de este barrio?
     private String mayorCriaderoBarrio;
 
+    private String anio;
+
     @Id
     @Column(name = "codigo_cuestionario", nullable = false, length = 36)
     public String getCodigoEncuesta() {
@@ -531,6 +533,15 @@ public class CuestionarioHogar  extends BaseMetaData implements Auditable {
     @Override
     public String toString() {
         return "codigoEncuesta='" + codigoEncuesta;
+    }
+
+    @Column(name = "anio", nullable = true)
+    public String getAnio() {
+        return anio;
+    }
+
+    public void setAnio(String anio) {
+        this.anio = anio;
     }
 
     @Override

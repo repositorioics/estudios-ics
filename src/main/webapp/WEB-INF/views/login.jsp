@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@page import="java.time.LocalDate"%>
 <html>
 <head>
 <jsp:include page="fragments/headTag.jsp" />
@@ -81,7 +82,7 @@
 									<img src="${logo}" alt="<spring:message code="login" />" />
 								</div>
 								<!-- END LOGO -->
-                                <div class="copyright">2017 - 2022 &copy; <spring:message code="footer"/>.</div>
+                                <div class="copyright">2017 - ${LocalDate.now().year} &copy; <spring:message code="footer"/>.</div>
                             </div>
                         </div>
                     </div>

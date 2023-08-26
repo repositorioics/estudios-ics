@@ -43,6 +43,8 @@
 
         <spring:url value="/super/particaso/getParticipantsCasos" var="getCodesUrl"/>
         <spring:url value="/super/UO1/closeCase" var="closeUrl"/>
+        <spring:url value="/super/UO1/searchDaysDiff" var="DiffUrl"/>
+        <spring:url value="/super/UO1/desactiveCase" var="DisabledUrl"/>
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
@@ -85,10 +87,14 @@
                                             var="editUrl">
                                     <spring:param name="codigo" value="${parti.codigoCasoParticipante}" />
                                 </spring:url>
-                                <spring:url value="/super/UO1/actions/disable/{codigo}"
-                                            var="disableUrl">
+                                <spring:url value="/super/UO1/actions/disable/{codigo}" var="disableUrl">
                                     <spring:param name="codigo" value="${parti.codigoCasoParticipante}-${parti.participante.codigo}" />
                                 </spring:url>
+
+                                <spring:url value="/super/UO1/desactiveCase/{codigo}" var="miDisableUrl">
+                                    <spring:param name="codigo" value="${parti.codigoCasoParticipante}-${parti.participante.codigo}" />
+                                </spring:url>
+
                                 <tr>
                                     <td><c:out value="${parti.participante.codigo}" /></td>
                                     <td><c:out value="${parti.participante.casa.codigo}" /></td>
@@ -113,8 +119,9 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                <a title="<spring:message code="close.case" />" data-toggle="modal" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-warning btn-sm salida"><i class="fa fa-sign-out"></i></a>
-                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
+                                                <a title="<spring:message code="close.case" />" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-warning btn-sm salida"><i class="fa fa-sign-out"></i></a>
+                                                <%--<a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>--%>
+                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -172,6 +179,52 @@
                     <!-- /.modal-content -->
                 </div>
                 <!-- /.modal-dialog -->
+            </div>
+
+            <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Deseas deshabilitar el caso?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div id="alertDias1" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h6> <strong>Dias transcurridos del caso: <span id="diasCasos1"></span> </strong> </h6>
+                                </div>
+                                <form autocomplete="off" id="desactive-form" class="form-horizontal">
+                                    <div class="form-group">
+                                        <input type=hidden class="form-control" id="accionDesactUrl" name="accionDesactUrl">
+                                    </div>
+
+                                    <div id="divMotivo">
+                                        <div class="form-group">
+                                            <label for="motivo" class="col-form-label"> <spring:message code="reason" /> <span class="required">*</span>  </label>
+                                            <textarea class="form-control" id="motivo" required="required"></textarea>
+                                        </div>
+                                        <%--<sec:authorize access="hasRole('ROLE_EDIT')"></sec:authorize>--%>
+                                        <div class="form-group">
+                                            <div class="form-check ml-2">
+                                                <input type="checkbox" class="form-check-input" id="enableBtn">
+                                                <label class="form-check-label" for="enableBtn">¿<spring:message code="confirm" /> <spring:message code="close.case" />?</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="resetForm"><spring:message code="cancel" /></button>
+                            <button type="button" id="btnDesact" class="btn btn-primary"><spring:message code="ok" /></button>
+                        </div>
+                    </div>
+                </div>
             </div>
             </div>
         </div>
@@ -240,7 +293,7 @@
                 "sUrl": "${dataTablesLang}"
             }
         });
-
+        table.order( [ 0, 'desc' ], [ 1, 'desc' ], [ 2, 'desc' ]).draw();
         var tt = new $.fn.dataTable.TableTools( table, {
             "sSwfPath": "${dataTablesTTSWF}",
             "sRowSelect": "single",
@@ -276,24 +329,80 @@
         if ("${cerrado}"){
             toastr.success("${successLabel}", "${participante}" );
         }
-        $(".desact").click(function(){
-            $('#accionUrl').val($(this).data('id').substr(0,$(this).data('id').lastIndexOf("-")));
-            $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
-            $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("-")+1))+'?</h3>');
-            $('#btnOkAct').show();
-            $('#dvSalida').hide();
-            $('#btnOkClose').hide();
-            $('#basic').modal('show');
+        $("#lista_casos tbody").on("click", ".desact",function(){
+            var codigoCaso = $(this).data('id');
+            console.log(codigoCaso);
+            $('#diasCasos1').html('');
+            getDiasCierre($(this).data('id'));
+            $("#alertDias").alert('close');
+            $('#accionDesactUrl').val($(this).data('id'));
+            $('#exampleModal').modal('show');
+
         });
 
-        $(".salida").click(function(){
+        $('#resetForm').on('click', function(){
+            document.getElementById("desactive-form").reset();
+            $('#exampleModal').modal('hide');
+        });
+        function getDiasCierre(codigo){
+            debugger
+            $('#diasCasos1').html('');
+            $.post("${DiffUrl}",{codigo: codigo, ajax: 'true'}, function(data){
+                var registro = JSON.parse(data);
+                console.log(registro);
+                if(registro.diasTranscurridos >= registro.diasDeBusqueda){
+                    document.getElementById('divMotivo').style.display = 'none';
+                    document.getElementById("motivo").required = false;
+                    var t = registro.diasTranscurridos +"/"+registro.diasDeBusqueda
+                    $('#diasCasos1').html('<span class="badge badge-danger">'+t+'</span>');
+                    document.getElementById("btnDesact").disabled = false;
+                }else{
+                    document.getElementById('divMotivo').style.display = 'block';
+                    document.getElementById("motivo").required = true;
+                    var t = registro.diasTranscurridos +"/"+registro.diasDeBusqueda
+                    $('#diasCasos1').html(t);
+                    document.getElementById("btnDesact").disabled = true
+                }
+            }, 'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                toastr.error( "error:" + errorThrown,{timeOut: 0});
+            });
+        }
+
+        $("#lista_casos tbody").on("click", ".salida",function(){
             $('#accionUrl').val($(this).data('id'));
+            getdiasTranscurridos($(this).data('id'));
             $('#titulo').html('<h2 class="modal-title">'+"${cerrarCaso}"+'</h2>');
             $('#cuerpo').html('');
             $('#btnOkAct').hide();
             $('#dvSalida').show();
             $('#btnOkClose').show();
             $('#basic').modal('show');
+        });
+
+
+        function getdiasTranscurridos(codigo){
+            debugger
+            $.post("${DiffUrl}",{codigo: codigo, ajax: 'true'}, function(data){
+                var registro = JSON.parse(data);
+                console.log(registro)
+                if(registro.diasTranscurridos < registro.diasDeBusqueda){
+                    document.getElementById("btnOkClose").disabled = true;
+                    $('#diasCasos').html(registro.diasTranscurridos);
+                }else {
+                    document.getElementById("btnOkClose").disabled = false;
+                    $('#diasCasos').html(registro.diasTranscurridos);
+                }
+            }, 'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                toastr.error( "error:" + errorThrown,{timeOut: 0});
+            });
+        }
+        $('#enableBtn').on('change', function(){
+            var isChkEnableBtn = document.getElementById('enableBtn');
+            if(isChkEnableBtn.checked){
+                document.getElementById("btnDesact").disabled = false;
+            }else{
+                document.getElementById("btnDesact").disabled = true;
+            }
         });
 
         var form2 = $('#close-form');
@@ -353,6 +462,56 @@
                     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
                         toastr.error( "error:" + errorThrown,{timeOut: 0});
                     });
+        }
+
+        var form3 = $('#desactive-form');
+        form3.validate({
+            errorElement: 'span', //default input error message container
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                motivo: { required: true }
+            },
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( 'form-control-feedback col-md-8' );
+                if ( element.prop( 'type' ) === 'checkbox' ) {
+                    error.insertAfter( element.parent( 'label' ) );
+                } else {
+                    //error.insertAfter( element ); //cuando no es input-group
+                    error.insertAfter(element.parent('.input-group'));
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( 'form-control-danger' ).removeClass( 'form-control-success' );
+                $( element ).parents( '.form-group' ).addClass( 'has-danger' ).removeClass( 'has-success' );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( 'form-control-success' ).removeClass( 'form-control-danger' );
+                $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
+            }
+        });
+
+        $("#btnDesact").click(function(){
+            if (form3.valid()){
+                desactive();
+            }
+        });
+
+        function desactive(){
+            $.post( "${DisabledUrl}", {codigo: $('#accionDesactUrl').val(), motivo: $('#motivo').val()}, function( data ){
+                var registro = JSON.parse(data);
+                console.log(registro);
+                if (registro.codigoCasoParticipante === undefined) {
+                    toastr.error(data,"Error",{timeOut: 0});
+                }else {
+                    toastr.success("${successLabel}");
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 1500);
+                }
+            }, 'text' ).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                toastr.error( "error:" + errorThrown,{timeOut: 0});
+            });
         }
 
         $('#lista_casos thead tr').clone(true).appendTo( '#lista_casos thead' );

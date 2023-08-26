@@ -67,7 +67,7 @@
                 </li>
             </sec:authorize>
             <!--  **  PROCESOS **  -->
-            <sec:authorize access="hasAnyRole('ROLE_ADMISION,ROLE_DIG,ROLE_LABORATORY,ROLE_DOM')">
+            <sec:authorize access="hasAnyRole('ROLE_ADMISION,ROLE_DIG,ROLE_LABORATORY,ROLE_DOM,ROLE_EDIT')">
                 <li class="nav-item nav-dropdown procesos">
                 <a class="nav-link nav-dropdown-toggle" href="#">
                     <i class="fa fa-cogs" aria-hidden="true"></i>
@@ -80,6 +80,14 @@
                           <i class="fa fa-snowflake-o" aria-hidden="true"></i>
                            <spring:message code="view" /></a>
                     </li>
+                    </sec:authorize>
+
+                    <sec:authorize access="hasRole('ROLE_EDIT')">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<spring:url value="/CorrectionParticipant/participantForm" htmlEscape="true "/>">
+                                <i class="fa fa-snowflake-o" aria-hidden="true"></i>
+                                <spring:message code="edit" /> <spring:message code="participant" /></a>
+                        </li>
                     </sec:authorize>
 
                     <sec:authorize access="hasAnyRole('ROLE_ROOT,ROLE_DIG')">
@@ -304,7 +312,7 @@
             </li>
             </sec:authorize>
             <!-- ** POSITIVOS ** -->
-            <sec:authorize access="hasRole('ROLE_ROOT')">
+            <sec:authorize access="hasAnyRole('ROLE_UMICH,ROLE_ROOT')">
             <li class="nav-item nav-dropdown comparison">
                 <a class="nav-link nav-dropdown-toggle" href="#">
                     <i class="fa fa-plus" aria-hidden="true"></i>

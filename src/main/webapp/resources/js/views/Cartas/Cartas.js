@@ -214,6 +214,7 @@ var scanCarta = function(){
                     $("#tipoCaso").select2().val(0).trigger("change").prop('disabled',true);
                 }
 
+
                 $("#partes").prop('disabled',false);
                 $("#version").prop('disabled',false);
                 ObtenerVersion(parametroII);
@@ -255,6 +256,13 @@ var scanCarta = function(){
                     ObtenerParte(parametroII);
                     if(cur_value != null) {
                         ContactoFuture(parametroII, cur_value);
+                    }
+                    if(cur_value === '7' || cur_value === '8' || cur_value === '9'){
+                        $('#asentimiento').val(3).trigger('change.select2');
+                        $('#tipoasentimiento').val(4).trigger('change.select2');
+                    }else{
+                        $('#asentimiento').val(1).trigger('change.select2');
+                        $('#tipoasentimiento').val(1).trigger('change.select2');
                     }
                 }
             });//fin
@@ -390,7 +398,8 @@ var scanCarta = function(){
                         tipoasentimiento: $("#tipoasentimiento").val().trim(),
                         parte: elementos,
                         estudios_actuales: $("#estudios").val(),
-                        esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim())
+                        esIndiceOrMiembro:parseInt($("#tipoCaso").val().trim()),
+                        reactivacion: ($('input:checkbox[name=reactivacion]').prop('checked') == true) ? '1' : '0'
                     };
                     verificaEstudioVersionCarta(data);
                 }

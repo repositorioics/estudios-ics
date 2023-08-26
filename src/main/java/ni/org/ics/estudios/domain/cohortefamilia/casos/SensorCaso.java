@@ -44,7 +44,7 @@ public class SensorCaso extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "CODIGO_CASO", nullable = false)
+    @JoinColumn(name = "CODIGO_CASO", nullable = true)
     @ForeignKey(name = "FK_SENSORES_CASA_CASO")
     public CasaCohorteFamiliaCaso getCodigoCaso() {
         return codigoCaso;
@@ -54,7 +54,7 @@ public class SensorCaso extends BaseMetaData implements Auditable {
         this.codigoCaso = codigoCaso;
     }
 
-    @Column(name = "NUMERO_SENSOR", length = 5, nullable = false)
+    @Column(name = "NUMERO_SENSOR", length = 10, nullable = false)
     public String getNumeroSensor() {
         return numeroSensor;
     }
@@ -64,7 +64,7 @@ public class SensorCaso extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "CODIGO_AREA", nullable = false)
+    @JoinColumn(name = "CODIGO_AREA", nullable = true)
     @ForeignKey(name = "FK_SENSORES_AREA_AMB")
     public AreaAmbiente getArea() {
         return area;
@@ -75,7 +75,7 @@ public class SensorCaso extends BaseMetaData implements Auditable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "CODIGO_CUARTO", nullable = false)
+    @JoinColumn(name = "CODIGO_CUARTO", nullable = true)
     @ForeignKey(name = "FK_SENSOR_CUARTO")
     public Cuarto getCuarto() {
         return cuarto;
