@@ -70,7 +70,7 @@ public class ParticipanteCasoUO1Service {
     public casosPositivosDiffDto getdiasTranscurridos(String codigo, int intervalo ){
         Session session = sessionFactory.getCurrentSession();
         String sql = "SELECT u.CODIGO_PARTICIPANTE_CASO as codigoCaso, u.CODIGO_PARTICIPANTE as codigoParticipante, DATE_format(u.fecha_ingreso,'%d-%m-%Y') AS fechaIngreso, date_format(CURDATE(),'%d-%m-%Y' )AS hoy,TIMESTAMPDIFF(DAY, u.FECHA_INGRESO, NOW()) AS diasTranscurridos " +
-                " FROM uo1_participantes_casos u WHERE u.FECHA_DESACTIVACION IS NULL AND u.PASIVO ='0' AND  u.CODIGO_PARTICIPANTE_CASO  =:codigo HAVING diasTranscurridos < :intervalo ORDER BY 1 ASC;";
+                " FROM uo1_participantes_casos u WHERE u.FECHA_DESACTIVACION IS NULL AND u.PASIVO ='0' AND  u.CODIGO_PARTICIPANTE_CASO  =:codigo HAVING diasTranscurridos >= :intervalo ORDER BY 1 ASC;";
         Query query = session.createSQLQuery(sql);
         query.setParameter("codigo", codigo);
         query.setParameter("intervalo", intervalo);

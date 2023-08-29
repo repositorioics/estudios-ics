@@ -163,7 +163,7 @@ public class ParticipanteCohorteFamiliaCasoService {
         Session session = sessionFactory.getCurrentSession();
         String sql = "SELECT c.CODIGO_CASO as codigoCaso, c.CODIGO_CASA_CHF as casaCHF, " +
                 "DATE_FORMAT(c.FECHA_INICIO,'%d-%m-%Y') AS fechaIngreso, DATE_FORMAT(CURDATE(),'%d-%m-%Y' ) AS hoy,TIMESTAMPDIFF(DAY, c.FECHA_INICIO, NOW()) AS diasTranscurridos \n" +
-                "FROM chf_casas_casos c WHERE c.FECHA_INACTIVA IS NULL AND c.INACTIVA = '0' AND c.PASIVO ='0' AND c.codigo_caso =:codigo HAVING diasTranscurridos > :intervalo ORDER BY 2 ASC;";
+                "FROM chf_casas_casos c WHERE c.FECHA_INACTIVA IS NULL AND c.INACTIVA = '0' AND c.PASIVO ='0' AND c.codigo_caso =:codigo HAVING diasTranscurridos >= :intervalo ORDER BY 2 ASC;";
         Query query = session.createSQLQuery(sql);
         query.setParameter("codigo", codigo);
         query.setParameter("intervalo", intervalo);

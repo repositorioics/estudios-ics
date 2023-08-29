@@ -87,10 +87,14 @@
                                             var="editUrl">
                                     <spring:param name="codigo" value="${parti.codigoCasoParticipante}" />
                                 </spring:url>
-                                <spring:url value="/super/UO1/actions/disable/{codigo}"
-                                            var="disableUrl">
+                                <spring:url value="/super/UO1/actions/disable/{codigo}" var="disableUrl">
                                     <spring:param name="codigo" value="${parti.codigoCasoParticipante}-${parti.participante.codigo}" />
                                 </spring:url>
+
+                                <spring:url value="/super/UO1/desactiveCase/{codigo}" var="miDisableUrl">
+                                    <spring:param name="codigo" value="${parti.codigoCasoParticipante}-${parti.participante.codigo}" />
+                                </spring:url>
+
                                 <tr>
                                     <td><c:out value="${parti.participante.codigo}" /></td>
                                     <td><c:out value="${parti.participante.casa.codigo}" /></td>
@@ -115,9 +119,9 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <a title="<spring:message code="edit" />" href="${fn:escapeXml(editUrl)}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                <a title="<spring:message code="close.case" />" data-toggle="modal" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-warning btn-sm salida"><i class="fa fa-sign-out"></i></a>
+                                                <a title="<spring:message code="close.case" />" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-warning btn-sm salida"><i class="fa fa-sign-out"></i></a>
                                                 <%--<a title="<spring:message code="disable" />" data-toggle="modal" data-id="${fn:escapeXml(disableUrl)}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>--%>
-                                                <a title="<spring:message code="disable" />" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-danger btn-sm desact" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat"><i class="fa fa-trash-o"></i></a>
+                                                <a title="<spring:message code="disable" />" data-toggle="modal" data-id="${parti.codigoCasoParticipante}" class="btn btn-outline-danger btn-sm desact"><i class="fa fa-trash-o"></i></a>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -325,27 +329,28 @@
         if ("${cerrado}"){
             toastr.success("${successLabel}", "${participante}" );
         }
-        $(".desact").click(function(){
+        $("#lista_casos tbody").on("click", ".desact",function(){
+            var codigoCaso = $(this).data('id');
+            console.log(codigoCaso);
+            $('#diasCasos1').html('');
             getDiasCierre($(this).data('id'));
             $("#alertDias").alert('close');
             $('#accionDesactUrl').val($(this).data('id'));
-            /*$('#accionUrl').val($(this).data('id').substr(0,$(this).data('id').lastIndexOf("-")));
-            $('#titulo').html('<h2 class="modal-title">'+"${confirmar}"+'</h2>');
-            $('#cuerpo').html('<h3>'+"${deshabilitar}"+' '+decodeURIComponent($(this).data('id').substr($(this).data('id').lastIndexOf("-")+1))+'?</h3>');
-            $('#btnOkAct').show();
-            $('#dvSalida').hide();
-            $('#btnOkClose').hide();
-            $('#basic').modal('show');*/
+            $('#exampleModal').modal('show');
+
         });
+
         $('#resetForm').on('click', function(){
             document.getElementById("desactive-form").reset();
             $('#exampleModal').modal('hide');
         });
         function getDiasCierre(codigo){
+            debugger
             $('#diasCasos1').html('');
             $.post("${DiffUrl}",{codigo: codigo, ajax: 'true'}, function(data){
                 var registro = JSON.parse(data);
-                if(registro.diasTranscurridos > registro.diasDeBusqueda){
+                console.log(registro);
+                if(registro.diasTranscurridos >= registro.diasDeBusqueda){
                     document.getElementById('divMotivo').style.display = 'none';
                     document.getElementById("motivo").required = false;
                     var t = registro.diasTranscurridos +"/"+registro.diasDeBusqueda
@@ -363,7 +368,7 @@
             });
         }
 
-        $(".salida").click(function(){
+        $("#lista_casos tbody").on("click", ".salida",function(){
             $('#accionUrl').val($(this).data('id'));
             getdiasTranscurridos($(this).data('id'));
             $('#titulo').html('<h2 class="modal-title">'+"${cerrarCaso}"+'</h2>');
@@ -374,10 +379,13 @@
             $('#basic').modal('show');
         });
 
+
         function getdiasTranscurridos(codigo){
+            debugger
             $.post("${DiffUrl}",{codigo: codigo, ajax: 'true'}, function(data){
                 var registro = JSON.parse(data);
-                if(registro.diasTranscurridos < 30){
+                console.log(registro)
+                if(registro.diasTranscurridos < registro.diasDeBusqueda){
                     document.getElementById("btnOkClose").disabled = true;
                     $('#diasCasos').html(registro.diasTranscurridos);
                 }else {
