@@ -42,7 +42,7 @@ public class SensoresCasoService {
                 "s.area.codigo as area, s.cuarto.codigo as cuarto, s.fechaColocacion as fechaColocacion, s.fechaRetiro as fechaRetiro, " +
                 "s.horaRetiro as horaRetiro, s.observacionRetiro as observacionRetiro, s.sensorSN as sensorSN, s.razonNoColocaSensor as razonNoColocaSensor, " +
                 "s.recordUser as recordUser, s.recordDate as recordDate, s.pasive as pasive, s.estado as estado, s.deviceid as deviceid " +
-                "FROM SensorCaso s ");
+                "FROM SensorCaso s where s.pasive = '0' and s.codigoCaso.inactiva = '0'");
                 //"FROM SensorCaso s where s.fechaRetiro is null ");
         query.setResultTransformer(Transformers.aliasToBean(SensorCasoDto.class));
         return query.list();
