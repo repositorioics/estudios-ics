@@ -1,6 +1,7 @@
 package ni.org.ics.estudios.movil.controller.cohortefamilia.casos;
 
 import ni.org.ics.estudios.domain.cohortefamilia.casos.SensorCaso;
+import ni.org.ics.estudios.dto.SensorCasoDto;
 import ni.org.ics.estudios.service.cohortefamilia.casos.SensoresCasoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +29,12 @@ public class SensoresCasosController {
     private SensoresCasoService sensoresCasoService;
 
     @RequestMapping(value = "sensorescasos", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody
-    List<SensorCaso> getVisitaFinalCasoCasos(){
+     public @ResponseBody
+     List<SensorCaso> getVisitaFinalCasoCasos(){
         logger.info("Descargando toda la informacion de los sensorescasos de las casas de la cohorte familia con caso positivo");
+
         List<SensorCaso> sensoresCasos = sensoresCasoService.getSensoresCasos();
-        if (sensoresCasos == null){
-            logger.debug("Nulo");
-        }
+
         return  sensoresCasos;
     }
 
@@ -51,5 +51,15 @@ public class SensoresCasosController {
             }
         }
         return "Datos recibidos!";
+    }
+
+    @RequestMapping(value = "sensorescasos_v2", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<SensorCasoDto> getSensoresCasos(){
+        logger.info("Descargando toda la informacion de los sensorescasos de las casas de la cohorte familia con caso positivo");
+
+        List<SensorCasoDto> sensoresCasosDto = sensoresCasoService.getSensoresCasosDto();
+
+        return  sensoresCasosDto;
     }
 }
