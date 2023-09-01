@@ -48,6 +48,9 @@ public class HistorialRetiroDto implements Serializable {
     private String perimetroAbdominal;
     private String encSatUsu;
 
+    //alerta edad Dengue 01-09-2023
+    private String alertaEdadDengue;
+
     private List<RetiroDto> retiroList;
 
     public HistorialRetiroDto() {
@@ -355,5 +358,13 @@ public class HistorialRetiroDto implements Serializable {
 
     public void setEncSatUsu(String encSatUsu) {
         this.encSatUsu = encSatUsu;
+    }
+
+    public String getAlertaEdadDengue() {
+        return alertaEdadDengue;
+    }
+
+    public void setAlertaEdadDengue(String alertaEdadDengue) {
+        this.alertaEdadDengue = alertaEdadDengue;
     }
 }

@@ -126,6 +126,14 @@ public class RegistroController {
             String fecha = DateUtil.DateToString(participante.getFechaNac(), "dd/MM/yyyy");
             historialDTO.setFechaNac(fecha);
             historialDTO.setEdad(participante.getEdad());
+            if (procesos.getEstudio().contains("Dengue")){
+                String cadena = participante.getEdad();
+                String[] parts = cadena.split("/");
+                int part0 = Integer.parseInt( parts[0]); // edad en años
+                if (part0 < 2){
+                    historialDTO.setAlertaEdadDengue("Participante Menor a 2 años, \n No tomar Categoria C");
+                }
+            }
             historialDTO.setDireccion(participante.getCasa().getDireccion());
             historialDTO.setNombreBarrio(participante.getCasa().getBarrio().getNombre());
             historialDTO.setJefe(participante.getCasa().getNombre1JefeFamilia()+" "+participante.getCasa().getNombre2JefeFamilia()+" "+participante.getCasa().getApellido1JefeFamilia()+" " +participante.getCasa().getApellido2JefeFamilia());

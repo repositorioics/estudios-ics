@@ -326,8 +326,9 @@
    <!-- <spring:url value="/resources/css/animate.css" var="anime" />
     <link rel="stylesheet" href="${anime}" type="text/css"/> -->
 
-    <spring:url value="/resources/css/sweetalert2/sweetalert2.min.css" var="sweetalert2" />
-    <link rel="stylesheet" href="${sweetalert2}">
+    <spring:url value="/resources/css/sweetalert.css" var="swalcss" />
+    <link href="${swalcss}" rel="stylesheet" type="text/css"/>
+
 
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -1089,8 +1090,8 @@
     <spring:param name="language" value="${lenguaje}" />
 </spring:url>
 
-<spring:url value="/resources/js/libs/sweetalert2/sweetalert2.min.js" var="sweetalert2" />
-<script src="${sweetalert2}"></script>
+<spring:url value="/resources/js/libs/sweetalert.min.js" var="sw" />
+<script type="text/javascript" src="${sw}"></script>
 
 <spring:url value="/resources/js/libs/jquery-ui.js" var="uiJs" />
 <script src="${uiJs}" type="text/javascript"></script>
@@ -1181,10 +1182,8 @@
                     $("#parametro").focus().val("");
                 }
                 else{
-                    if(data.estPart == "0"){
-                        toastr.warning("Participante está retirado!");
-                    }else{
-                        toastr.success("Participante está Activo!");
+                    if(data.alertaEdadDengue !=undefined){
+                        swal("Advertencia!",""+data.alertaEdadDengue,"info");
                     }
                         var elemento = data.edad;
                         var fecha = elemento.split('/');
