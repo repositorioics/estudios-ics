@@ -236,6 +236,12 @@ public class AreaAmbienteController {
             logger.debug("Nulo");
             return "No recibi nada!";
         }
+        else{
+            List<Ventana> areasAmbienteList = Arrays.asList(envio);
+            for (Ventana areaAmb : areasAmbienteList){
+                areaAmbienteService.saveOrUpdateVentana(areaAmb);
+            }
+        }
         return "Datos recibidos!";
     }
 }
