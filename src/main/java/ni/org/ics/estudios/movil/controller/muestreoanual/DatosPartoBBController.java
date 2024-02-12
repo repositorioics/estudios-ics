@@ -66,9 +66,18 @@ public class DatosPartoBBController {
         		datospartobbId.setFechaDatosParto(new Date(datospartobb.getDatosPartoId().getFechaDatosParto().getTime()));
         		Boolean existe = datosPartoBBService.checkDatosPartoBB(datospartobbId);
         		if (!existe){
+                    datospartobb.setEncuestaValida(true);
         			datosPartoBBService.addDatosPartoBB(datospartobb);
         		}
         		else{
+                    DatosPartoBB datos = datosPartoBBService.getDatosPartoBB(datospartobbId);
+                    if (datos != null) {
+                        if (datos.getEncuestaValida() != null) {
+                            datospartobb.setEncuestaValida(datos.getEncuestaValida());
+                        } else {
+                            datospartobb.setEncuestaValida(null);
+                        }
+                    }
         			datosPartoBBService.updateDatosPartoBB(datospartobb);
         		}
         	}

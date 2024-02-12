@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -33,6 +35,8 @@ public class Obsequio {
 	
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
+
+    private Boolean encuestaValida; //18-01-2024
 
 	@Column(name = "obseqsn", nullable = true, length = 1)
 	public Integer getObseqSN() {
@@ -149,4 +153,14 @@ public class Obsequio {
 	public void setOtrorecurso1(Integer otrorecurso1) {
 		this.otrorecurso1 = otrorecurso1;
 	}
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 }

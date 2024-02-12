@@ -322,7 +322,17 @@ public class ParticipanteController {
                             participante.setEsatUsuarioCc("No");
                         }
                     }
+
+                    //FECHA DE ENROLMIENTO
+                    if(partProc.getFechaEnrolamiento() != null) {
+                        participante.setFechaEnrolamiento(partProc.getFechaEnrolamiento());
+                    } else {
+                        participante.setFechaEnrolamiento(null);
+                    }
+                } else {
+                    participante.setFechaEnrolamiento(new Date());
                 }
+
                 participanteProcesosService.saveOrUpdateParticipanteProc(participante);
             }
         }

@@ -40,8 +40,31 @@ public class EncuestaSatisfaccionUsuarioController {
         }else{
             List<EncuestaSatisfaccionUsuario> encuestaSatisfaccionUsuarioList = Arrays.asList(objetos);
             for(EncuestaSatisfaccionUsuario encuestaSatisfaccionUsuario : encuestaSatisfaccionUsuarioList) {
-                encuestaSatisfaccionUsuario.setFechaRegistro(new Date());
-                encuestaSatisfaccionUsuarioService.saveOrUpdateEncuestaSatisfaccionUsuario(encuestaSatisfaccionUsuario);
+
+                Boolean existe = encuestaSatisfaccionUsuarioService.checkEncuestaSatisfaccionUsuario(new Date().getTime(), encuestaSatisfaccionUsuario.getCodigoParticipante());
+                if (!existe){
+                    encuestaSatisfaccionUsuario.setFechaRegistro(new Date());
+                    encuestaSatisfaccionUsuario.setEncuestaValida(true);
+                    encuestaSatisfaccionUsuarioService.addEncuestaSatisfaccionUsuario(encuestaSatisfaccionUsuario);
+                } else {
+                    EncuestaSatisfaccionUsuario encuestaSU = encuestaSatisfaccionUsuarioService.getEncuestaSatisfaccionUsuario(new Date().getTime(), encuestaSatisfaccionUsuario.getCodigoParticipante());
+                    encuestaSatisfaccionUsuario.setCodigo(encuestaSU.getCodigo());
+                    if (encuestaSU != null) {
+                        if (encuestaSU.getEncuestaValida() != null) {
+                            encuestaSatisfaccionUsuario.setEncuestaValida(encuestaSU.getEncuestaValida());
+                        } else {
+                            encuestaSatisfaccionUsuario.setEncuestaValida(null);
+                        }
+                        if (encuestaSU.getFechaRegistro() != null) {
+                            encuestaSatisfaccionUsuario.setFechaRegistro(encuestaSU.getFechaRegistro());
+                        } else {
+                            encuestaSatisfaccionUsuario.setFechaRegistro(null);
+                        }
+                    }
+                    encuestaSatisfaccionUsuarioService.updateEncuestaSatisfaccionUsuario(encuestaSatisfaccionUsuario);
+                }
+                //encuestaSatisfaccionUsuario.setFechaRegistro(new Date());
+                //encuestaSatisfaccionUsuarioService.saveOrUpdateEncuestaSatisfaccionUsuario(encuestaSatisfaccionUsuario);
             }
         }
         return "Datos recibidos!";

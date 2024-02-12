@@ -3,6 +3,7 @@ package ni.org.ics.estudios.domain.muestreoanual;
 import ni.org.ics.estudios.domain.BaseMetaData;
 import ni.org.ics.estudios.domain.audit.Auditable;
 import ni.org.ics.estudios.domain.cohortefamilia.ParticipanteCohorteFamilia;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class EncuestaPerimetroAbdominal {
     private Integer otrorecurso2;
     private String estudiosAct;
     private MovilInfo movilInfo;
+    private Boolean encuestaValida; //18-01-2024
 
     @Column(name = "toma_medidas", length = 1)
     public String getTomoMedidaSn() {
@@ -124,5 +126,15 @@ public class EncuestaPerimetroAbdominal {
 
     public void setPaId(EncuestaPerimetroAbdominalId paId) {
         this.paId = paId;
+    }
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
     }
 }

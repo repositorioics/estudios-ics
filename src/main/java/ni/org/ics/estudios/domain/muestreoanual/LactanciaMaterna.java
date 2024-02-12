@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -39,6 +41,7 @@ public class LactanciaMaterna {
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
 	private Integer otrorecurso2;
+    private Boolean encuestaValida; //18-01-2024
 
 	@EmbeddedId
 	public LactanciaMaternaId getLmId() {
@@ -218,5 +221,15 @@ public class LactanciaMaterna {
 	public void setOtrorecurso2(Integer otrorecurso2) {
 		this.otrorecurso2 = otrorecurso2;
 	}
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 
 }

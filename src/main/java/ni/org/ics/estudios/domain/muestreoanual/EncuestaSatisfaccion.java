@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,6 +40,7 @@ public class EncuestaSatisfaccion {
 	private Integer expMedCuid;
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
+    private Boolean encuestaValida; //18-01-2024
 	
 	@Id
 	@Column(name = "fecha_encuesta", nullable = false)
@@ -191,5 +194,15 @@ public class EncuestaSatisfaccion {
 	public void setOtrorecurso1(Integer otrorecurso1) {
 		this.otrorecurso1 = otrorecurso1;
 	}
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 
 }

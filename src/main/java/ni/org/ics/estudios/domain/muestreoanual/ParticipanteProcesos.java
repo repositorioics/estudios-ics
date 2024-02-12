@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.util.Date;
 
 /**
  * Simple objeto de dominio que representa un participante de los estudios
@@ -94,6 +95,9 @@ public class ParticipanteProcesos implements Auditable {
     private String esatUsuario;
 
     private String esatUsuarioCc;
+
+    //Fecha del Enrolamiento del participante -> 18-01-2024
+    private Date fechaEnrolamiento;
 
 
     @Id
@@ -672,5 +676,15 @@ public class ParticipanteProcesos implements Auditable {
 
     public void setEsatUsuarioCc(String esatUsuarioCc) {
         this.esatUsuarioCc = esatUsuarioCc;
+    }
+
+    @JsonIgnore
+    @Column(name = "fecha_enrolamiento", nullable = true)
+    public Date getFechaEnrolamiento() {
+        return fechaEnrolamiento;
+    }
+
+    public void setFechaEnrolamiento(Date fechaEnrolamiento) {
+        this.fechaEnrolamiento = fechaEnrolamiento;
     }
 }

@@ -66,9 +66,18 @@ public class PesoyTallaController {
         		ptId.setFechaPT(new Date(pt.getPtId().getFechaPT().getTime()));
         		Boolean existe = pesoyTallaService.checkPesoyTallaEB(ptId);
         		if (!existe){
+                    pt.setEncuestaValida(true);
         			pesoyTallaService.addPesoyTallaEB(pt);
         		}
         		else{
+                    PesoyTalla pesoyTalla = pesoyTallaService.getPesoytalla(ptId);
+                    if (pesoyTalla != null) {
+                        if (pesoyTalla.getEncuestaValida() != null) {
+                            pt.setEncuestaValida(pesoyTalla.getEncuestaValida());
+                        } else {
+                            pt.setEncuestaValida(null);
+                        }
+                    }
         			pesoyTallaService.updatePesoyTallaEB(pt);
         		}
         	}

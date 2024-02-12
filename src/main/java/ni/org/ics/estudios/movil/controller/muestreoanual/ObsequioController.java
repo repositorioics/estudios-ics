@@ -66,9 +66,18 @@ public class ObsequioController {
         		obId.setFechaEntrega(new Date(obsequio.getObId().getFechaEntrega().getTime()));
         		Boolean existe = obsequioService.checkObsequio(obId);
         		if (!existe){
+                    obsequio.setEncuestaValida(true);
         			obsequioService.addObsequio(obsequio);
         		}
         		else{
+                    Obsequio obseq = obsequioService.getObsequio(obId);
+                    if (obseq != null) {
+                        if (obseq.getEncuestaValida() != null) {
+                            obsequio.setEncuestaValida(obseq.getEncuestaValida());
+                        } else {
+                            obsequio.setEncuestaValida(null);
+                        }
+                    }
         			obsequioService.updateObsequio(obsequio);
         		}
         	}

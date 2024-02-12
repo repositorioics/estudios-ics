@@ -66,9 +66,18 @@ public class LactanciaMaternaController {
         		lmId.setFechaEncLM(new Date(lacmat.getLmId().getFechaEncLM().getTime()));
         		Boolean existe = lactanciaMaternaService.checkLactanciaMaterna(lmId);
         		if (!existe){
+                    lacmat.setEncuestaValida(true);
         			lactanciaMaternaService.addLactanciaMaterna(lacmat);
         		}
         		else{
+                    LactanciaMaterna lactanciaMaterna = lactanciaMaternaService.getLactanciaMaterna(lmId);
+                    if (lactanciaMaterna != null) {
+                        if (lactanciaMaterna.getEncuestaValida() != null) {
+                            lacmat.setEncuestaValida(lactanciaMaterna.getEncuestaValida());
+                        } else {
+                            lacmat.setEncuestaValida(null);
+                        }
+                    }
         			lactanciaMaternaService.updateLactanciaMaterna(lacmat);
         		}
         	}

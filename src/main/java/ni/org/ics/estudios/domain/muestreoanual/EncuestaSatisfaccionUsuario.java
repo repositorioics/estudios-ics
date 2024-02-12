@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -87,6 +89,7 @@ public class EncuestaSatisfaccionUsuario implements Serializable{
     private Integer codigoCasa;
     private String casaChf;
     private String estudio;
+    private Boolean encuestaValida; //18-01-2024
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -754,5 +757,15 @@ public class EncuestaSatisfaccionUsuario implements Serializable{
 
     public void setEstudio(String estudio) {
         this.estudio = estudio;
+    }
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
     }
 }

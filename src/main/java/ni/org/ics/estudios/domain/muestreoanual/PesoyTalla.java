@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -38,6 +40,7 @@ public class PesoyTalla {
 	private Integer otrorecurso1;
 	private Integer otrorecurso2;
 	private String estudiosAct; // estudios actuales al momento de llenar la encuesta
+    private Boolean encuestaValida; //18-01-2024
 
 	@Column(name = "peso1", nullable = true)
 	public Double getPeso1() {
@@ -200,4 +203,14 @@ public class PesoyTalla {
 	public void setEstudiosAct(String estudiosAct) {
 		this.estudiosAct = estudiosAct;
 	}
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 }

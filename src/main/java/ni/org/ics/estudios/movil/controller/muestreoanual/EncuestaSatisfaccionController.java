@@ -60,9 +60,18 @@ public class EncuestaSatisfaccionController {
         	for (EncuestaSatisfaccion encuestaSatisfaccion: encuestasSatisfaccion){
         		Boolean existe = encuestaSatisfaccionService.checkEncuestaSatisfaccion(encuestaSatisfaccion.getFechaEncuesta().getTime());
         		if (!existe){
+                    encuestaSatisfaccion.setEncuestaValida(true);
         			encuestaSatisfaccionService.addEncuestaSatisfaccion(encuestaSatisfaccion);
         		}
         		else{
+                    EncuestaSatisfaccion encuestaS = encuestaSatisfaccionService.getEncuestaSatisfaccion(encuestaSatisfaccion.getFechaEncuesta().getTime());
+                    if (encuestaS != null) {
+                        if (encuestaS.getEncuestaValida() != null) {
+                            encuestaSatisfaccion.setEncuestaValida(encuestaS.getEncuestaValida());
+                        } else {
+                            encuestaSatisfaccion.setEncuestaValida(null);
+                        }
+                    }
         			encuestaSatisfaccionService.updateEncuestaSatisfaccion(encuestaSatisfaccion);
         		}
         	}

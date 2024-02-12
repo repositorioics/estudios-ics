@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -137,6 +139,7 @@ public class EncuestaCasaMA {
 	private String remodelacionCasa;
 	private String tieneVehiculo;
 	private Integer participante;
+    private Boolean encuestaValida; //18-01-2024
     @Id
     @Column(name = "codigo", length = 50, nullable = false)
     public String getCodigo() {
@@ -1146,4 +1149,14 @@ public class EncuestaCasaMA {
 	public void setParticipante(Integer participante) {
 		this.participante = participante;
 	}
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 }

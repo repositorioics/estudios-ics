@@ -63,9 +63,19 @@ public class EncuestaCasaMAController {
                 if (codigo==null && (encuestaCasa.getCodCasaChf()!=null && !encuestaCasa.getCodCasaChf().isEmpty())) codigo = Integer.valueOf(encuestaCasa.getCodCasaChf());
         		Boolean existe = encuestaCasaService.checkEncuestaCasa(codigo, encuestaCasa.getFechaEncCasa());
         		if (!existe){
+                    encuestaCasa.setEncuestaValida(true);
         			encuestaCasaService.addEncuestaCasa(encuestaCasa);
         		}
         		else{
+                    EncuestaCasaMA encuestaCasaMA = encuestaCasaService.getEncuestaCasaMA(codigo, encuestaCasa.getFechaEncCasa());
+                    if (encuestaCasaMA != null) {
+                        if (encuestaCasaMA.getEncuestaValida() != null) {
+                            encuestaCasa.setEncuestaValida(encuestaCasaMA.getEncuestaValida());
+                        } else {
+                            encuestaCasa.setEncuestaValida(null);
+                        }
+                        encuestaCasa.setFechaEncCasa(encuestaCasa.getFechaEncCasa());
+                    }
         			encuestaCasaService.updateEncuestaCasa(encuestaCasa);
         		}
         	}

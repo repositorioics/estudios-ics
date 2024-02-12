@@ -65,9 +65,18 @@ public class EncuestaParticipanteMAController {
         		epId.setFechaEncPar(new Date(encuestaParticipante.getEpId().getFechaEncPar().getTime()));
         		Boolean existe = encuestaParticipanteService.checkEncuestaParticipante(epId);
         		if (!existe){
+                    encuestaParticipante.setEncuestaValida(true);
         			encuestaParticipanteService.addEncuestaParticipante(encuestaParticipante);
         		}
         		else{
+                    EncuestaParticipanteMA epMa = encuestaParticipanteService.getEncuestaParticipante(epId);
+                    if (epMa != null) {
+                        if (epMa.getEncuestaValida() != null) {
+                            encuestaParticipante.setEncuestaValida(epMa.getEncuestaValida());
+                        } else {
+                            encuestaParticipante.setEncuestaValida(null);
+                        }
+                    }
         			encuestaParticipanteService.updateEncuestaParticipante(encuestaParticipante);
         		}
         	}

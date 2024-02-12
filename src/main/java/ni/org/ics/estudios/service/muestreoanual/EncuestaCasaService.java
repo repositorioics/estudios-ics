@@ -67,6 +67,19 @@ public class EncuestaCasaService {
 		}			
 	}
 
+    public EncuestaCasaMA getEncuestaCasaMA (Integer codCasa, Date fechaEncCasa){
+        // Retrieve session from Hibernate
+        Session session = sessionFactory.getCurrentSession();
+
+        Timestamp timeStamp = new Timestamp(fechaEncCasa.getTime());
+        Query query = session.createQuery("FROM EncuestaCasaMA enccas where (enccas.codCasa = "
+                + codCasa + " or enccas.codCasaChf = '"+ codCasa +"') AND enccas.fechaEncCasa = :fechaE");
+        query.setTimestamp("fechaE",timeStamp);
+
+        EncuestaCasaMA encuestacasa = (EncuestaCasaMA) query.uniqueResult();
+        return encuestacasa;
+    }
+
 	/**
 	 * Agrega una Encuesta de Casa
 	 * 

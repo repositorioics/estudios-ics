@@ -55,9 +55,18 @@ public class EncuestaPerimetroAbdominalController {
                 pabdominalId.setFecha(new Date(pa.getPaId().getFecha().getTime()));
                 Boolean existe = encuestaPerimetroAbdominalService.checkEncuestaPerimetroAbdominal(pabdominalId);
                 if (!existe){
+                    pa.setEncuestaValida(true);
                     encuestaPerimetroAbdominalService.addEncuestaPerimetroAbdominal(pa);
                 }
                 else{
+                    EncuestaPerimetroAbdominal encuestaPA = encuestaPerimetroAbdominalService.getEncuestaPerimetroAbdominal(pabdominalId);
+                    if (encuestaPA != null) {
+                        if (encuestaPA.getEncuestaValida() != null) {
+                            pa.setEncuestaValida(encuestaPA.getEncuestaValida());
+                        } else {
+                            pa.setEncuestaValida(null);
+                        }
+                    }
                     encuestaPerimetroAbdominalService.updateEncuestaPerimetroAbdominal(pa);
                 }
             }

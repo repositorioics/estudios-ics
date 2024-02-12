@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -202,6 +204,7 @@ public class EncuestaParticipanteMA {
 	private String diagMedicoDengue;
 	private String rashUA; //sustitución de rash6m
 	private String consultaRashUA; //sustitución de consultaRashHormigueo
+    private Boolean encuestaValida; //18-01-2024
 
 	@EmbeddedId
 	public EncuestaParticipanteId getEpId() {
@@ -1776,4 +1779,14 @@ public class EncuestaParticipanteMA {
 	public void setConsultaRashUA(String consultaRashUA) {
 		this.consultaRashUA = consultaRashUA;
 	}
+
+    @JsonIgnore
+    @Column(name = "encuesta_valida")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 }
