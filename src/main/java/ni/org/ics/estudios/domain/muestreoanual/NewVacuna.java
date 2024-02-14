@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,6 +27,8 @@ public class NewVacuna {
 	
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
+
+    private Boolean encuestaValida; //13-02-2024
 
 	@Id
 	public NewVacunaId getVacunaId() {
@@ -78,6 +82,15 @@ public class NewVacuna {
 	public void setOtrorecurso1(Integer otrorecurso1) {
 		this.otrorecurso1 = otrorecurso1;
 	}
-	
+
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    @JsonIgnore
+    @Column(name = "ENCUESTA_VALIDA")
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 
 }

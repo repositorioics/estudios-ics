@@ -66,9 +66,17 @@ public class VisitaTerrenoMAController {
         		vtId.setFechaVisita(new Date(visita.getVisitaId().getFechaVisita().getTime()));
         		Boolean existe = visitaTerrenoService.checkMuestra(vtId);
         		if (!existe){
+                    visita.setEncuestaValida(true);
         			visitaTerrenoService.addVisitaTerreno(visita);
-        		}
-        		else{
+        		} else {
+                    VisitaTerrenoMA visitaTerrenoMA = visitaTerrenoService.getVisitaTerreno(vtId);
+                    if (visitaTerrenoMA != null) {
+                        if (visitaTerrenoMA.getEncuestaValida() != null) {
+                            visita.setEncuestaValida(visitaTerrenoMA.getEncuestaValida());
+                        } else {
+                            visita.setEncuestaValida(null);
+                        }
+                    }
         			visitaTerrenoService.updateVisitaTerreno(visita);
         		}
         	}

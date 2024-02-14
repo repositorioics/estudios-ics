@@ -66,10 +66,20 @@ public class MuestraMAController {
         		mId.setCodigo(muestra.getmId().getCodigo());
         		mId.setFechaMuestra(new Date(muestra.getmId().getFechaMuestra().getTime()));
         		Boolean existe = muestraService.checkMuestra(mId);
-        		if (!existe){
+        		if (!existe) {
+                    muestra.setEncuestaValida(true);
         			muestraService.addMuestra(muestra);
         		}
         		else{
+                    MuestraMA muestraMA = muestraService.getMuestra(mId);
+                    if (muestraMA != null) {
+                        if (muestraMA.getEncuestaValida() != null) {
+                            muestra.setEncuestaValida(muestraMA.getEncuestaValida());
+                        } else {
+                            muestra.setEncuestaValida(null);
+                        }
+                        muestra.setEncuestaValida(muestraMA.getEncuestaValida());
+                    }
         			muestraService.updateMuestra(muestra);
         		}
         	}

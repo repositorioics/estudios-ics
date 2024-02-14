@@ -1,5 +1,6 @@
 package ni.org.ics.estudios.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
@@ -34,6 +35,8 @@ public class ObsequioGeneral extends BaseMetaData implements Serializable {
 	private String otraRelacionFam;
 	private String telefono;
 	private String observaciones;
+
+    private Boolean encuestaValida; //13-02-2024
 
     @Id
     @Column(name = "CODIGO", nullable = false, insertable = true, updatable = false, length = 36)
@@ -153,8 +156,20 @@ public class ObsequioGeneral extends BaseMetaData implements Serializable {
         this.observaciones = observaciones;
     }
 
+    @JsonIgnore
+    @Column(name = "ENCUESTA_VALIDA")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
+
     @Override
     public String toString() {
         return id;
     }
+
+
 }

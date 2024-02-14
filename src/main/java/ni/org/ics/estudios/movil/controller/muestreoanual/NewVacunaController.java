@@ -66,9 +66,18 @@ public class NewVacunaController {
         		vacId.setFechaRegistroVacuna(new Date(vacuna.getVacunaId().getFechaRegistroVacuna().getTime()));
         		Boolean existe = newVacunaService.checkNewVacuna(vacId);
         		if (!existe){
+                    vacuna.setEncuestaValida(true);
         			newVacunaService.addNewVacuna(vacuna);
         		}
         		else{
+                    NewVacuna newVacuna = newVacunaService.getNewVacuna(vacId);
+                    if (newVacuna != null) {
+                        if (newVacuna.getEncuestaValida() != null) {
+                            vacuna.setEncuestaValida(newVacuna.getEncuestaValida());
+                        } else {
+                            vacuna.setEncuestaValida(null);
+                        }
+                    }
         			newVacunaService.updateNewVacuna(vacuna);
         		}
         	}

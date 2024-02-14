@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -50,6 +52,8 @@ public class MuestraMA {
 
     //MA2023
     private String observacion;
+
+    private Boolean encuestaValida; // 13/02/2024
 
 	@Column(name = "fiebre", nullable = true, length = 1)
 	public Integer getFiebreM() {
@@ -294,5 +298,15 @@ public class MuestraMA {
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+
+    @JsonIgnore
+    @Column(name = "ENCUESTA_VALIDA")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
     }
 }
