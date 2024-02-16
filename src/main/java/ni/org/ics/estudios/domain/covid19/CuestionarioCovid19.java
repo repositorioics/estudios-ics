@@ -478,6 +478,12 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String periodoSintomas;//Almacena desde que perido se estan preguntando los sintomas de la pregunta 1
     private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
 
+    //MA 2024
+    private String dxEnfermoCovid19;
+    private String sabeFechaUltEnf;
+    private String mesUltEnf;
+    private String anioUltEnf;
+
     @Id
     @Column(name = "CODIGO", length = 36, nullable = false)
     public String getCodigo() {
@@ -3623,6 +3629,41 @@ public String getNombreDosis3() {
 
     public void setFechaRecibido(Date fechaRecibido) {
         this.fechaRecibido = fechaRecibido;
+    }
+
+    @Column(name = "DX_ENFERMO_COVID19", length = 4, nullable = true)
+    public String getDxEnfermoCovid19() {
+        return dxEnfermoCovid19;
+    }
+
+    public void setDxEnfermoCovid19(String dxEnfermoCovid19) {
+        this.dxEnfermoCovid19 = dxEnfermoCovid19;
+    }
+
+    @Column(name = "MES_ULT_ENF", length = 4, nullable = true)
+    public String getMesUltEnf() {
+        return mesUltEnf;
+    }
+
+    public void setMesUltEnf(String mesUltimaEnfermedad) {
+        this.mesUltEnf = mesUltimaEnfermedad;
+    }
+
+    @Column(name = "ANIO_ULT_ENF", length = 4, nullable = true)
+    public String getAnioUltEnf() {
+        return anioUltEnf;
+    }
+
+    public void setAnioUltEnf(String anioUltimaEnfermedad) {
+        this.anioUltEnf = anioUltimaEnfermedad;
+    }
+    @Column(name = "SABE_FECHA_ULT_ENF", length = 4, nullable = true)
+    public String getSabeFechaUltEnf() {
+        return sabeFechaUltEnf;
+    }
+
+    public void setSabeFechaUltEnf(String sabeFechaUltEnf) {
+        this.sabeFechaUltEnf = sabeFechaUltEnf;
     }
 
     @Override
