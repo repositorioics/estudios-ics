@@ -478,6 +478,8 @@ public class CuestionarioCovid19 extends BaseMetaData implements Auditable {
     private String periodoSintomas;//Almacena desde que perido se estan preguntando los sintomas de la pregunta 1
     private Date fechaRecibido; //poner fecha en que se recibe el registro en el server
 
+    private Boolean encuestaValida; // 13/02/2024
+
     //MA 2024
     private String dxEnfermoCovid19;
     private String sabeFechaUltEnf;
@@ -3694,5 +3696,15 @@ public String getNombreDosis3() {
     @Override
     public boolean isFieldAuditable(String fieldname) {
         return true;
+    }
+
+    @JsonIgnore
+    @Column(name = "ENCUESTA_VALIDA")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
     }
 }

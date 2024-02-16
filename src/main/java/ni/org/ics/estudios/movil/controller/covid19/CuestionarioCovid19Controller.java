@@ -48,6 +48,7 @@ public class CuestionarioCovid19Controller {
             List<CuestionarioCovid19> cuestionarioCovid19List = Arrays.asList(objetos);
             for(CuestionarioCovid19 cuestionarioCovid19 : cuestionarioCovid19List) {
                 cuestionarioCovid19.setFechaRecibido(new Date());
+                cuestionarioCovid19.setEncuestaValida(true);
                 covidService.saveOrUpdateCuestionarioCovid19(cuestionarioCovid19);
             }
         }

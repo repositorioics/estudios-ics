@@ -377,7 +377,7 @@ public class DatosPartoBB {
     }
 
     @JsonIgnore
-    @Column(name = "encuesta_valida")
+    @Column(name = "ENCUESTA_VALIDA")
     public Boolean getEncuestaValida() {
         return encuestaValida;
     }

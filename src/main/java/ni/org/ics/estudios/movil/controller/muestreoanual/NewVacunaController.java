@@ -64,11 +64,21 @@ public class NewVacunaController {
         		NewVacunaId vacId = new NewVacunaId();
         		vacId.setCodigo(vacuna.getVacunaId().getCodigo());
         		vacId.setFechaRegistroVacuna(new Date(vacuna.getVacunaId().getFechaRegistroVacuna().getTime()));
-        		Boolean existe = newVacunaService.checkNewVacuna(vacId);
-        		if (!existe){
+        		//Boolean existe = newVacunaService.checkNewVacuna(vacId);
+                NewVacuna test = newVacunaService.getNewVacuna(vacId);
+        		if (test == null){
+                    vacuna.setEncuestavalida(true);
         			newVacunaService.addNewVacuna(vacuna);
         		}
         		else{
+                    NewVacuna newVacuna = newVacunaService.getNewVacuna(vacId);
+                    if (newVacuna != null) {
+                        if (newVacuna.getEncuestavalida() != null) {
+                            vacuna.setEncuestavalida(newVacuna.getEncuestavalida());
+                        } else {
+                            vacuna.setEncuestavalida(null);
+                        }
+                    }
         			newVacunaService.updateNewVacuna(vacuna);
         		}
         	}

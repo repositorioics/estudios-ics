@@ -1,5 +1,7 @@
 package ni.org.ics.estudios.domain.muestreoanual;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -37,6 +39,8 @@ public class VisitaTerrenoMA {
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
 	private Integer otrorecurso2;
+
+    private Boolean encuestaValida; //13-02-2024
 
 	@EmbeddedId
 	public VisitaTerrenoId getVisitaId() {
@@ -180,4 +184,14 @@ public class VisitaTerrenoMA {
 	public void setOtroMotNoVisita(String otroMotNoVisita) {
 		this.otroMotNoVisita = otroMotNoVisita;
 	}
+
+    @JsonIgnore
+    @Column(name = "ENCUESTA_VALIDA")
+    public Boolean getEncuestaValida() {
+        return encuestaValida;
+    }
+
+    public void setEncuestaValida(Boolean encuestaValida) {
+        this.encuestaValida = encuestaValida;
+    }
 }

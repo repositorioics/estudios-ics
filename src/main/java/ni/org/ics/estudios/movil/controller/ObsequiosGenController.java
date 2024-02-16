@@ -46,6 +46,7 @@ public class ObsequiosGenController {
         }else{
             List<ObsequioGeneral> obsequioGeneralList = Arrays.asList(objetos);
             for(ObsequioGeneral obsequioGeneral : obsequioGeneralList) {
+                obsequioGeneral.setEncuestaValida(true);
             	obsequioService.saveorUpdateObsequio(obsequioGeneral);
             }
         }
