@@ -28,7 +28,7 @@ public class NewVacuna {
 	private MovilInfo movilInfo;
 	private Integer otrorecurso1;
 
-    private Boolean encuestaValida; //13-02-2024
+    private Boolean encuestavalida;
 
 	@Id
 	public NewVacunaId getVacunaId() {
@@ -83,14 +83,14 @@ public class NewVacuna {
 		this.otrorecurso1 = otrorecurso1;
 	}
 
-    public Boolean getEncuestaValida() {
-        return encuestaValida;
-    }
-
     @JsonIgnore
     @Column(name = "ENCUESTA_VALIDA")
-    public void setEncuestaValida(Boolean encuestaValida) {
-        this.encuestaValida = encuestaValida;
+    public Boolean getEncuestavalida() {
+        return encuestavalida;
+    }
+
+    public void setEncuestavalida(Boolean encuestavalida) {
+        this.encuestavalida = encuestavalida;
     }
 
 }
